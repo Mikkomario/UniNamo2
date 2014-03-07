@@ -1,0 +1,7 @@
+* This is a list of sprites and spritebanks for the UniNamo2 project
+* TODO: Add more resources
+
+* Example
+* &background
+* mountains#images/background/mountains.png#1#0#0
+* space#images/background/space.png#1#0#0

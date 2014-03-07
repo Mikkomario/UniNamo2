@@ -3,10 +3,12 @@ Uninamo2 Suunnitelmaa
 Työtehtäviä
 	* Alpha	----------------------------------------------------------------------
 		- Alkuvalmistelut													...
-			* Repositoryn luominen
+			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE
 			* Handlersysteemien luominen									...
-			* Graafisten resurssien lataaminen
+				- Navigaatiosysteemin luominen
+					* Navigaatiosysteemin arkkitehtuuri
+			* Graafisten resurssien lataaminen								DONE
 		- Komponenttien perustoiminnot
 			* Komponenttiarkkitehtuuri
 			* Yksinkertaisen testikomponentin (virtalähde) luominen

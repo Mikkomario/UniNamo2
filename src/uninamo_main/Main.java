@@ -6,6 +6,8 @@ import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.DepthConstants;
+import utopia_resourcebanks.MultiMediaHolder;
+import utopia_resourcebanks.ResourceType;
 import utopia_video.GamePanel;
 import utopia_video.GameWindow;
 
@@ -26,14 +28,16 @@ public class Main
 	public Main()
 	{
 		// Initializes resources
-		// TODO: Initialize resources
+		MultiMediaHolder.initializeResourceDatabase(ResourceType.SPRITE, 
+				"configure/spriteload.txt");
 		
 		// Initializes handlers
 		ActorHandler mainactorhandler = new ActorHandler(false, null);
 		DrawableHandler maindrawer = new DrawableHandler(false, true, 
 				DepthConstants.NORMAL, null);
 		//KeyListenerHandler mainkeyhandler = new KeyListenerHandler(false, null);
-		MouseListenerHandler mainmousehandler = new MouseListenerHandler(false, null, null);
+		MouseListenerHandler mainmousehandler = 
+				new MouseListenerHandler(false, null, null);
 		
 		// Creates the main window
 		GamePanel gamepanel = new GamePanel(GameSettings.screenWidth, 
