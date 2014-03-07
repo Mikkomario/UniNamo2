@@ -1,0 +1,174 @@
+Uninamo2 Suunnitelmaa
+
+Työtehtäviä
+	* Alpha	----------------------------------------------------------------------
+		- Alkuvalmistelut													...
+			* Repositoryn luominen
+			* Ikkunan luominen												DONE
+			* Handlersysteemien luominen									...
+			* Graafisten resurssien lataaminen
+		- Komponenttien perustoiminnot
+			* Komponenttiarkkitehtuuri
+			* Yksinkertaisen testikomponentin (virtalähde) luominen
+			* Signaalin lähettäminen ja vastaanottaminen
+			* Johtoluokan runko
+			* Komponenttien sijoittaminen japiirtäminen
+		- Komponenttien kytkeminen toisiinsa
+			* Johtoluokan viimeistely
+				- Johdon piirto
+				- Johdon reagointi signaaleihin
+			* Johtojen luomisen implementointi käyttöliittymässä
+				- Komponenttien hiirikuuntelu
+			* Johtojen poistamisen implementointi käyttöliittymässä
+				- Johtojen hiirikuuntelu
+		- Komponenttinäkymän ja testinäkymän välillä liikkuminen
+			* Eri handlereiden aktivoiminen ja deaktivoiminen
+		- Laitteiden perustoiminnot
+			* Laitearkkitehtuuri
+			* Yksinkertaisen testilaitteen (liukuhihna) luominen
+		- Laitteiden kytkeminen komponentteihin
+			* Testilaitteen komponenttien luominen
+			* Liikkumattomuuden lisääminen komponentteihin
+			* Tiedonvälitys komponenttien ja laitteen välillä
+		- Toimijoiden perustoiminnot
+			* Toimija-arkkitehtuuri
+			* Yksinkertaisen testitoimijan (laatikko) luominen
+			* Toimijan sekä laitteiden vuorovaikutus
+		- Testausnappula
+			* Testausnappuloiden lisääminen käyttöliittymään
+			* Testausnappulan reagointi hiireen kuvan vaihdoilla
+		- Testausmoodi
+			* Testausmoodin aloittaminen
+				- Komponenttien ja muiden aktivoiminen
+			* Testausmoodin lopettaminen
+				- Komponenttien ja muiden resetoiminen
+			* Grafiikoiden vaihtaminen
+			* Ajastin
+				- Ajastimen arkkitehtuuri
+				- Ajastindatan tiedonvälityksen viimeistely
+		- Komponenttien liikuttelu työpöydällä
+			* Toiminnan implementoiminen komponenttiluokkaan
+			* Johtojen reagoiminen liikutteluun
+		- Komponenttilaatikot
+			* Komponenttilaatikkoarkkitehtuuri
+			* Laatikon luominen testikomponentille
+			* Laatikon reagointi hiireen
+		- Roskis
+			* Roskisluokka ja sen luominen alussa
+			* Komponenttien reagointi törmäykseen roskiksen kanssa 
+			dropin lopussa
+	* Beta	----------------------------------------------------------------------
+		- Voittolaitteet
+			* Voittolaitearkkitehtuuri
+			* Yksinkertaisen testivoittolaitteen (laatikkovoito) 
+			toteuttaminen
+		- Ohjekirja
+			* Ohjekirjan "näppäimen" toteuttaminen
+			* Ohjekirjan arkkitehtuuri
+			* Ohjekirjamoodin päälle asettaminen
+				- Muiden handlereiden epäaktivoiminen
+			* Alustavan sisällön tuottaminen
+			* Ohjekirjan materiaalin lataaminen tiedostosta?
+		- Säädöt
+			* Säätövalikon "näppäimen" toteuttaminen
+			* Säätövalikon arkkitehtuuri
+			* Säätövalikon moodin päälle asettaminen
+			* Säätövalikossa tarvittavat elementit
+			* Resoluution säätäminen
+			* Musiikin volyymin säätäminen
+			* Äänen volyymin säätäminen
+			* Efektien volyymin säätäminen
+			* Fullscreenin säätö
+		- Tehtävänannot
+			* Tehtävänantoarkkitehruuri
+			* Yksinkertaisen testitehtävänannon valmistaminen
+			* Tehtävänannon selostaminen lyhyessä kuvauksessa
+			* Tarvittavan moodin piirtäminen ja muiden deaktivoiminen
+		- Kahden näkymän piirtäminen testausmoodissa
+			* Kameroiden implementointi
+			* Kameran koon ja sijainnin muuttaminen testausvaiheessa
+		- Kenttien lukeminen tekstitiedostosta
+			* Tunnistettujen kenttien polkujen tallentaminen 
+			ja lukeminen tekstitiedostosta
+			* Laitteiden, toimijoiden sekä tehtävänantojen luominen 
+			komentojen pohjalta
+		- Sound effectien lisääminen peliin
+			* Resurssien lataaminen ohjelman alussa
+			* Äänten soittamisen implementointi
+	* Gold	---------------------------------------------------------------------
+		- Tehtävien valitseminen
+			* Tehtävien valintaympäristön luominen
+			* Tehtävän lopettaminen
+			* Tehtävän aloittaminen
+		- Erilaisten komponenttien valmistus
+			* Tarvittavat resurssit
+			* Tarvittavat laatikot
+		- Erilaisten laitteiden valmistus
+			* Tarvittavat resurssit
+			* Tarvittavat laitekomponentit
+		- Erilaisten toimijoiden valmistus
+			* Tarvittavat resurssit
+			* Interaktioiden toteuttaminen
+		- Kenttäeditori
+			* Kenttien tallentaminen tekstitiedostoon
+			* Kenttäeditorimoodiin siirtyminen
+				- Resurssiallokaatio?
+			* Resurssieditorin käyttöliittymä
+				- Laitesuunnitelma-arkkitehtuuri
+				- Laitesuunnitelmalaatikot
+				- Laitesuunnitelmien liikuttelu
+				- Sama toimijoille ja maaleille
+				- Seinien / lattian rakentaminen
+	
+Komponentteja
+	* Looginen
+		- And
+		- Latch
+		- Or
+		- Counter
+		- Inverter
+		- Exclusive Or (Exor)
+		- Delay
+		- Not And (Nand)
+		- Not Or (Nor)
+		- FlipFlop
+		- Relay
+		- Not Exclusive Or (Exnor)
+		- Bistable
+	* Looginen input
+		- Pulse Generator
+		- Power Generator
+	* Peli-input
+		- Lightsensor
+		- On / Off -switch
+		- Pingviinitunnistus
+		- Kappaletunnistus
+		- Väritunnistus
+		- Switch
+	* Pelioutput
+		- Valot
+		- Liukuhihna
+		- Solenoidi
+		- Leimasin
+		- Värispray
+	* Muita
+		- Random input
+		- Platform
+		- Pingviini
+		- Boxi
+		- Maali
+		- Rosvopingviini
+		- Ovi
+		
+Huomioita / Ideoita
+	* Aikajärjestelmä on vuoropohjainen (aika mitataan vuoroissa)
+	* Monivaiheisia tarkistusjärjestelmiä minkä välissä ei saa muttaa koodia?
+	* Ylänäkymä näytetään "pohjapiirrustus" -tyylillä, joka muuttuu "realistiseksi" 
+	kun testi käynnistetään.
+	* Alanäkymä muistuttaa työpöytää
+	* Optionssit voi laittaa teemaan sopivasti niin, että resoluutio = "työpöydän koko" 
+	ja että ääniasetukset säädetään radiosta
+	* Sound designissa pitää olla sellain rakentelijan tuntu
+		- Paperin ääntä
+		- Kolinaa ja kolketta
+		- Puisten laatikoiden avautumista
