@@ -6,8 +6,8 @@ import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.DepthConstants;
+import utopia_resourceHandling.ResourceType;
 import utopia_resourcebanks.MultiMediaHolder;
-import utopia_resourcebanks.ResourceType;
 import utopia_video.GamePanel;
 import utopia_video.GameWindow;
 

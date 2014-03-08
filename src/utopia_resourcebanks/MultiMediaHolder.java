@@ -2,6 +2,8 @@ package utopia_resourcebanks;
 
 import java.util.HashMap;
 
+import utopia_resourceHandling.ResourceType;
+
 /**
  * Multimediaholder keeps track all kinds of resources 
  * and provides them for other objects. The resources can be 
