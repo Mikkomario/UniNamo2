@@ -1,2 +1,5 @@
 * This is a list of GamePhases used in the UniNamo2 project
 * TODO: Add phases and banks
+
+&default
+gameplay#sprite:components

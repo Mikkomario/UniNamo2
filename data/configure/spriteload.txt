@@ -5,3 +5,6 @@
 * &background
 * mountains#images/background/mountains.png#1#0#0
 * space#images/background/space.png#1#0#0
+
+&components
+test#images/components/testcomponent.png#1#25#32

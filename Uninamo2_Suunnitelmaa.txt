@@ -15,12 +15,15 @@ Työtehtäviä
 					resourceActovatoriin
 				- Navigaatiosysteemin luominen
 			* Graafisten resurssien lataaminen								DONE
-		- Komponenttien perustoiminnot
-			* Komponenttiarkkitehtuuri
+		- Komponenttien perustoiminnot										...
+			* Komponenttiarkkitehtuuri										...
 			* Yksinkertaisen testikomponentin (virtalähde) luominen
 			* Signaalin lähettäminen ja vastaanottaminen
+				- Signaalinkäsittelijäluokka
+					* Signaalinlähettäjä
+					* Signaalinvastaanottaja
 			* Johtoluokan runko
-			* Komponenttien sijoittaminen japiirtäminen
+			* Komponenttien sijoittaminen ja piirtäminen					DONE
 		- Komponenttien kytkeminen toisiinsa
 			* Johtoluokan viimeistely
 				- Johdon piirto

@@ -2,10 +2,12 @@ package uninamo_main;
 
 import java.awt.BorderLayout;
 
+import uninamo_gameplay.Component;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.DepthConstants;
+import utopia_resourceHandling.ResourceActivator;
 import utopia_resourceHandling.ResourceType;
 import utopia_resourcebanks.MultiMediaHolder;
 import utopia_video.GamePanel;
@@ -57,6 +59,14 @@ public class Main
 		//window.addKeyListener(mainkeyhandler);
 		window.addActor(mainmousehandler);
 		window.addMouseListener(mainmousehandler);
+		
+		// TODO: Move this elswhere
+		// Starts the gameplay phase
+		MultiMediaHolder.activateBank(ResourceType.GAMEPHASE, "default", true);
+		ResourceActivator.startPhase(MultiMediaHolder.getGamePhaseBank(
+				"default").getPhase("gameplay"));
+		// Creates a test component
+		new Component(300, 300, maindrawer, mainactorhandler, mainmousehandler, "test");
 	}
 	
 	
