@@ -1,4 +1,4 @@
-package uninamo_gameplay;
+package uninamo_components;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
@@ -23,7 +23,7 @@ import utopia_resourcebanks.MultiMediaHolder;
  * @since 8.3.2014
  */
 public abstract class Component extends DimensionalDrawnObject implements
-		AdvancedMouseListener, SignalReceiver
+		AdvancedMouseListener, SignalReceiver, SignalSender
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
@@ -67,14 +67,14 @@ public abstract class Component extends DimensionalDrawnObject implements
 		// Creates the connectors
 		for (int i = 0; i < inputs; i++)
 		{
-			int relativey = (i + 1) * (getHeight() / (inputs + 1));
-			this.inputs[i] = new InputCableConnector(15, relativey, drawer, 
+			int relativey = (int) ((i + 1) * (getHeight() / (inputs + 1.0)));
+			this.inputs[i] = new InputCableConnector(10, relativey, drawer, 
 					mousehandler, this);
 		}
 		for (int i = 0; i < outputs; i++)
 		{
-			int relativey = (i + 1) * (getHeight() / (inputs + 1));
-			this.outputs[i] = new OutputCableConnector(getWidth() - 15, 
+			int relativey = (int) ((i + 1) * (getHeight() / (outputs + 1.0)));
+			this.outputs[i] = new OutputCableConnector(getWidth() - 10, 
 					relativey, drawer, mousehandler, this);
 		}
 		
@@ -194,5 +194,76 @@ public abstract class Component extends DimensionalDrawnObject implements
 		if (this.spritedrawer == null)
 			return;
 		this.spritedrawer.drawSprite(g2d, 0, 0);
+	}
+	
+	
+	// OTHER METHODS	-------------------------------------------------
+	
+	/**
+	 * Informs a specific output about a signal change
+	 * 
+	 * @param index The index of the output informed
+	 * @param signal The signal given to the output
+	 */
+	protected void sendSignalToOutput(int index, boolean signal)
+	{
+		if (index < 0 || index >= this.outputs.length)
+		{
+			System.err.println("The component doesn't have output with index " 
+					+ index);
+			return;
+		}
+		
+		this.outputs[index].onSignalChange(signal, this);
+	}
+	
+	/**
+	 * Informs all outputs about a signal change
+	 * @param signal The new signal status
+	 */
+	protected void sendSignalToAllOutputs(boolean signal)
+	{
+		for (int i = 0; i < this.outputs.length; i++)
+		{
+			this.outputs[i].onSignalChange(signal, this);
+		}
+	}
+	
+	/**
+	 * Returns the index of the given inputCableConnector. This can be used in 
+	 * recognizing the role of the input.
+	 * 
+	 * @param c The InputCableConnector who's index is needed
+	 * @return The index of the connector or -1 if the connector isn't 
+	 * connected to the component
+	 */
+	protected int getInputIndex(InputCableConnector c)
+	{
+		for (int i = 0; i < this.inputs.length; i++)
+		{
+			if (this.inputs[i].equals(c))
+				return i;
+		}
+		
+		return -1;
+	}
+	
+	/**
+	 * Returns a signal status from the input with the given index
+	 * 
+	 * @param index The index of the questioned input
+	 * @return The signal the input is receiving. returns false if no such input 
+	 * exists.
+	 */
+	protected boolean getInputStatus(int index)
+	{
+		if (index < 0 || index >= this.outputs.length)
+		{
+			System.err.println("The component doesn't have input with index " 
+					+ index);
+			return false;
+		}
+		
+		return this.inputs[index].getSignalStatus();
 	}
 }

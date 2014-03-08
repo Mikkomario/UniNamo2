@@ -17,17 +17,17 @@ Työtehtäviä
 					* GamePhasejen luominen ja syöttäminen 					Testaamatta
 					resourceActovatoriin
 			* Graafisten resurssien lataaminen								DONE
-		- Komponenttien perustoiminnot										...
+		- Komponenttien perustoiminnot										Testaamatta
 			* Komponenttiarkkitehtuuri										DONE
-			* Yksinkertaisen testikomponentin (virtalähde) luominen
+			* Yksinkertaisen testikomponentin (virtalähde) luominen			DONE
 			* Signaalin lähettäminen ja vastaanottaminen					Testaamatta
 				- Signaalinkäsittelijäluokka								Testaamatta
 					* Signaalinlähettäjä									Testaamatta
 					* Signaalinvastaanottaja								Testaamatta
 			* Johtoluokan runko												DONE
 			* Komponenttien sijoittaminen ja piirtäminen					DONE
-		- Komponenttien kytkeminen toisiinsa
-			* Toisen yksinkertaisen komponenttiluokan valmistaminen
+		- Komponenttien kytkeminen toisiinsa								...
+			* Toisen yksinkertaisen komponenttiluokan valmistaminen			DONE
 			* Johtoluokan viimeistely
 				- Johdon piirto
 				- Johdon reagointi signaaleihin

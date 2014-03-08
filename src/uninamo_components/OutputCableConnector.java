@@ -1,4 +1,4 @@
-package uninamo_gameplay;
+package uninamo_components;
 
 import java.awt.geom.Point2D;
 
@@ -92,7 +92,7 @@ public class OutputCableConnector extends CableConnector
 	}
 
 	@Override
-	public void onSignalChange(boolean newSignalStatus, SignalRelay source)
+	public void onSignalChange(boolean newSignalStatus, SignalSender source)
 	{
 		// Updates the last signal status and informs the cables if the status 
 		// changed

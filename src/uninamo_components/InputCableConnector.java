@@ -1,4 +1,4 @@
-package uninamo_gameplay;
+package uninamo_components;
 
 import java.awt.geom.Point2D;
 
@@ -85,7 +85,7 @@ public class InputCableConnector extends CableConnector
 	}
 
 	@Override
-	public void onSignalChange(boolean newSignalStatus, SignalRelay source)
+	public void onSignalChange(boolean newSignalStatus, SignalSender source)
 	{
 		// Checks if the signal changed and informs the component if that 
 		// is the case

@@ -1,4 +1,4 @@
-package uninamo_gameplay;
+package uninamo_components;
 
 /**
  * SignalReceivers react to changes in a binary signal and should be informed 
@@ -13,8 +13,8 @@ public interface SignalReceiver
 	 * This method should be called when the signal the receiver is interested 
 	 * of changes.
 	 * @param newSignalStatus The new status of the signal
-	 * @param source The signalRelay that informed the receiver about the 
+	 * @param source The signalSender that informed the receiver about the 
 	 * change. Null if the signal didn't come through a relay
 	 */
-	public void onSignalChange(boolean newSignalStatus, SignalRelay source);
+	public void onSignalChange(boolean newSignalStatus, SignalSender source);
 }

@@ -1,17 +1,17 @@
-package uninamo_gameplay;
+package uninamo_components;
 
 /**
- * SignalRelays send signals to signalReceivers. SignalRelays should be able 
+ * SignalSenders send signals to signalReceivers. SignalSenders should be able 
  * to inform objects of their signal type and send events when their signal changes.
  * 
  * @author Mikko Hilpinen
  * @since 8.3.2014
  */
-public interface SignalRelay
+public interface SignalSender
 {
 	/**
 	 * @return The current (or last known) status of the signal that is being 
-	 * relayed
+	 * sended
 	 */
 	public boolean getSignalStatus();
 }

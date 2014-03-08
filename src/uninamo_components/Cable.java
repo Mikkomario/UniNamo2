@@ -1,4 +1,4 @@
-package uninamo_gameplay;
+package uninamo_components;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
@@ -20,7 +20,7 @@ import utopia_resourcebanks.MultiMediaHolder;
  * @since 8.3.2014
  */
 public class Cable extends DimensionalDrawnObject implements
-		AdvancedMouseListener, TransformationListener, SignalRelay, SignalReceiver
+		AdvancedMouseListener, TransformationListener, SignalSender, SignalReceiver
 		// TODO: Add new signal interfaces
 {
 	// ATTRIBUTES	-----------------------------------------------------
@@ -53,7 +53,7 @@ public class Cable extends DimensionalDrawnObject implements
 		
 		// Initializes attributes
 		this.spritedrawer = new SingleSpriteDrawer(
-				MultiMediaHolder.getSpriteBank("connectors").getSprite(
+				MultiMediaHolder.getSpriteBank("components").getSprite(
 				"cable"), null, this);
 		this.active = true;
 		
@@ -183,7 +183,7 @@ public class Cable extends DimensionalDrawnObject implements
 
 
 	@Override
-	public void onSignalChange(boolean newSignalStatus, SignalRelay source)
+	public void onSignalChange(boolean newSignalStatus, SignalSender source)
 	{
 		// TODO Auto-generated method stub
 		

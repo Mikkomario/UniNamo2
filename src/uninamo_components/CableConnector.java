@@ -1,4 +1,4 @@
-package uninamo_gameplay;
+package uninamo_components;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
@@ -23,7 +23,7 @@ import utopia_resourcebanks.MultiMediaHolder;
  * @see Component
  */
 public abstract class CableConnector extends DimensionalDrawnObject implements
-		AdvancedMouseListener, TransformationListener, SignalRelay, 
+		AdvancedMouseListener, TransformationListener, SignalSender, 
 		SignalReceiver
 {
 	// ATTRIBUTES	-----------------------------------------------------
@@ -239,7 +239,7 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	 */
 	protected void largen()
 	{
-		setScale(1.3, 1.3);
+		setScale(1.4, 1.4);
 	}
 	
 	/**

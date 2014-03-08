@@ -2,7 +2,8 @@ package uninamo_main;
 
 import java.awt.BorderLayout;
 
-import uninamo_gameplay.Component;
+import uninamo_components.OrComponent;
+import uninamo_components.PowerSourceComponent;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
@@ -66,7 +67,8 @@ public class Main
 		ResourceActivator.startPhase(MultiMediaHolder.getGamePhaseBank(
 				"default").getPhase("gameplay"));
 		// Creates a test component
-		//new Component(300, 300, maindrawer, mainactorhandler, mainmousehandler, "test");
+		new PowerSourceComponent(300, 300, maindrawer, mainactorhandler, mainmousehandler);
+		new OrComponent(600, 300, maindrawer, mainmousehandler);
 	}
 	
 	
