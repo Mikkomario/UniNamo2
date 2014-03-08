@@ -30,6 +30,8 @@ public class Main
 		// Initializes resources
 		MultiMediaHolder.initializeResourceDatabase(ResourceType.SPRITE, 
 				"configure/spriteload.txt");
+		MultiMediaHolder.initializeResourceDatabase(ResourceType.GAMEPHASE, 
+				"configure/gamephaseload.txt");
 		
 		// Initializes handlers
 		ActorHandler mainactorhandler = new ActorHandler(false, null);
