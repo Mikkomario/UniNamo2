@@ -6,12 +6,12 @@ Työtehtäviä
 			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE
 			* Handlersysteemien luominen									...
-			* Navigaatiosysteemin rekonstruointi
-				- Vanhan navigaatiosysteemin abstrahointi
-				- Yleisen ratkaisun muodostus
-					* Yleinen GamePhase -luokka
+			* Navigaatiosysteemin rekonstruointi							...
+				- Vanhan navigaatiosysteemin abstrahointi					...
+				- Yleisen ratkaisun muodostus								...
+					* Yleinen GamePhase -luokka								Testaamatta
 					* Yleinen resourceActivator -luokka
-					* GamePhasejen luominen ja syöttäminen 
+					* GamePhasejen luominen ja syöttäminen 					...
 					resourceActovatoriin
 				- Navigaatiosysteemin luominen
 			* Graafisten resurssien lataaminen								DONE

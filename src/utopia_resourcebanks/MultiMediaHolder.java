@@ -55,7 +55,8 @@ public class MultiMediaHolder
 	 * * this is a comment
 	 * @see OpenBankHolder#OpenBankHolder(String, boolean)
 	 */
-	public static void initializeResourceDatabase(ResourceType type, String filename)
+	public static void initializeResourceDatabase(ResourceType type, 
+			String filename)
 	{
 		if (bankholders.containsKey(type))
 		{
@@ -102,6 +103,11 @@ public class MultiMediaHolder
 						new OpenWavSoundTrackBankHolder(filename, 
 								(OpenWavSoundBankHolder) bankholders.get(
 								ResourceType.WAV))); break;
+			}
+			case GAMEPHASE:
+			{
+				bankholders.put(type, 
+						new OpenGamePhaseBankHolder(filename)); break;
 			}
 			default:
 			{
@@ -197,6 +203,23 @@ public class MultiMediaHolder
 		
 		if (maybetrackbank instanceof SoundTrackBank)
 			return (SoundTrackBank) maybetrackbank;
+		else
+			return null;
+	}
+	
+	/**
+	 * Returns an GamePhaseBank if it has been initialized
+	 *
+	 * @param bankname The name of the needed bank
+	 * @return The GamePhaseBank with the given name or null if no such bank exists 
+	 * or if the bank is not active
+	 */
+	public static GamePhaseBank getGamePhaseBank(String bankname)
+	{
+		OpenBank maybegamephasebank = getBank(ResourceType.GAMEPHASE, bankname);
+		
+		if (maybegamephasebank instanceof GamePhaseBank)
+			return (GamePhaseBank) maybegamephasebank;
 		else
 			return null;
 	}

@@ -77,8 +77,10 @@ public class GamePhase implements BankObject
 		
 		if (names == null)
 		{
+			/*
 			System.err.println("ResourceType " + type + "in GamePhase " + this 
 					+ " hasn't been introduced.");
+			*/
 			return new String[0];
 		}
 		
@@ -107,9 +109,15 @@ public class GamePhase implements BankObject
 	 * resourceBanks of the given type. These should be same names that 
 	 * are used by the resourceBanks' holder and / or MultiMediaHolder.
 	 * @see MultiMediaHolder
+	 * @warning It may not be a good idea to connect GamePhaseBanks to 
+	 * GamePhases. You have been warned.
 	 */
 	public void connectResourceBankNames(ResourceType bankType, String[] bankNames)
 	{
+		if (bankType == ResourceType.GAMEPHASE)
+			System.err.println("Warning: Connecting a GamePhaseBank to a "
+					+ "GamePhase is usually not a good idea.");
+		
 		this.connectedBankNames.put(bankType, bankNames);
 	}
 }

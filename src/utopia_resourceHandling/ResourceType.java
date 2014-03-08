@@ -37,7 +37,13 @@ public enum ResourceType
 	 * WavSoundTrack is a track created by combining multiple wavs together.
 	 * @see SoundTrack
 	 */
-	WAVSOUNDTRACK;
+	WAVSOUNDTRACK,
+	/**
+	 * GamePhases are separate phases in the game. They are mostly used in 
+	 * resource activation between phases.
+	 * @see GamePhase
+	 */
+	GAMEPHASE;
 	
 	
 	// METHODS	----------------------------------------------------------
