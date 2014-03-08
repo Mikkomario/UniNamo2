@@ -402,6 +402,15 @@ public abstract class DrawnObject extends GameObject implements Drawable
 	}
 	
 	/**
+	 * Changes the object's position in the game world
+	 * @param newPosition The object's new position (absolute pixels)
+	 */
+	public void setPosition(Point2D.Double newPosition)
+	{
+		setPosition(newPosition.getX(), newPosition.getY());
+	}
+	
+	/**
 	 * Changes the object's position on the x-axis
 	 *
 	 * @param x The object's new x-coordinate

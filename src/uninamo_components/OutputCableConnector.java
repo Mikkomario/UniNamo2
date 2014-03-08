@@ -60,7 +60,7 @@ public class OutputCableConnector extends CableConnector
 		if (button == MouseButton.LEFT && eventType == 
 				MouseButtonEventType.PRESSED)
 		{
-			new Cable(this.drawer, this.mousehandler, this);
+			connectCable(new Cable(this.drawer, this.mousehandler, this));
 			// Also resets scaling
 			rescale();
 		}

@@ -3,11 +3,13 @@ package uninamo_components;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
+import uninamo_main.GameSettings;
 import utopia_gameobjects.DimensionalDrawnObject;
 import utopia_graphic.SingleSpriteDrawer;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.CollisionType;
+import utopia_helpAndEnums.HelpMath;
 import utopia_listeners.AdvancedMouseListener;
 import utopia_listeners.TransformationListener;
 import utopia_resourcebanks.MultiMediaHolder;
@@ -21,12 +23,14 @@ import utopia_resourcebanks.MultiMediaHolder;
  */
 public class Cable extends DimensionalDrawnObject implements
 		AdvancedMouseListener, TransformationListener, SignalSender, SignalReceiver
-		// TODO: Add new signal interfaces
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private SingleSpriteDrawer spritedrawer;
-	private boolean active;
+	private boolean active, lastSignalStatus;
+	private OutputCableConnector start;
+	private InputCableConnector end;
+	private Point2D lastMousePosition;
 	
 	/**
 	 * Is there currently a cable that's being dragged around
@@ -56,8 +60,17 @@ public class Cable extends DimensionalDrawnObject implements
 				MultiMediaHolder.getSpriteBank("components").getSprite(
 				"cable"), null, this);
 		this.active = true;
+		this.start = startConnector;
+		this.end = null;
+		this.lastMousePosition = new Point2D.Double(0, 0);
+		this.lastSignalStatus = this.start.getSignalStatus();
 		
-		// TODO: Update position
+		// The cable starts as being dragged
+		cableIsBeingDragged = true;
+		
+		updateTransformations();
+		this.spritedrawer.setImageSpeed(0);
+		this.spritedrawer.setImageIndex(0);
 		
 		// Adds the object to the handler(s)
 		if (mousehandler != null)
@@ -97,7 +110,7 @@ public class Cable extends DimensionalDrawnObject implements
 	public void onTransformationEvent(TransformationEvent e)
 	{
 		// Resets the position
-		// TODO: Update position
+		updateTransformations();
 	}
 
 	@Override
@@ -105,7 +118,34 @@ public class Cable extends DimensionalDrawnObject implements
 			MouseButtonEventType eventType, Point2D mousePosition,
 			double eventStepTime)
 	{
-		// TODO: Place or remove the cable
+		// On mouse release tries to place the cable on a connector
+		// TODO: Implement cable placing
+		// TODO: Create a connectorHandler
+		
+		// On mouse press removes the cable from either end
+		if (button == MouseButton.LEFT && eventType == 
+				MouseButtonEventType.PRESSED && !cableIsBeingDragged)
+		{
+			cableIsBeingDragged = true;
+			
+			// If the button was pressed closer to start, removes the cable 
+			// from there, otherwise removes the cable from the end point
+			if (HelpMath.pointDistance(mousePosition.getX(), 
+					mousePosition.getY(), this.start.getX(), this.start.getY()) 
+					< HelpMath.pointDistance(mousePosition.getX(), 
+					mousePosition.getY(), this.end.getX(), this.end.getY()))
+			{
+				this.start.removeCable(this);
+				this.start = null;
+			}
+			else
+			{
+				this.end.removeCable(this);
+				this.end = null;
+			}
+			
+			setYScale(1);
+		}
 	}
 
 	@Override
@@ -117,28 +157,36 @@ public class Cable extends DimensionalDrawnObject implements
 	@Override
 	public boolean listensMouseEnterExit()
 	{
-		// TODO: Change later
-		return false;
+		// Listens to enter and exit events if is not being dragged
+		return !isBeingDragged();
 	}
 
 	@Override
 	public void onMousePositionEvent(MousePositionEventType eventType,
 			Point2D mousePosition, double eventStepTime)
 	{
-		// TODO: Add scaling if removable
+		// Scales the object on enter, rescales on exit
+		if (eventType == MousePositionEventType.ENTER)
+			setYScale(GameSettings.interfaceScaleFactor);
+		else if (eventType == MousePositionEventType.EXIT)
+			setYScale(1);
 	}
 
 	@Override
 	public void onMouseMove(Point2D newMousePosition)
 	{
-		// TODO: Update transformations if being placed
+		// Updates the last known mouse position if being dragged
+		if (isBeingDragged())
+			this.lastMousePosition = newMousePosition;
 	}
 
 	@Override
 	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
 	{
-		// TODO: Change to global when being placed
-		return MouseButtonEventScale.LOCAL;
+		if (!isBeingDragged())
+			return MouseButtonEventScale.LOCAL;
+		else
+			return MouseButtonEventScale.GLOBAL;
 	}
 
 	@Override
@@ -181,19 +229,58 @@ public class Cable extends DimensionalDrawnObject implements
 		this.spritedrawer.drawSprite(g2d, 0, 0);
 	}
 
-
 	@Override
 	public void onSignalChange(boolean newSignalStatus, SignalSender source)
 	{
-		// TODO Auto-generated method stub
+		// Informs the end point about the change (if there is one)
+		if (this.end != null)
+			this.end.onSignalChange(newSignalStatus, this);
 		
+		this.lastSignalStatus = newSignalStatus;
+		
+		// Changes sprite index
+		if (newSignalStatus)
+			this.spritedrawer.setImageIndex(1);
+		else
+			this.spritedrawer.setImageIndex(0);
 	}
-
 
 	@Override
 	public boolean getSignalStatus()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return this.lastSignalStatus;
+	}
+	
+	
+	// OTHER METHODS	-------------------------------------------------
+	
+	// Updates the position and form of the cable
+	private void updateTransformations()
+	{
+		Point2D startPoint, endPoint;
+		
+		// Updates starting position
+		if (this.start != null)
+			startPoint = this.start.getPosition();
+		else
+			startPoint = this.lastMousePosition;
+		
+		// Updates scaling and rotation
+		if (this.end != null)
+			endPoint = this.end.getPosition();
+		else
+			endPoint = this.lastMousePosition;
+		
+		// TODO: Debug this since it can cause problems
+		setPosition((Point2D.Double) startPoint);
+		setAngle(HelpMath.pointDirection(startPoint.getX(), startPoint.getY(), 
+				endPoint.getX(), endPoint.getY()));
+		setXScale(HelpMath.pointDistance(startPoint.getX(), startPoint.getY(), 
+				endPoint.getX(), endPoint.getY()) / getWidth());
+	}
+	
+	private boolean isBeingDragged()
+	{
+		return (cableIsBeingDragged && this.start != null && this.end != null);
 	}
 }

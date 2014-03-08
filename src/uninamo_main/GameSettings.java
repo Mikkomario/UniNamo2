@@ -23,6 +23,11 @@ public class GameSettings
 	 */
 	public static boolean fullScreen = false;
 	
+	/**
+	 * How much interface elements are scaled when mouse hovers over them
+	 */
+	public static final double interfaceScaleFactor = 1.2;
+	
 	// CONSTRUCTOR	-----------------------------------------------------
 	
 	private GameSettings()

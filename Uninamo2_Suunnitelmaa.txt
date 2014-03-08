@@ -28,13 +28,13 @@ Työtehtäviä
 			* Komponenttien sijoittaminen ja piirtäminen					DONE
 		- Komponenttien kytkeminen toisiinsa								...
 			* Toisen yksinkertaisen komponenttiluokan valmistaminen			DONE
-			* Johtoluokan viimeistely
-				- Johdon piirto
-				- Johdon reagointi signaaleihin
-			* Johtojen luomisen implementointi käyttöliittymässä
-				- Komponenttien hiirikuuntelu
-			* Johtojen poistamisen implementointi käyttöliittymässä
-				- Johtojen hiirikuuntelu
+			* Johtoluokan viimeistely										...
+				- Johdon piirto												DONE
+				- Johdon reagointi signaaleihin								Testaamatta
+			* Johtojen luomisen implementointi käyttöliittymässä			...
+				- Komponenttien hiirikuuntelu								...
+			* Johtojen poistamisen implementointi käyttöliittymässä			...
+				- Johtojen hiirikuuntelu									...
 		- Komponenttinäkymän ja testinäkymän välillä liikkuminen
 			* Eri handlereiden aktivoiminen ja deaktivoiminen
 		- Laitteiden perustoiminnot
