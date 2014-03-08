@@ -13,84 +13,71 @@ import utopia_listeners.TransformationListener;
 import utopia_resourcebanks.MultiMediaHolder;
 
 /**
- * CableConnectors are attached to certain components. They handle the signal 
- * processing between the component and the cable. Cables can be attached 
- * to the connectors at will.
+ * Cables are elements that connect components together and that deliver 
+ * signals from one connector to other.
  * 
  * @author Mikko Hilpinen
  * @since 8.3.2014
- * @see Component
  */
-public class CableConnector extends DimensionalDrawnObject implements
+public class Cable extends DimensionalDrawnObject implements
 		AdvancedMouseListener, TransformationListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private SingleSpriteDrawer spritedrawer;
-	private Component host;
-	private Point2D.Double relativePoint;
-	// TODO: Add cable list(s)
+	private boolean active;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
 	
 	/**
-	 * Creates a new cableConnector that is tied to the given component.
+	 * Creates a new cable that starts from the given connector. The cable will 
+	 * hover over the mouse until it has been connected to another connector.
 	 * 
-	 * @param relativex The x-coordinate of the object in relation to the 
-	 * component's top-left corner (pixels)
-	 * @param relativey The y-coordinate of the object in relation to the 
-	 * component's top-left corner (pixels)
-	 * @param drawer The drawableHandler that will draw the connector
-	 * @param mousehandler The mouseListenerHandler that will inform the object 
-	 * about mouse events
-	 * @param host The component to which the connector is tied to
+	 * @param drawer The drawableHandler that will draw the cable
+	 * @param mousehandler The mouseListenerHandler that will inform the 
+	 * cable about mouse events
+	 * @param startConnector The connector the cable starts from
 	 */
-	public CableConnector(int relativex, int relativey, DrawableHandler drawer, 
-			MouseListenerHandler mousehandler, Component host)
+	public Cable(DrawableHandler drawer, MouseListenerHandler mousehandler, 
+			CableConnector startConnector)
 	{
-		super(0, 0, host.getDepth() - 1, false, CollisionType.CIRCLE, drawer, 
-				null);
+		super(0, 0, startConnector.getDepth() - 1, false, CollisionType.BOX, 
+				drawer, null);
 		
 		// Initializes attributes
-		this.relativePoint = new Point2D.Double(relativex, relativey);
-		this.host = host;
 		this.spritedrawer = new SingleSpriteDrawer(
-				MultiMediaHolder.getSpriteBank("components").getSprite(
-				"cableconnector"), null, this);
+				MultiMediaHolder.getSpriteBank("connectors").getSprite(
+				"cable"), null, this);
+		this.active = true;
 		
-		// Updates radius
-		setRadius(this.spritedrawer.getSprite().getWidth() / 2);
-		
-		// Updates the position
-		updateAbsolutePosition();
+		// TODO: Update position
 		
 		// Adds the object to the handler(s)
 		if (mousehandler != null)
 			mousehandler.addMouseListener(this);
-	
-		host.getTransformationListenerHandler().addListener(this);
+		startConnector.getTransformationListenerHandler().addListener(this);
 	}
 	
 	
-	// IMPLEMENTED METHODS	---------------------------------------------
+	// IMPLEMENTED METHODS	-----------------------------------------------
 
 	@Override
 	public boolean isActive()
 	{
-		return this.host.isActive();
+		return this.active;
 	}
 
 	@Override
 	public void activate()
 	{
-		// Cannot be activated separately
+		this.active = true;
 	}
 
 	@Override
 	public void inactivate()
 	{
-		// Cannot be inactivated separately
+		this.active = false;
 	}
 
 	@Override
@@ -103,12 +90,8 @@ public class CableConnector extends DimensionalDrawnObject implements
 	@Override
 	public void onTransformationEvent(TransformationEvent e)
 	{
-		// Updates the position
-		updateAbsolutePosition();
-		
-		// May scale the object as well
-		if (e.getType() == TransformationType.SCAlING)
-			setScale(this.host.getXScale(), this.host.getYScale());
+		// Resets the position
+		// TODO: Update position
 	}
 
 	@Override
@@ -116,7 +99,7 @@ public class CableConnector extends DimensionalDrawnObject implements
 			MouseButtonEventType eventType, Point2D mousePosition,
 			double eventStepTime)
 	{
-		// TODO: Add cable connecting
+		// TODO: Place or remove the cable
 	}
 
 	@Override
@@ -136,19 +119,19 @@ public class CableConnector extends DimensionalDrawnObject implements
 	public void onMousePositionEvent(MousePositionEventType eventType,
 			Point2D mousePosition, double eventStepTime)
 	{
-		// Doesn't react to mouse position events
-		// TODO: Add scaling effect of 1.3 if can react to mouse
+		// TODO: Add scaling if removable
 	}
 
 	@Override
 	public void onMouseMove(Point2D newMousePosition)
 	{
-		// Doesn't react to mouse movement
+		// TODO: Update transformations if being placed
 	}
 
 	@Override
 	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
 	{
+		// TODO: Change to global when being placed
 		return MouseButtonEventScale.LOCAL;
 	}
 
@@ -190,29 +173,5 @@ public class CableConnector extends DimensionalDrawnObject implements
 		if (this.spritedrawer == null)
 			return;
 		this.spritedrawer.drawSprite(g2d, 0, 0);
-	}
-	
-	@Override
-	public boolean isDead()
-	{
-		// Is considered dead if the component is dead
-		return (this.host.isDead() || super.isDead());
-	}
-	
-	@Override
-	public boolean isVisible()
-	{
-		// Is considered invisible if the component is invisible
-		return (this.host.isVisible() && super.isVisible());
-	}
-
-	
-	// OTHER METHODS	--------------------------------------------------
-	
-	// Updates the object's absolute position
-	private void updateAbsolutePosition()
-	{
-		Point2D.Double newPosition = this.host.transform(this.relativePoint);
-		setPosition(newPosition.getX(), newPosition.getY());
 	}
 }

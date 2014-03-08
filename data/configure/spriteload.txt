@@ -8,4 +8,5 @@
 
 &components
 test#images/components/testcomponent.png#1#25#32
-cableconnector#images/components/cableconnector.png#1#15#15
+cableconnector#images/components/cableconnector_v2.png#2#15#15
+cable#images/components/cable.png#1#4#4

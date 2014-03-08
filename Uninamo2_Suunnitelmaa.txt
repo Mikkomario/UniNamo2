@@ -2,18 +2,17 @@ Uninamo2 Suunnitelmaa
 
 Työtehtäviä
 	* Alpha	----------------------------------------------------------------------
-		- Alkuvalmistelut													...
+		- Alkuvalmistelut													Testaamatta
 			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE
-			* Handlersysteemien luominen									...
-			* Navigaatiosysteemin rekonstruointi							...
+			* Handlersysteemien luominen									DONE
+			* Navigaatiosysteemin rekonstruointi							Testaamatta
 				- Vanhan navigaatiosysteemin abstrahointi					DONE
 				- Yleisen ratkaisun muodostus								Testaamatta
 					* Yleinen GamePhase -luokka								Testaamatta
 					* Yleinen resourceActivator -luokka						Testaamatta
 					* GamePhasejen luominen ja syöttäminen 					Testaamatta
 					resourceActovatoriin
-				- Navigaatiosysteemin luominen
 			* Graafisten resurssien lataaminen								DONE
 		- Komponenttien perustoiminnot										...
 			* Komponenttiarkkitehtuuri										...
@@ -22,7 +21,7 @@ Työtehtäviä
 				- Signaalinkäsittelijäluokka								...
 					* Signaalinlähettäjä
 					* Signaalinvastaanottaja
-			* Johtoluokan runko
+			* Johtoluokan runko												DONE
 			* Komponenttien sijoittaminen ja piirtäminen					DONE
 		- Komponenttien kytkeminen toisiinsa
 			* Johtoluokan viimeistely
