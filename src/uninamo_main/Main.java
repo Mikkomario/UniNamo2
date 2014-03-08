@@ -66,7 +66,7 @@ public class Main
 		ResourceActivator.startPhase(MultiMediaHolder.getGamePhaseBank(
 				"default").getPhase("gameplay"));
 		// Creates a test component
-		new Component(300, 300, maindrawer, mainactorhandler, mainmousehandler, "test");
+		//new Component(300, 300, maindrawer, mainactorhandler, mainmousehandler, "test");
 	}
 	
 	

@@ -22,13 +22,14 @@ import utopia_resourcebanks.MultiMediaHolder;
  * @author Mikko Hilpinen
  * @since 8.3.2014
  */
-public class Component extends DimensionalDrawnObject implements
-		AdvancedMouseListener
+public abstract class Component extends DimensionalDrawnObject implements
+		AdvancedMouseListener, SignalReceiver
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
 	private SingleSpriteDrawer spritedrawer;
-	// TODO: Add signalprocessorlists
+	private InputCableConnector[] inputs;
+	private OutputCableConnector[] outputs;
 	private boolean active;
 	
 	
@@ -45,10 +46,12 @@ public class Component extends DimensionalDrawnObject implements
 	 * object about mouse events
 	 * @param spritename The name of the component sprite used to draw the 
 	 * component
+	 * @param inputs How many input connectors the component has
+	 * @param outputs How many output connectors the component has
 	 */
 	public Component(int x, int y, DrawableHandler drawer, 
 			ActorHandler actorhandler, MouseListenerHandler mousehandler, 
-			String spritename)
+			String spritename, int inputs, int outputs)
 	{
 		super(x, y, DepthConstants.NORMAL, false, CollisionType.BOX, drawer, 
 				null);
@@ -58,6 +61,22 @@ public class Component extends DimensionalDrawnObject implements
 				MultiMediaHolder.getSpriteBank("components").getSprite(
 				spritename), actorhandler, this);
 		this.active = true;
+		this.inputs = new InputCableConnector[inputs];
+		this.outputs = new OutputCableConnector[outputs];
+		
+		// Creates the connectors
+		for (int i = 0; i < inputs; i++)
+		{
+			int relativey = (i + 1) * (getHeight() / (inputs + 1));
+			this.inputs[i] = new InputCableConnector(15, relativey, drawer, 
+					mousehandler, this);
+		}
+		for (int i = 0; i < outputs; i++)
+		{
+			int relativey = (i + 1) * (getHeight() / (inputs + 1));
+			this.outputs[i] = new OutputCableConnector(getWidth() - 15, 
+					relativey, drawer, mousehandler, this);
+		}
 		
 		// Adds the object to the handler(s)
 		if (mousehandler != null)

@@ -18,15 +18,16 @@ Työtehtäviä
 					resourceActovatoriin
 			* Graafisten resurssien lataaminen								DONE
 		- Komponenttien perustoiminnot										...
-			* Komponenttiarkkitehtuuri										...
+			* Komponenttiarkkitehtuuri										DONE
 			* Yksinkertaisen testikomponentin (virtalähde) luominen
-			* Signaalin lähettäminen ja vastaanottaminen					...
-				- Signaalinkäsittelijäluokka								...
-					* Signaalinlähettäjä
-					* Signaalinvastaanottaja
+			* Signaalin lähettäminen ja vastaanottaminen					Testaamatta
+				- Signaalinkäsittelijäluokka								Testaamatta
+					* Signaalinlähettäjä									Testaamatta
+					* Signaalinvastaanottaja								Testaamatta
 			* Johtoluokan runko												DONE
 			* Komponenttien sijoittaminen ja piirtäminen					DONE
 		- Komponenttien kytkeminen toisiinsa
+			* Toisen yksinkertaisen komponenttiluokan valmistaminen
 			* Johtoluokan viimeistely
 				- Johdon piirto
 				- Johdon reagointi signaaleihin
