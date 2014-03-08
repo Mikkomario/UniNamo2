@@ -37,6 +37,15 @@ public class OpenSpriteBankHolder extends OpenBankHolder
 	}
 	
 	
+	// IMPLEMENTED METHODS	----------------------------------------------
+	
+	@Override
+	protected OpenBank createBank(ArrayList<String> commands)
+	{
+		return new OpenSpriteBank(commands);
+	}
+	
+	
 	// OTHER METHODS	--------------------------------------------------
 
 	/**
@@ -55,11 +64,5 @@ public class OpenSpriteBankHolder extends OpenBankHolder
 			return (OpenSpriteBank) maybeOpenSpriteBank;
 		else
 			return null;
-	}
-	
-	@Override
-	protected OpenBank createBank(ArrayList<String> commands)
-	{
-		return new OpenSpriteBank(commands);
 	}
 }

@@ -42,10 +42,10 @@ public class OpenGamePhaseBank extends GamePhaseBank implements OpenBank
 		for (int i = 0; i < this.creationCommands.size(); i++)
 		{
 			String command = this.creationCommands.get(i);
-			String[] parts = command.split("#");
+			String[] arguments = command.split("#");
 			
 			// Checks that there are enough arguments
-			if (parts.length < 2)
+			if (arguments.length < 2)
 			{
 				System.err.println("Couldn't load a GamePhase. Line " + command + 
 						"doensn't have enough arguments");
@@ -54,12 +54,13 @@ public class OpenGamePhaseBank extends GamePhaseBank implements OpenBank
 			
 			HashMap<ResourceType, String[]> banknames = 
 					new HashMap<ResourceType, String[]>();
-			
+					
+			// The first argument is the name of the phase
 			// Reads the banknames and resourcetypes from arguments 2 forwards
-			for (int partindex = 1; partindex < parts.length; partindex++)
+			for (int argumentindex = 1; argumentindex < arguments.length; argumentindex++)
 			{
 				// The banknames are listed in the second part of the argument
-				String[] resourceparts = parts[partindex].split(":");
+				String[] resourceparts = arguments[argumentindex].split(":");
 				String[] nameslist = resourceparts[1].split(",");
 				
 				// Adds the names to the map
@@ -68,14 +69,14 @@ public class OpenGamePhaseBank extends GamePhaseBank implements OpenBank
 			
 			// Creates a new phase, adds it to the bank and updates it according 
 			// to the findings
-			GamePhase newPhase = new GamePhase(parts[0]);
+			GamePhase newPhase = new GamePhase(arguments[0]);
 			
 			for (ResourceType type : banknames.keySet())
 			{
 				newPhase.connectResourceBankNames(type,  banknames.get(type));
 			}
 			
-			addObject(newPhase, parts[0]);
+			addObject(newPhase, arguments[0]);
 		}
 	}
 }
