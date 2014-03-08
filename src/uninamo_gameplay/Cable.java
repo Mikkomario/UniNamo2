@@ -20,12 +20,18 @@ import utopia_resourcebanks.MultiMediaHolder;
  * @since 8.3.2014
  */
 public class Cable extends DimensionalDrawnObject implements
-		AdvancedMouseListener, TransformationListener
+		AdvancedMouseListener, TransformationListener, SignalRelay, SignalReceiver
+		// TODO: Add new signal interfaces
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private SingleSpriteDrawer spritedrawer;
 	private boolean active;
+	
+	/**
+	 * Is there currently a cable that's being dragged around
+	 */
+	protected static boolean cableIsBeingDragged = false;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -40,7 +46,7 @@ public class Cable extends DimensionalDrawnObject implements
 	 * @param startConnector The connector the cable starts from
 	 */
 	public Cable(DrawableHandler drawer, MouseListenerHandler mousehandler, 
-			CableConnector startConnector)
+			OutputCableConnector startConnector)
 	{
 		super(0, 0, startConnector.getDepth() - 1, false, CollisionType.BOX, 
 				drawer, null);
@@ -173,5 +179,21 @@ public class Cable extends DimensionalDrawnObject implements
 		if (this.spritedrawer == null)
 			return;
 		this.spritedrawer.drawSprite(g2d, 0, 0);
+	}
+
+
+	@Override
+	public void onSignalChange(boolean newSignalStatus, SignalRelay source)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public boolean getSignalStatus()
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

@@ -2,6 +2,7 @@ package uninamo_gameplay;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 import utopia_gameobjects.DimensionalDrawnObject;
 import utopia_graphic.SingleSpriteDrawer;
@@ -21,15 +22,16 @@ import utopia_resourcebanks.MultiMediaHolder;
  * @since 8.3.2014
  * @see Component
  */
-public class CableConnector extends DimensionalDrawnObject implements
-		AdvancedMouseListener, TransformationListener
+public abstract class CableConnector extends DimensionalDrawnObject implements
+		AdvancedMouseListener, TransformationListener, SignalRelay, 
+		SignalReceiver
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private SingleSpriteDrawer spritedrawer;
 	private Component host;
 	private Point2D.Double relativePoint;
-	// TODO: Add cable list(s)
+	private ArrayList<Cable> connectedCables;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -58,6 +60,7 @@ public class CableConnector extends DimensionalDrawnObject implements
 		this.spritedrawer = new SingleSpriteDrawer(
 				MultiMediaHolder.getSpriteBank("components").getSprite(
 				"cableconnector"), null, this);
+		this.connectedCables = new ArrayList<Cable>();
 		
 		// Updates radius
 		setRadius(this.spritedrawer.getSprite().getWidth() / 2);
@@ -112,44 +115,15 @@ public class CableConnector extends DimensionalDrawnObject implements
 	}
 
 	@Override
-	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Point2D mousePosition,
-			double eventStepTime)
-	{
-		// TODO: Add cable connecting
-	}
-
-	@Override
 	public boolean listensPosition(Point2D testedPosition)
 	{
 		return pointCollides(testedPosition);
 	}
 
 	@Override
-	public boolean listensMouseEnterExit()
-	{
-		// TODO: Change later
-		return false;
-	}
-
-	@Override
-	public void onMousePositionEvent(MousePositionEventType eventType,
-			Point2D mousePosition, double eventStepTime)
-	{
-		// Doesn't react to mouse position events
-		// TODO: Add scaling effect of 1.3 if can react to mouse
-	}
-
-	@Override
 	public void onMouseMove(Point2D newMousePosition)
 	{
 		// Doesn't react to mouse movement
-	}
-
-	@Override
-	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
-	{
-		return MouseButtonEventScale.LOCAL;
 	}
 
 	@Override
@@ -208,6 +182,73 @@ public class CableConnector extends DimensionalDrawnObject implements
 
 	
 	// OTHER METHODS	--------------------------------------------------
+	
+	/**
+	 * @return The spriteDrawer the connector uses
+	 */
+	protected SingleSpriteDrawer getSpriteDrawer()
+	{
+		return this.spritedrawer;
+	}
+	
+	/**
+	 * Returns a cable from the list of connected cables
+	 * 
+	 * @param index The index of the cable in the list (starts from 0)
+	 * @return A cable with the given index or null if no such index exists
+	 */
+	protected Cable getCable(int index)
+	{
+		if (index >= 0 && index < this.connectedCables.size())
+			return this.connectedCables.get(index);
+		else
+			return null;
+	}
+	
+	/**
+	 * Connects a new cable to the cable connector
+	 * 
+	 * @param c The cable to be connected
+	 */
+	public void connectCable(Cable c)
+	{
+		if (!this.connectedCables.contains(c))
+			this.connectedCables.add(c);
+	}
+	
+	/**
+	 * Removes a cable from the connector
+	 * @param c The cable to be removed from the connector
+	 */
+	public void removeCable(Cable c)
+	{
+		if (this.connectedCables.contains(c))
+			this.connectedCables.remove(c);
+	}
+	
+	/**
+	 * @return How many cables are connected to this connector
+	 */
+	protected int getCableAmount()
+	{
+		return this.connectedCables.size();
+	}
+	
+	/**
+	 * Makes the connector appear larger
+	 */
+	protected void largen()
+	{
+		setScale(1.3, 1.3);
+	}
+	
+	/**
+	 * Rescales the component back to the component's levels
+	 */
+	protected void rescale()
+	{
+		setScale(this.host.getXScale(), this.host.getYScale());
+	}
 	
 	// Updates the object's absolute position
 	private void updateAbsolutePosition()

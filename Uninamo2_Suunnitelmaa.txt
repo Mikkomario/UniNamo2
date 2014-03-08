@@ -2,6 +2,9 @@ Uninamo2 Suunnitelmaa
 
 Työtehtäviä
 	* Alpha	----------------------------------------------------------------------
+		- Utopia Game Enginen debuggaus
+			* Originia ei aina ehditä laskea ennen ensimmäistä piirtoa 
+			-> piirtyy aluksi väärään paikkaan
 		- Alkuvalmistelut													Testaamatta
 			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE
@@ -67,6 +70,7 @@ Työtehtäviä
 			* Roskisluokka ja sen luominen alussa
 			* Komponenttien reagointi törmäykseen roskiksen kanssa 
 			dropin lopussa
+		- Takaisinkytkentätilanteiden ratkaiseminen
 	* Beta	----------------------------------------------------------------------
 		- Voittolaitteet
 			* Voittolaitearkkitehtuuri
