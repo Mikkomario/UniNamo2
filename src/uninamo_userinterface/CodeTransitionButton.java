@@ -74,12 +74,15 @@ public class CodeTransitionButton extends AbstractButton
 	public void onMouseButtonEvent(MouseButton button,
 			MouseButtonEventType eventType, Point2D mousePosition,
 			double eventStepTime)
-	{
+	{	
+		if (button != MouseButton.LEFT || eventType != MouseButtonEventType.PRESSED)
+			return;
+		
 		// Enables drawing and mouse of the new area but disables them from 
 		// the old one
 		Area newArea, oldArea;
 		
-		System.out.println(mousePosition);
+		//System.out.println(this);
 		
 		if (this.type == TODESING)
 		{

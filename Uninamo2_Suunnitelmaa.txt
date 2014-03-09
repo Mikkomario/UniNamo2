@@ -5,6 +5,8 @@ Työtehtäviä
 		- Utopia Game Enginen debuggaus
 			* Originia ei aina ehditä laskea ennen ensimmäistä piirtoa 
 			-> piirtyy aluksi väärään paikkaan
+			* Kun siirrytään koodauksesta designiin, voi muutosprosessi 
+			mennä pieleen (puoliksi muuttuu)
 		- Alkuvalmistelut													DONE
 			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE
@@ -35,10 +37,10 @@ Työtehtäviä
 				- Komponenttien hiirikuuntelu								DONE
 			* Johtojen poistamisen implementointi käyttöliittymässä			DONE
 				- Johtojen hiirikuuntelu									DONE
-		- Komponenttinäkymän ja testinäkymän välillä liikkuminen			...
-			* Eri handlereiden aktivoiminen ja deaktivoiminen				Testaamatta
+		- Komponenttinäkymän ja testinäkymän välillä liikkuminen			DONE
+			* Eri handlereiden aktivoiminen ja deaktivoiminen				DONE
 			* Background toiseen näkymään niin erottaa						DONE
-			* Siirtymänappula(t) koodauksen ja suunnitelman välille			buginen
+			* Siirtymänappula(t) koodauksen ja suunnitelman välille			DONE
 		- Laitteiden perustoiminnot
 			* Laitearkkitehtuuri
 			* Yksinkertaisen testilaitteen (liukuhihna) luominen
