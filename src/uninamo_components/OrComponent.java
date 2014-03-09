@@ -45,6 +45,8 @@ public class OrComponent extends Component
 	@Override
 	public void onSignalChange(boolean newSignalStatus, SignalSender source)
 	{
+		//System.out.println("Or signal changes");
+		
 		// Informs the new signal to the output connector
 		this.signalStatus = (getInputStatus(0) || getInputStatus(1));
 		sendSignalToOutput(0, this.signalStatus);

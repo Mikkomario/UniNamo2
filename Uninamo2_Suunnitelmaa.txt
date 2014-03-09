@@ -26,15 +26,15 @@ Työtehtäviä
 					* Signaalinvastaanottaja								Testaamatta
 			* Johtoluokan runko												DONE
 			* Komponenttien sijoittaminen ja piirtäminen					DONE
-		- Komponenttien kytkeminen toisiinsa								...
+		- Komponenttien kytkeminen toisiinsa								DONE
 			* Toisen yksinkertaisen komponenttiluokan valmistaminen			DONE
-			* Johtoluokan viimeistely										...
+			* Johtoluokan viimeistely										DONE
 				- Johdon piirto												DONE
-				- Johdon reagointi signaaleihin								Testaamatta
-			* Johtojen luomisen implementointi käyttöliittymässä			...
-				- Komponenttien hiirikuuntelu								...
-			* Johtojen poistamisen implementointi käyttöliittymässä			...
-				- Johtojen hiirikuuntelu									...
+				- Johdon reagointi signaaleihin								DONE
+			* Johtojen luomisen implementointi käyttöliittymässä			DONE
+				- Komponenttien hiirikuuntelu								DONE
+			* Johtojen poistamisen implementointi käyttöliittymässä			DONE
+				- Johtojen hiirikuuntelu									DONE
 		- Komponenttinäkymän ja testinäkymän välillä liikkuminen
 			* Eri handlereiden aktivoiminen ja deaktivoiminen
 		- Laitteiden perustoiminnot
@@ -72,6 +72,7 @@ Työtehtäviä
 			* Komponenttien reagointi törmäykseen roskiksen kanssa 
 			dropin lopussa
 		- Takaisinkytkentätilanteiden ratkaiseminen
+			* Ongelmia signaalintunnistuksen kanssa jos komponentti ohjaa itseään
 	* Beta	----------------------------------------------------------------------
 		- Voittolaitteet
 			* Voittolaitearkkitehtuuri

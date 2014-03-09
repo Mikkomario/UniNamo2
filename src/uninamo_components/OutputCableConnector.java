@@ -64,29 +64,8 @@ public class OutputCableConnector extends CableConnector
 				MouseButtonEventType.PRESSED && !Cable.cableIsBeingDragged)
 		{
 			connectCable(new Cable(this.drawer, this.mousehandler, this.relay, 
-					this));
-			// Also resets scaling
-			rescale();
+					this, null));
 		}
-	}
-
-	@Override
-	public boolean listensMouseEnterExit()
-	{
-		// Only listens to enter / exit if a new cable can be created (one is 
-		// not being dragged)
-		return !Cable.cableIsBeingDragged;
-	}
-
-	@Override
-	public void onMousePositionEvent(MousePositionEventType eventType,
-			Point2D mousePosition, double eventStepTime)
-	{
-		// Scales the object on enter, rescales on exit
-		if (eventType == MousePositionEventType.ENTER)
-			largen();
-		else if (eventType == MousePositionEventType.EXIT)
-			rescale();
 	}
 
 	@Override
@@ -109,12 +88,6 @@ public class OutputCableConnector extends CableConnector
 				getCable(i).onSignalChange(getSignalStatus(), this);
 			}
 		}
-	}
-
-	@Override
-	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
-	{
-		return MouseButtonEventScale.LOCAL;
 	}
 	
 	@Override

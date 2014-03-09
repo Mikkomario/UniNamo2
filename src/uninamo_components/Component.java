@@ -72,13 +72,13 @@ public abstract class Component extends DimensionalDrawnObject implements
 		for (int i = 0; i < inputs; i++)
 		{
 			int relativey = (int) ((i + 1) * (getHeight() / (inputs + 1.0)));
-			this.inputs[i] = new InputCableConnector(10, relativey, drawer, 
+			this.inputs[i] = new InputCableConnector(0, relativey, drawer, 
 					mousehandler, connectorRelay, this);
 		}
 		for (int i = 0; i < outputs; i++)
 		{
 			int relativey = (int) ((i + 1) * (getHeight() / (outputs + 1.0)));
-			this.outputs[i] = new OutputCableConnector(getWidth() - 10, 
+			this.outputs[i] = new OutputCableConnector(getWidth() - 0, 
 					relativey, drawer, mousehandler, connectorRelay, this);
 		}
 		
@@ -262,7 +262,7 @@ public abstract class Component extends DimensionalDrawnObject implements
 	 */
 	protected boolean getInputStatus(int index)
 	{
-		if (index < 0 || index >= this.outputs.length)
+		if (index < 0 || index >= this.inputs.length)
 		{
 			System.err.println("The component doesn't have input with index " 
 					+ index);

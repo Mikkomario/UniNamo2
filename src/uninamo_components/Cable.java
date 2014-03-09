@@ -9,6 +9,7 @@ import utopia_graphic.SingleSpriteDrawer;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.CollisionType;
+import utopia_helpAndEnums.DepthConstants;
 import utopia_helpAndEnums.HelpMath;
 import utopia_listeners.AdvancedMouseListener;
 import utopia_listeners.TransformationListener;
@@ -27,7 +28,7 @@ public class Cable extends DimensionalDrawnObject implements
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private SingleSpriteDrawer spritedrawer;
-	private boolean active, lastSignalStatus;
+	private boolean active, lastSignalStatus, dragged;
 	private OutputCableConnector start;
 	private InputCableConnector end;
 	private Point2D.Double lastMousePosition;
@@ -50,12 +51,14 @@ public class Cable extends DimensionalDrawnObject implements
 	 * cable about mouse events
 	 * @param connectorRelay A connectorRelay that will inform the cable about 
 	 * connector positions
-	 * @param startConnector The connector the cable starts from
+	 * @param startConnector The connector the cable starts from (Optional if endConnector is provided)
+	 * @param endConnector The connector the cable ends to (optional if startConnector is provided)
 	 */
 	public Cable(DrawableHandler drawer, MouseListenerHandler mousehandler, 
-			ConnectorRelay connectorRelay, OutputCableConnector startConnector)
+			ConnectorRelay connectorRelay, OutputCableConnector startConnector, 
+			InputCableConnector endConnector)
 	{
-		super(0, 0, startConnector.getDepth() - 1, false, CollisionType.BOX, 
+		super(0, 0, DepthConstants.NORMAL - 5, false, CollisionType.BOX, 
 				drawer, null);
 		
 		// The cable starts as being dragged
@@ -70,12 +73,13 @@ public class Cable extends DimensionalDrawnObject implements
 				"cable"), null, this);
 		this.active = true;
 		this.start = startConnector;
-		this.end = null;
+		this.end = endConnector;
 		this.lastMousePosition = new Point2D.Double(
 				mousehandler.getMousePosition().getX(), 
 				mousehandler.getMousePosition().getY());
-		this.lastSignalStatus = this.start.getSignalStatus();
+		this.lastSignalStatus = false;
 		this.connectorRelay = connectorRelay;
+		this.dragged = true;
 		
 		updateTransformations();
 		this.spritedrawer.setImageSpeed(0);
@@ -84,7 +88,10 @@ public class Cable extends DimensionalDrawnObject implements
 		// Adds the object to the handler(s)
 		if (mousehandler != null)
 			mousehandler.addMouseListener(this);
-		startConnector.getTransformationListenerHandler().addListener(this);
+		if (startConnector != null)
+			startConnector.getTransformationListenerHandler().addListener(this);
+		if (endConnector != null)
+			endConnector.getTransformationListenerHandler().addListener(this);
 	}
 	
 	
@@ -133,6 +140,7 @@ public class Cable extends DimensionalDrawnObject implements
 		{
 			// Ends drag
 			cableIsBeingDragged = false;
+			this.dragged = false;
 			
 			//System.out.println("Ends drag on cable " + this + ": " + (this.start == null) + ", " + (this.end == null));
 			
@@ -145,7 +153,9 @@ public class Cable extends DimensionalDrawnObject implements
 				// If one couldn't be found, dies
 				if (newstart == null)
 				{
+					//System.out.println("Cable dies since start is null");
 					this.end.removeCable(this);
+					this.end = null;
 					kill();
 				}
 				else
@@ -163,7 +173,9 @@ public class Cable extends DimensionalDrawnObject implements
 				// If one couldn't be found, dies
 				if (newend == null)
 				{
+					//System.out.println("Dies since end is null");
 					this.start.removeCable(this);
+					this.start = null;
 					kill();
 				}
 				else
@@ -173,6 +185,8 @@ public class Cable extends DimensionalDrawnObject implements
 					this.end.getTransformationListenerHandler().addListener(this);
 				}
 			}
+			
+			//System.out.println("Cable is still without end: " + (this.start == null) + ", " + (this.end == null));
 		}
 		
 		// On mouse press removes the cable from either end
@@ -180,8 +194,9 @@ public class Cable extends DimensionalDrawnObject implements
 				MouseButtonEventType.PRESSED && !cableIsBeingDragged)
 		{
 			cableIsBeingDragged = true;
+			this.dragged = true;
 			
-			System.out.println("Releases a cable");
+			//System.out.println("Releases a cable");
 			
 			// If the button was pressed closer to start, removes the cable 
 			// from there, otherwise removes the cable from the end point
@@ -291,6 +306,10 @@ public class Cable extends DimensionalDrawnObject implements
 	@Override
 	public void onSignalChange(boolean newSignalStatus, SignalSender source)
 	{
+		// If the status is same as previously, does nothing
+		if (newSignalStatus == this.lastSignalStatus)
+			return;
+		
 		// Informs the end point about the change (if there is one)
 		if (this.end != null)
 			this.end.onSignalChange(newSignalStatus, this);
@@ -339,6 +358,6 @@ public class Cable extends DimensionalDrawnObject implements
 	
 	private boolean isBeingDragged()
 	{
-		return (cableIsBeingDragged && (this.start != null || this.end != null));
+		return this.dragged;//(cableIsBeingDragged && (this.start != null || this.end != null));
 	}
 }

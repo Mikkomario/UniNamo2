@@ -115,7 +115,8 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 		updateAbsolutePosition();
 		
 		// May scale the object as well
-		if (e.getType() == TransformationType.SCAlING)
+		if (e.getType() == TransformationType.SCAlING && getXScale() 
+				<= GameSettings.interfaceScaleFactor)
 			setScale(this.host.getXScale(), this.host.getYScale());
 	}
 
@@ -184,9 +185,40 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 		// Is considered invisible if the component is invisible
 		return (this.host.isVisible() && super.isVisible());
 	}
+	
+	@Override
+	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
+	{
+		return MouseButtonEventScale.LOCAL;
+	}
+	
+	@Override
+	public void onMousePositionEvent(MousePositionEventType eventType,
+			Point2D mousePosition, double eventStepTime)
+	{
+		// Scales the object on enter, rescales on exit
+		if (eventType == MousePositionEventType.ENTER)
+			largen();
+		else if (eventType == MousePositionEventType.EXIT)
+			rescale();
+	}
+	
+	@Override
+	public boolean listensMouseEnterExit()
+	{
+		return true;
+	}
 
 	
 	// OTHER METHODS	--------------------------------------------------
+	
+	/**
+	 * @return The component the connector is connected to
+	 */
+	protected Component getHost()
+	{
+		return this.host;
+	}
 	
 	/**
 	 * @return The spriteDrawer the connector uses
@@ -242,7 +274,7 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	/**
 	 * Makes the connector appear larger
 	 */
-	protected void largen()
+	private void largen()
 	{
 		double newscale = Math.pow(GameSettings.interfaceScaleFactor, 2);
 		setScale(newscale, newscale);
@@ -251,7 +283,7 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	/**
 	 * Rescales the component back to the component's levels
 	 */
-	protected void rescale()
+	private void rescale()
 	{
 		setScale(this.host.getXScale(), this.host.getYScale());
 	}

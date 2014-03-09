@@ -17,6 +17,9 @@ public class InputCableConnector extends CableConnector
 	// ATTRIBUTES	------------------------------------------------------
 	
 	private boolean lastSignalStatus;
+	private DrawableHandler drawer;
+	private MouseListenerHandler mousehandler;
+	private ConnectorRelay relay;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -39,7 +42,11 @@ public class InputCableConnector extends CableConnector
 			ConnectorRelay relay, Component host)
 	{
 		super(relativex, relativey, drawer, mousehandler, relay, host);
-		// TODO: Change the parameter to inputComponent and add an attribute
+		
+		// Initializes attributes
+		this.drawer = drawer;
+		this.mousehandler = mousehandler;
+		this.relay = relay;
 		
 		// Changes the look of the connector
 		getSpriteDrawer().setImageIndex(1);
@@ -56,26 +63,14 @@ public class InputCableConnector extends CableConnector
 			MouseButtonEventType eventType, Point2D mousePosition,
 			double eventStepTime)
 	{
-		// Doesn't react to mouse buttons (cables do that)
-	}
-
-	@Override
-	public boolean listensMouseEnterExit()
-	{
-		// Only listens to enter / exit if a new cable is being dragged and 
-		// can be placed
-		return Cable.cableIsBeingDragged;
-	}
-
-	@Override
-	public void onMousePositionEvent(MousePositionEventType eventType,
-			Point2D mousePosition, double eventStepTime)
-	{
-		// Scales the object on enter, rescales on exit
-		if (eventType == MousePositionEventType.ENTER)
-			largen();
-		else if (eventType == MousePositionEventType.EXIT)
-			rescale();
+		// If the connector is clicked with a left mouse button it will create 
+		// a new cable
+		if (button == MouseButton.LEFT && eventType == 
+				MouseButtonEventType.PRESSED && !Cable.cableIsBeingDragged)
+		{
+			connectCable(new Cable(this.drawer, this.mousehandler, this.relay, 
+					null, this));
+		}
 	}
 
 	@Override
@@ -88,6 +83,8 @@ public class InputCableConnector extends CableConnector
 	@Override
 	public void onSignalChange(boolean newSignalStatus, SignalSender source)
 	{
+		//System.out.println("Input receives new signal");
+		
 		// Checks if the signal changed and informs the component if that 
 		// is the case
 		boolean newStatus = calculateNewSignalStatus();
@@ -95,15 +92,9 @@ public class InputCableConnector extends CableConnector
 		if (newStatus != getSignalStatus())
 		{
 			this.lastSignalStatus = newStatus;
-			// TODO: Inform the component (once you get input and output components done)
+			// Informs the component as well
+			getHost().onSignalChange(getSignalStatus(), this);
 		}	
-	}
-	
-	@Override
-	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
-	{
-		// Isn't interested in mouse button presses
-		return MouseButtonEventScale.NONE;
 	}
 	
 	@Override
