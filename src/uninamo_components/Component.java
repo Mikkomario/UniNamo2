@@ -12,7 +12,9 @@ import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.CollisionType;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_listeners.AdvancedMouseListener;
+import utopia_listeners.RoomListener;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Room;
 
 /**
  * Components are key elements in the game. Components can be placed on the 
@@ -24,7 +26,7 @@ import utopia_resourcebanks.MultiMediaHolder;
  * @since 8.3.2014
  */
 public abstract class Component extends DimensionalDrawnObject implements
-		AdvancedMouseListener, SignalReceiver, SignalSender
+		AdvancedMouseListener, SignalReceiver, SignalSender, RoomListener
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
@@ -45,6 +47,7 @@ public abstract class Component extends DimensionalDrawnObject implements
 	 * @param actorhandler The actorHandler that will animate the component
 	 * @param mousehandler The mouseListenerHandler that will inform the 
 	 * object about mouse events
+	 * @param room The room where the component resides at
 	 * @param connectorRelay A connectorRelay that will keep track of the 
 	 * connectors
 	 * @param spritename The name of the component sprite used to draw the 
@@ -54,8 +57,8 @@ public abstract class Component extends DimensionalDrawnObject implements
 	 */
 	public Component(int x, int y, DrawableHandler drawer, 
 			ActorHandler actorhandler, MouseListenerHandler mousehandler, 
-			ConnectorRelay connectorRelay, String spritename, int inputs, 
-			int outputs)
+			Room room, ConnectorRelay connectorRelay, String spritename, 
+			int inputs, int outputs)
 	{
 		super(x, y, DepthConstants.NORMAL, false, CollisionType.BOX, drawer, 
 				null);
@@ -73,16 +76,18 @@ public abstract class Component extends DimensionalDrawnObject implements
 		{
 			int relativey = (int) ((i + 1) * (getHeight() / (inputs + 1.0)));
 			this.inputs[i] = new InputCableConnector(0, relativey, drawer, 
-					mousehandler, connectorRelay, this);
+					mousehandler, room, connectorRelay, this);
 		}
 		for (int i = 0; i < outputs; i++)
 		{
 			int relativey = (int) ((i + 1) * (getHeight() / (outputs + 1.0)));
 			this.outputs[i] = new OutputCableConnector(getWidth() - 0, 
-					relativey, drawer, mousehandler, connectorRelay, this);
+					relativey, drawer, mousehandler, room, connectorRelay, this);
 		}
 		
 		// Adds the object to the handler(s)
+		if (room != null)
+			room.addObject(this);
 		if (mousehandler != null)
 			mousehandler.addMouseListener(this);
 	}
@@ -199,6 +204,19 @@ public abstract class Component extends DimensionalDrawnObject implements
 		if (this.spritedrawer == null)
 			return;
 		this.spritedrawer.drawSprite(g2d, 0, 0);
+	}
+	
+	@Override
+	public void onRoomStart(Room room)
+	{
+		// Does nothing
+	}
+
+	@Override
+	public void onRoomEnd(Room room)
+	{
+		// Dies
+		kill();
 	}
 	
 	

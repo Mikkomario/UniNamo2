@@ -11,8 +11,10 @@ import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.CollisionType;
 import utopia_listeners.AdvancedMouseListener;
+import utopia_listeners.RoomListener;
 import utopia_listeners.TransformationListener;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Room;
 
 /**
  * CableConnectors are attached to certain components. They handle the signal 
@@ -25,7 +27,7 @@ import utopia_resourcebanks.MultiMediaHolder;
  */
 public abstract class CableConnector extends DimensionalDrawnObject implements
 		AdvancedMouseListener, TransformationListener, SignalSender, 
-		SignalReceiver
+		SignalReceiver, RoomListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
@@ -47,11 +49,12 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	 * @param drawer The drawableHandler that will draw the connector
 	 * @param mousehandler The mouseListenerHandler that will inform the object 
 	 * about mouse events
+	 * @param room The room where the connector resides at
 	 * @param relay The ConnectorRelay that will keep track of the connector
 	 * @param host The component to which the connector is tied to
 	 */
 	public CableConnector(int relativex, int relativey, DrawableHandler drawer, 
-			MouseListenerHandler mousehandler, ConnectorRelay relay, 
+			MouseListenerHandler mousehandler, Room room, ConnectorRelay relay, 
 			Component host)
 	{
 		super(0, 0, host.getDepth() - 1, false, CollisionType.CIRCLE, drawer, 
@@ -72,6 +75,8 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 		updateAbsolutePosition();
 		
 		// Adds the object to the handler(s)
+		if (room != null)
+			room.addObject(this);
 		if (mousehandler != null)
 			mousehandler.addMouseListener(this);
 		if (relay != null)
@@ -207,6 +212,19 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	public boolean listensMouseEnterExit()
 	{
 		return true;
+	}
+	
+	@Override
+	public void onRoomStart(Room room)
+	{
+		// Does nothing
+	}
+
+	@Override
+	public void onRoomEnd(Room room)
+	{
+		// Dies
+		kill();
 	}
 
 	

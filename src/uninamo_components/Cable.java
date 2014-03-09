@@ -12,8 +12,10 @@ import utopia_helpAndEnums.CollisionType;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_helpAndEnums.HelpMath;
 import utopia_listeners.AdvancedMouseListener;
+import utopia_listeners.RoomListener;
 import utopia_listeners.TransformationListener;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Room;
 
 /**
  * Cables are elements that connect components together and that deliver 
@@ -23,7 +25,8 @@ import utopia_resourcebanks.MultiMediaHolder;
  * @since 8.3.2014
  */
 public class Cable extends DimensionalDrawnObject implements
-		AdvancedMouseListener, TransformationListener, SignalSender, SignalReceiver
+		AdvancedMouseListener, TransformationListener, SignalSender, 
+		SignalReceiver, RoomListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
@@ -49,14 +52,15 @@ public class Cable extends DimensionalDrawnObject implements
 	 * @param drawer The drawableHandler that will draw the cable
 	 * @param mousehandler The mouseListenerHandler that will inform the 
 	 * cable about mouse events
+	 * @param room The room where the cable resides at
 	 * @param connectorRelay A connectorRelay that will inform the cable about 
 	 * connector positions
 	 * @param startConnector The connector the cable starts from (Optional if endConnector is provided)
 	 * @param endConnector The connector the cable ends to (optional if startConnector is provided)
 	 */
 	public Cable(DrawableHandler drawer, MouseListenerHandler mousehandler, 
-			ConnectorRelay connectorRelay, OutputCableConnector startConnector, 
-			InputCableConnector endConnector)
+			Room room, ConnectorRelay connectorRelay, 
+			OutputCableConnector startConnector, InputCableConnector endConnector)
 	{
 		super(0, 0, DepthConstants.NORMAL - 5, false, CollisionType.BOX, 
 				drawer, null);
@@ -86,6 +90,8 @@ public class Cable extends DimensionalDrawnObject implements
 		this.spritedrawer.setImageIndex(0);
 		
 		// Adds the object to the handler(s)
+		if (room != null)
+			room.addObject(this);
 		if (mousehandler != null)
 			mousehandler.addMouseListener(this);
 		if (startConnector != null)
@@ -327,6 +333,19 @@ public class Cable extends DimensionalDrawnObject implements
 	public boolean getSignalStatus()
 	{
 		return this.lastSignalStatus;
+	}
+	
+	@Override
+	public void onRoomStart(Room room)
+	{
+		// Does nothing
+	}
+
+	@Override
+	public void onRoomEnd(Room room)
+	{
+		// Dies
+		kill();
 	}
 	
 	

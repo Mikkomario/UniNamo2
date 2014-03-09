@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
+import utopia_worlds.Room;
 
 /**
  * OutputCableConnectors take signal events from components and relays them to 
@@ -20,6 +21,7 @@ public class OutputCableConnector extends CableConnector
 	private MouseListenerHandler mousehandler;
 	private boolean lastSignalStatus;
 	private ConnectorRelay relay;
+	private Room room;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -34,20 +36,22 @@ public class OutputCableConnector extends CableConnector
 	 * @param drawer The drawableHandler that will draw the connector
 	 * @param mousehandler The MouseListenerHandler that will inform the 
 	 * connector about mouse events
+	 * @param room The room where the connector resides at
 	 * @param relay The connectorRelay that will keep track of the connectors
 	 * @param host The component the connector is tied to
 	 */
 	public OutputCableConnector(int relativex, int relativey,
 			DrawableHandler drawer, MouseListenerHandler mousehandler, 
-			ConnectorRelay relay, Component host)
+			Room room, ConnectorRelay relay, Component host)
 	{
-		super(relativex, relativey, drawer, mousehandler, relay, host);
+		super(relativex, relativey, drawer, mousehandler, room, relay, host);
 		
 		// Initializes attributes
 		this.lastSignalStatus = false;
 		this.drawer = drawer;
 		this.mousehandler = mousehandler;
 		this.relay = relay;
+		this.room = room;
 	}
 	
 	
@@ -63,8 +67,8 @@ public class OutputCableConnector extends CableConnector
 		if (button == MouseButton.LEFT && eventType == 
 				MouseButtonEventType.PRESSED && !Cable.cableIsBeingDragged)
 		{
-			connectCable(new Cable(this.drawer, this.mousehandler, this.relay, 
-					this, null));
+			connectCable(new Cable(this.drawer, this.mousehandler, this.room, 
+					this.relay, this, null));
 		}
 	}
 

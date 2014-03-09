@@ -3,6 +3,7 @@ package uninamo_components;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
+import utopia_worlds.Room;
 
 /**
  * PowerSourceComponent is a very simple component that simply sends true 
@@ -24,15 +25,16 @@ public class PowerSourceComponent extends Component
 	 * @param actorhandler The actorHandler that will animate the component
 	 * @param mousehandler The mouseListenerHandler that will inform the 
 	 * component about mouse events
+	 * @param room The room where the component resides at
 	 * @param connectorRelay A connectorRelay that will keep track of the 
 	 * connectors
 	 */
 	public PowerSourceComponent(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, MouseListenerHandler mousehandler, 
-			ConnectorRelay connectorRelay)
+			Room room, ConnectorRelay connectorRelay)
 	{
-		super(x, y, drawer, actorhandler, mousehandler, connectorRelay, "test", 
-				0, 1);
+		super(x, y, drawer, actorhandler, mousehandler, room, connectorRelay, 
+				"test", 0, 1);
 		
 		// Informs the output(s) about the component's status
 		sendSignalToOutput(0, true);

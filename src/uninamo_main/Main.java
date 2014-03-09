@@ -2,9 +2,7 @@ package uninamo_main;
 
 import java.awt.BorderLayout;
 
-import uninamo_components.ConnectorRelay;
-import uninamo_components.OrComponent;
-import uninamo_components.PowerSourceComponent;
+import uninamo_worlds.AreaChanger;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
@@ -62,15 +60,15 @@ public class Main
 		window.addActor(mainmousehandler);
 		window.addMouseListener(mainmousehandler);
 		
-		// TODO: Move this elswhere
-		// Starts the gameplay phase
 		MultiMediaHolder.activateBank(ResourceType.GAMEPHASE, "default", true);
+		// TODO: The next line is only for testing
 		ResourceActivator.startPhase(MultiMediaHolder.getGamePhaseBank(
 				"default").getPhase("gameplay"));
-		// Creates a test components
-		ConnectorRelay relay = new ConnectorRelay();
-		new PowerSourceComponent(300, 300, maindrawer, mainactorhandler, mainmousehandler, relay);
-		new OrComponent(600, 300, maindrawer, mainmousehandler, relay);
+		
+		// Starts the gameplay area(s)
+		AreaChanger areachanger = new AreaChanger(mainmousehandler, 
+				mainactorhandler, maindrawer);
+		areachanger.getArea("coding").start();
 	}
 	
 	

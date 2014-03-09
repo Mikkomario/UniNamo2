@@ -210,6 +210,7 @@ public class Room extends Handler
 		if (this.active)
 			return;
 		
+		endDisable();
 		this.active = true;
 		initialize();
 		
@@ -227,6 +228,8 @@ public class Room extends Handler
 		// If the room had already been ended, nothing happens
 		if (!this.active)
 			return;
+		
+		endDisable();
 		
 		// Informs the listeners about the event
 		//System.out.println("informs about room end");
