@@ -7,7 +7,6 @@ import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.DepthConstants;
-import utopia_resourceHandling.ResourceActivator;
 import utopia_resourceHandling.ResourceType;
 import utopia_resourcebanks.MultiMediaHolder;
 import utopia_video.GamePanel;
@@ -60,12 +59,9 @@ public class Main
 		window.addActor(mainmousehandler);
 		window.addMouseListener(mainmousehandler);
 		
-		MultiMediaHolder.activateBank(ResourceType.GAMEPHASE, "default", true);
-		// TODO: The next line is only for testing
-		ResourceActivator.startPhase(MultiMediaHolder.getGamePhaseBank(
-				"default").getPhase("gameplay"));
-		
 		// Starts the gameplay area(s)
+		MultiMediaHolder.activateBank(ResourceType.GAMEPHASE, "default", true);
+		
 		AreaChanger areachanger = new AreaChanger(mainmousehandler, 
 				mainactorhandler, maindrawer);
 		areachanger.getArea("coding").start();

@@ -38,6 +38,7 @@ Työtehtäviä
 		- Komponenttinäkymän ja testinäkymän välillä liikkuminen			...
 			* Eri handlereiden aktivoiminen ja deaktivoiminen				Testaamatta
 			* Background toiseen näkymään niin erottaa
+			* Siirtymänappula(t) koodauksen ja suunnitelman välille
 		- Laitteiden perustoiminnot
 			* Laitearkkitehtuuri
 			* Yksinkertaisen testilaitteen (liukuhihna) luominen

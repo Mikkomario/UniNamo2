@@ -2,9 +2,6 @@ package uninamo_worlds;
 
 import java.util.HashMap;
 
-import uninamo_components.ConnectorRelay;
-import uninamo_components.OrComponent;
-import uninamo_components.PowerSourceComponent;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
@@ -46,11 +43,7 @@ public class AreaChanger
 		// Normal coding area (with test objects)
 		this.areas.put("coding", new Area(MultiMediaHolder.getGamePhaseBank(
 				"default").getPhase("gameplay"), mousehandler, actorhandler, drawer));
-		// TODO Remove these later
-		ConnectorRelay relay = new ConnectorRelay();
-		new PowerSourceComponent(300, 300, drawer, actorhandler, mousehandler, 
-				getArea("coding"), relay);
-		new OrComponent(600, 300, drawer, mousehandler, getArea("coding"), relay);
+		new CodingObjectCreator(this);
 	}
 
 	
