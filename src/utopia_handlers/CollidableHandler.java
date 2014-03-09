@@ -94,6 +94,9 @@ public class CollidableHandler extends Handler
 	 */
 	public void makeCollidablesSolid()
 	{
+		// Ends disabilities
+		endDisable();
+		
 		// Tries to make all of the collidables solid
 		handleObjects(new MakeSolidOperator());
 	}
@@ -103,6 +106,9 @@ public class CollidableHandler extends Handler
 	 */
 	public void makeCollidablesUnsolid()
 	{
+		// Ends disables since unsolid is stronger
+		endDisable();
+		
 		// Tries to make all of the collidables solid
 		handleObjects(new MakeUnsolidOperator());
 	}

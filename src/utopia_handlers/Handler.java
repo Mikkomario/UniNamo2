@@ -26,6 +26,7 @@ public abstract class Handler implements Handled
 	private boolean autodeath;
 	private boolean killed;
 	private boolean started; // Have any objects been added to the handler yet
+	private boolean disabled; // Has the handler been temporarily disabled
 	
 	private HashMap<HandlingOperation, ReentrantLock> locks;
 	
@@ -49,6 +50,7 @@ public abstract class Handler implements Handled
 		this.handledstobeadded = new ArrayList<Handled>();
 		this.handledstoberemoved = new ArrayList<Handled>();
 		this.started = false;
+		this.disabled = false;
 		this.locks = new HashMap<HandlingOperation, ReentrantLock>();
 		this.locks.put(HandlingOperation.HANDLE, new ReentrantLock());
 		this.locks.put(HandlingOperation.ADD, new ReentrantLock());
@@ -148,10 +150,12 @@ public abstract class Handler implements Handled
 	 */
 	// TODO: Add boolean parameter performUpdate is needed
 	protected void handleObjects(HandlingOperator operator)
-	{
-		//System.out.println(this+ " Starts handling objects");
-		
+	{	
 		updateStatus();
+		
+		// Disabled handlers don't handle objects until reactivated
+		if (this.disabled)
+			return;
 		
 		// Goes through all the handleds
 		boolean handlingskipped = false;
@@ -279,6 +283,26 @@ public abstract class Handler implements Handled
 		
 		// Also cancels the adding of new handleds
 		clearOperationList(HandlingOperation.ADD);
+	}
+	
+	/**
+	 * Temporarily disables the handler. This can be used to block certain 
+	 * functions for a while. The disable should be ended with endDisable().
+	 * 
+	 * @see #endDisable()
+	 */
+	public void disable()
+	{
+		this.disabled = true;
+	}
+	
+	/**
+	 * Ends a temporary disable put on the handler, making it function normally 
+	 * again
+	 */
+	public void endDisable()
+	{
+		this.disabled = false;
 	}
 	
 	/**

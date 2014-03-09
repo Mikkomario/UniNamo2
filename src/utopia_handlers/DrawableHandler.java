@@ -71,6 +71,9 @@ public class DrawableHandler extends Handler implements Drawable
 	@Override
 	public void setVisible()
 	{
+		// Ends disabilities
+		endDisable();
+		
 		// tries to set all the drawables visible
 		handleObjects(new SetVisibleOperator());
 	}
@@ -78,6 +81,9 @@ public class DrawableHandler extends Handler implements Drawable
 	@Override
 	public void setInvisible()
 	{
+		// Ends disables since invisibility is stronger
+		endDisable();
+				
 		// tries to set all the drawables invisible
 		handleObjects(new SetInVisibleOperator());
 	}

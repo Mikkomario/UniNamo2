@@ -310,10 +310,6 @@ public class Cable extends DimensionalDrawnObject implements
 		if (newSignalStatus == this.lastSignalStatus)
 			return;
 		
-		// Informs the end point about the change (if there is one)
-		if (this.end != null)
-			this.end.onSignalChange(newSignalStatus, this);
-		
 		this.lastSignalStatus = newSignalStatus;
 		
 		// Changes sprite index
@@ -321,6 +317,10 @@ public class Cable extends DimensionalDrawnObject implements
 			this.spritedrawer.setImageIndex(1);
 		else
 			this.spritedrawer.setImageIndex(0);
+		
+		// Informs the end point about the change (if there is one)
+		if (this.end != null)
+			this.end.onSignalChange(newSignalStatus, this);
 	}
 
 	@Override

@@ -37,6 +37,7 @@ Työtehtäviä
 				- Johtojen hiirikuuntelu									DONE
 		- Komponenttinäkymän ja testinäkymän välillä liikkuminen
 			* Eri handlereiden aktivoiminen ja deaktivoiminen
+			* Background toiseen näkymään niin erottaa
 		- Laitteiden perustoiminnot
 			* Laitearkkitehtuuri
 			* Yksinkertaisen testilaitteen (liukuhihna) luominen
@@ -73,6 +74,7 @@ Työtehtäviä
 			dropin lopussa
 		- Takaisinkytkentätilanteiden ratkaiseminen
 			* Ongelmia signaalintunnistuksen kanssa jos komponentti ohjaa itseään
+				- ORin signaalin saa "kiertämään" kytkemällä komponentin itseensä
 	* Beta	----------------------------------------------------------------------
 		- Voittolaitteet
 			* Voittolaitearkkitehtuuri

@@ -42,6 +42,9 @@ public abstract class LogicalHandler extends Handler implements LogicalHandled
 	@Override
 	public void activate()
 	{
+		// Ends all disabilities
+		endDisable();
+		
 		// tries to activate all the handled objects
 		handleObjects(new ActivateOperator());
 	}
@@ -49,6 +52,9 @@ public abstract class LogicalHandler extends Handler implements LogicalHandled
 	@Override
 	public void inactivate()
 	{
+		// Ends disables since inactivation is stronger
+		endDisable();
+		
 		// tries to inactivate all the handled objects
 		handleObjects(new InactivateOperator());
 	}
