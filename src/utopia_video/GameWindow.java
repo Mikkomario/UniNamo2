@@ -55,6 +55,11 @@ public class GameWindow extends JFrame
 	private ArrayList<JPanel> paddings;
 	private JPanel gamepanel;
 	
+	/**
+	 * The height of the border at the top of the window (if there is one)
+	 */
+	private static final int BORDERHEIGHT = 32;
+	
 	
 	// CONSTRUCTOR ---------------------------------------------------------
 	
@@ -97,6 +102,13 @@ public class GameWindow extends JFrame
 		this.leftpaddingwidth = 0;
 		
 		this.setTitle(title);
+		
+		// Takes the toolbar into account with height calculations
+		if (hastoolbar)
+		{
+			System.out.println("Heightens the window");
+			this.height += BORDERHEIGHT;
+		}
 		
 		//Let's format our window
 		this.formatWindow();

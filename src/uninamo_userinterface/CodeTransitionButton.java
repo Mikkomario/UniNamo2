@@ -86,13 +86,13 @@ public class CodeTransitionButton extends AbstractButton
 		
 		if (this.type == TODESING)
 		{
-			System.out.println("Transition to desing");
+			//System.out.println("Transition to desing");
 			newArea = this.areaChanger.getArea("design");
 			oldArea = this.areaChanger.getArea("coding");
 		}
 		else
 		{
-			System.out.println("Transition to coding");
+			//System.out.println("Transition to coding");
 			newArea = this.areaChanger.getArea("coding");
 			oldArea = this.areaChanger.getArea("design");
 		}

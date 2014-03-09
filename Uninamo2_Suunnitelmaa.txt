@@ -41,8 +41,8 @@ Työtehtäviä
 			* Eri handlereiden aktivoiminen ja deaktivoiminen				DONE
 			* Background toiseen näkymään niin erottaa						DONE
 			* Siirtymänappula(t) koodauksen ja suunnitelman välille			DONE
-		- Laitteiden perustoiminnot
-			* Laitearkkitehtuuri
+		- Laitteiden perustoiminnot											...
+			* Laitearkkitehtuuri											Testaamatta
 			* Yksinkertaisen testilaitteen (liukuhihna) luominen
 		- Laitteiden kytkeminen komponentteihin
 			* Testilaitteen komponenttien luominen
@@ -75,6 +75,8 @@ Työtehtäviä
 			* Roskisluokka ja sen luominen alussa
 			* Komponenttien reagointi törmäykseen roskiksen kanssa 
 			dropin lopussa
+		- Paranteluja
+			* CableConnectorien kuvan muuttuminen signaalin mukaan
 		- Takaisinkytkentätilanteiden ratkaiseminen
 			* Ongelmia signaalintunnistuksen kanssa jos komponentti ohjaa itseään
 				- ORin signaalin saa "kiertämään" kytkemällä komponentin itseensä

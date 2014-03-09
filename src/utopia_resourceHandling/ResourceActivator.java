@@ -74,7 +74,7 @@ public class ResourceActivator
 				
 				if (!newbanknamelist.contains(oldbankname))
 				{
-					System.out.println("Deactivates: " + oldbankname);
+					//System.out.println("Deactivates: " + oldbankname);
 					MultiMediaHolder.deactivateBank(resourcetype, oldbankname);
 				}
 			}
@@ -84,7 +84,7 @@ public class ResourceActivator
 		// (Checking done in the MultiMediaHolder)
 		for (int i = 0; i < newbanknames.length; i++)
 		{
-			System.out.println("Activates: " + newbanknames[i]);
+			//System.out.println("Activates: " + newbanknames[i]);
 			MultiMediaHolder.activateBank(resourcetype, newbanknames[i], true);
 		}
 	}
