@@ -30,7 +30,8 @@ public class Cable extends DimensionalDrawnObject implements
 	private boolean active, lastSignalStatus;
 	private OutputCableConnector start;
 	private InputCableConnector end;
-	private Point2D lastMousePosition;
+	private Point2D.Double lastMousePosition;
+	private ConnectorRelay connectorRelay;
 	
 	/**
 	 * Is there currently a cable that's being dragged around
@@ -47,13 +48,21 @@ public class Cable extends DimensionalDrawnObject implements
 	 * @param drawer The drawableHandler that will draw the cable
 	 * @param mousehandler The mouseListenerHandler that will inform the 
 	 * cable about mouse events
+	 * @param connectorRelay A connectorRelay that will inform the cable about 
+	 * connector positions
 	 * @param startConnector The connector the cable starts from
 	 */
 	public Cable(DrawableHandler drawer, MouseListenerHandler mousehandler, 
-			OutputCableConnector startConnector)
+			ConnectorRelay connectorRelay, OutputCableConnector startConnector)
 	{
 		super(0, 0, startConnector.getDepth() - 1, false, CollisionType.BOX, 
 				drawer, null);
+		
+		// The cable starts as being dragged
+		if (cableIsBeingDragged)
+			System.out.println("CABLE ALREADY DRAGGED!");
+		
+		cableIsBeingDragged = true;
 		
 		// Initializes attributes
 		this.spritedrawer = new SingleSpriteDrawer(
@@ -62,11 +71,11 @@ public class Cable extends DimensionalDrawnObject implements
 		this.active = true;
 		this.start = startConnector;
 		this.end = null;
-		this.lastMousePosition = new Point2D.Double(0, 0);
+		this.lastMousePosition = new Point2D.Double(
+				mousehandler.getMousePosition().getX(), 
+				mousehandler.getMousePosition().getY());
 		this.lastSignalStatus = this.start.getSignalStatus();
-		
-		// The cable starts as being dragged
-		cableIsBeingDragged = true;
+		this.connectorRelay = connectorRelay;
 		
 		updateTransformations();
 		this.spritedrawer.setImageSpeed(0);
@@ -119,14 +128,60 @@ public class Cable extends DimensionalDrawnObject implements
 			double eventStepTime)
 	{
 		// On mouse release tries to place the cable on a connector
-		// TODO: Implement cable placing
-		// TODO: Create a connectorHandler
+		if (button == MouseButton.LEFT && eventType == 
+				MouseButtonEventType.RELEASED && isBeingDragged())
+		{
+			// Ends drag
+			cableIsBeingDragged = false;
+			
+			//System.out.println("Ends drag on cable " + this + ": " + (this.start == null) + ", " + (this.end == null));
+			
+			// Tries to find a suitable new start- / endpoint
+			if (this.start == null)
+			{
+				OutputCableConnector newstart = (OutputCableConnector) 
+						this.connectorRelay.getConnectorAtPoint(
+						this.lastMousePosition, OutputCableConnector.class);
+				// If one couldn't be found, dies
+				if (newstart == null)
+				{
+					this.end.removeCable(this);
+					kill();
+				}
+				else
+				{
+					this.start = newstart;
+					this.start.connectCable(this);
+					this.start.getTransformationListenerHandler().addListener(this);
+				}
+			}
+			else //if (this.end == null)
+			{
+				InputCableConnector newend = (InputCableConnector) 
+						this.connectorRelay.getConnectorAtPoint(
+						this.lastMousePosition, InputCableConnector.class);
+				// If one couldn't be found, dies
+				if (newend == null)
+				{
+					this.start.removeCable(this);
+					kill();
+				}
+				else
+				{
+					this.end = newend;
+					this.end.connectCable(this);
+					this.end.getTransformationListenerHandler().addListener(this);
+				}
+			}
+		}
 		
 		// On mouse press removes the cable from either end
-		if (button == MouseButton.LEFT && eventType == 
+		else if (button == MouseButton.LEFT && eventType == 
 				MouseButtonEventType.PRESSED && !cableIsBeingDragged)
 		{
 			cableIsBeingDragged = true;
+			
+			System.out.println("Releases a cable");
 			
 			// If the button was pressed closer to start, removes the cable 
 			// from there, otherwise removes the cable from the end point
@@ -177,7 +232,11 @@ public class Cable extends DimensionalDrawnObject implements
 	{
 		// Updates the last known mouse position if being dragged
 		if (isBeingDragged())
-			this.lastMousePosition = newMousePosition;
+		{
+			this.lastMousePosition = new Point2D.Double(newMousePosition.getX(), 
+					newMousePosition.getY());
+			updateTransformations();
+		}
 	}
 
 	@Override
@@ -257,7 +316,7 @@ public class Cable extends DimensionalDrawnObject implements
 	// Updates the position and form of the cable
 	private void updateTransformations()
 	{
-		Point2D startPoint, endPoint;
+		Point2D.Double startPoint, endPoint;
 		
 		// Updates starting position
 		if (this.start != null)
@@ -271,16 +330,15 @@ public class Cable extends DimensionalDrawnObject implements
 		else
 			endPoint = this.lastMousePosition;
 		
-		// TODO: Debug this since it can cause problems
-		setPosition((Point2D.Double) startPoint);
+		setPosition(startPoint);
 		setAngle(HelpMath.pointDirection(startPoint.getX(), startPoint.getY(), 
 				endPoint.getX(), endPoint.getY()));
 		setXScale(HelpMath.pointDistance(startPoint.getX(), startPoint.getY(), 
-				endPoint.getX(), endPoint.getY()) / getWidth());
+				endPoint.getX(), endPoint.getY()) / (getWidth() - 2 * getOriginX()));
 	}
 	
 	private boolean isBeingDragged()
 	{
-		return (cableIsBeingDragged && this.start != null && this.end != null);
+		return (cableIsBeingDragged && (this.start != null || this.end != null));
 	}
 }

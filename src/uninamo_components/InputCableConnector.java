@@ -31,13 +31,14 @@ public class InputCableConnector extends CableConnector
 	 * @param drawer The drawableHandler that will draw the connector
 	 * @param mousehandler The mouseListenerHandler that will inform the 
 	 * connector about mouse events
+	 * @param relay The connectorRelay that will keep track of the connectors
 	 * @param host The host component the connector is tied to
 	 */
 	public InputCableConnector(int relativex, int relativey,
-			DrawableHandler drawer, MouseListenerHandler mousehandler,
-			Component host)
+			DrawableHandler drawer, MouseListenerHandler mousehandler, 
+			ConnectorRelay relay, Component host)
 	{
-		super(relativex, relativey, drawer, mousehandler, host);
+		super(relativex, relativey, drawer, mousehandler, relay, host);
 		// TODO: Change the parameter to inputComponent and add an attribute
 		
 		// Changes the look of the connector

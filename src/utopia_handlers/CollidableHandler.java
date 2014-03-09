@@ -67,7 +67,7 @@ public class CollidableHandler extends Handler
 	 * The value is only used for checking if the collided object supports the 
 	 * listener and no changes are made to the object. Use null if you 
 	 * specifically want to skip all support checks.
-	 * @return A list of objects colliding wiht the point or null if no object 
+	 * @return A list of objects colliding with the point or null if no object 
 	 * collided with the point
 	 */
 	public ArrayList<Collidable> getCollidedObjectsAtPoint(Point2D collisionPoint, 

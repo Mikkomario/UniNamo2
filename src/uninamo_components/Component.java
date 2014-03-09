@@ -3,6 +3,7 @@ package uninamo_components;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
+import uninamo_main.GameSettings;
 import utopia_gameobjects.DimensionalDrawnObject;
 import utopia_graphic.SingleSpriteDrawer;
 import utopia_handlers.ActorHandler;
@@ -44,6 +45,8 @@ public abstract class Component extends DimensionalDrawnObject implements
 	 * @param actorhandler The actorHandler that will animate the component
 	 * @param mousehandler The mouseListenerHandler that will inform the 
 	 * object about mouse events
+	 * @param connectorRelay A connectorRelay that will keep track of the 
+	 * connectors
 	 * @param spritename The name of the component sprite used to draw the 
 	 * component
 	 * @param inputs How many input connectors the component has
@@ -51,7 +54,8 @@ public abstract class Component extends DimensionalDrawnObject implements
 	 */
 	public Component(int x, int y, DrawableHandler drawer, 
 			ActorHandler actorhandler, MouseListenerHandler mousehandler, 
-			String spritename, int inputs, int outputs)
+			ConnectorRelay connectorRelay, String spritename, int inputs, 
+			int outputs)
 	{
 		super(x, y, DepthConstants.NORMAL, false, CollisionType.BOX, drawer, 
 				null);
@@ -69,13 +73,13 @@ public abstract class Component extends DimensionalDrawnObject implements
 		{
 			int relativey = (int) ((i + 1) * (getHeight() / (inputs + 1.0)));
 			this.inputs[i] = new InputCableConnector(10, relativey, drawer, 
-					mousehandler, this);
+					mousehandler, connectorRelay, this);
 		}
 		for (int i = 0; i < outputs; i++)
 		{
 			int relativey = (int) ((i + 1) * (getHeight() / (outputs + 1.0)));
 			this.outputs[i] = new OutputCableConnector(getWidth() - 10, 
-					relativey, drawer, mousehandler, this);
+					relativey, drawer, mousehandler, connectorRelay, this);
 		}
 		
 		// Adds the object to the handler(s)
@@ -137,7 +141,8 @@ public abstract class Component extends DimensionalDrawnObject implements
 	{
 		// TODO: Limit this if the component is being dragged
 		if (eventType == MousePositionEventType.ENTER)
-			setScale(1.2, 1.2);
+			setScale(GameSettings.interfaceScaleFactor, 
+					GameSettings.interfaceScaleFactor);
 		else if (eventType == MousePositionEventType.EXIT)
 			setScale(1, 1);
 	}

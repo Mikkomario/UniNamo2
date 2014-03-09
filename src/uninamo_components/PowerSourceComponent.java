@@ -24,11 +24,15 @@ public class PowerSourceComponent extends Component
 	 * @param actorhandler The actorHandler that will animate the component
 	 * @param mousehandler The mouseListenerHandler that will inform the 
 	 * component about mouse events
+	 * @param connectorRelay A connectorRelay that will keep track of the 
+	 * connectors
 	 */
 	public PowerSourceComponent(int x, int y, DrawableHandler drawer,
-			ActorHandler actorhandler, MouseListenerHandler mousehandler)
+			ActorHandler actorhandler, MouseListenerHandler mousehandler, 
+			ConnectorRelay connectorRelay)
 	{
-		super(x, y, drawer, actorhandler, mousehandler, "test", 0, 1);
+		super(x, y, drawer, actorhandler, mousehandler, connectorRelay, "test", 
+				0, 1);
 		
 		// Informs the output(s) about the component's status
 		sendSignalToOutput(0, true);

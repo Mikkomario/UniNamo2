@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import uninamo_main.GameSettings;
 import utopia_gameobjects.DimensionalDrawnObject;
 import utopia_graphic.SingleSpriteDrawer;
 import utopia_handlers.DrawableHandler;
@@ -46,10 +47,12 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	 * @param drawer The drawableHandler that will draw the connector
 	 * @param mousehandler The mouseListenerHandler that will inform the object 
 	 * about mouse events
+	 * @param relay The ConnectorRelay that will keep track of the connector
 	 * @param host The component to which the connector is tied to
 	 */
 	public CableConnector(int relativex, int relativey, DrawableHandler drawer, 
-			MouseListenerHandler mousehandler, Component host)
+			MouseListenerHandler mousehandler, ConnectorRelay relay, 
+			Component host)
 	{
 		super(0, 0, host.getDepth() - 1, false, CollisionType.CIRCLE, drawer, 
 				null);
@@ -71,6 +74,8 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 		// Adds the object to the handler(s)
 		if (mousehandler != null)
 			mousehandler.addMouseListener(this);
+		if (relay != null)
+			relay.addConnector(this);
 	
 		host.getTransformationListenerHandler().addListener(this);
 	}
@@ -239,7 +244,8 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	 */
 	protected void largen()
 	{
-		setScale(1.4, 1.4);
+		double newscale = Math.pow(GameSettings.interfaceScaleFactor, 2);
+		setScale(newscale, newscale);
 	}
 	
 	/**

@@ -27,11 +27,13 @@ public class OrComponent extends Component
 	 * @param drawer The drawableHandler that will draw the component
 	 * @param mousehandler The mouseListenerHandler that will inform the 
 	 * object about mouse events
+	 * @param connectorRelay A connectorRelay that will keep track of the 
+	 * connectors
 	 */
 	public OrComponent(int x, int y, DrawableHandler drawer, 
-			MouseListenerHandler mousehandler)
+			MouseListenerHandler mousehandler, ConnectorRelay connectorRelay)
 	{
-		super(x, y, drawer, null, mousehandler, "test", 2, 1);
+		super(x, y, drawer, null, mousehandler, connectorRelay, "test", 2, 1);
 		
 		// Initializes attributes
 		this.signalStatus = false;

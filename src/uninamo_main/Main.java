@@ -2,6 +2,7 @@ package uninamo_main;
 
 import java.awt.BorderLayout;
 
+import uninamo_components.ConnectorRelay;
 import uninamo_components.OrComponent;
 import uninamo_components.PowerSourceComponent;
 import utopia_handlers.ActorHandler;
@@ -66,9 +67,10 @@ public class Main
 		MultiMediaHolder.activateBank(ResourceType.GAMEPHASE, "default", true);
 		ResourceActivator.startPhase(MultiMediaHolder.getGamePhaseBank(
 				"default").getPhase("gameplay"));
-		// Creates a test component
-		new PowerSourceComponent(300, 300, maindrawer, mainactorhandler, mainmousehandler);
-		new OrComponent(600, 300, maindrawer, mainmousehandler);
+		// Creates a test components
+		ConnectorRelay relay = new ConnectorRelay();
+		new PowerSourceComponent(300, 300, maindrawer, mainactorhandler, mainmousehandler, relay);
+		new OrComponent(600, 300, maindrawer, mainmousehandler, relay);
 	}
 	
 	

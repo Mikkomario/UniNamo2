@@ -19,6 +19,7 @@ public class OutputCableConnector extends CableConnector
 	private DrawableHandler drawer;
 	private MouseListenerHandler mousehandler;
 	private boolean lastSignalStatus;
+	private ConnectorRelay relay;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -33,18 +34,20 @@ public class OutputCableConnector extends CableConnector
 	 * @param drawer The drawableHandler that will draw the connector
 	 * @param mousehandler The MouseListenerHandler that will inform the 
 	 * connector about mouse events
+	 * @param relay The connectorRelay that will keep track of the connectors
 	 * @param host The component the connector is tied to
 	 */
 	public OutputCableConnector(int relativex, int relativey,
-			DrawableHandler drawer, MouseListenerHandler mousehandler,
-			Component host)
+			DrawableHandler drawer, MouseListenerHandler mousehandler, 
+			ConnectorRelay relay, Component host)
 	{
-		super(relativex, relativey, drawer, mousehandler, host);
+		super(relativex, relativey, drawer, mousehandler, relay, host);
 		
 		// Initializes attributes
 		this.lastSignalStatus = false;
 		this.drawer = drawer;
 		this.mousehandler = mousehandler;
+		this.relay = relay;
 	}
 	
 	
@@ -58,9 +61,10 @@ public class OutputCableConnector extends CableConnector
 		// If the connector is clicked with a left mouse button it will create 
 		// a new cable
 		if (button == MouseButton.LEFT && eventType == 
-				MouseButtonEventType.PRESSED)
+				MouseButtonEventType.PRESSED && !Cable.cableIsBeingDragged)
 		{
-			connectCable(new Cable(this.drawer, this.mousehandler, this));
+			connectCable(new Cable(this.drawer, this.mousehandler, this.relay, 
+					this));
 			// Also resets scaling
 			rescale();
 		}
@@ -111,5 +115,23 @@ public class OutputCableConnector extends CableConnector
 	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
 	{
 		return MouseButtonEventScale.LOCAL;
+	}
+	
+	@Override
+	public void connectCable(Cable c)
+	{
+		super.connectCable(c);
+		
+		// In addition to normal connecting, informs the signal to the cable
+		c.onSignalChange(getSignalStatus(), this);
+	}
+	
+	@Override
+	public void removeCable(Cable c)
+	{
+		super.removeCable(c);
+		
+		// In addition to removal, resets signal status to false
+		c.onSignalChange(false, this);
 	}
 }
