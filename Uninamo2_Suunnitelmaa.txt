@@ -5,25 +5,25 @@ Työtehtäviä
 		- Utopia Game Enginen debuggaus
 			* Originia ei aina ehditä laskea ennen ensimmäistä piirtoa 
 			-> piirtyy aluksi väärään paikkaan
-		- Alkuvalmistelut													Testaamatta
+		- Alkuvalmistelut													DONE
 			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE
 			* Handlersysteemien luominen									DONE
-			* Navigaatiosysteemin rekonstruointi							Testaamatta
+			* Navigaatiosysteemin rekonstruointi							DONE
 				- Vanhan navigaatiosysteemin abstrahointi					DONE
-				- Yleisen ratkaisun muodostus								Testaamatta
-					* Yleinen GamePhase -luokka								Testaamatta
-					* Yleinen resourceActivator -luokka						Testaamatta
-					* GamePhasejen luominen ja syöttäminen 					Testaamatta
+				- Yleisen ratkaisun muodostus								DONE
+					* Yleinen GamePhase -luokka								DONE
+					* Yleinen resourceActivator -luokka						DONE
+					* GamePhasejen luominen ja syöttäminen 					DONE
 					resourceActovatoriin
 			* Graafisten resurssien lataaminen								DONE
-		- Komponenttien perustoiminnot										Testaamatta
+		- Komponenttien perustoiminnot										DONE
 			* Komponenttiarkkitehtuuri										DONE
 			* Yksinkertaisen testikomponentin (virtalähde) luominen			DONE
-			* Signaalin lähettäminen ja vastaanottaminen					Testaamatta
-				- Signaalinkäsittelijäluokka								Testaamatta
-					* Signaalinlähettäjä									Testaamatta
-					* Signaalinvastaanottaja								Testaamatta
+			* Signaalin lähettäminen ja vastaanottaminen					DONE
+				- Signaalinkäsittelijäluokka								DONE
+					* Signaalinlähettäjä									DONE
+					* Signaalinvastaanottaja								DONE
 			* Johtoluokan runko												DONE
 			* Komponenttien sijoittaminen ja piirtäminen					DONE
 		- Komponenttien kytkeminen toisiinsa								DONE
@@ -37,7 +37,7 @@ Työtehtäviä
 				- Johtojen hiirikuuntelu									DONE
 		- Komponenttinäkymän ja testinäkymän välillä liikkuminen			...
 			* Eri handlereiden aktivoiminen ja deaktivoiminen				Testaamatta
-			* Background toiseen näkymään niin erottaa
+			* Background toiseen näkymään niin erottaa						DONE
 			* Siirtymänappula(t) koodauksen ja suunnitelman välille
 		- Laitteiden perustoiminnot
 			* Laitearkkitehtuuri
@@ -103,9 +103,10 @@ Työtehtäviä
 			* Yksinkertaisen testitehtävänannon valmistaminen
 			* Tehtävänannon selostaminen lyhyessä kuvauksessa
 			* Tarvittavan moodin piirtäminen ja muiden deaktivoiminen
-		- Kahden näkymän piirtäminen testausmoodissa
+		- Kahden näkymän piirtäminen testausmoodissa (ja muuten)
 			* Kameroiden implementointi
 			* Kameran koon ja sijainnin muuttaminen testausvaiheessa
+			* Näppäin käyttöliittymään, josta kuvan saa päälle tai pois
 		- Kenttien lukeminen tekstitiedostosta
 			* Tunnistettujen kenttien polkujen tallentaminen 
 			ja lukeminen tekstitiedostosta

@@ -93,9 +93,21 @@ public class Room extends Handler
 	 *
 	 * @param backgrounds The new background(s) shown in the room (null if 
 	 * no background is used in the room)
+	 * @param killFormerBackgrounds Should the formerly used backgrounds be 
+	 * killed?
 	 */
-	public void setBackgrounds(ArrayList<Background> backgrounds)
+	public void setBackgrounds(ArrayList<Background> backgrounds, 
+			boolean killFormerBackgrounds)
 	{
+		// Kills the old background(s) if necessary
+		if (killFormerBackgrounds && this.backgrounds != null)
+		{
+			for (Background back : this.backgrounds)
+			{
+				back.kill();
+			}
+		}
+		
 		this.backgrounds = backgrounds;
 	}
 	

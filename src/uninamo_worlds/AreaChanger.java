@@ -40,10 +40,14 @@ public class AreaChanger
 		
 		// TODO Create areas
 		
-		// Normal coding area (with test objects)
+		// Creates areas
 		this.areas.put("coding", new Area(MultiMediaHolder.getGamePhaseBank(
 				"default").getPhase("gameplay"), mousehandler, actorhandler, drawer));
 		new CodingObjectCreator(this);
+		
+		this.areas.put("design", new Area(MultiMediaHolder.getGamePhaseBank(
+				"default").getPhase("gameplay"), mousehandler, actorhandler, drawer));
+		new DesignObjectCreator(this);
 	}
 
 	

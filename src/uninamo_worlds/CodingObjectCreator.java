@@ -24,7 +24,7 @@ public class CodingObjectCreator extends AreaObjectCreator
 	 */
 	public CodingObjectCreator(AreaChanger areaChanger)
 	{
-		super(areaChanger.getArea("coding"));
+		super(areaChanger.getArea("coding"), null, null);
 	}
 	
 	

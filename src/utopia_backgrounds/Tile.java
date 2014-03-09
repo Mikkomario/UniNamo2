@@ -18,8 +18,8 @@ public class Tile extends Background
 	/**
 	 * Creates a new tile with the given information
 	 *
-	 * @param x The x-coordinate of the tile's top left position
-	 * @param y The y-coordinate of the tile's top left position
+	 * @param x The x-coordinate of the tile's center
+	 * @param y The y-coordinate of the tile's center
 	 * @param drawer The drawableHandler that will draw the tile
 	 * @param actorhandler The actorhandler that will animate the tile (optional, 
 	 * for animated tiles)

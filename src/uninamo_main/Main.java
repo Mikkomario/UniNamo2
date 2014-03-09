@@ -64,7 +64,7 @@ public class Main
 		
 		AreaChanger areachanger = new AreaChanger(mainmousehandler, 
 				mainactorhandler, maindrawer);
-		areachanger.getArea("coding").start();
+		areachanger.getArea("design").start();
 	}
 	
 	

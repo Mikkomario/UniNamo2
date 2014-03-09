@@ -2,4 +2,4 @@
 * TODO: Add phases and banks
 
 &default
-gameplay#sprite:components,gameplaybackground
+gameplay#sprite:components,gameplaybackgrounds
