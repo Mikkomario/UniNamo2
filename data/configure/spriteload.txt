@@ -13,3 +13,6 @@ cable#images/components/cable_v2.png#2#0#4
 
 &gameplaybackgrounds
 paper#images/backgrounds/designpaper.png#1#0#0
+
+&gameplayinterface
+transition#images/ui/transitionbutton_v2.png#1#300#75

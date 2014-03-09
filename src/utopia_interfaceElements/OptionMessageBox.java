@@ -6,17 +6,14 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
-import utopia_gameobjects.DimensionalDrawnObject;
-import utopia_graphic.SingleSpriteDrawer;
 import utopia_graphic.Sprite;
 import utopia_handleds.LogicalHandled;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
-import utopia_helpAndEnums.CollisionType;
-import utopia_listeners.AdvancedMouseListener;
 import utopia_listeners.OptionMessageBoxListener;
 import utopia_listeners.TransformationListener;
+import utopia_worlds.Room;
 
 /**
  * OptionMessageBoxes are interactive messageBoxes that show a number of 
@@ -78,13 +75,15 @@ public class OptionMessageBox extends MessageBox implements LogicalHandled
 	 * sprite (optional)
 	 * @param mousehandler MouseListenerHandler that informs the option buttons 
 	 * about mouse events
+	 * @param room The room where the box resides at
 	 */
 	public OptionMessageBox(int x, int y, int depth, String message,
 			Font textfont, Color textcolor, Sprite backgroundsprite, 
 			String[] options, Sprite buttonsprite, boolean diesafteruse, 
 			boolean deactivateOtherComponents, 
 			OptionMessageBoxListener user, DrawableHandler drawer,
-			ActorHandler actorhandler, MouseListenerHandler mousehandler)
+			ActorHandler actorhandler, MouseListenerHandler mousehandler, 
+			Room room)
 	{
 		super(x, y, depth, message, textfont, textcolor, backgroundsprite, drawer,
 				actorhandler);
@@ -116,7 +115,7 @@ public class OptionMessageBox extends MessageBox implements LogicalHandled
 			int buttonx = (int) (minbuttonx + ((i + 1.0) / (options.length + 1.0)) * (maxbuttonx - minbuttonx));
 			
 			new OptionButton(buttonx, buttony, buttonsprite, options[i], i, 
-					textfont, textcolor, drawer, mousehandler, this);
+					textfont, textcolor, drawer, mousehandler, room, this);
 		}
 	}
 	
@@ -174,13 +173,12 @@ public class OptionMessageBox extends MessageBox implements LogicalHandled
 	 * @author Mikko Hilpinen
 	 * created 8.1.2014
 	 */
-	private class OptionButton extends DimensionalDrawnObject implements 
-			TransformationListener, AdvancedMouseListener
+	private class OptionButton extends AbstractButton implements 
+			TransformationListener
 	{
 		// ATTRIBUTES	-------------------------------------------------
 		
 		private Point2D relativeposition;
-		private SingleSpriteDrawer spritedrawer;
 		private OptionMessageBox box;
 		private String text;
 		private int index;
@@ -195,17 +193,16 @@ public class OptionMessageBox extends MessageBox implements LogicalHandled
 		public OptionButton(int relativex, int relativey, Sprite buttonsprite, 
 				String text, int index, Font textfont, Color textcolor, 
 				DrawableHandler drawer, MouseListenerHandler mousehandler, 
-				OptionMessageBox containerbox)
+				Room room, OptionMessageBox containerbox)
 		{
-			super(0, 0, containerbox.getDepth(), false, 
-					CollisionType.BOX, drawer, null);
+			super(0, 0, containerbox.getDepth(), buttonsprite, drawer, 
+					mousehandler, room);
 			
 			// Initializes attributes
 			this.box = containerbox;
 			this.text = text;
 			this.index = index;
 			this.relativeposition = new Point(relativex, relativey);
-			this.spritedrawer = new SingleSpriteDrawer(buttonsprite, null, this);
 			this.textfont = textfont;
 			this.textcolor = textcolor;
 			
@@ -213,57 +210,18 @@ public class OptionMessageBox extends MessageBox implements LogicalHandled
 			
 			// Adds the object to the handler(s)
 			this.box.getTransformationListenerHandler().addListener(this);
-			mousehandler.addMouseListener(this);
 		}
 		
 		
 		// IMPLEMENTED METHODS	------------------------------------------
 
 		@Override
-		public int getWidth()
-		{
-			if (this.spritedrawer == null)
-				return 0;
-			
-			return this.spritedrawer.getSprite().getWidth();
-		}
-
-		@Override
-		public int getHeight()
-		{
-			if (this.spritedrawer == null)
-				return 0;
-			
-			return this.spritedrawer.getSprite().getHeight();
-		}
-
-		@Override
-		public int getOriginX()
-		{
-			if (this.spritedrawer == null)
-				return 0;
-			
-			return this.spritedrawer.getSprite().getOriginX();
-		}
-
-		@Override
-		public int getOriginY()
-		{
-			if (this.spritedrawer == null)
-				return 0;
-			
-			return this.spritedrawer.getSprite().getOriginY();
-		}
-
-		@Override
 		public void drawSelfBasic(Graphics2D g2d)
 		{
 			// Draws the sprite
-			if (this.spritedrawer == null)
-				return;
+			super.drawSelfBasic(g2d);
 			
-			this.spritedrawer.drawSprite(g2d, 0, 0);
-			
+			// Also draws some text
 			g2d.setFont(this.textfont);
 			g2d.setColor(this.textcolor);
 			g2d.drawString(this.text, 0, 0);
@@ -272,19 +230,7 @@ public class OptionMessageBox extends MessageBox implements LogicalHandled
 		@Override
 		public boolean isActive()
 		{
-			return this.box.isActive();
-		}
-
-		@Override
-		public void activate()
-		{
-			this.box.activate();
-		}
-
-		@Override
-		public void inactivate()
-		{
-			this.box.inactivate();
+			return this.box.isActive() && super.isActive();
 		}
 
 		@Override
@@ -325,27 +271,9 @@ public class OptionMessageBox extends MessageBox implements LogicalHandled
 		}
 
 		@Override
-		public boolean listensPosition(Point2D testPosition)
-		{
-			return pointCollides(testPosition);
-		}
-
-		@Override
 		public boolean listensMouseEnterExit()
 		{
 			return true;
-		}
-
-		@Override
-		public void onMouseMove(Point2D newMousePosition)
-		{
-			// Does nothing
-		}
-
-		@Override
-		public MouseButtonEventScale getCurrentButtonScaleOfInterest()
-		{
-			return MouseButtonEventScale.LOCAL;
 		}
 		
 		@Override
@@ -377,16 +305,9 @@ public class OptionMessageBox extends MessageBox implements LogicalHandled
 		{
 			// Button reacts to mouse over by changing sprite index
 			if (eventType == MousePositionEventType.ENTER)
-				this.spritedrawer.setImageIndex(1);
+				getSpriteDrawer().setImageIndex(1);
 			else if (eventType == MousePositionEventType.EXIT)
-				this.spritedrawer.setImageIndex(0);
-		}
-		
-		@Override
-		public Class<?>[] getSupportedListenerClasses()
-		{
-			// Doesn't limit supported classes
-			return null;
+				getSpriteDrawer().setImageIndex(0);
 		}
 		
 		

@@ -81,7 +81,7 @@ public class ResourceActivator
 		}
 		
 		// Adds all the new banks that weren't active already
-		// (Checking done in the addSpritebank method)
+		// (Checking done in the MultiMediaHolder)
 		for (int i = 0; i < newbanknames.length; i++)
 		{
 			System.out.println("Activates: " + newbanknames[i]);

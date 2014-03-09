@@ -1,5 +1,8 @@
 package uninamo_main;
 
+import java.awt.Color;
+import java.awt.Font;
+
 /**
  * This is a collection of different settings used in the game.
  * 
@@ -27,6 +30,14 @@ public class GameSettings
 	 * How much interface elements are scaled when mouse hovers over them
 	 */
 	public static final double interfaceScaleFactor = 1.2;
+	/**
+	 * The basic font used in the game
+	 */
+	public final static Font basicFont = new Font("Orc A Std", Font.BOLD, 30);
+	/**
+	 * The basic white colour used in the basic texts of the game
+	 */
+	public final static Color whiteTextColor = new Color(235, 232, 168);
 	
 	// CONSTRUCTOR	-----------------------------------------------------
 	

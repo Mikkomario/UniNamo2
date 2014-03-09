@@ -1,5 +1,7 @@
 package uninamo_worlds;
 
+import uninamo_userinterface.CodeTransitionButton;
+
 /**
  * DesignObjectCreator creates the objects needed in the design area. It also 
  * handles the background of the said area.
@@ -9,6 +11,11 @@ package uninamo_worlds;
  */
 public class DesignObjectCreator extends AreaObjectCreator
 {
+	// ATTRIBUTES	-----------------------------------------------------
+	
+	private AreaChanger areaChanger;
+	
+	
 	// CONSTRUCTOR	-----------------------------------------------------
 	
 	/**
@@ -20,6 +27,9 @@ public class DesignObjectCreator extends AreaObjectCreator
 	public DesignObjectCreator(AreaChanger areaChanger)
 	{
 		super(areaChanger.getArea("design"), "paper", "gameplaybackgrounds");
+		
+		// Initializes attributes
+		this.areaChanger = areaChanger;
 	}
 
 	
@@ -28,6 +38,9 @@ public class DesignObjectCreator extends AreaObjectCreator
 	@Override
 	protected void createObjects(Area area)
 	{
-		// TODO Add objects to create
+		// Creates objects
+		
+		new CodeTransitionButton(area.getDrawer(), area.getMouseHandler(), 
+				area, CodeTransitionButton.TOCODE, this.areaChanger);
 	}
 }

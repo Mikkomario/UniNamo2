@@ -112,9 +112,9 @@ public class Area extends Room
 	 */
 	public void returnNormal()
 	{
-		getActorHandler().endDisable();
-		getDrawer().endDisable();
-		getMouseHandler().endDisable();
+		getActorHandler().activate();
+		getMouseHandler().activate();
+		getDrawer().setVisible();
 	}
 	
 	/**
@@ -123,7 +123,7 @@ public class Area extends Room
 	public void disableOnlyMouse()
 	{
 		returnNormal();
-		getMouseHandler().disable();
+		getMouseHandler().inactivate();
 	}
 	
 	/**
@@ -132,7 +132,8 @@ public class Area extends Room
 	public void disableMouseAndDrawing()
 	{
 		returnNormal();
-		getMouseHandler().disable();
-		getDrawer().disable();
+		
+		getMouseHandler().inactivate();
+		getDrawer().setInvisible();
 	}
 }
