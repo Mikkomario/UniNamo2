@@ -7,6 +7,8 @@ Työtehtäviä
 			-> piirtyy aluksi väärään paikkaan
 			* Kun siirrytään koodauksesta designiin, voi muutosprosessi 
 			mennä pieleen (puoliksi muuttuu)
+			* Törmäyssysteemi ei ota huomioon stepin pituutta
+				- Pitää korjata mahdollisimman pian
 		- Alkuvalmistelut													DONE
 			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE
