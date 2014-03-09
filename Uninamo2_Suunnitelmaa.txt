@@ -41,13 +41,13 @@ Työtehtäviä
 			* Eri handlereiden aktivoiminen ja deaktivoiminen				DONE
 			* Background toiseen näkymään niin erottaa						DONE
 			* Siirtymänappula(t) koodauksen ja suunnitelman välille			DONE
-		- Laitteiden perustoiminnot											...
-			* Laitearkkitehtuuri											Testaamatta
-			* Yksinkertaisen testilaitteen (liukuhihna) luominen
-		- Laitteiden kytkeminen komponentteihin
-			* Testilaitteen komponenttien luominen
-			* Liikkumattomuuden lisääminen komponentteihin
-			* Tiedonvälitys komponenttien ja laitteen välillä
+		- Laitteiden perustoiminnot											DONE
+			* Laitearkkitehtuuri											DONE
+			* Yksinkertaisen testilaitteen (liukuhihna) luominen			DONE
+		- Laitteiden kytkeminen komponentteihin								DONE
+			* Testilaitteen komponenttien luominen							DONE
+			* Liikkumattomuuden lisääminen komponentteihin					DONE
+			* Tiedonvälitys komponenttien ja laitteen välillä				DONE
 		- Toimijoiden perustoiminnot
 			* Toimija-arkkitehtuuri
 			* Yksinkertaisen testitoimijan (laatikko) luominen

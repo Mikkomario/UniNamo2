@@ -17,6 +17,7 @@ public class CodingObjectCreator extends AreaObjectCreator
 	// ATTRIBUTES	----------------------------------------------------
 	
 	private AreaChanger areaChanger;
+	private ConnectorRelay connectorRelay;
 	
 	
 	// CONSTRUCTOR	----------------------------------------------------
@@ -27,13 +28,17 @@ public class CodingObjectCreator extends AreaObjectCreator
 	 * 
 	 * @param areaChanger The areaChanger that handles different areas in the 
 	 * game
+	 * @param connectorRelay The connectorRelay that contains the connectors 
+	 * used in the area
 	 */
-	public CodingObjectCreator(AreaChanger areaChanger)
+	public CodingObjectCreator(AreaChanger areaChanger, 
+			ConnectorRelay connectorRelay)
 	{
 		super(areaChanger.getArea("coding"), null, null);
 		
 		// Initializes attributes
 		this.areaChanger = areaChanger;
+		this.connectorRelay = connectorRelay;
 	}
 	
 	
@@ -43,14 +48,14 @@ public class CodingObjectCreator extends AreaObjectCreator
 	protected void createObjects(Area area)
 	{
 		// Creates a set of (test) objects
-		ConnectorRelay relay = new ConnectorRelay();
-		
 		new CodeTransitionButton(area.getDrawer(), area.getMouseHandler(), 
 				area, CodeTransitionButton.TODESING, this.areaChanger);
 		
 		new PowerSourceComponent(300, 300, area.getDrawer(), 
-				area.getActorHandler(), area.getMouseHandler(), area, relay);
-		new OrComponent(600, 300, area.getDrawer(), area.getMouseHandler(), area, relay);
+				area.getActorHandler(), area.getMouseHandler(), area, 
+				this.connectorRelay);
+		new OrComponent(600, 300, area.getDrawer(), area.getMouseHandler(), 
+				area, this.connectorRelay);
 	}
 
 }

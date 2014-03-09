@@ -211,6 +211,14 @@ public abstract class Machine extends DimensionalDrawnObject implements RoomList
 	// OTHER METHODS	-------------------------------------------------
 	
 	/**
+	 * @return The spritedrawer that draws the machine's sprites
+	 */
+	protected MultiSpriteDrawer getSpriteDrawer()
+	{
+		return this.spritedrawer;
+	}
+	
+	/**
 	 * Sends signal through the output component to other connected components
 	 * 
 	 * @param signal The type of signal

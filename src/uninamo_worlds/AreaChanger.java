@@ -2,6 +2,7 @@ package uninamo_worlds;
 
 import java.util.HashMap;
 
+import uninamo_components.ConnectorRelay;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
@@ -40,14 +41,17 @@ public class AreaChanger
 		
 		// TODO Create areas
 		
+		// Creates shared resources
+		ConnectorRelay relay = new ConnectorRelay();
+		
 		// Creates areas
 		this.areas.put("coding", new Area(MultiMediaHolder.getGamePhaseBank(
 				"default").getPhase("gameplay"), mousehandler, actorhandler, drawer));
-		new CodingObjectCreator(this);
+		new CodingObjectCreator(this, relay);
 		
 		this.areas.put("design", new Area(MultiMediaHolder.getGamePhaseBank(
 				"default").getPhase("gameplay"), mousehandler, actorhandler, drawer));
-		new DesignObjectCreator(this);
+		new DesignObjectCreator(this, relay);
 	}
 
 	

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import utopia_backgrounds.Background;
 import utopia_handlers.ActorHandler;
+import utopia_handlers.CollisionHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.DepthConstants;
@@ -26,6 +27,7 @@ public class Area extends Room
 	private MouseListenerHandler mousehandler;
 	private ActorHandler actorhandler;
 	private DrawableHandler drawer;
+	private CollisionHandler collisionhandler;
 	private GamePhase phase;
 	
 	
@@ -52,6 +54,7 @@ public class Area extends Room
 		this.actorhandler = new ActorHandler(false, superActorHandler);
 		this.drawer = new DrawableHandler(false, true, DepthConstants.NORMAL, 
 				superDrawer);
+		this.collisionhandler = new CollisionHandler(false, superActorHandler);
 	}
 
 	
@@ -64,6 +67,7 @@ public class Area extends Room
 		this.mousehandler.kill();
 		this.actorhandler.kill();
 		this.drawer.kill();
+		this.collisionhandler.kill();
 		
 		super.kill();
 	}
@@ -104,6 +108,14 @@ public class Area extends Room
 		return this.drawer;
 	}
 	
+	/**
+	 * @return The collisionHandler used in the area
+	 */
+	public CollisionHandler getCollisionHandler()
+	{
+		return this.collisionhandler;
+	}
+	
 	
 	// OTHER METHODS	--------------------------------------------------
 	
@@ -112,7 +124,6 @@ public class Area extends Room
 	 */
 	public void returnNormal()
 	{
-		getActorHandler().activate();
 		getMouseHandler().activate();
 		getDrawer().setVisible();
 	}
