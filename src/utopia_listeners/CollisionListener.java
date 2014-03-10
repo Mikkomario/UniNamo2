@@ -30,6 +30,7 @@ public interface CollisionListener extends LogicalHandled
 	 * an object
 	 * @param colpoints The points in which the collision(s) happened (absolute)
 	 * @param collided The object with which the collision(s) happened
+	 * @param steps The duration of the collision in steps
 	 */
-	public void onCollision(ArrayList<Point2D.Double> colpoints, Collidable collided);
+	public void onCollision(ArrayList<Point2D.Double> colpoints, Collidable collided, double steps);
 }

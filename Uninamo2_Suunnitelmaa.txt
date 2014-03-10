@@ -7,8 +7,8 @@ Työtehtäviä
 			-> piirtyy aluksi väärään paikkaan
 			* Kun siirrytään koodauksesta designiin, voi muutosprosessi 
 			mennä pieleen (puoliksi muuttuu)
-			* Törmäyssysteemi ei ota huomioon stepin pituutta
-				- Pitää korjata mahdollisimman pian
+			* Törmäyssysteemi ei ota huomioon stepin pituutta				DONE
+				- Pitää korjata mahdollisimman pian							DONE
 		- Alkuvalmistelut													DONE
 			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE
@@ -50,8 +50,8 @@ Työtehtäviä
 			* Testilaitteen komponenttien luominen							DONE
 			* Liikkumattomuuden lisääminen komponentteihin					DONE
 			* Tiedonvälitys komponenttien ja laitteen välillä				DONE
-		- Toimijoiden perustoiminnot
-			* Toimija-arkkitehtuuri
+		- Toimijoiden perustoiminnot										...
+			* Toimija-arkkitehtuuri											...
 			* Yksinkertaisen testitoimijan (laatikko) luominen
 			* Toimijan sekä laitteiden vuorovaikutus
 		- Testausnappula
@@ -121,6 +121,8 @@ Työtehtäviä
 		- Sound effectien lisääminen peliin
 			* Resurssien lataaminen ohjelman alussa
 			* Äänten soittamisen implementointi
+		- Samanlaisten input- ja outputkomponenttien (ja laitteiden) 
+		erotteleminen toisistaan numeroilla
 	* Gold	---------------------------------------------------------------------
 		- Tehtävien valitseminen
 			* Tehtävien valintaympäristön luominen

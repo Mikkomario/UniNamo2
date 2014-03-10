@@ -67,7 +67,8 @@ public class Obstacle extends BouncingBasicPhysicDrawnObject
 	// IMPLEMENTED METHODS	----------------------------------------------
 
 	@Override
-	public void onCollision(ArrayList<Double> colpoints, Collidable collided)
+	public void onCollision(ArrayList<Double> colpoints, Collidable collided, 
+			double steps)
 	{
 		// TODO Add wall collision
 	}
@@ -133,6 +134,5 @@ public class Obstacle extends BouncingBasicPhysicDrawnObject
 		//if (getX() - getOriginX() < 0)
 		// TODO: Create wall bounce,
 		// TODO: Fix the collision system
-			
 	}
 }

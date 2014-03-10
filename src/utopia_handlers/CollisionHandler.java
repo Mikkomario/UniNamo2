@@ -21,6 +21,7 @@ public class CollisionHandler extends LogicalHandler implements Actor
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private CollidableHandler collidablehandler;
+	private double lastStepLength;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -38,6 +39,7 @@ public class CollisionHandler extends LogicalHandler implements Actor
 		
 		// Initializes attributes
 		this.collidablehandler = new CollidableHandler(false, null);
+		this.lastStepLength = 1;
 	}
 	
 	
@@ -47,6 +49,7 @@ public class CollisionHandler extends LogicalHandler implements Actor
 	public void act(double steps)
 	{
 		// Handles the objects normally = checks collisions
+		this.lastStepLength = steps;
 		handleObjects();
 	}
 	
@@ -95,7 +98,7 @@ public class CollisionHandler extends LogicalHandler implements Actor
 		
 		// Informs the listener about each object it collided with
 		for (Collidable c: collidedpoints.keySet())
-			listener.onCollision(collidedpoints.get(c), c);
+			listener.onCollision(collidedpoints.get(c), c, this.lastStepLength);
 		
 		return true;
 	}

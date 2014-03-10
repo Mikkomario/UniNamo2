@@ -123,7 +123,7 @@ public class BasicCamera extends BasicPhysicDrawnObject
 	
 	@Override
 	public void onCollision(ArrayList<Point2D.Double> collisionpoints, 
-			Collidable collided)
+			Collidable collided, double steps)
 	{
 		// Doesn't do anything upon collision
 	}
