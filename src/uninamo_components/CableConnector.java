@@ -35,6 +35,7 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	private Component host;
 	private Point2D.Double relativePoint;
 	private ArrayList<Cable> connectedCables;
+	private boolean testing;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -54,8 +55,8 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	 * @param host The component to which the connector is tied to
 	 */
 	public CableConnector(int relativex, int relativey, DrawableHandler drawer, 
-			MouseListenerHandler mousehandler, Room room, ConnectorRelay relay, 
-			Component host)
+			MouseListenerHandler mousehandler, Room room, 
+			ConnectorRelay relay, Component host)
 	{
 		super(0, 0, host.getDepth() - 1, false, CollisionType.CIRCLE, drawer, 
 				null);
@@ -91,7 +92,7 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	@Override
 	public boolean isActive()
 	{
-		return this.host.isActive();
+		return this.host.isActive() && !this.testing;
 	}
 
 	@Override

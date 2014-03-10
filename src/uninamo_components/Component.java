@@ -3,6 +3,8 @@ package uninamo_components;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
+import uninamo_gameplaysupport.TestHandler;
+import uninamo_gameplaysupport.Testable;
 import uninamo_main.GameSettings;
 import utopia_gameobjects.DimensionalDrawnObject;
 import utopia_graphic.SingleSpriteDrawer;
@@ -26,14 +28,15 @@ import utopia_worlds.Room;
  * @since 8.3.2014
  */
 public abstract class Component extends DimensionalDrawnObject implements
-		AdvancedMouseListener, SignalReceiver, SignalSender, RoomListener
+		AdvancedMouseListener, SignalReceiver, SignalSender, RoomListener, 
+		Testable
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
 	private SingleSpriteDrawer spritedrawer;
 	private InputCableConnector[] inputs;
 	private OutputCableConnector[] outputs;
-	private boolean active;
+	private boolean active, testing;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -48,6 +51,8 @@ public abstract class Component extends DimensionalDrawnObject implements
 	 * @param mousehandler The mouseListenerHandler that will inform the 
 	 * object about mouse events
 	 * @param room The room where the component resides at
+	 * @param testHandler The testHandler that will inform the object about test 
+	 * events
 	 * @param connectorRelay A connectorRelay that will keep track of the 
 	 * connectors
 	 * @param spritename The name of the component sprite used to draw the 
@@ -57,8 +62,8 @@ public abstract class Component extends DimensionalDrawnObject implements
 	 */
 	public Component(int x, int y, DrawableHandler drawer, 
 			ActorHandler actorhandler, MouseListenerHandler mousehandler, 
-			Room room, ConnectorRelay connectorRelay, String spritename, 
-			int inputs, int outputs)
+			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
+			String spritename, int inputs, int outputs)
 	{
 		super(x, y, DepthConstants.NORMAL, false, CollisionType.BOX, drawer, 
 				null);
@@ -70,19 +75,21 @@ public abstract class Component extends DimensionalDrawnObject implements
 		this.active = true;
 		this.inputs = new InputCableConnector[inputs];
 		this.outputs = new OutputCableConnector[outputs];
+		this.testing = false;
 		
 		// Creates the connectors
 		for (int i = 0; i < inputs; i++)
 		{
 			int relativey = (int) ((i + 1) * (getHeight() / (inputs + 1.0)));
 			this.inputs[i] = new InputCableConnector(0, relativey, drawer, 
-					mousehandler, room, connectorRelay, this);
+					mousehandler, room, testHandler, connectorRelay, this);
 		}
 		for (int i = 0; i < outputs; i++)
 		{
 			int relativey = (int) ((i + 1) * (getHeight() / (outputs + 1.0)));
 			this.outputs[i] = new OutputCableConnector(getWidth() - 0, 
-					relativey, drawer, mousehandler, room, connectorRelay, this);
+					relativey, drawer, mousehandler, room, testHandler, 
+					connectorRelay, this);
 		}
 		
 		// Adds the object to the handler(s)
@@ -90,6 +97,8 @@ public abstract class Component extends DimensionalDrawnObject implements
 			room.addObject(this);
 		if (mousehandler != null)
 			mousehandler.addMouseListener(this);
+		if (testHandler != null)
+			testHandler.addTestable(this);
 	}
 	
 	
@@ -98,7 +107,7 @@ public abstract class Component extends DimensionalDrawnObject implements
 	@Override
 	public boolean isActive()
 	{
-		return this.active;
+		return this.active && !this.testing;
 	}
 
 	@Override
@@ -217,6 +226,18 @@ public abstract class Component extends DimensionalDrawnObject implements
 	{
 		// Dies
 		kill();
+	}
+	
+	@Override
+	public void startTesting()
+	{
+		this.testing = true;
+	}
+
+	@Override
+	public void endTesting()
+	{
+		this.testing = false;
 	}
 	
 	

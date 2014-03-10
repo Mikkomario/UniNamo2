@@ -55,25 +55,27 @@ Työtehtäviä
 			* Toimija-arkkitehtuuri											DONE
 			* Yksinkertaisen testitoimijan (laatikko) luominen				DONE
 			* Toimijan sekä laitteiden vuorovaikutus						DONE
-		- Testausnappula
-			* Testausnappuloiden lisääminen käyttöliittymään
-			* Testausnappulan reagointi hiireen kuvan vaihdoilla
-		- Testausmoodi
-			* Testausmoodin aloittaminen
-				- Komponenttien ja muiden aktivoiminen
-			* Testausmoodin lopettaminen
-				- Komponenttien ja muiden resetoiminen
-			* Grafiikoiden vaihtaminen
-			* Ajastin
-				- Ajastimen arkkitehtuuri
-				- Ajastindatan tiedonvälityksen viimeistely
+		- Testausnappula													DONE
+			* Testausnappuloiden lisääminen käyttöliittymään				DONE
+			* Testausnappulan reagointi hiireen								DONE
+		- Testausmoodi														...
+			* Testausmoodin aloittaminen									...
+				- Komponenttien ja muiden aktivoiminen						...
+			* Testausmoodin lopettaminen									...
+				- Komponenttien ja muiden resetoiminen						...
+			* Grafiikoiden vaihtaminen										...
+			* Komponenttien ja johtojen editoimisen estäminen testin aikana	...
+		- Ajastin
+			* Ajastimen arkkitehtuuri
+			* Ajastindatan tiedonvälityksen viimeistely
+			* Ajastinta käyttävän testiobjektin tekeminen
 		- Komponenttien liikuttelu työpöydällä
 			* Toiminnan implementoiminen komponenttiluokkaan
 			* Johtojen reagoiminen liikutteluun
 		- Komponenttilaatikot
 			* Komponenttilaatikkoarkkitehtuuri
 			* Laatikon luominen testikomponentille
-			* Laatikon reagointi hiireen
+			* Laatikon reagointi hiireen kuvan vaihdolla
 		- Roskis
 			* Roskisluokka ja sen luominen alussa
 			* Komponenttien reagointi törmäykseen roskiksen kanssa 
@@ -112,6 +114,7 @@ Työtehtäviä
 			* Yksinkertaisen testitehtävänannon valmistaminen
 			* Tehtävänannon selostaminen lyhyessä kuvauksessa
 			* Tarvittavan moodin piirtäminen ja muiden deaktivoiminen
+		- Tehtävänantovalikko / käyttöliitymä / jokin
 		- Kahden näkymän piirtäminen testausmoodissa (ja muuten)
 			* Kameroiden implementointi
 			* Kameran koon ja sijainnin muuttaminen testausvaiheessa
@@ -126,6 +129,9 @@ Työtehtäviä
 			* Äänten soittamisen implementointi
 		- Samanlaisten input- ja outputkomponenttien (ja laitteiden) 
 		erotteleminen toisistaan numeroilla
+		- Voittoikkuna
+			* Komponenttikäytön analysointi
+			* Uusien tehtävien antaminen
 	* Gold	---------------------------------------------------------------------
 		- Tehtävien valitseminen
 			* Tehtävien valintaympäristön luominen
@@ -150,13 +156,15 @@ Työtehtäviä
 				- Laitesuunnitelmien liikuttelu
 				- Sama toimijoille ja maaleille
 				- Seinien / lattian rakentaminen
+		- Mainokset uusien laitteiden kanssa
 	
 Komponentteja
 	* Looginen
 		- And
 		- Latch
 		- Or
-		- Counter
+		- HC Counter
+		- Casual Counter
 		- Inverter
 		- Exclusive Or (Exor)
 		- Delay
@@ -166,30 +174,73 @@ Komponentteja
 		- Relay
 		- Not Exclusive Or (Exnor)
 		- Bistable
+		- Binäärimuunnin
+		- Käänteinen flipflop
 	* Looginen input
 		- Pulse Generator
 		- Power Generator
-	* Peli-input
-		- Lightsensor
-		- On / Off -switch
-		- Pingviinitunnistus
-		- Kappaletunnistus
-		- Väritunnistus
-		- Switch
-	* Pelioutput
-		- Valot
-		- Liukuhihna
-		- Solenoidi
-		- Leimasin
-		- Värispray
-	* Muita
-		- Random input
-		- Platform
-		- Pingviini
-		- Boxi
-		- Maali
-		- Rosvopingviini
-		- Ovi
+		
+Koneita
+	* Värivalitsin
+	* Pigviinitunnistaja
+	* Magneettitunnistus
+	* Solenoidi (hydraulipumppu)
+	* Valot
+	* Batman sensory unit
+	* Maali spray
+	* Robottivartiokoirat
+		- Pigviinit saa henkisiä traumoja
+	* Hissi
+		- Kertoo jos hissi on jossain kerroksessa
+		- Myös 3 ovea (2 binääristä sisääntuloa)
+	* Kahvikone (myös tee)
+	* Switch
+	* On/Off switch
+	* Venttiili
+	* Ovi
+	* Kallistin (jos fysiikka toimii)
+	* On/Off -lukko (?)
+	* Liikkeentunnistin
+	* Painelaatta
+	* Valontunnistus
+	* Lämmöntunnistun
+	* Vastus
+	* Korttilukko
+	* Platform joka aukee
+	* Ponnahduslauta
+	* "Sauronin silmä"
+		- Lämmittää rangella
+	* Laser
+	* Lasertunnistin
+	* Nyrkki / littain
+	* Apuliukuhihna (tekee samaa kuin toinen)
+	* Seinäponnautin
+	* Tuuletin (horison ja vert)
+	* Maalikuplakone
+	* Jäädytin
+		- Voi esim. jäädyttää kuplia
+	* Keksikone
+	* Magneutin
+Objekteja
+	* Pigviini
+	* Rosvopigni
+	* Roskalaatikko (huono laatikko)
+	* Batman
+	* Tynnyri
+	* Seinämä
+	* Jääblokki
+		- Silakoita sisällä
+	* Kortti
+	* Rullaboxi (rullaa muita objekteja)
+	* Ponnahduslauta
+	* Vinoponnautuslauta
+	* Ilmapallopigviini
+	* Kupla
+	
+Ominaisuudet vois laittaa aktiivisina moduuleina
+	* Esim. magneettisuusmoduuli liikuttaa tarvittaessa
+Diskreetit säätimet joihinkin komponentteihin
+Järkevästi otetaan aluksi mukaan lisää komponentteja
 		
 Huomioita / Ideoita
 	* Aikajärjestelmä on vuoropohjainen (aika mitataan vuoroissa)

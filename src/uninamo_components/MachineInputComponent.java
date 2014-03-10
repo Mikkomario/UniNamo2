@@ -2,6 +2,7 @@ package uninamo_components;
 
 import java.util.HashMap;
 
+import uninamo_gameplaysupport.TestHandler;
 import uninamo_machinery.Machine;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
@@ -36,6 +37,8 @@ public class MachineInputComponent extends Component
 	 * @param mousehandler The mouseListenerHandler that will inform the 
 	 * component about mouse events
 	 * @param room The room where the component resides
+	 * @param testHandler The testHandler that will inform the object about 
+	 * test events
 	 * @param connectorRelay The connectorRelay that keeps track of all the 
 	 * connectors
 	 * @param spritename The name of the sprite the component uses
@@ -44,11 +47,11 @@ public class MachineInputComponent extends Component
 	 */
 	public MachineInputComponent(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, MouseListenerHandler mousehandler,
-			Room room, ConnectorRelay connectorRelay, String spritename,
-			int inputs, Machine host)
+			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
+			String spritename, int inputs, Machine host)
 	{
-		super(x, y, drawer, actorhandler, mousehandler, room, connectorRelay,
-				spritename, inputs, 0);
+		super(x, y, drawer, actorhandler, mousehandler, room, testHandler, 
+				connectorRelay, spritename, inputs, 0);
 		
 		// Initializes attributes
 		this.host = host;

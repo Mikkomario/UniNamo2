@@ -2,10 +2,12 @@ package uninamo_worlds;
 
 import uninamo_components.ConnectorRelay;
 import uninamo_gameplaysupport.InvisibleWall;
+import uninamo_gameplaysupport.TestHandler;
 import uninamo_machinery.ConveyorBelt;
 import uninamo_main.GameSettings;
 import uninamo_obstacles.Box;
 import uninamo_userinterface.CodeTransitionButton;
+import uninamo_userinterface.TestingButton;
 
 /**
  * DesignObjectCreator creates the objects needed in the design area. It also 
@@ -20,6 +22,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 	
 	private AreaChanger areaChanger;
 	private ConnectorRelay connectorRelay;
+	private TestHandler testHandler;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -30,15 +33,18 @@ public class DesignObjectCreator extends AreaObjectCreator
 	 * 
 	 * @param areaChanger The areaChanger that handles different areas
 	 * @param connectorRelay The connectorRelay that is used in the coding area.
+	 * @param testHandler The testHandler that will inform the objects about 
+	 * test events
 	 */
 	public DesignObjectCreator(AreaChanger areaChanger, 
-			ConnectorRelay connectorRelay)
+			ConnectorRelay connectorRelay, TestHandler testHandler)
 	{
 		super(areaChanger.getArea("design"), "paper", "gameplaybackgrounds");
 		
 		// Initializes attributes
 		this.areaChanger = areaChanger;
 		this.connectorRelay = connectorRelay;
+		this.testHandler = testHandler;
 	}
 
 	
@@ -62,10 +68,14 @@ public class DesignObjectCreator extends AreaObjectCreator
 		// Creates objects
 		new CodeTransitionButton(area.getDrawer(), area.getMouseHandler(), 
 				area, CodeTransitionButton.TOCODE, this.areaChanger);
+		new TestingButton(GameSettings.screenWidth - 110, 
+				GameSettings.screenHeight - 45, area.getDrawer(), 
+				area.getMouseHandler(), area);
+		
 		new ConveyorBelt(400, GameSettings.screenHeight - 200, 
 				area.getDrawer(), area.getActorHandler(), 
 				area.getCollisionHandler(), this.areaChanger.getArea("coding"), 
-				this.connectorRelay);
+				area, this.testHandler, this.connectorRelay);
 		new Box(400, 200, area.getDrawer(), 
 				area.getCollisionHandler().getCollidableHandler(), 
 				area.getCollisionHandler(), area.getActorHandler(), area).startTest();;

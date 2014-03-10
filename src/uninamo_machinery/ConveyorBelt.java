@@ -6,6 +6,7 @@ import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
 import uninamo_components.ConnectorRelay;
+import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.Wall;
 import uninamo_obstacles.Obstacle;
 import uninamo_worlds.Area;
@@ -49,17 +50,21 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener,
 	 * collision checking and collision event informing
 	 * @param codingArea The coding area of the game where the components are 
 	 * created
+	 * @param designArea The area where the machine is located at
+	 * @param testHandler The testHandler that will inform the object about 
+	 * test events
 	 * @param connectorRelay The connectorRelay that will handle the belts 
 	 * connectors
 	 */
 	public ConveyorBelt(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, CollisionHandler collisionHandler,
-			Area codingArea, ConnectorRelay connectorRelay)
+			Area codingArea, Area designArea, TestHandler testHandler, 
+			ConnectorRelay connectorRelay)
 	{
 		super(x, y, true, CollisionType.BOX, drawer, actorhandler,
 				collisionHandler.getCollidableHandler(), codingArea, 
-				connectorRelay,"belt", "beltreal", "machinecomponent", null, 
-				2, 0);
+				designArea, testHandler, connectorRelay,"belt", "beltreal", 
+				"machinecomponent", null, 2, 0);
 		
 		// Initializes attributes
 		this.absolutePointsNeedUpdating = true;

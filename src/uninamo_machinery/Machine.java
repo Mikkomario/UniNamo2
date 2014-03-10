@@ -6,6 +6,8 @@ import java.awt.geom.Point2D;
 import uninamo_components.ConnectorRelay;
 import uninamo_components.MachineInputComponent;
 import uninamo_components.MachineOutputComponent;
+import uninamo_gameplaysupport.TestHandler;
+import uninamo_gameplaysupport.Testable;
 import uninamo_main.GameSettings;
 import uninamo_obstacles.Obstacle;
 import uninamo_worlds.Area;
@@ -28,7 +30,8 @@ import utopia_worlds.Room;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public abstract class Machine extends DimensionalDrawnObject implements RoomListener
+public abstract class Machine extends DimensionalDrawnObject implements 
+		RoomListener, Testable
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
@@ -56,6 +59,8 @@ public abstract class Machine extends DimensionalDrawnObject implements RoomList
 	 * @param collidablehandler The collidableHandler that will handle the 
 	 * machine's collision checking
 	 * @param codingArea The coding area where the machine components will be created
+	 * @param designArea The area where the machine is located at
+	 * @param testHandler The testHandler that will inform the object about test events
 	 * @param connectorRelay The connectorRelay that will handle the machine's 
 	 * components' connectors
 	 * @param designSpriteName The name of the sprite the machine uses in the 
@@ -74,7 +79,8 @@ public abstract class Machine extends DimensionalDrawnObject implements RoomList
 	public Machine(int x, int y, boolean isSolid,
 			CollisionType collisiontype, DrawableHandler drawer, 
 			ActorHandler actorhandler, CollidableHandler collidablehandler, 
-			Area codingArea, ConnectorRelay connectorRelay, 
+			Area codingArea, Area designArea, TestHandler testHandler, 
+			ConnectorRelay connectorRelay, 
 			String designSpriteName, String realSpriteName, 
 			String inputComponentSpriteName, String outputComponentSpriteName, 
 			int inputs, int outputs)
@@ -97,8 +103,8 @@ public abstract class Machine extends DimensionalDrawnObject implements RoomList
 			new MachineInputComponent((int) position.getX(), 
 					(int) position.getY(), codingArea.getDrawer(), 
 					codingArea.getActorHandler(), codingArea.getMouseHandler(), 
-					codingArea, connectorRelay, inputComponentSpriteName, 
-					inputs, this);
+					codingArea, testHandler, connectorRelay, 
+					inputComponentSpriteName, inputs, this);
 			inputComponentsCreated ++;
 		}
 		if (outputComponentSpriteName != null && outputs > 0)
@@ -107,10 +113,16 @@ public abstract class Machine extends DimensionalDrawnObject implements RoomList
 			this.output = new MachineOutputComponent((int) position.getX(), 
 					(int) position.getY(), codingArea.getDrawer(), 
 					codingArea.getActorHandler(), codingArea.getMouseHandler(), 
-					codingArea, connectorRelay, outputComponentSpriteName, 
-					outputs);
+					codingArea, testHandler, connectorRelay, 
+					outputComponentSpriteName, outputs);
 			outputComponentsCreated ++;
 		}
+		
+		// Adds the object to the handler(s)
+		if (designArea != null)
+			designArea.addObject(this);
+		if (testHandler != null)
+			testHandler.addTestable(this);
 	}
 
 	
@@ -209,6 +221,20 @@ public abstract class Machine extends DimensionalDrawnObject implements RoomList
 		super.kill();
 	}
 	
+	@Override
+	public void startTesting()
+	{
+		// Changes the sprite
+		getSpriteDrawer().setSpriteIndex(1, false);
+	}
+
+	@Override
+	public void endTesting()
+	{
+		// Changes the sprite
+		getSpriteDrawer().setSpriteIndex(0, false);
+	}
+	
 	
 	// OTHER METHODS	-------------------------------------------------
 	
@@ -238,7 +264,7 @@ public abstract class Machine extends DimensionalDrawnObject implements RoomList
 	private static Point2D.Double getNewComponentPosition(boolean isInput)
 	{
 		int x = GameSettings.screenWidth - 200;
-		int y = COMPONENTDISTANCE / 2;
+		int y = COMPONENTDISTANCE / 2 + 160;
 		int i = 0;
 		int components = inputComponentsCreated;
 		
@@ -252,7 +278,7 @@ public abstract class Machine extends DimensionalDrawnObject implements RoomList
 		{
 			y += COMPONENTDISTANCE;
 			
-			if (y > GameSettings.screenHeight - COMPONENTDISTANCE / 2)
+			if (y > GameSettings.screenHeight - COMPONENTDISTANCE / 2 + 160)
 			{
 				if (isInput)
 					x -= COMPONENTDISTANCE;

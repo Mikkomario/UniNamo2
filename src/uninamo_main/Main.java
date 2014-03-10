@@ -66,6 +66,8 @@ public class Main
 				mainactorhandler, maindrawer);
 		areachanger.getArea("design").start();
 		areachanger.getArea("coding").start();
+		
+		// TODO: This causes occasional errors
 		areachanger.getArea("design").disableMouseAndDrawing();
 	}
 	

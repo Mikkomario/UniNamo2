@@ -3,7 +3,10 @@ package uninamo_worlds;
 import uninamo_components.ConnectorRelay;
 import uninamo_components.OrComponent;
 import uninamo_components.PowerSourceComponent;
+import uninamo_gameplaysupport.TestHandler;
+import uninamo_main.GameSettings;
 import uninamo_userinterface.CodeTransitionButton;
+import uninamo_userinterface.TestingButton;
 
 /**
  * This objectCreator creates the necessary elements used in the coding 
@@ -18,6 +21,7 @@ public class CodingObjectCreator extends AreaObjectCreator
 	
 	private AreaChanger areaChanger;
 	private ConnectorRelay connectorRelay;
+	private TestHandler testHandler;
 	
 	
 	// CONSTRUCTOR	----------------------------------------------------
@@ -30,15 +34,18 @@ public class CodingObjectCreator extends AreaObjectCreator
 	 * game
 	 * @param connectorRelay The connectorRelay that contains the connectors 
 	 * used in the area
+	 * @param testHandler The testHandler that will inform the objects about 
+	 * test events
 	 */
 	public CodingObjectCreator(AreaChanger areaChanger, 
-			ConnectorRelay connectorRelay)
+			ConnectorRelay connectorRelay, TestHandler testHandler)
 	{
 		super(areaChanger.getArea("coding"), null, null);
 		
 		// Initializes attributes
 		this.areaChanger = areaChanger;
 		this.connectorRelay = connectorRelay;
+		this.testHandler = testHandler;
 	}
 	
 	
@@ -50,12 +57,13 @@ public class CodingObjectCreator extends AreaObjectCreator
 		// Creates a set of (test) objects
 		new CodeTransitionButton(area.getDrawer(), area.getMouseHandler(), 
 				area, CodeTransitionButton.TODESING, this.areaChanger);
+		new TestingButton(GameSettings.screenWidth - 110, 45, area.getDrawer(), 
+				area.getMouseHandler(), area);
 		
 		new PowerSourceComponent(300, 300, area.getDrawer(), 
 				area.getActorHandler(), area.getMouseHandler(), area, 
-				this.connectorRelay);
+				this.testHandler, this.connectorRelay);
 		new OrComponent(600, 300, area.getDrawer(), area.getMouseHandler(), 
-				area, this.connectorRelay);
+				area, this.testHandler, this.connectorRelay);
 	}
-
 }

@@ -12,6 +12,7 @@ paper#images/backgrounds/designpaper.png#1#0#0
 
 &gameplayinterface
 transition#images/ui/transitionbutton_v2.png#1#300#75
+testing#images/ui/testbutton_strip2.png#2#80#24
 
 &machines
 belt#images/machines/belt_strip2.png#2#86#86

@@ -3,6 +3,8 @@ package uninamo_components;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
+import uninamo_gameplaysupport.TestHandler;
+import uninamo_gameplaysupport.Testable;
 import uninamo_main.GameSettings;
 import utopia_gameobjects.DimensionalDrawnObject;
 import utopia_graphic.SingleSpriteDrawer;
@@ -26,12 +28,12 @@ import utopia_worlds.Room;
  */
 public class Cable extends DimensionalDrawnObject implements
 		AdvancedMouseListener, TransformationListener, SignalSender, 
-		SignalReceiver, RoomListener
+		SignalReceiver, RoomListener, Testable
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private SingleSpriteDrawer spritedrawer;
-	private boolean active, lastSignalStatus, dragged;
+	private boolean active, lastSignalStatus, dragged, testing;
 	private OutputCableConnector start;
 	private InputCableConnector end;
 	private Point2D.Double lastMousePosition;
@@ -53,13 +55,14 @@ public class Cable extends DimensionalDrawnObject implements
 	 * @param mousehandler The mouseListenerHandler that will inform the 
 	 * cable about mouse events
 	 * @param room The room where the cable resides at
+	 * @param testHandler The testHandler that will inform the cable about test events
 	 * @param connectorRelay A connectorRelay that will inform the cable about 
 	 * connector positions
 	 * @param startConnector The connector the cable starts from (Optional if endConnector is provided)
 	 * @param endConnector The connector the cable ends to (optional if startConnector is provided)
 	 */
 	public Cable(DrawableHandler drawer, MouseListenerHandler mousehandler, 
-			Room room, ConnectorRelay connectorRelay, 
+			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
 			OutputCableConnector startConnector, InputCableConnector endConnector)
 	{
 		super(0, 0, DepthConstants.NORMAL - 5, false, CollisionType.BOX, 
@@ -84,6 +87,7 @@ public class Cable extends DimensionalDrawnObject implements
 		this.lastSignalStatus = false;
 		this.connectorRelay = connectorRelay;
 		this.dragged = true;
+		this.testing = false;
 		
 		updateTransformations();
 		this.spritedrawer.setImageSpeed(0);
@@ -98,6 +102,8 @@ public class Cable extends DimensionalDrawnObject implements
 			startConnector.getTransformationListenerHandler().addListener(this);
 		if (endConnector != null)
 			endConnector.getTransformationListenerHandler().addListener(this);
+		if (testHandler != null)
+			testHandler.addTestable(this);
 	}
 	
 	
@@ -106,7 +112,8 @@ public class Cable extends DimensionalDrawnObject implements
 	@Override
 	public boolean isActive()
 	{
-		return this.active;
+		// If the cable is in testing mode it doesn't react to mouse
+		return this.active && !this.testing;
 	}
 
 	@Override
@@ -346,6 +353,18 @@ public class Cable extends DimensionalDrawnObject implements
 	{
 		// Dies
 		kill();
+	}
+	
+	@Override
+	public void startTesting()
+	{
+		this.testing = true;
+	}
+
+	@Override
+	public void endTesting()
+	{
+		this.testing = false;
 	}
 	
 	

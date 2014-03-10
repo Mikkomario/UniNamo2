@@ -2,6 +2,7 @@ package uninamo_components;
 
 import java.awt.geom.Point2D;
 
+import uninamo_gameplaysupport.TestHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
 import utopia_worlds.Room;
@@ -22,6 +23,9 @@ public class InputCableConnector extends CableConnector
 	private MouseListenerHandler mousehandler;
 	private ConnectorRelay relay;
 	private Room room;
+	private TestHandler testHandler;
+	
+	// TODO: These should be moved to the superclass
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -37,12 +41,15 @@ public class InputCableConnector extends CableConnector
 	 * @param mousehandler The mouseListenerHandler that will inform the 
 	 * connector about mouse events
 	 * @param room The room where the connector resides at
+	 * @param testHandler The testHandler that will inform the cables about 
+	 * test events
 	 * @param relay The connectorRelay that will keep track of the connectors
 	 * @param host The host component the connector is tied to
 	 */
 	public InputCableConnector(int relativex, int relativey,
 			DrawableHandler drawer, MouseListenerHandler mousehandler, 
-			Room room, ConnectorRelay relay, Component host)
+			Room room, TestHandler testHandler, ConnectorRelay relay, 
+			Component host)
 	{
 		super(relativex, relativey, drawer, mousehandler, room, relay, host);
 		
@@ -51,6 +58,7 @@ public class InputCableConnector extends CableConnector
 		this.mousehandler = mousehandler;
 		this.relay = relay;
 		this.room = room;
+		this.testHandler = testHandler;
 		
 		// Changes the look of the connector
 		getSpriteDrawer().setImageIndex(1);
@@ -73,7 +81,7 @@ public class InputCableConnector extends CableConnector
 				MouseButtonEventType.PRESSED && !Cable.cableIsBeingDragged)
 		{
 			connectCable(new Cable(this.drawer, this.mousehandler, this.room, 
-					this.relay, null, this));
+					this.testHandler, this.relay, null, this));
 		}
 	}
 

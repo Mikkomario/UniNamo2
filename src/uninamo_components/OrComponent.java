@@ -1,5 +1,6 @@
 package uninamo_components;
 
+import uninamo_gameplaysupport.TestHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
 import utopia_worlds.Room;
@@ -29,14 +30,16 @@ public class OrComponent extends Component
 	 * @param mousehandler The mouseListenerHandler that will inform the 
 	 * object about mouse events
 	 * @param room The room where the component resides at
+	 * @param testHandler The testHandler that will inform the object about test events
 	 * @param connectorRelay A connectorRelay that will keep track of the 
 	 * connectors
 	 */
 	public OrComponent(int x, int y, DrawableHandler drawer, 
-			MouseListenerHandler mousehandler, Room room, 
+			MouseListenerHandler mousehandler, Room room, TestHandler testHandler, 
 			ConnectorRelay connectorRelay)
 	{
-		super(x, y, drawer, null, mousehandler, room, connectorRelay, "test", 2, 1);
+		super(x, y, drawer, null, mousehandler, room, testHandler, 
+				connectorRelay, "test", 2, 1);
 		
 		// Initializes attributes
 		this.signalStatus = false;

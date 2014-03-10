@@ -1,5 +1,6 @@
 package uninamo_components;
 
+import uninamo_gameplaysupport.TestHandler;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
@@ -28,6 +29,8 @@ public class MachineOutputComponent extends Component
 	 * @param mousehandler The mouseHandler that will inform the component 
 	 * about mouse events 
 	 * @param room The room where the component resides
+	 * @param testHandler The testHandler that will inform the object about 
+	 * test events
 	 * @param connectorRelay The connectorRelay that keeps track of the 
 	 * connectors
 	 * @param spritename The name of the sprite the component uses
@@ -35,11 +38,11 @@ public class MachineOutputComponent extends Component
 	 */
 	public MachineOutputComponent(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, MouseListenerHandler mousehandler,
-			Room room, ConnectorRelay connectorRelay, String spritename,
-			int outputs)
+			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
+			String spritename, int outputs)
 	{
-		super(x, y, drawer, actorhandler, mousehandler, room, connectorRelay,
-				spritename, 0, outputs);
+		super(x, y, drawer, actorhandler, mousehandler, room, testHandler, 
+				connectorRelay, spritename, 0, outputs);
 	}
 	
 	
