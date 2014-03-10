@@ -864,6 +864,9 @@ public abstract class DrawnObject extends GameObject implements Drawable
 	protected static void drawRelativePoints(Graphics2D g2d, 
 			Point2D.Double[] relativePoints)
 	{
+		if (relativePoints == null || g2d == null)
+			return;
+		
 		g2d.setColor(new Color(255, 0, 0));
 		
 		for (Point2D.Double p: relativePoints)

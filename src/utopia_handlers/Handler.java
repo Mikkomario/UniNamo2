@@ -314,6 +314,15 @@ public abstract class Handler implements Handled
 	}
 	
 	/**
+	 * Prints the amount of handleds the handler currently contains. This 
+	 * should be used for testing purposes only.
+	 */
+	public void printHandledNumber()
+	{
+		System.out.println(getHandledNumber());
+	}
+	
+	/**
 	 * @return The first handled in the list of handleds
 	 */
 	protected Handled getFirstHandled()

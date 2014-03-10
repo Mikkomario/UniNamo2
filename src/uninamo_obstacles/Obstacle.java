@@ -120,7 +120,7 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements
 			
 			// TODO: Munch these numbers further
 			bounceWithoutRotationFrom(wall, HelpMath.getAveragePoint(colpoints), 
-					0, 0.25, 0.25, steps);
+					0, 0.25, 0.4, steps);
 		}
 	}
 

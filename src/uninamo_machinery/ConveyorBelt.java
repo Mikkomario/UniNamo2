@@ -15,6 +15,7 @@ import utopia_handlers.CollisionHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.CollisionType;
 import utopia_listeners.CollisionListener;
+import utopia_listeners.TransformationListener;
 
 /**
  * ConveyorBelt is a machine that pushes actors either left or right or 
@@ -23,13 +24,15 @@ import utopia_listeners.CollisionListener;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public class ConveyorBelt extends Machine implements Wall, CollisionListener
+public class ConveyorBelt extends Machine implements Wall, CollisionListener, 
+	TransformationListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
-	private boolean running, active;
+	private boolean running, active, absolutePointsNeedUpdating;
 	private int speedSign;
 	private Point2D.Double[] relativeColPoints;
+	private Point2D.Double[] absoluteColPoints;
 	
 	
 	// CONSTRUCOR	-----------------------------------------------------
@@ -59,9 +62,11 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener
 				2, 0);
 		
 		// Initializes attributes
+		this.absolutePointsNeedUpdating = true;
 		this.running = false;
 		this.speedSign = 1;
 		this.active = true;
+		//this.colhandler = collisionHandler;
 		
 		// Calculates the collision points
 		this.relativeColPoints = new Point2D.Double[5];
@@ -71,10 +76,15 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener
 					i * getWidth() / (this.relativeColPoints.length - 1), -15);
 		}
 		
+		updateAbsoluteCollisionPoints();
+		
 		updateAnimation();
+		
+		//collisionHandler.printHandledNumber();
 		
 		// Adds the object to the handler(s)
 		collisionHandler.addCollisionListener(this);
+		getTransformationListenerHandler().addListener(this);
 	}
 	
 	// IMPLEMENTED METHODS	---------------------------------------------
@@ -82,6 +92,8 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener
 	@Override
 	public void onSignalEvent(boolean signalType, int inputIndex)
 	{
+		//this.colhandler.printHandledNumber();
+		
 		// May start, stop or change direction
 		if (inputIndex == 0)
 			this.running = signalType;
@@ -116,21 +128,28 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener
 	@Override
 	public Double[] getCollisionPoints()
 	{
-		return this.relativeColPoints;
+		//System.out.println("Relative points: " + this.relativeColPoints);
+		//System.out.println("Absolute points: " + this.absoluteColPoints);
+		
+		// Updates the points if necessary
+		if (this.absolutePointsNeedUpdating)
+			updateAbsoluteCollisionPoints();
+		
+		return this.absoluteColPoints;
 	}
 
 	@Override
 	public void onCollision(ArrayList<Double> colpoints, Collidable collided,
 			double steps)
-	{
-		System.out.println("Collides with something");
-		
+	{		
 		// When collides with obstacles, moves them either left or right
 		if (this.running && collided instanceof Obstacle)
 		{
+			//System.out.println("Collides with a box");
+			
 			Obstacle o = (Obstacle) collided;
 			
-			o.addPosition(4 * this.speedSign, 0);
+			o.addPosition(2 * this.speedSign, 0);
 		}
 	}
 	
@@ -142,6 +161,13 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener
 		drawRelativePoints(g2d, this.relativeColPoints);
 	}
 	
+	@Override
+	public void onTransformationEvent(TransformationEvent e)
+	{
+		// Remembers that the collision points need updating
+		this.absolutePointsNeedUpdating = true;
+	}
+	
 	
 	// OTHER METHODS	--------------------------------------------------
 	
@@ -151,5 +177,25 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener
 			getSpriteDrawer().setImageSpeed(this.speedSign * 0.1);
 		else
 			getSpriteDrawer().setImageSpeed(0);
+	}
+	
+	private void updateAbsoluteCollisionPoints()
+	{
+		// if relativepoints don't exist, sets up an empty table
+		if (this.relativeColPoints == null)
+		{
+			this.absoluteColPoints = new Point2D.Double[0];
+			return;
+		}
+		
+		this.absoluteColPoints = new Point2D.Double[this.relativeColPoints.length];
+		
+		// Transforms each of the points and adds them to the new table
+		for (int i = 0; i < this.relativeColPoints.length; i++)
+		{
+			this.absoluteColPoints[i] = transform(this.relativeColPoints[i]);
+		}
+		
+		this.absolutePointsNeedUpdating = false;
 	}
 }

@@ -69,6 +69,15 @@ public class CollisionHandler extends LogicalHandler implements Actor
 			return true;
 		
 		Point2D.Double[] colpoints = listener.getCollisionPoints();
+		
+		// If collision points could not be read, skips the object
+		if (colpoints == null)
+		{
+			System.err.println("CollisionListener " + h + 
+					" doesn't provide viable collision points.");
+			return true;
+		}
+		
 		HashMap<Collidable, ArrayList<Point2D.Double>> collidedpoints = 
 				new HashMap<Collidable, ArrayList<Point2D.Double>>();
 		

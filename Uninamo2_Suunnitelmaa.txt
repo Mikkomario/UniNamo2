@@ -51,10 +51,10 @@ Työtehtäviä
 			* Testilaitteen komponenttien luominen							DONE
 			* Liikkumattomuuden lisääminen komponentteihin					DONE
 			* Tiedonvälitys komponenttien ja laitteen välillä				DONE
-		- Toimijoiden perustoiminnot										...
+		- Toimijoiden perustoiminnot										DONE
 			* Toimija-arkkitehtuuri											DONE
 			* Yksinkertaisen testitoimijan (laatikko) luominen				DONE
-			* Toimijan sekä laitteiden vuorovaikutus						...
+			* Toimijan sekä laitteiden vuorovaikutus						DONE
 		- Testausnappula
 			* Testausnappuloiden lisääminen käyttöliittymään
 			* Testausnappulan reagointi hiireen kuvan vaihdoilla
