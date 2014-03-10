@@ -9,6 +9,7 @@ Työtehtäviä
 			mennä pieleen (puoliksi muuttuu)
 			* Törmäyssysteemi ei ota huomioon stepin pituutta				DONE
 				- Pitää korjata mahdollisimman pian							DONE
+			* Jos törmää hirveän lujaa niin menee toisen objektin sisälle
 		- Alkuvalmistelut													DONE
 			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE
@@ -51,9 +52,9 @@ Työtehtäviä
 			* Liikkumattomuuden lisääminen komponentteihin					DONE
 			* Tiedonvälitys komponenttien ja laitteen välillä				DONE
 		- Toimijoiden perustoiminnot										...
-			* Toimija-arkkitehtuuri											...
-			* Yksinkertaisen testitoimijan (laatikko) luominen
-			* Toimijan sekä laitteiden vuorovaikutus
+			* Toimija-arkkitehtuuri											DONE
+			* Yksinkertaisen testitoimijan (laatikko) luominen				DONE
+			* Toimijan sekä laitteiden vuorovaikutus						...
 		- Testausnappula
 			* Testausnappuloiden lisääminen käyttöliittymään
 			* Testausnappulan reagointi hiireen kuvan vaihdoilla

@@ -17,4 +17,6 @@ transition#images/ui/transitionbutton_v2.png#1#300#75
 belt#images/machines/belt_strip2.png#2#86#86
 beltreal#images/machines/belt_real_strip2.png#2#86#86
 
-*&obstacles
+&obstacles
+boxdesign#images/obstacles/boxdesign.png#1#80#80
+boxreal#images/obstacles/boxreal.png#1#80#80

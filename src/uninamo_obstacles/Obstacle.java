@@ -17,7 +17,9 @@ import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.CollisionType;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_helpAndEnums.HelpMath;
+import utopia_listeners.RoomListener;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Room;
 
 /**
  * obstacles are the main 'objects' in the game in a sense that the user is 
@@ -27,7 +29,8 @@ import utopia_resourcebanks.MultiMediaHolder;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public abstract class Obstacle extends BouncingBasicPhysicDrawnObject
+public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements 
+	RoomListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
@@ -53,6 +56,7 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject
 	 * object about collision events (optional)
 	 * @param actorhandler The actorHandler that will inform the object about 
 	 * step events
+	 * @param room The room where the obstacle resides at
 	 * @param designSpriteName The name of the sprite used to draw the object 
 	 * in the design mode
 	 * @param realSpriteName The name of the sprite used to draw the object 
@@ -62,7 +66,7 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject
 			CollisionType collisiontype, DrawableHandler drawer,
 			CollidableHandler collidablehandler,
 			CollisionHandler collisionhandler, ActorHandler actorhandler, 
-			String designSpriteName, String realSpriteName)
+			Room room, String designSpriteName, String realSpriteName)
 	{
 		super(x, y, DepthConstants.NORMAL, isSolid, collisiontype, drawer, 
 				collidablehandler, collisionhandler, actorhandler);
@@ -76,6 +80,10 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject
 		this.spritedrawer = new MultiSpriteDrawer(sprites, actorhandler, this);
 		this.started = false;
 		this.startPosition = new Point2D.Double(x, y);
+		
+		// Adds the object to the handler(s)
+		if (room != null)
+			room.addObject(this);
 	}
 	
 	
@@ -111,7 +119,7 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject
 			
 			// TODO: Munch these numbers further
 			bounceWithoutRotationFrom(wall, HelpMath.getAveragePoint(colpoints), 
-					0, 0.25, steps);
+					0, 0.25, 0.25, steps);
 		}
 	}
 
@@ -162,6 +170,9 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject
 			return;
 		
 		this.spritedrawer.drawSprite(g2d, 0, 0);
+		
+		//drawCollisionArea(g2d);
+		//drawCollisionPoints(g2d);
 	}
 
 	@Override
@@ -185,6 +196,19 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject
 	{
 		// Only started obstacles can be collided with
 		return super.isSolid() && this.started;
+	}
+	
+	@Override
+	public void onRoomStart(Room room)
+	{
+		// Does nothing
+	}
+
+	@Override
+	public void onRoomEnd(Room room)
+	{	
+		// Dies
+		kill();
 	}
 	
 	

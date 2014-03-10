@@ -4,6 +4,7 @@ import uninamo_components.ConnectorRelay;
 import uninamo_gameplaysupport.InvisibleWall;
 import uninamo_machinery.ConveyorBelt;
 import uninamo_main.GameSettings;
+import uninamo_obstacles.Box;
 import uninamo_userinterface.CodeTransitionButton;
 
 /**
@@ -51,17 +52,22 @@ public class DesignObjectCreator extends AreaObjectCreator
 				area.getCollisionHandler().getCollidableHandler(), area);
 		new InvisibleWall(0, -1, GameSettings.screenWidth, 
 				area.getCollisionHandler().getCollidableHandler(), area);
+		/*
 		new InvisibleWall(1, 0, 0, 
 				area.getCollisionHandler().getCollidableHandler(), area);
+		*/
 		new InvisibleWall(-1, 0, GameSettings.screenHeight - 80, 
 				area.getCollisionHandler().getCollidableHandler(), area);
 		
 		// Creates objects
 		new CodeTransitionButton(area.getDrawer(), area.getMouseHandler(), 
 				area, CodeTransitionButton.TOCODE, this.areaChanger);
-		new ConveyorBelt(400, GameSettings.screenHeight - 400, 
+		new ConveyorBelt(400, GameSettings.screenHeight - 200, 
 				area.getDrawer(), area.getActorHandler(), 
 				area.getCollisionHandler().getCollidableHandler(), 
 				this.areaChanger.getArea("coding"), this.connectorRelay);
+		new Box(400, 200, area.getDrawer(), 
+				area.getCollisionHandler().getCollidableHandler(), 
+				area.getCollisionHandler(), area.getActorHandler(), area);
 	}
 }
