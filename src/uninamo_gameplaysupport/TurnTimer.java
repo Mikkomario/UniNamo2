@@ -64,7 +64,7 @@ public class TurnTimer extends TurnHandler implements RoomListener, Testable,
 	public void onRoomEnd(Room room)
 	{
 		// Dies
-		kill();
+		killWithoutKillingHandleds();
 	}
 
 	@Override
@@ -106,10 +106,10 @@ public class TurnTimer extends TurnHandler implements RoomListener, Testable,
 	}
 	
 	@Override
-	public void kill()
+	public void killWithoutKillingHandleds()
 	{
 		// Also kills the timer
 		this.timer.kill();
-		super.kill();
+		super.killWithoutKillingHandleds();
 	}
 }

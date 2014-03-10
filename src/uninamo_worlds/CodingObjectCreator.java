@@ -3,7 +3,9 @@ package uninamo_worlds;
 import uninamo_components.ConnectorRelay;
 import uninamo_components.OrComponent;
 import uninamo_components.PowerSourceComponent;
+import uninamo_components.PulseGeneratorComponent;
 import uninamo_gameplaysupport.TestHandler;
+import uninamo_gameplaysupport.TurnTimer;
 import uninamo_main.GameSettings;
 import uninamo_userinterface.CodeTransitionButton;
 import uninamo_userinterface.TestingButton;
@@ -22,6 +24,7 @@ public class CodingObjectCreator extends AreaObjectCreator
 	private AreaChanger areaChanger;
 	private ConnectorRelay connectorRelay;
 	private TestHandler testHandler;
+	private TurnTimer timer;
 	
 	
 	// CONSTRUCTOR	----------------------------------------------------
@@ -36,9 +39,11 @@ public class CodingObjectCreator extends AreaObjectCreator
 	 * used in the area
 	 * @param testHandler The testHandler that will inform the objects about 
 	 * test events
+	 * @param timer The turnTimer that informs the objects about turn events
 	 */
 	public CodingObjectCreator(AreaChanger areaChanger, 
-			ConnectorRelay connectorRelay, TestHandler testHandler)
+			ConnectorRelay connectorRelay, TestHandler testHandler, 
+			TurnTimer timer)
 	{
 		super(areaChanger.getArea("coding"), null, null);
 		
@@ -46,6 +51,7 @@ public class CodingObjectCreator extends AreaObjectCreator
 		this.areaChanger = areaChanger;
 		this.connectorRelay = connectorRelay;
 		this.testHandler = testHandler;
+		this.timer = timer;
 	}
 	
 	
@@ -65,5 +71,8 @@ public class CodingObjectCreator extends AreaObjectCreator
 				this.testHandler, this.connectorRelay);
 		new OrComponent(600, 300, area.getDrawer(), area.getMouseHandler(), 
 				area, this.testHandler, this.connectorRelay);
+		new PulseGeneratorComponent(600, 600, area.getDrawer(), 
+				area.getActorHandler(), area.getMouseHandler(), area, 
+				this.testHandler, this.connectorRelay, this.timer);
 	}
 }

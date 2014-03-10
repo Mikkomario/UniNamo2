@@ -1,5 +1,7 @@
 package uninamo_gameplaysupport;
 
+import utopia_handleds.Handled;
+
 /**
  * Turn based instances react to time events that are produced at 
  * certain intervals.
@@ -7,7 +9,7 @@ package uninamo_gameplaysupport;
  * @author Mikko Hilpinen
  * @since 10.3.2014
  */
-public interface TurnBased
+public interface TurnBased extends Handled
 {
 	/**
 	 * This method is called each time a new turn starts

@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import uninamo_components.ConnectorRelay;
 import uninamo_gameplaysupport.TestHandler;
+import uninamo_gameplaysupport.TurnTimer;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
@@ -49,7 +50,9 @@ public class AreaChanger
 		// Creates areas
 		this.areas.put("coding", new Area(MultiMediaHolder.getGamePhaseBank(
 				"default").getPhase("gameplay"), mousehandler, actorhandler, drawer));
-		new CodingObjectCreator(this, relay, testHandler);
+		TurnTimer turnTimer = new TurnTimer(testHandler, 
+				this.areas.get("coding"), actorhandler);
+		new CodingObjectCreator(this, relay, testHandler, turnTimer);
 		
 		this.areas.put("design", new Area(MultiMediaHolder.getGamePhaseBank(
 				"default").getPhase("gameplay"), mousehandler, actorhandler, drawer));

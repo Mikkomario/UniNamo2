@@ -49,4 +49,17 @@ public class TurnHandler extends Handler implements TurnBased
 		
 		return true;
 	}
+	
+	
+	// OTHER METHODS	-------------------------------------------------
+	
+	/**
+	 * Adds a turn based instance to the list of informed objects
+	 * 
+	 * @param t The object to be informed in the future
+	 */
+	public void addTurnListener(TurnBased t)
+	{
+		addHandled(t);
+	}
 }

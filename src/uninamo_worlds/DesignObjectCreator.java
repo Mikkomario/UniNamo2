@@ -23,6 +23,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 	private AreaChanger areaChanger;
 	private ConnectorRelay connectorRelay;
 	private TestHandler testHandler;
+	//private TurnTimer timer;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -37,7 +38,8 @@ public class DesignObjectCreator extends AreaObjectCreator
 	 * test events
 	 */
 	public DesignObjectCreator(AreaChanger areaChanger, 
-			ConnectorRelay connectorRelay, TestHandler testHandler)
+			ConnectorRelay connectorRelay, TestHandler testHandler/*, 
+			TurnTimer turnTimer*/)
 	{
 		super(areaChanger.getArea("design"), "paper", "gameplaybackgrounds");
 		
@@ -45,6 +47,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 		this.areaChanger = areaChanger;
 		this.connectorRelay = connectorRelay;
 		this.testHandler = testHandler;
+		//this.timer = turnTimer;
 	}
 
 	

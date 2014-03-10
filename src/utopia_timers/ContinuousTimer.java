@@ -47,7 +47,7 @@ public class ContinuousTimer extends AbstractTimer
 	public void onTimerEvent()
 	{
 		// Resets the timer
-		reset();
+		delay(this.interval);
 	}
 	
 	
@@ -59,6 +59,6 @@ public class ContinuousTimer extends AbstractTimer
 	 */
 	public void reset()
 	{
-		delay(this.interval);
+		setDelay(this.interval);
 	}
 }
