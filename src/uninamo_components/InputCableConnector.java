@@ -60,9 +60,6 @@ public class InputCableConnector extends CableConnector
 		this.room = room;
 		this.testHandler = testHandler;
 		
-		// Changes the look of the connector
-		getSpriteDrawer().setImageIndex(1);
-		
 		// Initializes attributes
 		this.lastSignalStatus = false;
 	}
@@ -106,6 +103,11 @@ public class InputCableConnector extends CableConnector
 			this.lastSignalStatus = newStatus;
 			// Informs the component as well
 			getHost().onSignalChange(getSignalStatus(), this);
+			
+			if (this.lastSignalStatus)
+				getSpriteDrawer().setImageIndex(1);
+			else
+				getSpriteDrawer().setImageIndex(0);
 		}	
 	}
 	

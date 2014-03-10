@@ -3,14 +3,14 @@ Uninamo2 Suunnitelmaa
 Työtehtäviä
 	* Alpha	----------------------------------------------------------------------
 		- Utopia Game Enginen debuggaus										...
-			* Originia ei aina ehditä laskea ennen ensimmäistä piirtoa 
+			* Originia ei aina ehditä laskea ennen ensimmäistä piirtoa 		Väistetty?
 			-> piirtyy aluksi väärään paikkaan
-			* Kun siirrytään koodauksesta designiin, voi muutosprosessi 
+			* Kun siirrytään koodauksesta designiin, voi muutosprosessi 	Väistetty?
 			mennä pieleen (puoliksi muuttuu)
 			* Törmäyssysteemi ei ota huomioon stepin pituutta				DONE
 				- Pitää korjata mahdollisimman pian							DONE
 			* Jos törmää hirveän lujaa niin menee toisen objektin sisälle	DONE
-			* EpicBOx tippuu lattian läpi!
+			* EpicBOx tippuu lattian läpi!									Väistetty?
 				- Tarvittavat numerot muuttuu mystisesti...
 			* ComponentBoxin luominen hidastaa ohjelman käynnistymistä 
 			omituisen paljon
@@ -90,9 +90,9 @@ Työtehtäviä
 			dropin lopussa
 			* Komponenttien tuhoaminen kun ne menevät kentän reunalle		DONE
 				- Visuaalinen havainnollistaminen
-		- Paranteluja
-			* CableConnectorien kuvan muuttuminen signaalin mukaan
-		- Takaisinkytkentätilanteiden ratkaiseminen
+		- Paranteluja														DONE
+			* CableConnectorien kuvan muuttuminen signaalin mukaan			DONE
+		- Takaisinkytkentätilanteiden ratkaiseminen							Hylätty
 			* Ongelmia signaalintunnistuksen kanssa jos komponentti ohjaa itseään
 				- ORin signaalin saa "kiertämään" kytkemällä komponentin itseensä
 	* Beta	----------------------------------------------------------------------
@@ -124,7 +124,6 @@ Työtehtäviä
 			* Yksinkertaisen testitehtävänannon valmistaminen
 			* Tehtävänannon selostaminen lyhyessä kuvauksessa
 			* Tarvittavan moodin piirtäminen ja muiden deaktivoiminen
-		- Tehtävänantovalikko / käyttöliitymä / jokin
 		- Kahden näkymän piirtäminen testausmoodissa (ja muuten)
 			* Kameroiden implementointi
 			* Kameran koon ja sijainnin muuttaminen testausvaiheessa
@@ -148,6 +147,10 @@ Työtehtäviä
 			* Tehtävien valintaympäristön luominen
 			* Tehtävän lopettaminen
 			* Tehtävän aloittaminen
+		- Gold Graffat
+			* Komponentit
+			* Laitteet
+			* Toimijat
 		- Erilaisten komponenttien valmistus
 			* Tarvittavat resurssit
 			* Tarvittavat laatikot

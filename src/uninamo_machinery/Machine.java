@@ -123,6 +123,9 @@ public abstract class Machine extends DimensionalDrawnObject implements
 			designArea.addObject(this);
 		if (testHandler != null)
 			testHandler.addTestable(this);
+		
+		// Forces transformation update
+		forceTransformationUpdate();
 	}
 
 	

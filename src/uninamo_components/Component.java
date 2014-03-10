@@ -113,6 +113,9 @@ public abstract class Component extends DimensionalDrawnObject implements
 			mousehandler.addMouseListener(this);
 		if (testHandler != null)
 			testHandler.addTestable(this);
+		
+		// Resets the transform status
+		forceTransformationUpdate();
 	}
 	
 	

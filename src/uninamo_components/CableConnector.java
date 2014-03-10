@@ -6,7 +6,8 @@ import java.util.ArrayList;
 
 import uninamo_main.GameSettings;
 import utopia_gameobjects.DimensionalDrawnObject;
-import utopia_graphic.SingleSpriteDrawer;
+import utopia_graphic.MultiSpriteDrawer;
+import utopia_graphic.Sprite;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.CollisionType;
@@ -31,7 +32,7 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
-	private SingleSpriteDrawer spritedrawer;
+	private MultiSpriteDrawer spritedrawer;
 	private Component host;
 	private Point2D.Double relativePoint;
 	private ArrayList<Cable> connectedCables;
@@ -64,9 +65,14 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 		// Initializes attributes
 		this.relativePoint = new Point2D.Double(relativex, relativey);
 		this.host = host;
-		this.spritedrawer = new SingleSpriteDrawer(
-				MultiMediaHolder.getSpriteBank("components").getSprite(
-				"cableconnector"), null, this);
+		
+		Sprite[] sprites = new Sprite[2];
+		sprites[0] = MultiMediaHolder.getSpriteBank(
+				"components").getSprite("inputconnector");
+		sprites[1] = MultiMediaHolder.getSpriteBank(
+				"components").getSprite("outputconnector");
+		
+		this.spritedrawer = new MultiSpriteDrawer(sprites, null, this);
 		this.connectedCables = new ArrayList<Cable>();
 		
 		// Updates radius
@@ -74,6 +80,8 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 		
 		// Updates the position
 		updateAbsolutePosition();
+		
+		getSpriteDrawer().setImageSpeed(0);
 		
 		// Adds the object to the handler(s)
 		if (room != null)
@@ -247,7 +255,7 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	/**
 	 * @return The spriteDrawer the connector uses
 	 */
-	protected SingleSpriteDrawer getSpriteDrawer()
+	protected MultiSpriteDrawer getSpriteDrawer()
 	{
 		return this.spritedrawer;
 	}

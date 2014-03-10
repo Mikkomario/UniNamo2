@@ -58,6 +58,9 @@ public class OutputCableConnector extends CableConnector
 		this.relay = relay;
 		this.room = room;
 		this.testHandler = testHandler;
+		
+		// Changes the look of the connector
+		getSpriteDrawer().setSpriteIndex(1, false);
 	}
 	
 	
@@ -97,6 +100,11 @@ public class OutputCableConnector extends CableConnector
 			{
 				getCable(i).onSignalChange(getSignalStatus(), this);
 			}
+			
+			if (this.lastSignalStatus)
+				getSpriteDrawer().setImageIndex(1);
+			else
+				getSpriteDrawer().setImageIndex(0);
 		}
 	}
 	
