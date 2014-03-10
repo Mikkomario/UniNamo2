@@ -240,6 +240,22 @@ public abstract class Component extends DimensionalDrawnObject implements
 		this.testing = false;
 	}
 	
+	@Override
+	public void kill()
+	{
+		// Also kills the connectors
+		for (CableConnector connector : this.inputs)
+		{
+			connector.kill();
+		}
+		for (CableConnector connector : this.outputs)
+		{
+			connector.kill();
+		}
+		
+		super.kill();
+	}
+	
 	
 	// OTHER METHODS	-------------------------------------------------
 	

@@ -33,7 +33,7 @@ public class GameSettings
 	/**
 	 * How long a single "turn" in the game should take (in steps)
 	 */
-	public static final double turnDuration = 100;
+	public static final int turnDuration = 100;
 	/**
 	 * How fast should objects usually move horizontally to move a single 
 	 * "unit" in a turn

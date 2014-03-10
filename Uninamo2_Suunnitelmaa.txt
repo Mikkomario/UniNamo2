@@ -67,9 +67,9 @@ Työtehtäviä
 				- Komponenttien ja muiden resetoiminen						DONE
 			* Grafiikoiden vaihtaminen										DONE
 			* Komponenttien ja johtojen editoimisen estäminen testin aikana	DONE
-		- Ajastin
-			* Ajastimen arkkitehtuuri
-			* Ajastindatan tiedonvälityksen viimeistely
+		- Ajastin															...
+			* Ajastimen arkkitehtuuri										Testaamatta
+			* Ajastindatan tiedonvälityksen viimeistely						Testaamatta
 			* Ajastinta käyttävän testiobjektin tekeminen
 		- Komponenttien liikuttelu työpöydällä
 			* Toiminnan implementoiminen komponenttiluokkaan

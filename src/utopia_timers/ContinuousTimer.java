@@ -47,6 +47,18 @@ public class ContinuousTimer extends AbstractTimer
 	public void onTimerEvent()
 	{
 		// Resets the timer
+		reset();
+	}
+	
+	
+	// OTHER METHODS	------------------------------------------------
+	
+	/**
+	 * Resets the timer back to the start of the delay as if a cycle had just 
+	 * ended
+	 */
+	public void reset()
+	{
 		delay(this.interval);
 	}
 }

@@ -179,13 +179,6 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	}
 	
 	@Override
-	public boolean isDead()
-	{
-		// Is considered dead if the component is dead
-		return (this.host.isDead() || super.isDead());
-	}
-	
-	@Override
 	public boolean isVisible()
 	{
 		// Is considered invisible if the component is invisible
@@ -226,6 +219,16 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	{
 		// Dies
 		kill();
+	}
+	
+	@Override
+	public void kill()
+	{
+		// Also kills the connected cables
+		for (Cable cable : this.connectedCables)
+		{
+			cable.kill();
+		}
 	}
 
 	
