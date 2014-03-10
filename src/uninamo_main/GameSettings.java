@@ -42,7 +42,7 @@ public class GameSettings
 	/**
 	 * The basic font used in the game
 	 */
-	public final static Font basicFont = new Font("Orc A Std", Font.BOLD, 30);
+	public final static Font basicFont = new Font("Orc A Std", Font.PLAIN, 20);
 	/**
 	 * The basic white colour used in the basic texts of the game
 	 */

@@ -12,6 +12,8 @@ Työtehtäviä
 			* Jos törmää hirveän lujaa niin menee toisen objektin sisälle	DONE
 			* EpicBOx tippuu lattian läpi!
 				- Tarvittavat numerot muuttuu mystisesti...
+			* ComponentBoxin luominen hidastaa ohjelman käynnistymistä 
+			omituisen paljon
 		- Alkuvalmistelut													DONE
 			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE
@@ -71,14 +73,16 @@ Työtehtäviä
 			* Ajastimen arkkitehtuuri										DONE
 			* Ajastindatan tiedonvälityksen viimeistely						DONE
 			* Ajastinta käyttävän testiobjektin tekeminen					DONE
-		- Komponenttien liikuttelu työpöydällä
-			* Toiminnan implementoiminen komponenttiluokkaan
-			* Johtojen reagoiminen liikutteluun
-		- Komponenttilaatikot
-			* Komponenttilaatikkoarkkitehtuuri
+		- Komponenttien liikuttelu työpöydällä								DONE
+			* Toiminnan implementoiminen komponenttiluokkaan				DONE
+			* Johtojen reagoiminen liikutteluun								DONE
+		- Komponenttilaatikot												...
+			* Komponenttilaatikkoarkkitehtuuri								...
+				- Ihmeellisten classien tapahtuvien konstruktorikutsujen 
+				toteuttaminen
 			* Laatikon luominen testikomponentille
-			* Laatikon reagointi hiireen kuvan vaihdolla
-		- Roskis
+			* Laatikon reagointi hiireen kuvan vaihdolla					DONE
+		- Roskis / Komponenttien poistaminen
 			* Roskisluokka ja sen luominen alussa
 			* Komponenttien reagointi törmäykseen roskiksen kanssa 
 			dropin lopussa

@@ -1,6 +1,7 @@
 package uninamo_components;
 
 import uninamo_gameplaysupport.TestHandler;
+import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
 import utopia_worlds.Room;
@@ -27,6 +28,8 @@ public class OrComponent extends Component
 	 * @param x The x-coordinate of the component (pixels)
 	 * @param y The y-coordinate of the component (pixels)
 	 * @param drawer The drawableHandler that will draw the component
+	 * @param actorHandler The actorHandler that informs the object about 
+	 * act events
 	 * @param mousehandler The mouseListenerHandler that will inform the 
 	 * object about mouse events
 	 * @param room The room where the component resides at
@@ -34,11 +37,11 @@ public class OrComponent extends Component
 	 * @param connectorRelay A connectorRelay that will keep track of the 
 	 * connectors
 	 */
-	public OrComponent(int x, int y, DrawableHandler drawer, 
+	public OrComponent(int x, int y, DrawableHandler drawer, ActorHandler actorHandler, 
 			MouseListenerHandler mousehandler, Room room, TestHandler testHandler, 
 			ConnectorRelay connectorRelay)
 	{
-		super(x, y, drawer, null, mousehandler, room, testHandler, 
+		super(x, y, drawer, actorHandler, mousehandler, room, testHandler, 
 				connectorRelay, "test", 2, 1);
 		
 		// Initializes attributes

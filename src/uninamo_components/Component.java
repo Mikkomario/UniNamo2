@@ -36,7 +36,13 @@ public abstract class Component extends DimensionalDrawnObject implements
 	private SingleSpriteDrawer spritedrawer;
 	private InputCableConnector[] inputs;
 	private OutputCableConnector[] outputs;
-	private boolean active, testing;
+	private boolean active, testing, dragged;
+	private ConnectorRelay relay;
+	// Notice that this is relative to the origin, not top-left corner 
+	// (in other words is a relative absolute point)
+	private Point2D.Double lastRelativeMouseGrabPosition;
+	
+	private static boolean componentDragged = false;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -76,6 +82,9 @@ public abstract class Component extends DimensionalDrawnObject implements
 		this.inputs = new InputCableConnector[inputs];
 		this.outputs = new OutputCableConnector[outputs];
 		this.testing = false;
+		this.dragged = false;
+		this.relay = connectorRelay;
+		this.lastRelativeMouseGrabPosition = null;
 		
 		// Creates the connectors
 		for (int i = 0; i < inputs; i++)
@@ -134,7 +143,25 @@ public abstract class Component extends DimensionalDrawnObject implements
 			MouseButtonEventType eventType, Point2D mousePosition,
 			double eventStepTime)
 	{
-		// TODO: Add drag & drop and other features
+		// If the component (and not one of its connectors) is clicked, it 
+		// is considered a grab
+		if (button == MouseButton.LEFT && 
+				eventType == MouseButtonEventType.PRESSED && !componentDragged &&
+				this.relay.getConnectorAtPoint(new Point2D.Double(
+				mousePosition.getX(), mousePosition.getY()), null) == null)
+		{
+			this.dragged = true;
+			componentDragged = true;
+			this.lastRelativeMouseGrabPosition = new Point2D.Double(getX() - 
+					mousePosition.getX(), getY() - mousePosition.getY());
+		}
+		// If the button is released, also releases the grab
+		else if (button == MouseButton.LEFT && 
+				eventType == MouseButtonEventType.RELEASED && this.dragged)
+		{
+			this.dragged = false;
+			componentDragged = false;
+		}
 	}
 
 	@Override
@@ -153,7 +180,9 @@ public abstract class Component extends DimensionalDrawnObject implements
 	public void onMousePositionEvent(MousePositionEventType eventType,
 			Point2D mousePosition, double eventStepTime)
 	{
-		// TODO: Limit this if the component is being dragged
+		if (this.dragged)
+			return;
+		
 		if (eventType == MousePositionEventType.ENTER)
 			setScale(GameSettings.interfaceScaleFactor, 
 					GameSettings.interfaceScaleFactor);
@@ -164,13 +193,20 @@ public abstract class Component extends DimensionalDrawnObject implements
 	@Override
 	public void onMouseMove(Point2D newMousePosition)
 	{
-		// Doesn't react to mouse movement
+		// If being dragged, jumps into the mouse's position
+		if (this.dragged)
+			setPosition(newMousePosition.getX() + 
+					this.lastRelativeMouseGrabPosition.getX(), 
+					newMousePosition.getY() + 
+					this.lastRelativeMouseGrabPosition.getY());
 	}
 
 	@Override
 	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
 	{
-		// TODO Change to global when the component is being dragged
+		if (this.dragged)
+			return MouseButtonEventScale.GLOBAL;
+		
 		return MouseButtonEventScale.LOCAL;
 	}
 
