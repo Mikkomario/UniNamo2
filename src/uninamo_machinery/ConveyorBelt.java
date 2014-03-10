@@ -1,12 +1,20 @@
 package uninamo_machinery;
 
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
+import java.util.ArrayList;
+
 import uninamo_components.ConnectorRelay;
 import uninamo_gameplaysupport.Wall;
+import uninamo_obstacles.Obstacle;
 import uninamo_worlds.Area;
+import utopia_handleds.Collidable;
 import utopia_handlers.ActorHandler;
-import utopia_handlers.CollidableHandler;
+import utopia_handlers.CollisionHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.CollisionType;
+import utopia_listeners.CollisionListener;
 
 /**
  * ConveyorBelt is a machine that pushes actors either left or right or 
@@ -15,12 +23,13 @@ import utopia_helpAndEnums.CollisionType;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public class ConveyorBelt extends Machine implements Wall
+public class ConveyorBelt extends Machine implements Wall, CollisionListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
-	private boolean running;
+	private boolean running, active;
 	private int speedSign;
+	private Point2D.Double[] relativeColPoints;
 	
 	
 	// CONSTRUCOR	-----------------------------------------------------
@@ -33,29 +42,40 @@ public class ConveyorBelt extends Machine implements Wall
 	 * @param drawer The DrawableHandler that will draw the belt
 	 * @param actorhandler The ActorHandler that will inform the belt about 
 	 * step events
-	 * @param collidablehandler CollidableHandler that will handle the belt's 
-	 * collision checking
+	 * @param collisionHandler the CollisionHandler that will handle the belt's 
+	 * collision checking and collision event informing
 	 * @param codingArea The coding area of the game where the components are 
 	 * created
 	 * @param connectorRelay The connectorRelay that will handle the belts 
 	 * connectors
 	 */
 	public ConveyorBelt(int x, int y, DrawableHandler drawer,
-			ActorHandler actorhandler, CollidableHandler collidablehandler,
+			ActorHandler actorhandler, CollisionHandler collisionHandler,
 			Area codingArea, ConnectorRelay connectorRelay)
 	{
 		super(x, y, true, CollisionType.BOX, drawer, actorhandler,
-				collidablehandler, codingArea, connectorRelay,
-				"belt", "beltreal", "machinecomponent", null, 2, 0);
+				collisionHandler.getCollidableHandler(), codingArea, 
+				connectorRelay,"belt", "beltreal", "machinecomponent", null, 
+				2, 0);
 		
 		// Initializes attributes
 		this.running = false;
 		this.speedSign = 1;
+		this.active = true;
+		
+		// Calculates the collision points
+		this.relativeColPoints = new Point2D.Double[5];
+		for (int i = 0; i < this.relativeColPoints.length; i++)
+		{
+			this.relativeColPoints[i] = new Point2D.Double(
+					i * getWidth() / (this.relativeColPoints.length - 1), -15);
+		}
 		
 		updateAnimation();
+		
+		// Adds the object to the handler(s)
+		collisionHandler.addCollisionListener(this);
 	}
-	
-	// TODO: Add interaction with actors (by making the belt a collisionListener?)
 	
 	// IMPLEMENTED METHODS	---------------------------------------------
 
@@ -73,6 +93,53 @@ public class ConveyorBelt extends Machine implements Wall
 			this.speedSign = 1;
 		
 		updateAnimation();
+	}
+	
+	@Override
+	public boolean isActive()
+	{
+		return this.active;
+	}
+
+	@Override
+	public void activate()
+	{
+		this.active = true;
+	}
+
+	@Override
+	public void inactivate()
+	{
+		this.active = false;
+	}
+
+	@Override
+	public Double[] getCollisionPoints()
+	{
+		return this.relativeColPoints;
+	}
+
+	@Override
+	public void onCollision(ArrayList<Double> colpoints, Collidable collided,
+			double steps)
+	{
+		System.out.println("Collides with something");
+		
+		// When collides with obstacles, moves them either left or right
+		if (this.running && collided instanceof Obstacle)
+		{
+			Obstacle o = (Obstacle) collided;
+			
+			o.addPosition(4 * this.speedSign, 0);
+		}
+	}
+	
+	@Override
+	public void drawSelfBasic(Graphics2D g2d)
+	{
+		super.drawSelfBasic(g2d);
+		
+		drawRelativePoints(g2d, this.relativeColPoints);
 	}
 	
 	

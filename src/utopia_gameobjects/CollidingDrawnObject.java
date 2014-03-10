@@ -1,6 +1,5 @@
 package utopia_gameobjects;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
@@ -209,14 +208,7 @@ public abstract class CollidingDrawnObject extends DimensionalDrawnObject
 	 */
 	protected void drawCollisionPoints(Graphics2D g2d)
 	{
-		g2d.setColor(new Color(255, 0, 0));
-		
-		for (Point2D.Double p: getRelativeCollisionPoints())
-		{
-			g2d.drawRect((int) p.x, (int) p.y, 5, 5);
-		}
-		
-		g2d.setColor(new Color(0, 0, 0));
+		drawRelativePoints(g2d, getRelativeCollisionPoints());
 	}
 	
 	private void initializeBoxCollisionPoints(int edgeprecision, int insideprecision)

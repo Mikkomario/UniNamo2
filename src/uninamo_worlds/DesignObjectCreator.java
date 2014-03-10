@@ -64,10 +64,10 @@ public class DesignObjectCreator extends AreaObjectCreator
 				area, CodeTransitionButton.TOCODE, this.areaChanger);
 		new ConveyorBelt(400, GameSettings.screenHeight - 200, 
 				area.getDrawer(), area.getActorHandler(), 
-				area.getCollisionHandler().getCollidableHandler(), 
-				this.areaChanger.getArea("coding"), this.connectorRelay);
+				area.getCollisionHandler(), this.areaChanger.getArea("coding"), 
+				this.connectorRelay);
 		new Box(400, 200, area.getDrawer(), 
 				area.getCollisionHandler().getCollidableHandler(), 
-				area.getCollisionHandler(), area.getActorHandler(), area);
+				area.getCollisionHandler(), area.getActorHandler(), area).startTest();;
 	}
 }

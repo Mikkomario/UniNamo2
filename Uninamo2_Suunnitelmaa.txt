@@ -9,7 +9,7 @@ Työtehtäviä
 			mennä pieleen (puoliksi muuttuu)
 			* Törmäyssysteemi ei ota huomioon stepin pituutta				DONE
 				- Pitää korjata mahdollisimman pian							DONE
-			* Jos törmää hirveän lujaa niin menee toisen objektin sisälle
+			* Jos törmää hirveän lujaa niin menee toisen objektin sisälle	DONE
 		- Alkuvalmistelut													DONE
 			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE

@@ -37,6 +37,7 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements
 	private MultiSpriteDrawer spritedrawer;
 	private boolean started;
 	private Point2D.Double startPosition;
+	//private static final Class<?> COLLIDEDCLASSES[] = {Machine.class, Obstacle.class};
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -127,7 +128,7 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements
 	public Class<?>[] getSupportedListenerClasses()
 	{
 		// Doesn't limit colliding classes
-		return null;
+		return null;//COLLIDEDCLASSES;
 	}
 
 	@Override
@@ -171,8 +172,8 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements
 		
 		this.spritedrawer.drawSprite(g2d, 0, 0);
 		
-		//drawCollisionArea(g2d);
-		//drawCollisionPoints(g2d);
+		drawCollisionArea(g2d);
+		drawCollisionPoints(g2d);
 	}
 
 	@Override

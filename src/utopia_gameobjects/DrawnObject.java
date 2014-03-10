@@ -1,6 +1,7 @@
 package utopia_gameobjects;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -849,6 +850,28 @@ public abstract class DrawnObject extends GameObject implements Drawable
 	protected void forceTransformationUpdate()
 	{
 		this.transformationneedsupdating = true;
+	}
+	
+	/**
+	 * Draws all points in the given table. This method should be called in the 
+	 * drawSelfBasic -method
+	 *
+	 * @param g2d The graphics object that does the actual drawing
+	 * @param relativePoints A table containing a set of points to be drawn. 
+	 * The points should be in a relative space and not in absolute space.
+	 * @warning This method is supposed to be used only in testing purposes
+	 */
+	protected static void drawRelativePoints(Graphics2D g2d, 
+			Point2D.Double[] relativePoints)
+	{
+		g2d.setColor(new Color(255, 0, 0));
+		
+		for (Point2D.Double p: relativePoints)
+		{
+			g2d.drawRect((int) p.x, (int) p.y, 5, 5);
+		}
+		
+		g2d.setColor(new Color(0, 0, 0));
 	}
 	
 	// Updates the current transformation value
