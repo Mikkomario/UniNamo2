@@ -42,7 +42,7 @@ public class MachineOutputComponent extends Component
 			String spritename, int outputs)
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler, 
-				connectorRelay, spritename, 0, outputs);
+				connectorRelay, spritename, 0, outputs, false);
 	}
 	
 	

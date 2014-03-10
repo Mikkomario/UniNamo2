@@ -46,7 +46,7 @@ public class PulseGeneratorComponent extends Component implements TurnBased
 			TurnHandler turnHandler)
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler,
-				connectorRelay, "test", 0, 1);
+				connectorRelay, "test", 0, 1, true);
 		
 		// Initializes attributes
 		this.lastSignalType = false;

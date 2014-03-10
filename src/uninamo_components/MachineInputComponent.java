@@ -51,7 +51,7 @@ public class MachineInputComponent extends Component
 			String spritename, int inputs, Machine host)
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler, 
-				connectorRelay, spritename, inputs, 0);
+				connectorRelay, spritename, inputs, 0, false);
 		
 		// Initializes attributes
 		this.host = host;

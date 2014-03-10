@@ -37,7 +37,7 @@ public class PowerSourceComponent extends Component
 			Room room, TestHandler testHandler, ConnectorRelay connectorRelay)
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler, 
-				connectorRelay, "test", 0, 1);
+				connectorRelay, "test", 0, 1, true);
 		
 		// Informs the output(s) about the component's status
 		sendSignalToOutput(0, true);

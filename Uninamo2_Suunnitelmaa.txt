@@ -14,6 +14,8 @@ Työtehtäviä
 				- Tarvittavat numerot muuttuu mystisesti...
 			* ComponentBoxin luominen hidastaa ohjelman käynnistymistä 
 			omituisen paljon
+			* Vaihda MouseListenerHandlerin mousePositionjutut Point2D:stä 
+			Point2D.Doubleen
 		- Alkuvalmistelut													DONE
 			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE

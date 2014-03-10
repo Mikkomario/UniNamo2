@@ -42,7 +42,7 @@ public class OrComponent extends Component
 			ConnectorRelay connectorRelay)
 	{
 		super(x, y, drawer, actorHandler, mousehandler, room, testHandler, 
-				connectorRelay, "test", 2, 1);
+				connectorRelay, "test", 2, 1, true);
 		
 		// Initializes attributes
 		this.signalStatus = false;

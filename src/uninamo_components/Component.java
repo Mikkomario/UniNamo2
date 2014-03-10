@@ -65,11 +65,12 @@ public abstract class Component extends DimensionalDrawnObject implements
 	 * component
 	 * @param inputs How many input connectors the component has
 	 * @param outputs How many output connectors the component has
+	 * @param fromBox Was the component created by pulling it from a componentBox
 	 */
 	public Component(int x, int y, DrawableHandler drawer, 
 			ActorHandler actorhandler, MouseListenerHandler mousehandler, 
 			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
-			String spritename, int inputs, int outputs)
+			String spritename, int inputs, int outputs, boolean fromBox)
 	{
 		super(x, y, DepthConstants.NORMAL, false, CollisionType.BOX, drawer, 
 				null);
@@ -82,9 +83,11 @@ public abstract class Component extends DimensionalDrawnObject implements
 		this.inputs = new InputCableConnector[inputs];
 		this.outputs = new OutputCableConnector[outputs];
 		this.testing = false;
-		this.dragged = false;
+		this.dragged = fromBox;
 		this.relay = connectorRelay;
-		this.lastRelativeMouseGrabPosition = null;
+		this.lastRelativeMouseGrabPosition = new Point2D.Double();
+		if (fromBox)
+			componentDragged = true;
 		
 		// Creates the connectors
 		for (int i = 0; i < inputs; i++)
