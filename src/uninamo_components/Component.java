@@ -13,6 +13,7 @@ import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.CollisionType;
 import utopia_helpAndEnums.DepthConstants;
+import utopia_helpAndEnums.HelpMath;
 import utopia_listeners.AdvancedMouseListener;
 import utopia_listeners.RoomListener;
 import utopia_resourcebanks.MultiMediaHolder;
@@ -36,7 +37,7 @@ public abstract class Component extends DimensionalDrawnObject implements
 	private SingleSpriteDrawer spritedrawer;
 	private InputCableConnector[] inputs;
 	private OutputCableConnector[] outputs;
-	private boolean active, testing, dragged;
+	private boolean active, testing, dragged, diesWhenDropped;
 	private ConnectorRelay relay;
 	// Notice that this is relative to the origin, not top-left corner 
 	// (in other words is a relative absolute point)
@@ -85,6 +86,7 @@ public abstract class Component extends DimensionalDrawnObject implements
 		this.testing = false;
 		this.dragged = fromBox;
 		this.relay = connectorRelay;
+		this.diesWhenDropped = fromBox;
 		this.lastRelativeMouseGrabPosition = new Point2D.Double();
 		if (fromBox)
 			componentDragged = true;
@@ -164,6 +166,10 @@ public abstract class Component extends DimensionalDrawnObject implements
 		{
 			this.dragged = false;
 			componentDragged = false;
+			
+			// If the component was supposed to die upon drop, dies
+			if (this.diesWhenDropped)
+				kill();
 		}
 	}
 
@@ -198,10 +204,33 @@ public abstract class Component extends DimensionalDrawnObject implements
 	{
 		// If being dragged, jumps into the mouse's position
 		if (this.dragged)
+		{
 			setPosition(newMousePosition.getX() + 
 					this.lastRelativeMouseGrabPosition.getX(), 
 					newMousePosition.getY() + 
 					this.lastRelativeMouseGrabPosition.getY());
+			// If the position is near an edge of the screen, prepares to die, 
+			// may also return from this state
+			if (HelpMath.pointIsInRange(getPosition(), 64, 
+					GameSettings.screenWidth - 64, 64, 
+					GameSettings.screenHeight - 64))
+			{
+				if (this.diesWhenDropped)
+				{
+					this.diesWhenDropped = false;
+					setScale(GameSettings.interfaceScaleFactor, 
+							GameSettings.interfaceScaleFactor);
+				}
+			}
+			else
+			{
+				if (!this.diesWhenDropped)
+				{
+					this.diesWhenDropped = true;
+					setScale(0.5, 0.5);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -285,10 +314,12 @@ public abstract class Component extends DimensionalDrawnObject implements
 		// Also kills the connectors
 		for (CableConnector connector : this.inputs)
 		{
+			//System.out.println("Kills an input");
 			connector.kill();
 		}
 		for (CableConnector connector : this.outputs)
 		{
+			//System.out.println("Kills an output");
 			connector.kill();
 		}
 		

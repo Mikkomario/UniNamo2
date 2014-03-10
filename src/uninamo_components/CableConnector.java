@@ -224,6 +224,8 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	@Override
 	public void kill()
 	{
+		super.kill();
+		
 		// Also kills the connected cables
 		for (Cable cable : this.connectedCables)
 		{
@@ -281,7 +283,9 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	 */
 	public void removeCable(Cable c)
 	{
-		if (this.connectedCables.contains(c))
+		// If the component is dead, it is probably already removing the 
+		// cables
+		if (!isDead() && this.connectedCables.contains(c))
 			this.connectedCables.remove(c);
 	}
 	

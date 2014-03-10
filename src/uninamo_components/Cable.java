@@ -367,6 +367,24 @@ public class Cable extends DimensionalDrawnObject implements
 		this.testing = false;
 	}
 	
+	@Override
+	public void kill()
+	{
+		// Removes the cable from its connectors first
+		if (this.start != null)
+		{
+			this.start.removeCable(this);
+			this.start = null;
+		}
+		if (this.end != null)
+		{
+			this.end.removeCable(this);
+			this.end = null;
+		}
+		
+		super.kill();
+	}
+	
 	
 	// OTHER METHODS	-------------------------------------------------
 	

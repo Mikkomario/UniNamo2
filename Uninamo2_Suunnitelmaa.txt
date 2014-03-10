@@ -78,16 +78,18 @@ Työtehtäviä
 		- Komponenttien liikuttelu työpöydällä								DONE
 			* Toiminnan implementoiminen komponenttiluokkaan				DONE
 			* Johtojen reagoiminen liikutteluun								DONE
-		- Komponenttilaatikot												...
-			* Komponenttilaatikkoarkkitehtuuri								...
-				- Ihmeellisten classien tapahtuvien konstruktorikutsujen 
+		- Komponenttilaatikot												DONE
+			* Komponenttilaatikkoarkkitehtuuri								DONE
+				- Ihmeellisten classien tapahtuvien konstruktorikutsujen 	Hylätty
 				toteuttaminen
-			* Laatikon luominen testikomponentille
+			* Laatikon luominen testikomponentille							DONE
 			* Laatikon reagointi hiireen kuvan vaihdolla					DONE
-		- Roskis / Komponenttien poistaminen
-			* Roskisluokka ja sen luominen alussa
-			* Komponenttien reagointi törmäykseen roskiksen kanssa 
+		- Roskis / Komponenttien poistaminen								DONE
+			* Roskisluokka ja sen luominen alussa							Hylätty
+			* Komponenttien reagointi törmäykseen roskiksen kanssa 			Hylätty
 			dropin lopussa
+			* Komponenttien tuhoaminen kun ne menevät kentän reunalle		DONE
+				- Visuaalinen havainnollistaminen
 		- Paranteluja
 			* CableConnectorien kuvan muuttuminen signaalin mukaan
 		- Takaisinkytkentätilanteiden ratkaiseminen
