@@ -58,7 +58,7 @@ public class CodingObjectCreator extends AreaObjectCreator
 		new CodeTransitionButton(area.getDrawer(), area.getMouseHandler(), 
 				area, CodeTransitionButton.TODESING, this.areaChanger);
 		new TestingButton(GameSettings.screenWidth - 110, 45, area.getDrawer(), 
-				area.getMouseHandler(), area);
+				area.getMouseHandler(), area, this.testHandler);
 		
 		new PowerSourceComponent(300, 300, area.getDrawer(), 
 				area.getActorHandler(), area.getMouseHandler(), area, 

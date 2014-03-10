@@ -3,6 +3,7 @@ package uninamo_obstacles;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
+import uninamo_gameplaysupport.TestHandler;
 import utopia_handleds.Collidable;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.CollidableHandler;
@@ -31,14 +32,17 @@ public class Box extends Obstacle
 	 * @param actorhandler The actorHandler that will inform the box about 
 	 * act events
 	 * @param room The room where the box resides at
+	 * @param testHandler The testHandler that will inform the object about 
+	 * test events
 	 */
 	public Box(int x, int y, DrawableHandler drawer, 
 			CollidableHandler collidablehandler, 
 			CollisionHandler collisionhandler, ActorHandler actorhandler, 
-			Room room)
+			Room room, TestHandler testHandler)
 	{
 		super(x, y, true, CollisionType.BOX, drawer, collidablehandler,
-				collisionhandler, actorhandler, room, "boxdesign", "boxreal");
+				collisionhandler, actorhandler, room, testHandler, "boxdesign", 
+				"boxreal");
 		
 		setBoxCollisionPrecision(2, 2);
 	}

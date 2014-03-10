@@ -2,6 +2,8 @@ package uninamo_userinterface;
 
 import java.awt.geom.Point2D;
 
+import uninamo_gameplaysupport.TestHandler;
+import uninamo_gameplaysupport.Testable;
 import uninamo_main.GameSettings;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
@@ -18,11 +20,12 @@ import utopia_worlds.Room;
  * @author Mikko Hilpinen
  * @since 10.3.2014
  */
-public class TestingButton extends AbstractButton
+public class TestingButton extends AbstractButton implements Testable
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
 	private boolean testing;
+	private TestHandler testHandler;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -36,9 +39,12 @@ public class TestingButton extends AbstractButton
 	 * @param mousehandler The mouseListenerHandler that will inform the 
 	 * button about mouse events
 	 * @param room The room where the button resides at
+	 * @param testHandler The testHandler that is used to inform objects about 
+	 * produced test events
 	 */
 	public TestingButton(int x, int y, DrawableHandler drawer, 
-			MouseListenerHandler mousehandler, Room room)
+			MouseListenerHandler mousehandler, Room room, 
+			TestHandler testHandler)
 	{
 		super(x, y, DepthConstants.FOREGROUND, 
 				MultiMediaHolder.getSpriteBank(
@@ -47,9 +53,14 @@ public class TestingButton extends AbstractButton
 		
 		// Initializes attributes
 		this.testing = false;
+		this.testHandler = testHandler;
 		
 		getSpriteDrawer().setImageSpeed(0);
 		getSpriteDrawer().setImageIndex(0);
+		
+		// Adds the object to the handler(s)
+		if (testHandler != null)
+			testHandler.addTestable(this);
 	}
 	
 	
@@ -65,19 +76,9 @@ public class TestingButton extends AbstractButton
 				eventType == MouseButtonEventType.PRESSED)
 		{
 			if (this.testing)
-			{
-				// Ends the test
-				this.testing = false;
-				getSpriteDrawer().setImageIndex(0);
-				// TODO: End testing
-			}
+				this.testHandler.endTesting();
 			else
-			{
-				// Starts the test
-				this.testing = true;
-				getSpriteDrawer().setImageIndex(1);
-				// TODO: Start testing
-			}
+				this.testHandler.startTesting();
 		}
 	}
 
@@ -97,5 +98,19 @@ public class TestingButton extends AbstractButton
 					GameSettings.interfaceScaleFactor);
 		else if (eventType == MousePositionEventType.EXIT)
 			setScale(1, 1);
+	}
+
+	@Override
+	public void startTesting()
+	{
+		this.testing = true;
+		getSpriteDrawer().setImageIndex(1);
+	}
+
+	@Override
+	public void endTesting()
+	{
+		this.testing = false;
+		getSpriteDrawer().setImageIndex(0);
 	}
 }

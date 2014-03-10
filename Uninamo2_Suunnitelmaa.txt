@@ -2,7 +2,7 @@ Uninamo2 Suunnitelmaa
 
 Työtehtäviä
 	* Alpha	----------------------------------------------------------------------
-		- Utopia Game Enginen debuggaus
+		- Utopia Game Enginen debuggaus										...
 			* Originia ei aina ehditä laskea ennen ensimmäistä piirtoa 
 			-> piirtyy aluksi väärään paikkaan
 			* Kun siirrytään koodauksesta designiin, voi muutosprosessi 
@@ -10,6 +10,8 @@ Työtehtäviä
 			* Törmäyssysteemi ei ota huomioon stepin pituutta				DONE
 				- Pitää korjata mahdollisimman pian							DONE
 			* Jos törmää hirveän lujaa niin menee toisen objektin sisälle	DONE
+			* EpicBOx tippuu lattian läpi!
+				- Tarvittavat numerot muuttuu mystisesti...
 		- Alkuvalmistelut													DONE
 			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE
@@ -58,13 +60,13 @@ Työtehtäviä
 		- Testausnappula													DONE
 			* Testausnappuloiden lisääminen käyttöliittymään				DONE
 			* Testausnappulan reagointi hiireen								DONE
-		- Testausmoodi														...
-			* Testausmoodin aloittaminen									...
-				- Komponenttien ja muiden aktivoiminen						...
-			* Testausmoodin lopettaminen									...
-				- Komponenttien ja muiden resetoiminen						...
-			* Grafiikoiden vaihtaminen										...
-			* Komponenttien ja johtojen editoimisen estäminen testin aikana	...
+		- Testausmoodi														DONE
+			* Testausmoodin aloittaminen									DONE
+				- Komponenttien ja muiden aktivoiminen						DONE
+			* Testausmoodin lopettaminen									DONE
+				- Komponenttien ja muiden resetoiminen						DONE
+			* Grafiikoiden vaihtaminen										DONE
+			* Komponenttien ja johtojen editoimisen estäminen testin aikana	DONE
 		- Ajastin
 			* Ajastimen arkkitehtuuri
 			* Ajastindatan tiedonvälityksen viimeistely
@@ -132,6 +134,7 @@ Työtehtäviä
 		- Voittoikkuna
 			* Komponenttikäytön analysointi
 			* Uusien tehtävien antaminen
+		- Testausmoodin selkeä näyttäminen koodipuolella
 	* Gold	---------------------------------------------------------------------
 		- Tehtävien valitseminen
 			* Tehtävien valintaympäristön luominen

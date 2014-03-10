@@ -2,6 +2,7 @@ package uninamo_main;
 
 import java.awt.BorderLayout;
 
+import tests.FpsApsTest;
 import uninamo_worlds.AreaChanger;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
@@ -69,6 +70,9 @@ public class Main
 		
 		// TODO: This causes occasional errors
 		areachanger.getArea("design").disableMouseAndDrawing();
+		
+		// Also activates FPS test
+		new FpsApsTest(mainactorhandler, maindrawer);
 	}
 	
 	

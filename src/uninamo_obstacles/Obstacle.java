@@ -5,6 +5,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
+import uninamo_gameplaysupport.TestHandler;
+import uninamo_gameplaysupport.Testable;
 import uninamo_gameplaysupport.Wall;
 import utopia_gameobjects.BouncingBasicPhysicDrawnObject;
 import utopia_graphic.MultiSpriteDrawer;
@@ -30,7 +32,7 @@ import utopia_worlds.Room;
  * @since 9.3.2014
  */
 public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements 
-	RoomListener
+	RoomListener, Testable
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
@@ -58,6 +60,7 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements
 	 * @param actorhandler The actorHandler that will inform the object about 
 	 * step events
 	 * @param room The room where the obstacle resides at
+	 * @param testHandler The testHandler that will inform the obstacle about test events
 	 * @param designSpriteName The name of the sprite used to draw the object 
 	 * in the design mode
 	 * @param realSpriteName The name of the sprite used to draw the object 
@@ -67,7 +70,8 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements
 			CollisionType collisiontype, DrawableHandler drawer,
 			CollidableHandler collidablehandler,
 			CollisionHandler collisionhandler, ActorHandler actorhandler, 
-			Room room, String designSpriteName, String realSpriteName)
+			Room room, TestHandler testHandler, String designSpriteName, 
+			String realSpriteName)
 	{
 		super(x, y, DepthConstants.NORMAL, isSolid, collisiontype, drawer, 
 				collidablehandler, collisionhandler, actorhandler);
@@ -85,6 +89,8 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements
 		// Adds the object to the handler(s)
 		if (room != null)
 			room.addObject(this);
+		if (testHandler != null)
+			testHandler.addTestable(this);
 	}
 	
 	
@@ -118,9 +124,11 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements
 		{
 			Wall wall = (Wall) collided;
 			
-			// TODO: Munch these numbers further
+			//System.out.println(getMovement().getVSpeed());
+			
+			// TODO: Munch these numbers further if need be
 			bounceWithoutRotationFrom(wall, HelpMath.getAveragePoint(colpoints), 
-					0, 0.25, 0.4, steps);
+					0, 0.25, 1, steps);
 		}
 	}
 
@@ -179,10 +187,10 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements
 	@Override
 	public void act(double steps)
 	{
-		super.act(steps);
-		
 		// Adds gravity
 		addMotion(270, 0.75 * steps);
+		
+		super.act(steps);
 	}
 	
 	@Override
@@ -212,6 +220,30 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements
 		kill();
 	}
 	
+	/**
+	 * The object should go into test mode in a reseted state
+	 */
+	@Override
+	public void startTesting()
+	{
+		// Changes the object's graphics and starts it
+		getSpriteDrawer().setSpriteIndex(1, false);
+		this.started = true;
+	}
+	
+	/**
+	 * The object should return from the test mode
+	 */
+	@Override
+	public void endTesting()
+	{
+		// Returns back to the original position and sprite
+		this.started = false;
+		getSpriteDrawer().setSpriteIndex(0, false);
+		setPosition(this.startPosition);
+		resetStatus();
+	}
+	
 	
 	// GETTERS & SETTERS	----------------------------------------------
 	
@@ -221,48 +253,5 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements
 	protected MultiSpriteDrawer getSpriteDrawer()
 	{
 		return this.spritedrawer;
-	}
-	
-	
-	// OTHER METHODS	--------------------------------------------------
-	
-	/**
-	 * Resets the object back to its starting place and status while keeping 
-	 * the object active
-	 */
-	public void resetTest()
-	{
-		// The object can't be reseted if it hasn't bee started yet
-		if (this.started)
-		{
-			setPosition(this.startPosition);
-			resetStatus();
-		}
-	}
-	
-	/**
-	 * Starts the object, making it active and react to other instances
-	 */
-	public void startTest()
-	{
-		if (this.started)
-			return;
-		
-		// Changes the object's graphics and starts it
-		getSpriteDrawer().setSpriteIndex(1, false);
-		this.started = true;
-	}
-	
-	/**
-	 * Inactivates the object until it is started again. The object won't react 
-	 * to other instances or events in this mode
-	 */
-	public void endTest()
-	{
-		if (!this.started)
-			return;
-		
-		this.started = false;
-		getSpriteDrawer().setSpriteIndex(0, false);
 	}
 }

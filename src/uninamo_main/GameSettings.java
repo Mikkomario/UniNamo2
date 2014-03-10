@@ -31,6 +31,15 @@ public class GameSettings
 	 */
 	public static final double interfaceScaleFactor = 1.2;
 	/**
+	 * How long a single "turn" in the game should take (in steps)
+	 */
+	public static final double turnDuration = 100;
+	/**
+	 * How fast should objects usually move horizontally to move a single 
+	 * "unit" in a turn
+	 */
+	public static final double normalTurnSpeed = 1.72;
+	/**
 	 * The basic font used in the game
 	 */
 	public final static Font basicFont = new Font("Orc A Std", Font.BOLD, 30);

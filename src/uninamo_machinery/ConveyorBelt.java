@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import uninamo_components.ConnectorRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.Wall;
+import uninamo_main.GameSettings;
 import uninamo_obstacles.Obstacle;
 import uninamo_worlds.Area;
 import utopia_handleds.Collidable;
@@ -154,7 +155,7 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener,
 			
 			Obstacle o = (Obstacle) collided;
 			
-			o.addPosition(2 * this.speedSign, 0);
+			o.addPosition(GameSettings.normalTurnSpeed * this.speedSign, 0);
 		}
 	}
 	

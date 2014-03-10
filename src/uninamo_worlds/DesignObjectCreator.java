@@ -70,7 +70,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 				area, CodeTransitionButton.TOCODE, this.areaChanger);
 		new TestingButton(GameSettings.screenWidth - 110, 
 				GameSettings.screenHeight - 45, area.getDrawer(), 
-				area.getMouseHandler(), area);
+				area.getMouseHandler(), area, this.testHandler);
 		
 		new ConveyorBelt(400, GameSettings.screenHeight - 200, 
 				area.getDrawer(), area.getActorHandler(), 
@@ -78,6 +78,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 				area, this.testHandler, this.connectorRelay);
 		new Box(400, 200, area.getDrawer(), 
 				area.getCollisionHandler().getCollidableHandler(), 
-				area.getCollisionHandler(), area.getActorHandler(), area).startTest();;
+				area.getCollisionHandler(), area.getActorHandler(), area, 
+				this.testHandler);
 	}
 }
