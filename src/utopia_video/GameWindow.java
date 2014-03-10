@@ -106,7 +106,7 @@ public class GameWindow extends JFrame
 		// Takes the toolbar into account with height calculations
 		if (hastoolbar)
 		{
-			System.out.println("Heightens the window");
+			//System.out.println("Heightens the window");
 			this.height += BORDERHEIGHT;
 		}
 		

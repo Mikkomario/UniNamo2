@@ -79,10 +79,11 @@ public abstract class BouncingBasicPhysicDrawnObject extends BasicPhysicDrawnObj
 	 * and a smaller number means that the object loses speed upon the collision)
 	 * @param frictionmodifier How much the collision affects speed that isn't 
 	 * directional to the opposing force (0+).
+	 * @param steps How many steps does the collision take to happen
 	 */
 	public void bounceWithoutRotationFrom(PhysicalCollidable p, 
 			Point2D.Double collisionpoint, double bounciness, 
-			double frictionmodifier)
+			double frictionmodifier, double steps)
 	{	
 		// If there's no speed, doesn't do anything
 		if (getMovement().getSpeed() == 0)
@@ -92,8 +93,9 @@ public abstract class BouncingBasicPhysicDrawnObject extends BasicPhysicDrawnObj
 		double forcedir = p.getCollisionForceDirection(collisionpoint);
 		
 		// Calculates the actual amount of force applied to the object
-		Movement oppmovement = 
-				getMovement().getOpposingMovement().getDirectionalMovement(forcedir);
+		Movement oppmovement = Movement.getMultipliedMovement(
+				getMovement().getOpposingMovement().getDirectionalMovement(
+				forcedir), steps);
 		
 		bounce(bounciness, frictionmodifier, oppmovement, forcedir);
 	}
