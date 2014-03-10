@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
-import utopia_handleds.Collidable;
+import utopia_handleds.PhysicalCollidable;
 import utopia_handlers.CollidableHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.CollisionType;
@@ -17,7 +17,7 @@ import utopia_helpAndEnums.HelpMath;
  * @author Mikko Hilpinen.
  *         Created 30.6.2013.
  */
-public abstract class DimensionalDrawnObject extends DrawnObject implements Collidable
+public abstract class DimensionalDrawnObject extends DrawnObject implements PhysicalCollidable
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
@@ -123,6 +123,45 @@ public abstract class DimensionalDrawnObject extends DrawnObject implements Coll
 			return (negatedPoint.x < 0);
 	}
 	
+	@Override
+	public double getCollisionForceDirection(Point2D.Double collisionpoint)
+	{
+		// Circles simply push the object away
+		if (this.collisiontype == CollisionType.CIRCLE)
+			return HelpMath.pointDirection(getX(), getY(), 
+					collisionpoint.x, collisionpoint.y);
+		// Walls simply push the object to the right (relative)
+		else if (this.collisiontype == CollisionType.WALL)
+			return getAngle();
+		// Boxes are the most complicated
+		else if (this.collisiontype == CollisionType.BOX)
+		{
+			// Calculates the side which the object touches
+			Point2D.Double relativepoint = negateTransformations(collisionpoint);
+			double relxdiffer = -0.5 + relativepoint.x / getWidth();
+			double relydiffer = -0.5 + relativepoint.y / getHeight();
+			
+			// Returns drection of one of the sides of the object
+			if (Math.abs(relxdiffer) >= Math.abs(relydiffer))
+			{
+				if (relxdiffer >= 0)
+					return getAngle();
+				else
+					return HelpMath.checkDirection(getAngle() + 180);
+			}
+			else
+			{
+				if (relydiffer >= 0)
+					return HelpMath.checkDirection(getAngle() + 270);
+				else
+					return HelpMath.checkDirection(getAngle() + 90);
+			}
+		}
+		
+		// In case one of these types wasn't the case, returns 0
+		return 0;
+	}
+	
 	
 	// GETTERS & SETTERS	----------------------------------------------
 	
@@ -172,55 +211,6 @@ public abstract class DimensionalDrawnObject extends DrawnObject implements Coll
 	
 	
 	// OTHER METHODS	--------------------------------------------------
-	
-	/**
-	 * Calculates the direction towards which the force caused by the collision 
-	 * applies.<p>
-	 * 
-	 * Boxes push the point away from the nearest side.<br>
-	 * Circles push the point away from the origin of the object.<br>
-	 * Walls always push the point to their right side
-	 * 
-	 * @param collisionpoint The point at which the collision happens
-	 * @return To which direction the force should apply
-	 */
-	public double getCollisionForceDirection(Point2D.Double collisionpoint)
-	{
-		// Circles simply push the object away
-		if (this.collisiontype == CollisionType.CIRCLE)
-			return HelpMath.pointDirection(getX(), getY(), 
-					collisionpoint.x, collisionpoint.y);
-		// Walls simply push the object to the right (relative)
-		else if (this.collisiontype == CollisionType.WALL)
-			return getAngle();
-		// Boxes are the most complicated
-		else if (this.collisiontype == CollisionType.BOX)
-		{
-			// Calculates the side which the object touches
-			Point2D.Double relativepoint = negateTransformations(collisionpoint);
-			double relxdiffer = -0.5 + relativepoint.x / getWidth();
-			double relydiffer = -0.5 + relativepoint.y / getHeight();
-			
-			// Returns drection of one of the sides of the object
-			if (Math.abs(relxdiffer) >= Math.abs(relydiffer))
-			{
-				if (relxdiffer >= 0)
-					return getAngle();
-				else
-					return HelpMath.checkDirection(getAngle() + 180);
-			}
-			else
-			{
-				if (relydiffer >= 0)
-					return HelpMath.checkDirection(getAngle() + 270);
-				else
-					return HelpMath.checkDirection(getAngle() + 90);
-			}
-		}
-		
-		// In case one of these types wasn't the case, returns 0
-		return 0;
-	}
 	
 	/**
 	 * @return the longest possible radius of the object (from origin to a 

@@ -7,6 +7,7 @@ import uninamo_components.ConnectorRelay;
 import uninamo_components.MachineInputComponent;
 import uninamo_components.MachineOutputComponent;
 import uninamo_main.GameSettings;
+import uninamo_obstacles.Obstacle;
 import uninamo_worlds.Area;
 import utopia_gameobjects.DimensionalDrawnObject;
 import utopia_graphic.MultiSpriteDrawer;
@@ -38,6 +39,7 @@ public abstract class Machine extends DimensionalDrawnObject implements RoomList
 	private static int inputComponentsCreated = 0;
 	private static int outputComponentsCreated = 0;
 	private static final int COMPONENTDISTANCE = 85;
+	private static final Class<?>[] COLLIDEDCLASSES = {Obstacle.class};
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -128,8 +130,8 @@ public abstract class Machine extends DimensionalDrawnObject implements RoomList
 	@Override
 	public Class<?>[] getSupportedListenerClasses()
 	{
-		// TODO Change to "Actors"
-		return null;
+		// Only obstacles interact with the machines in a physical way
+		return COLLIDEDCLASSES;
 	}
 
 	@Override

@@ -94,6 +94,8 @@ Työtehtäviä
 				- Muiden handlereiden epäaktivoiminen
 			* Alustavan sisällön tuottaminen
 			* Ohjekirjan materiaalin lataaminen tiedostosta?
+		- Tee designmodesta resoluutiosta riippumaton (tullaan tulevaisuudessa 
+		skaalaamaan eri tavalla kuin coding)
 		- Säädöt
 			* Säätövalikon "näppäimen" toteuttaminen
 			* Säätövalikon arkkitehtuuri

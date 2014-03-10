@@ -2,6 +2,7 @@ package utopia_gameobjects;
 
 import java.awt.geom.Point2D;
 
+import utopia_handleds.PhysicalCollidable;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.CollidableHandler;
 import utopia_handlers.CollisionHandler;
@@ -71,7 +72,7 @@ public abstract class BouncingBasicPhysicDrawnObject extends BasicPhysicDrawnObj
 	 * The object bounces from a certain object it collides with. This doesn't 
 	 * cause rotational movement.
 	 *
-	 * @param d The object collided with
+	 * @param p The object collided with
 	 * @param collisionpoint The point in which the collision happens (absolute)
 	 * @param bounciness How much the object bounces away from the given 
 	 * object (0+) (1 means that the object doesn't lose speed in the collision 
@@ -79,7 +80,7 @@ public abstract class BouncingBasicPhysicDrawnObject extends BasicPhysicDrawnObj
 	 * @param frictionmodifier How much the collision affects speed that isn't 
 	 * directional to the opposing force (0+).
 	 */
-	public void bounceWithoutRotationFrom(DimensionalDrawnObject d, 
+	public void bounceWithoutRotationFrom(PhysicalCollidable p, 
 			Point2D.Double collisionpoint, double bounciness, 
 			double frictionmodifier)
 	{	
@@ -88,7 +89,7 @@ public abstract class BouncingBasicPhysicDrawnObject extends BasicPhysicDrawnObj
 			return;
 		
 		// Calculates the direction, towards which the force is applied
-		double forcedir = d.getCollisionForceDirection(collisionpoint);
+		double forcedir = p.getCollisionForceDirection(collisionpoint);
 		
 		// Calculates the actual amount of force applied to the object
 		Movement oppmovement = 

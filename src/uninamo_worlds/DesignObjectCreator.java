@@ -1,6 +1,7 @@
 package uninamo_worlds;
 
 import uninamo_components.ConnectorRelay;
+import uninamo_gameplaysupport.InvisibleWall;
 import uninamo_machinery.ConveyorBelt;
 import uninamo_main.GameSettings;
 import uninamo_userinterface.CodeTransitionButton;
@@ -45,6 +46,16 @@ public class DesignObjectCreator extends AreaObjectCreator
 	@Override
 	protected void createObjects(Area area)
 	{
+		// Creates the invisible walls
+		new InvisibleWall(0, 1, 0, 
+				area.getCollisionHandler().getCollidableHandler(), area);
+		new InvisibleWall(0, -1, GameSettings.screenWidth, 
+				area.getCollisionHandler().getCollidableHandler(), area);
+		new InvisibleWall(1, 0, 0, 
+				area.getCollisionHandler().getCollidableHandler(), area);
+		new InvisibleWall(-1, 0, GameSettings.screenHeight - 80, 
+				area.getCollisionHandler().getCollidableHandler(), area);
+		
 		// Creates objects
 		new CodeTransitionButton(area.getDrawer(), area.getMouseHandler(), 
 				area, CodeTransitionButton.TOCODE, this.areaChanger);

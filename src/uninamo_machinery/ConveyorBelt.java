@@ -1,6 +1,7 @@
 package uninamo_machinery;
 
 import uninamo_components.ConnectorRelay;
+import uninamo_gameplaysupport.Wall;
 import uninamo_worlds.Area;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.CollidableHandler;
@@ -14,7 +15,7 @@ import utopia_helpAndEnums.CollisionType;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public class ConveyorBelt extends Machine
+public class ConveyorBelt extends Machine implements Wall
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	

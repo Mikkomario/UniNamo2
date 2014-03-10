@@ -19,12 +19,14 @@ public class CollidableHandler extends Handler
 	// CONSTRUCTOR	------------------------------------------------------
 	
 	/**
-	 * Creates a new empty collidablehandler
+	 * Creates a new empty collidablehandler. CollidableHandlers should only 
+	 * be created for CollisionHandlers or some special purposes, hence the 
+	 * protected attribute.
 	 *
 	 * @param autodeath Will the handler die if it runs out of handleds
 	 * @param superhandler The collidablehandler that holds the handler
 	 */
-	public CollidableHandler(boolean autodeath, CollidableHandler superhandler)
+	protected CollidableHandler(boolean autodeath, CollidableHandler superhandler)
 	{
 		super(autodeath, superhandler);
 	}
