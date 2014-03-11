@@ -2,7 +2,9 @@ package uninamo_worlds;
 
 import uninamo_components.ConnectorRelay;
 import uninamo_gameplaysupport.InvisibleWall;
+import uninamo_gameplaysupport.ObstacleCollector;
 import uninamo_gameplaysupport.TestHandler;
+import uninamo_gameplaysupport.VictoryHandler;
 import uninamo_machinery.ConveyorBelt;
 import uninamo_main.GameSettings;
 import uninamo_obstacles.Box;
@@ -56,6 +58,9 @@ public class DesignObjectCreator extends AreaObjectCreator
 	@Override
 	protected void createObjects(Area area)
 	{
+		// Creates the victoryHandler
+		VictoryHandler victoryHandler = new VictoryHandler(null);
+		
 		// Creates the invisible walls
 		new InvisibleWall(0, 1, 0, 
 				area.getCollisionHandler().getCollidableHandler(), area);
@@ -106,5 +111,8 @@ public class DesignObjectCreator extends AreaObjectCreator
 					this.testHandler);
 		}
 		
+		new ObstacleCollector(800, GameSettings.screenHeight - 200, area.getDrawer(), 
+				area.getCollisionHandler(), this.testHandler, victoryHandler, 
+				Box.class, 2, "boxdesign", "boxreal");
 	}
 }
