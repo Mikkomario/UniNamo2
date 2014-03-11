@@ -290,7 +290,7 @@ public class OptionMessageBox extends MessageBox implements LogicalHandled
 		
 		@Override
 		public void onMouseButtonEvent(MouseButton button,
-				MouseButtonEventType eventType, Point2D mousePosition,
+				MouseButtonEventType eventType, Point2D.Double mousePosition,
 				double eventStepTime)
 		{
 			// If the button was clicked, Informs the box
@@ -301,7 +301,7 @@ public class OptionMessageBox extends MessageBox implements LogicalHandled
 
 		@Override
 		public void onMousePositionEvent(MousePositionEventType eventType,
-				Point2D mousePosition, double eventStepTime)
+				Point2D.Double mousePosition, double eventStepTime)
 		{
 			// Button reacts to mouse over by changing sprite index
 			if (eventType == MousePositionEventType.ENTER)

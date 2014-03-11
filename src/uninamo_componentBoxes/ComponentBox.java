@@ -101,7 +101,7 @@ public abstract class ComponentBox extends AbstractButton
 
 	@Override
 	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Point2D mousePosition,
+			MouseButtonEventType eventType, Point2D.Double mousePosition,
 			double eventStepTime)
 	{
 		// On left click, creates a new component
@@ -121,7 +121,7 @@ public abstract class ComponentBox extends AbstractButton
 
 	@Override
 	public void onMousePositionEvent(MousePositionEventType eventType,
-			Point2D mousePosition, double eventStepTime)
+			Point2D.Double mousePosition, double eventStepTime)
 	{
 		// On enter, scales a bit and opens the box
 		if (eventType == MousePositionEventType.ENTER)

@@ -144,7 +144,7 @@ public class Cable extends DimensionalDrawnObject implements
 
 	@Override
 	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Point2D mousePosition,
+			MouseButtonEventType eventType, Point2D.Double mousePosition,
 			double eventStepTime)
 	{
 		// On mouse release tries to place the cable on a connector
@@ -232,7 +232,7 @@ public class Cable extends DimensionalDrawnObject implements
 	}
 
 	@Override
-	public boolean listensPosition(Point2D testedPosition)
+	public boolean listensPosition(Point2D.Double testedPosition)
 	{
 		return pointCollides(testedPosition);
 	}
@@ -246,7 +246,7 @@ public class Cable extends DimensionalDrawnObject implements
 
 	@Override
 	public void onMousePositionEvent(MousePositionEventType eventType,
-			Point2D mousePosition, double eventStepTime)
+			Point2D.Double mousePosition, double eventStepTime)
 	{
 		// Scales the object on enter, rescales on exit
 		if (eventType == MousePositionEventType.ENTER)
@@ -256,13 +256,12 @@ public class Cable extends DimensionalDrawnObject implements
 	}
 
 	@Override
-	public void onMouseMove(Point2D newMousePosition)
+	public void onMouseMove(Point2D.Double newMousePosition)
 	{
 		// Updates the last known mouse position if being dragged
 		if (isBeingDragged())
 		{
-			this.lastMousePosition = new Point2D.Double(newMousePosition.getX(), 
-					newMousePosition.getY());
+			this.lastMousePosition = newMousePosition;
 			updateTransformations();
 		}
 	}

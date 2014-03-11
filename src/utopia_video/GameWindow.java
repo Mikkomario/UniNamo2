@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -214,7 +215,7 @@ public class GameWindow extends JFrame
 		
 		//System.out.println("GW Mouse x : " + mousex + ", mousey: " + mousey);
 		
-		this.mainmousehandler.setMousePosition(new Point(mousex, mousey));
+		this.mainmousehandler.setMousePosition(new Point2D.Double(mousex, mousey));
 	}
 	
 	/**
@@ -426,7 +427,7 @@ public class GameWindow extends JFrame
 					GameWindow.this.yscale);
 			
 			GameWindow.this.mainmousehandler.setMouseStatus(
-					new Point(mousex, mousey), true, e.getButton());
+					new Point2D.Double(mousex, mousey), true, e.getButton());
 		}
 
 		@Override
@@ -439,7 +440,7 @@ public class GameWindow extends JFrame
 					GameWindow.this.yscale);
 			
 			GameWindow.this.mainmousehandler.setMouseStatus(
-					new Point(mousex, mousey), false, e.getButton());
+					new Point2D.Double(mousex, mousey), false, e.getButton());
 		}
 	}
 	

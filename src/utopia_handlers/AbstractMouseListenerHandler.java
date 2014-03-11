@@ -1,6 +1,5 @@
 package utopia_handlers;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -24,7 +23,7 @@ implements Actor
 {
 	// ATTRIBUTES	-------------------------------------------------------
 	
-	private Point2D currentMousePosition;
+	private Point2D.Double currentMousePosition;
 	private boolean ldown, rdown, lpressed, rpressed, lreleased, rreleased;
 	
 	private ArrayList<AdvancedMouseListener> entered;
@@ -49,7 +48,7 @@ implements Actor
 		super(autodeath, actorhandler);
 		
 		// Initializes attributes
-		this.currentMousePosition = new Point(0, 0);
+		this.currentMousePosition = new Point2D.Double(0, 0);
 		this.entered = new ArrayList<AdvancedMouseListener>();
 		this.over = new ArrayList<AdvancedMouseListener>();
 		this.exited = new ArrayList<AdvancedMouseListener>();
@@ -191,7 +190,7 @@ implements Actor
 	/**
 	 * @return The current position of the mouse
 	 */
-	public Point2D getMousePosition()
+	public Point2D.Double getMousePosition()
 	{
 		return this.currentMousePosition;
 	}
@@ -217,11 +216,11 @@ implements Actor
 	 *
 	 * @param newMousePosition the new mouse position to be set
 	 */
-	public void setMousePosition(Point2D newMousePosition)
+	public void setMousePosition(Point2D.Double newMousePosition)
 	{		
 		if (!getMousePosition().equals(newMousePosition))
 		{		
-			this.currentMousePosition = (Point2D) newMousePosition.clone();
+			this.currentMousePosition = (Point2D.Double) newMousePosition.clone();
 			
 			// Informs the objects
 			this.lastevent = AdvancedMouseEvent.MOVE;

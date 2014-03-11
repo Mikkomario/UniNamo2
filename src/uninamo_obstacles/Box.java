@@ -4,6 +4,7 @@ import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
 import uninamo_gameplaysupport.TestHandler;
+import uninamo_gameplaysupport.Wall;
 import utopia_handleds.Collidable;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.CollidableHandler;
@@ -17,7 +18,7 @@ import utopia_worlds.Room;
  * 
  * @author Mikko Hilpinen
  */
-public class Box extends Obstacle
+public class Box extends Obstacle implements Wall
 {
 	/**
 	 * Creates a new box to the given position
@@ -44,7 +45,7 @@ public class Box extends Obstacle
 				collisionhandler, actorhandler, room, testHandler, "boxdesign", 
 				"boxreal");
 		
-		setBoxCollisionPrecision(2, 2);
+		setBoxCollisionPrecision(2, 0);
 	}
 	
 	

@@ -148,15 +148,14 @@ public abstract class Component extends DimensionalDrawnObject implements
 
 	@Override
 	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Point2D mousePosition,
+			MouseButtonEventType eventType, Point2D.Double mousePosition,
 			double eventStepTime)
 	{
 		// If the component (and not one of its connectors) is clicked, it 
 		// is considered a grab
 		if (button == MouseButton.LEFT && 
 				eventType == MouseButtonEventType.PRESSED && !componentDragged &&
-				this.relay.getConnectorAtPoint(new Point2D.Double(
-				mousePosition.getX(), mousePosition.getY()), null) == null)
+				this.relay.getConnectorAtPoint(mousePosition, null) == null)
 		{
 			this.dragged = true;
 			componentDragged = true;
@@ -177,7 +176,7 @@ public abstract class Component extends DimensionalDrawnObject implements
 	}
 
 	@Override
-	public boolean listensPosition(Point2D testedPosition)
+	public boolean listensPosition(Point2D.Double testedPosition)
 	{
 		return pointCollides(testedPosition);
 	}
@@ -190,7 +189,7 @@ public abstract class Component extends DimensionalDrawnObject implements
 
 	@Override
 	public void onMousePositionEvent(MousePositionEventType eventType,
-			Point2D mousePosition, double eventStepTime)
+			Point2D.Double mousePosition, double eventStepTime)
 	{
 		if (this.dragged)
 			return;
@@ -203,7 +202,7 @@ public abstract class Component extends DimensionalDrawnObject implements
 	}
 
 	@Override
-	public void onMouseMove(Point2D newMousePosition)
+	public void onMouseMove(Point2D.Double newMousePosition)
 	{
 		// If being dragged, jumps into the mouse's position
 		if (this.dragged)

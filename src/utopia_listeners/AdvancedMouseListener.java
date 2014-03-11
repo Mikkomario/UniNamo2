@@ -29,7 +29,7 @@ public interface AdvancedMouseListener extends LogicalHandled
 	 * @see #getCurrentButtonScaleOfInterest()
 	 */
 	public void onMouseButtonEvent(MouseButton button, 
-			MouseButtonEventType eventType, Point2D mousePosition, 
+			MouseButtonEventType eventType, Point2D.Double mousePosition, 
 			double eventStepTime);
 	
 	/**
@@ -39,7 +39,7 @@ public interface AdvancedMouseListener extends LogicalHandled
 	 * @return Is the object interested if a mouse event occurs in the given 
 	 * position
 	 */
-	public boolean listensPosition(Point2D testedPosition);
+	public boolean listensPosition(Point2D.Double testedPosition);
 	
 	/**
 	 * @return Should the listener be informed if the mouse enters or exits its 
@@ -60,7 +60,7 @@ public interface AdvancedMouseListener extends LogicalHandled
 	 * @see #listensMouseEnterExit()
 	 */
 	public void onMousePositionEvent(MousePositionEventType eventType, 
-			Point2D mousePosition, double eventStepTime);
+			Point2D.Double mousePosition, double eventStepTime);
 	
 	/**
 	 * This method is called at each time the mouse was moved and it tells 
@@ -68,7 +68,7 @@ public interface AdvancedMouseListener extends LogicalHandled
 	 * 
 	 * @param newMousePosition the mouse's new position
 	 */
-	public void onMouseMove(Point2D newMousePosition);
+	public void onMouseMove(Point2D.Double newMousePosition);
 	
 	/**
 	 * @return On which scale the object is interested in mouse button events. 

@@ -39,8 +39,8 @@ public class MainMouseListenerHandler extends AbstractMouseListenerHandler
 	 * @param mousePressed Is a mouse button pressed
 	 * @param mouseButton Which mouse button is pressed
 	 */
-	public void setMouseStatus(Point2D mousePosition, boolean mousePressed, 
-			int mouseButton)
+	public void setMouseStatus(Point2D.Double mousePosition, 
+			boolean mousePressed, int mouseButton)
 	{
 		setMousePosition(mousePosition);
 		

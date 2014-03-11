@@ -45,7 +45,7 @@ public class MouseListenerHandler extends AbstractMouseListenerHandler
 	}
 
 	@Override
-	public void onMouseMove(Point2D mousePosition)
+	public void onMouseMove(Point2D.Double mousePosition)
 	{
 		// Updates mouse status
 		setMousePosition(mousePosition);
@@ -60,7 +60,7 @@ public class MouseListenerHandler extends AbstractMouseListenerHandler
 
 	@Override
 	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Point2D mousePosition,
+			MouseButtonEventType eventType, Point2D.Double mousePosition,
 			double eventStepTime)
 	{
 		// TODO: Change this old system into a more elegant one
@@ -83,7 +83,7 @@ public class MouseListenerHandler extends AbstractMouseListenerHandler
 	}
 
 	@Override
-	public boolean listensPosition(Point2D testedPosition)
+	public boolean listensPosition(Point2D.Double testedPosition)
 	{
 		// Handlers are interested in all areas
 		return true;
@@ -92,7 +92,7 @@ public class MouseListenerHandler extends AbstractMouseListenerHandler
 
 	@Override
 	public void onMousePositionEvent(MousePositionEventType eventType,
-			Point2D mousePosition, double eventStepTime)
+			Point2D.Double mousePosition, double eventStepTime)
 	{
 		// Doesn't react to mouse position events
 	}

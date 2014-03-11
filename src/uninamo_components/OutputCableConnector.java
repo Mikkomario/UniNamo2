@@ -68,7 +68,7 @@ public class OutputCableConnector extends CableConnector
 
 	@Override
 	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Point2D mousePosition,
+			MouseButtonEventType eventType, Point2D.Double mousePosition,
 			double eventStepTime)
 	{
 		// If the connector is clicked with a left mouse button it will create 

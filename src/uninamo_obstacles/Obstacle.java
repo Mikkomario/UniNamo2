@@ -19,6 +19,7 @@ import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.CollisionType;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_helpAndEnums.HelpMath;
+import utopia_helpAndEnums.Movement;
 import utopia_listeners.RoomListener;
 import utopia_resourcebanks.MultiMediaHolder;
 import utopia_worlds.Room;
@@ -241,6 +242,7 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements
 		this.started = false;
 		getSpriteDrawer().setSpriteIndex(0, false);
 		setPosition(this.startPosition);
+		setMovement(new Movement(0, 0));
 		resetStatus();
 	}
 	

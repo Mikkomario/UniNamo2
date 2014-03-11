@@ -100,6 +100,7 @@ public abstract class Machine extends DimensionalDrawnObject implements
 		if (inputComponentSpriteName != null && inputs > 0)
 		{
 			Point2D.Double position = getNewComponentPosition(true);
+			
 			new MachineInputComponent((int) position.getX(), 
 					(int) position.getY(), codingArea.getDrawer(), 
 					codingArea.getActorHandler(), codingArea.getMouseHandler(), 
@@ -107,6 +108,7 @@ public abstract class Machine extends DimensionalDrawnObject implements
 					inputComponentSpriteName, inputs, this);
 			inputComponentsCreated ++;
 		}
+		
 		if (outputComponentSpriteName != null && outputs > 0)
 		{
 			Point2D.Double position = getNewComponentPosition(false);
@@ -289,6 +291,8 @@ public abstract class Machine extends DimensionalDrawnObject implements
 					x += COMPONENTDISTANCE;
 				y = COMPONENTDISTANCE / 2;
 			}
+			
+			i++;
 		}
 		
 		return new Point2D.Double(x, y);

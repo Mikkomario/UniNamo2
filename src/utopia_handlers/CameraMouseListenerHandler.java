@@ -50,14 +50,14 @@ public class CameraMouseListenerHandler extends MouseListenerHandler
 	// Overrides the mousemove to transform the coordinates before informing 
 	// them further
 	@Override
-	public void onMouseMove(Point2D mousePosition)
+	public void onMouseMove(Point2D.Double mousePosition)
 	{
 		super.onMouseMove(this.camera.transform(mousePosition));
 	}
 	
 	@Override
 	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Point2D mousePosition,
+			MouseButtonEventType eventType, Point2D.Double mousePosition,
 			double eventStepTime)
 	{
 		// Transforms the position before updating

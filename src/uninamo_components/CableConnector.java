@@ -135,13 +135,13 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	}
 
 	@Override
-	public boolean listensPosition(Point2D testedPosition)
+	public boolean listensPosition(Point2D.Double testedPosition)
 	{
 		return pointCollides(testedPosition);
 	}
 
 	@Override
-	public void onMouseMove(Point2D newMousePosition)
+	public void onMouseMove(Point2D.Double newMousePosition)
 	{
 		// Doesn't react to mouse movement
 	}
@@ -201,7 +201,7 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	
 	@Override
 	public void onMousePositionEvent(MousePositionEventType eventType,
-			Point2D mousePosition, double eventStepTime)
+			Point2D.Double mousePosition, double eventStepTime)
 	{
 		// Scales the object on enter, rescales on exit
 		if (eventType == MousePositionEventType.ENTER)

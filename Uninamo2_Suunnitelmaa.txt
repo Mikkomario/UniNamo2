@@ -14,8 +14,11 @@ Työtehtäviä
 				- Tarvittavat numerot muuttuu mystisesti...
 			* ComponentBoxin luominen hidastaa ohjelman käynnistymistä 
 			omituisen paljon
-			* Vaihda MouseListenerHandlerin mousePositionjutut Point2D:stä 
+			* Vaihda MouseListenerHandlerin mousePositionjutut Point2D:stä 	DONE
 			Point2D.Doubleen
+			* Boxit vaan liukuu jos ne on päällekkäin 
+			(laita liikuttaminen toisiin objekteihin)
+			* Ohjelma bugaa täydellisesti jos laittaa toisen beltin
 		- Alkuvalmistelut													DONE
 			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE
@@ -98,8 +101,13 @@ Työtehtäviä
 	* Beta	----------------------------------------------------------------------
 		- Voittolaitteet
 			* Voittolaitearkkitehtuuri
+				- Obstaclen tunnistaminen
+				- Kerättyjen obstaclien poistaminen ja laskeminen
+				- Voittohandlerin informoiminen
 			* Yksinkertaisen testivoittolaitteen (laatikkovoito) 
 			toteuttaminen
+			* VictoryHandler, joka chekkaa, onko kaikki voittolaitteet 
+			voittotilassa ja informoi lopullisen voiton
 		- Ohjekirja
 			* Ohjekirjan "näppäimen" toteuttaminen
 			* Ohjekirjan arkkitehtuuri
@@ -147,6 +155,8 @@ Työtehtäviä
 			* Tehtävien valintaympäristön luominen
 			* Tehtävän lopettaminen
 			* Tehtävän aloittaminen
+		- Main menu
+			* Säätöihin, tehtävävalikkoon sekä kenttäeditoriin pääsy
 		- Gold Graffat
 			* Komponentit
 			* Laitteet
@@ -170,6 +180,13 @@ Työtehtäviä
 				- Laitesuunnitelmien liikuttelu
 				- Sama toimijoille ja maaleille
 				- Seinien / lattian rakentaminen
+		- Hauskat extra laitteet ja obstaclet kenttäeditoriin
+			* Pongiin tarvittavat jutut
+			* Breakouttiin tarvittavat jutut
+			* Suondplayerit ja visuaaliset efektit
+			* Userinputkomponentit
+				- Näppäinkuuntelija
+				- Hiirikuuntelija
 		- Mainokset uusien laitteiden kanssa
 	
 Komponentteja

@@ -146,13 +146,13 @@ public abstract class AbstractButton extends DimensionalDrawnObject implements
 	}
 
 	@Override
-	public boolean listensPosition(Point2D testPosition)
+	public boolean listensPosition(Point2D.Double testPosition)
 	{
 		return pointCollides(testPosition);
 	}
 
 	@Override
-	public void onMouseMove(Point2D newMousePosition)
+	public void onMouseMove(Point2D.Double newMousePosition)
 	{
 		// Does nothing
 	}

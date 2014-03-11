@@ -155,7 +155,8 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener,
 			
 			Obstacle o = (Obstacle) collided;
 			
-			o.addPosition(GameSettings.normalTurnSpeed * this.speedSign, 0);
+			o.getMovement().setHSpeed(GameSettings.normalTurnSpeed * this.speedSign);
+			//o.addPosition(GameSettings.normalTurnSpeed * this.speedSign * steps, 0);
 		}
 	}
 	

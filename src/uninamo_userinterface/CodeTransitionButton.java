@@ -72,7 +72,7 @@ public class CodeTransitionButton extends AbstractButton
 
 	@Override
 	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Point2D mousePosition,
+			MouseButtonEventType eventType, Point2D.Double mousePosition,
 			double eventStepTime)
 	{	
 		if (button != MouseButton.LEFT || eventType != MouseButtonEventType.PRESSED)
@@ -109,7 +109,7 @@ public class CodeTransitionButton extends AbstractButton
 
 	@Override
 	public void onMousePositionEvent(MousePositionEventType eventType,
-			Point2D mousePosition, double eventStepTime)
+			Point2D.Double mousePosition, double eventStepTime)
 	{
 		// Scales the object on mouse over
 		if (eventType == MousePositionEventType.ENTER)

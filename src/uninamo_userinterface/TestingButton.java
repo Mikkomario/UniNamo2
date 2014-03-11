@@ -68,7 +68,7 @@ public class TestingButton extends AbstractButton implements Testable
 
 	@Override
 	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Point2D mousePosition,
+			MouseButtonEventType eventType, Point2D.Double mousePosition,
 			double eventStepTime)
 	{
 		// On left mouse click, starts or ends the test mode
@@ -90,7 +90,7 @@ public class TestingButton extends AbstractButton implements Testable
 
 	@Override
 	public void onMousePositionEvent(MousePositionEventType eventType,
-			Point2D mousePosition, double eventStepTime)
+			Point2D.Double mousePosition, double eventStepTime)
 	{
 		// On mouse enter largens, on mouse exit rescales back
 		if (eventType == MousePositionEventType.ENTER)
