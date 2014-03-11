@@ -30,11 +30,12 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private Class<?> collectedClass;
-	private int neededAmount;
+	private int neededAmount, collectsLeft;
 	private MultiSpriteDrawer spriteDrawer;
 	private Point2D.Double[] relativeColPoints, absoluteColPoints;
 	private boolean colPointsNeedUpdating, active;
 	private VictoryHandler victoryHandler;
+	private SpriteDrawerObject numberDrawer;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -68,6 +69,7 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 		this.collectedClass = collectedClass;
 		this.neededAmount = neededAmount;
 		this.victoryHandler = victoryHandler;
+		this.collectsLeft = this.neededAmount;
 		
 		Sprite[] sprites = new Sprite[2];
 		sprites[0] = MultiMediaHolder.getSpriteBank("goals").getSprite(designSpriteName);
@@ -78,6 +80,14 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 		this.relativeColPoints = new Point2D.Double[1];
 		this.relativeColPoints[0] = new Point2D.Double(getOriginX(), getOriginY());
 		this.colPointsNeedUpdating = true;
+		
+		this.numberDrawer = new SpriteDrawerObject(DepthConstants.BACK - 1, 
+				drawer, null, this, 
+				MultiMediaHolder.getSpriteBank(
+				"gameplayinterface").getSprite("numbers"));
+		this.numberDrawer.setSize(this.spriteDrawer.getSprite().getWidth() - 10, 
+				this.spriteDrawer.getSprite().getHeight() - 10);
+		this.numberDrawer.getSpriteDrawer().setImageIndex(this.neededAmount);
 		
 		// Adds the object to the handler(s)
 		if (collisionHandler != null)
@@ -140,10 +150,14 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 			// Collects the collided object
 			Obstacle o = (Obstacle) collided;
 			
-			o.kill();
-			this.neededAmount --;
+			o.makeUnsolid();
+			o.inactivate();
+			o.setInvisible();
 			
-			if (this.neededAmount == 0)
+			this.collectsLeft --;
+			this.numberDrawer.getSpriteDrawer().setImageIndex(this.collectsLeft);
+			
+			if (this.collectsLeft == 0)
 			{
 				inactivate();
 				this.spriteDrawer.setImageIndex(1);
@@ -187,6 +201,7 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 	{
 		// Changes image & activates
 		this.spriteDrawer.setSpriteIndex(1, true);
+		this.collectsLeft = this.neededAmount;
 		activate();
 	}
 
@@ -194,6 +209,7 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 	public void endTesting()
 	{
 		this.spriteDrawer.setSpriteIndex(0, true);
+		this.numberDrawer.getSpriteDrawer().setImageIndex(this.neededAmount);
 		inactivate();
 	}
 
@@ -202,5 +218,6 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 	{
 		// Updates the collision points
 		this.colPointsNeedUpdating = true;
+		this.numberDrawer.setPosition(getPosition());
 	}
 }

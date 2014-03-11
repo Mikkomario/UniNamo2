@@ -1,0 +1,19 @@
+* This text file contains the short descriptions of each component ans stuff
+
+or#Logical OR component sends TRUE signal when either of its inputs is receiving TRUE signal.
+pulse#Pulse Generator sends pulses of TRUE and FALSE signal in succession. The length of a pulse can be changed.
+power#Power Generator always sends TRUE signal.
+and#Logical AND sends TRUE signal when both of its inputs receive TRUE signal.
+latch#Latch sends FALSE signal until it receives a TRUE pulse, after which it sends TRUE signal until its reset input receives a TRUE pulse.
+hccounter#Hardcore Counter works like a normal counter (see Counter) except it informs its number in a binary format. The outputs match the following binary numbers: 0, 1, 2, 4, 8
+counter#Counter counts the pulses it receives and sends TRUE signal from an output that matches the current count, starting from 0. If the counter receives a TRUE pulse to its reset it goes back to 0.
+Inverter#Inverter inverts the signal it receives. When it receives TRUE it sends FALSE and vice versa.
+exor#EXOR or EXCLUSIVE OR sends TRUE signal when both of its inputs receive different kinds of signals.
+delay#Delay sends TRUE signal for a while after it receives a TRUE pulse. The duration of the delay can be adjusted.
+nand#NAND or NOT AND sends TRUE signal when either of its inputs is receiving FALSE signal.
+nor#NOR or NOT OR sends TRUE signal when both of its inputs receive FALSE signal.
+flipflop#FlipFlop sends TRUE signal from its first output and FALSE from the second, but switches them around each time it receives a TRUE pulse. The initial state is restored once the reset input receives a TRUE pulse.
+relay#Relay relays a signal to one of two outputs. If the Relay's second input receives FALSE signal the value of the first input's signal is sent through the first output. If the second input's signal is TRUE, the first input's signal is sent through the second output instead.
+exnor#EXNOR or NOT EXCLUSIVE OR sends TRUE signal when both of its inputs receive similar signal.
+bistable#Bistable initially sends TRUE signal from its first output and FALSE from the other one. When the first input receives a TRUE pulse, the first output becomes locked to FALSE and the second to TRUE. The initial state is restored when the reset input receives a TRUE pulse.
+binary#Binary Converter transforms the binary signal it receives through its 5 inputs and sends it as a numeric signal through the 10 outputs. The inputs are 0, 1, 2, 4 and 8 in that order and outputs go from 0 to 9. If the output would be larger than 9, the converter doesn't send any TRUE signal.

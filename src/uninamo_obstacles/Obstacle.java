@@ -243,6 +243,9 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements
 		getSpriteDrawer().setSpriteIndex(0, false);
 		setPosition(this.startPosition);
 		setMovement(new Movement(0, 0));
+		makeSolid();
+		setVisible();
+		activate();
 		resetStatus();
 	}
 	

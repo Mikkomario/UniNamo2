@@ -876,6 +876,21 @@ public abstract class DrawnObject extends GameObject implements Drawable
 	}
 	
 	/**
+	 * Copies transformations from another object, including position, rotation, 
+	 * scaling, shearing and alpha value (opacity)
+	 * 
+	 * @param other The object from which the transformations are copied from
+	 */
+	protected void copyTransformationsFrom(DrawnObject other)
+	{
+		setPosition(other.getPosition());
+		setAngle(other.getAngle());
+		setScale(other.getXScale(), other.getYScale());
+		setShear(other.getXShear(), other.getYShear());
+		setAlpha(other.getAlpha());
+	}
+	
+	/**
 	 * Draws all points in the given table. This method should be called in the 
 	 * drawSelfBasic -method
 	 *
