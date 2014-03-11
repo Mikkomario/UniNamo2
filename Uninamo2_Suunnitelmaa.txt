@@ -114,6 +114,7 @@ Työtehtäviä
 			* Ohjekirjan arkkitehtuuri
 				- Testikomponentin luominen ja poistaminen
 				- Sivun vaihtaminen
+					* Sivunäppäin
 				- Sivun tekeminen luokkana?
 					* Ehkä kirja voi olla linkitetty lista sivuja?
 						- Kirjanmerkit hakuja
@@ -121,6 +122,14 @@ Työtehtäviä
 					* Tekstin piirtäminen
 						- Checkkaa messagebox jos sieltä sais 
 						yleisen version väsättyä
+				- Ohjehallinta
+					* Sisältää
+						- Sivut listana
+						- Kirjanmerkit
+						- näppäimet
+						- taustan
+				- Ohjekirjan sulkeminen
+					* Sulkunäppäin
 			* Ohjekirjamoodin päälle asettaminen
 				- Muiden handlereiden epäaktivoiminen
 				- Oma area
