@@ -6,7 +6,7 @@ import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
 import uninamo_gameplaysupport.TestHandler;
-import uninamo_gameplaysupport.Testable;
+import uninamo_gameplaysupport.TestListener;
 import uninamo_gameplaysupport.Wall;
 import utopia_gameobjects.BouncingBasicPhysicDrawnObject;
 import utopia_graphic.MultiSpriteDrawer;
@@ -33,7 +33,7 @@ import utopia_worlds.Room;
  * @since 9.3.2014
  */
 public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements 
-	RoomListener, Testable
+	RoomListener, TestListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
@@ -225,7 +225,7 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements
 	 * The object should go into test mode in a reseted state
 	 */
 	@Override
-	public void startTesting()
+	public void onTestStart()
 	{
 		// Changes the object's graphics and starts it
 		getSpriteDrawer().setSpriteIndex(1, false);
@@ -236,7 +236,7 @@ public abstract class Obstacle extends BouncingBasicPhysicDrawnObject implements
 	 * The object should return from the test mode
 	 */
 	@Override
-	public void endTesting()
+	public void onTestEnd()
 	{
 		// Returns back to the original position and sprite
 		this.started = false;

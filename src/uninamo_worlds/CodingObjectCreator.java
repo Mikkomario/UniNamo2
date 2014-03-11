@@ -6,6 +6,7 @@ import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnTimer;
 import uninamo_main.GameSettings;
 import uninamo_userinterface.CodeTransitionButton;
+import uninamo_userinterface.ManualButton;
 import uninamo_userinterface.TestingButton;
 
 /**
@@ -66,5 +67,8 @@ public class CodingObjectCreator extends AreaObjectCreator
 		
 		new PulseGeneratorComponentBox(64, 30, area, this.testHandler, 
 				this.connectorRelay, this.timer);
+		
+		new ManualButton(GameSettings.screenWidth / 3, GameSettings.screenHeight, area.getDrawer(), 
+				area.getMouseHandler(), area);
 	}
 }

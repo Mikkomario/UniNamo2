@@ -3,7 +3,7 @@ package uninamo_userinterface;
 import java.awt.geom.Point2D;
 
 import uninamo_gameplaysupport.TestHandler;
-import uninamo_gameplaysupport.Testable;
+import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
@@ -20,7 +20,7 @@ import utopia_worlds.Room;
  * @author Mikko Hilpinen
  * @since 10.3.2014
  */
-public class TestingButton extends AbstractButton implements Testable
+public class TestingButton extends AbstractButton implements TestListener
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
@@ -76,9 +76,9 @@ public class TestingButton extends AbstractButton implements Testable
 				eventType == MouseButtonEventType.PRESSED)
 		{
 			if (this.testing)
-				this.testHandler.endTesting();
+				this.testHandler.onTestEnd();
 			else
-				this.testHandler.startTesting();
+				this.testHandler.onTestStart();
 		}
 	}
 
@@ -101,14 +101,14 @@ public class TestingButton extends AbstractButton implements Testable
 	}
 
 	@Override
-	public void startTesting()
+	public void onTestStart()
 	{
 		this.testing = true;
 		getSpriteDrawer().setImageIndex(1);
 	}
 
 	@Override
-	public void endTesting()
+	public void onTestEnd()
 	{
 		this.testing = false;
 		getSpriteDrawer().setImageIndex(0);

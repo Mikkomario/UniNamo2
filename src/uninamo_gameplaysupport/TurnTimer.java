@@ -14,7 +14,7 @@ import utopia_worlds.Room;
  * @author Mikko Hilpinen
  * @since 10.3.2014
  */
-public class TurnTimer extends TurnHandler implements RoomListener, Testable, 
+public class TurnTimer extends TurnHandler implements RoomListener, TestListener, 
 		TimerEventListener
 {
 	// ATTRIBUTES	------------------------------------------------------
@@ -68,14 +68,14 @@ public class TurnTimer extends TurnHandler implements RoomListener, Testable,
 	}
 
 	@Override
-	public void startTesting()
+	public void onTestStart()
 	{
 		// Resets the timer
 		this.timer.reset();
 	}
 
 	@Override
-	public void endTesting()
+	public void onTestEnd()
 	{
 		// Does nothing
 	}

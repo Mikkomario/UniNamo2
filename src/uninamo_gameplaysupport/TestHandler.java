@@ -9,7 +9,7 @@ import utopia_handlers.Handler;
  * @author Mikko Hilpinen
  * @since 10.3.2014
  */
-public class TestHandler extends Handler implements Testable
+public class TestHandler extends Handler implements TestListener
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
@@ -37,7 +37,7 @@ public class TestHandler extends Handler implements Testable
 	// IMPLEMENTED METHODS	---------------------------------------------
 
 	@Override
-	public void startTesting()
+	public void onTestStart()
 	{
 		// Informs the objects
 		this.lastEvent = START;
@@ -45,7 +45,7 @@ public class TestHandler extends Handler implements Testable
 	}
 
 	@Override
-	public void endTesting()
+	public void onTestEnd()
 	{
 		this.lastEvent = END;
 		handleObjects();
@@ -54,7 +54,7 @@ public class TestHandler extends Handler implements Testable
 	@Override
 	protected Class<?> getSupportedClass()
 	{
-		return Testable.class;
+		return TestListener.class;
 	}
 
 	@Override
@@ -62,9 +62,9 @@ public class TestHandler extends Handler implements Testable
 	{
 		// Informs the object about an event
 		if (this.lastEvent == START)
-			((Testable) h).startTesting();
+			((TestListener) h).onTestStart();
 		else
-			((Testable) h).endTesting();
+			((TestListener) h).onTestEnd();
 		
 		return true;
 	}
@@ -76,7 +76,7 @@ public class TestHandler extends Handler implements Testable
 	 * Adds the testable into the list of informed testables
 	 * @param t The testable to be informed
 	 */
-	public void addTestable(Testable t)
+	public void addTestable(TestListener t)
 	{
 		addHandled(t);
 	}

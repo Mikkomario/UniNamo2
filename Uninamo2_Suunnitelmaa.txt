@@ -110,7 +110,7 @@ Työtehtäviä
 			* VictoryHandler, joka chekkaa, onko kaikki voittolaitteet 		DONE
 			voittotilassa ja informoi lopullisen voiton
 		- Ohjekirja															...
-			* Ohjekirjan "näppäimen" toteuttaminen
+			* Ohjekirjan "näppäimen" toteuttaminen							...
 			* Ohjekirjan arkkitehtuuri
 				- Testikomponentin luominen ja poistaminen
 				- Sivun vaihtaminen

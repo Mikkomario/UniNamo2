@@ -16,7 +16,7 @@ transition#images/ui/transitionbutton_v2.png#1#300#75
 testing#images/ui/testbutton_strip2.png#2#80#24
 componentbox#images/ui/componentbox_strip2.png#2#57#24
 numbers#images/ui/numbers_strip10.png#10#16#16
-manual#images/ui/helpbutton.png#1#96#32
+manual#images/ui/helpbutton.png#1#96#64
 
 &machines
 belt#images/machines/belt_strip2.png#2#86#86
@@ -39,3 +39,4 @@ obstacles#images/manual/obstacles.png#32#80
 contents#images/manual/tableofcontetns.png#32#80
 manualback#images/manual/manualback.png#192#192
 contentstext#images/manual/tableofcontentstext.png#96#96
+close#images/manual/closebutton1.png#16#16

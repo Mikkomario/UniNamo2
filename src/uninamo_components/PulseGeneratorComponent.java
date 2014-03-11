@@ -80,9 +80,9 @@ public class PulseGeneratorComponent extends Component implements TurnBased
 	}
 	
 	@Override
-	public void startTesting()
+	public void onTestStart()
 	{
-		super.startTesting();
+		super.onTestStart();
 		
 		// Resets the signal on test start
 		this.lastSignalType = false;

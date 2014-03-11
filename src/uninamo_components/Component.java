@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
 import uninamo_gameplaysupport.TestHandler;
-import uninamo_gameplaysupport.Testable;
+import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
 import utopia_gameobjects.DimensionalDrawnObject;
 import utopia_graphic.SingleSpriteDrawer;
@@ -30,7 +30,7 @@ import utopia_worlds.Room;
  */
 public abstract class Component extends DimensionalDrawnObject implements
 		AdvancedMouseListener, SignalReceiver, SignalSender, RoomListener, 
-		Testable
+		TestListener
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
@@ -299,13 +299,13 @@ public abstract class Component extends DimensionalDrawnObject implements
 	}
 	
 	@Override
-	public void startTesting()
+	public void onTestStart()
 	{
 		this.testing = true;
 	}
 
 	@Override
-	public void endTesting()
+	public void onTestEnd()
 	{
 		this.testing = false;
 	}

@@ -1,5 +1,6 @@
 * This text file contains the short descriptions of each component ans stuff
 
+&components
 or#Logical OR component sends TRUE signal when either of its inputs is receiving TRUE signal.
 pulse#Pulse Generator sends pulses of TRUE and FALSE signal in succession. The length of a pulse can be changed.
 power#Power Generator always sends TRUE signal.

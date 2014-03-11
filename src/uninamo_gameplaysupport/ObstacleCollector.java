@@ -25,7 +25,7 @@ import utopia_resourcebanks.MultiMediaHolder;
  * @since 11.3.2014
  */
 public class ObstacleCollector extends DrawnObject implements CollisionListener, 
-	Testable, TransformationListener
+	TestListener, TransformationListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
@@ -197,7 +197,7 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 	}
 
 	@Override
-	public void startTesting()
+	public void onTestStart()
 	{
 		// Changes image & activates
 		this.spriteDrawer.setSpriteIndex(1, true);
@@ -206,7 +206,7 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 	}
 
 	@Override
-	public void endTesting()
+	public void onTestEnd()
 	{
 		this.spriteDrawer.setSpriteIndex(0, true);
 		this.numberDrawer.getSpriteDrawer().setImageIndex(this.neededAmount);

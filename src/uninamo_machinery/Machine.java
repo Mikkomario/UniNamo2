@@ -7,7 +7,7 @@ import uninamo_components.ConnectorRelay;
 import uninamo_components.MachineInputComponent;
 import uninamo_components.MachineOutputComponent;
 import uninamo_gameplaysupport.TestHandler;
-import uninamo_gameplaysupport.Testable;
+import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
 import uninamo_obstacles.Obstacle;
 import uninamo_worlds.Area;
@@ -31,7 +31,7 @@ import utopia_worlds.Room;
  * @since 9.3.2014
  */
 public abstract class Machine extends DimensionalDrawnObject implements 
-		RoomListener, Testable
+		RoomListener, TestListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
@@ -229,14 +229,14 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	}
 	
 	@Override
-	public void startTesting()
+	public void onTestStart()
 	{
 		// Changes the sprite
 		getSpriteDrawer().setSpriteIndex(1, false);
 	}
 
 	@Override
-	public void endTesting()
+	public void onTestEnd()
 	{
 		// Changes the sprite
 		getSpriteDrawer().setSpriteIndex(0, false);
