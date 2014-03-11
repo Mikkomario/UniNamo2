@@ -2,4 +2,4 @@
 * TODO: Add phases and banks
 
 &default
-gameplay#sprite:components,gameplaybackgrounds,gameplayinterface,machines,obstacles
+gameplay#sprite:components,gameplaybackgrounds,gameplayinterface,machines,obstacles,goals

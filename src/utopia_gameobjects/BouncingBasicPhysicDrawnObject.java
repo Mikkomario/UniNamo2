@@ -146,4 +146,14 @@ public abstract class BouncingBasicPhysicDrawnObject extends BasicPhysicDrawnObj
 				addWallFriction(oppmovement, frictionmodifier);
 		}
 	}
+	
+	/*
+	private void addCollisionFriction()
+	{
+		// The object has a speed (to oppforce +- 90 direction) (1)
+		// The other object also has speed (to that direction) (2)
+		// The object should move itself along the speed difference vector 1 - 2 multiplied 
+		// with friction modifier a
+	}
+	*/
 }

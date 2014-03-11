@@ -796,6 +796,29 @@ public abstract class DrawnObject extends GameObject implements Drawable
 	}
 	
 	/**
+	 * Transforms a set of relative points into absolute space
+	 * 
+	 * @param relativePoints a set of relative space points to be transformed
+	 * @return A table containing the given points transformed into absolute space
+	 */
+	protected Point2D.Double[] transformMultipleRelativePoints(Point2D.Double[] relativePoints)
+	{
+		// if relativepoints don't exist, sets up an empty table
+		if (relativePoints == null)
+			return new Point2D.Double[0];
+		
+		Point2D.Double[] absolutePoints = new Point2D.Double[relativePoints.length];
+		
+		// Transforms each of the points and adds them to the new table
+		for (int i = 0; i < relativePoints.length; i++)
+		{
+			absolutePoints[i] = transform(relativePoints[i]);
+		}
+		
+		return absolutePoints;
+	}
+	
+	/**
 	 * @return An affineTransform matrix opposite to the object's normal 
 	 * transformation. This may be used in cameras for example
 	 */

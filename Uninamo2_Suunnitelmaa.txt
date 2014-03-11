@@ -188,6 +188,10 @@ Työtehtäviä
 				- Näppäinkuuntelija
 				- Hiirikuuntelija
 		- Mainokset uusien laitteiden kanssa
+		- Jokaisella kentällä rajattu budjetti ja kaikki 
+		komponentit maksaa
+			* Myös erinomaiset mikrotransaktiomahdollisuudet
+			* Raha voi olla ihan yleinen resurssi
 	
 Komponentteja
 	* Looginen
