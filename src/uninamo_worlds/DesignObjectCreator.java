@@ -85,25 +85,26 @@ public class DesignObjectCreator extends AreaObjectCreator
 				area.getCollisionHandler(), this.areaChanger.getArea("coding"), 
 				area, this.testHandler, this.connectorRelay);
 		
-		
-		new Box(400, 200, area.getDrawer(), 
+		/*
+		new Box(430, 200, area.getDrawer(), 
 				area.getCollisionHandler().getCollidableHandler(), 
 				area.getCollisionHandler(), area.getActorHandler(), area, 
 				this.testHandler);
-		/*
+		
+		*//*
 		new Box(600, 200, area.getDrawer(), 
 				area.getCollisionHandler().getCollidableHandler(), 
 				area.getCollisionHandler(), area.getActorHandler(), area, 
 				this.testHandler);
 		*/
-		/*
-		for (int i = 0; i < 62; i++)
+		
+		for (int i = 0; i < 5; i++)
 		{
 			new Box(400, 200 - 200 * i, area.getDrawer(), 
 					area.getCollisionHandler().getCollidableHandler(), 
 					area.getCollisionHandler(), area.getActorHandler(), area, 
 					this.testHandler);
 		}
-		*/
+		
 	}
 }

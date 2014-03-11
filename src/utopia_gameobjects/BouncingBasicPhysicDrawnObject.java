@@ -98,10 +98,25 @@ public abstract class BouncingBasicPhysicDrawnObject extends BasicPhysicDrawnObj
 		// Calculates the direction, towards which the force is applied
 		double forcedir = p.getCollisionForceDirection(collisionpoint);
 		
+		//System.out.println("Opporigi" + forcedir);
+		
+		//System.out.println(getMovement().getDirectionalMovement(forcedir).getDirection());
+		
 		// Calculates the actual amount of force applied to the object
 		Movement oppmovement = Movement.getMultipliedMovement(
 				getMovement().getOpposingMovement().getDirectionalMovement(
 				forcedir), steps);
+		
+		// If the object would be pushed inside the collided object, doesn't 
+		// do anything
+		if (HelpMath.getAngleDifference180(oppmovement.getDirection(), forcedir) >= 45)
+		{
+			//System.out.println("Skips the push");
+			return;
+		}
+		
+		//System.out.println("Oppforce: " + oppmovement.getDirection());
+		//System.out.println(forcedir != oppmovement.getDirection());
 		
 		// Applies some of the force as compensation movement
 		if (compenstationMovementFactor != 0)

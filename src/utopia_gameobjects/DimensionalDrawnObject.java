@@ -130,9 +130,11 @@ public abstract class DimensionalDrawnObject extends DrawnObject implements Phys
 		if (this.collisiontype == CollisionType.CIRCLE)
 			return HelpMath.pointDirection(getX(), getY(), 
 					collisionpoint.x, collisionpoint.y);
+		
 		// Walls simply push the object to the right (relative)
 		else if (this.collisiontype == CollisionType.WALL)
 			return getAngle();
+		
 		// Boxes are the most complicated
 		else if (this.collisiontype == CollisionType.BOX)
 		{
@@ -142,7 +144,20 @@ public abstract class DimensionalDrawnObject extends DrawnObject implements Phys
 			double relydiffer = -0.5 + relativepoint.y / getHeight();
 			
 			// Returns drection of one of the sides of the object
-			if (Math.abs(relxdiffer) >= Math.abs(relydiffer))
+			if (Math.abs(relxdiffer) == Math.abs(relydiffer))
+			{
+				System.out.println("Secret collision");
+				
+				if (relxdiffer >= 0 && relydiffer >= 0)
+					return HelpMath.checkDirection(getAngle() + 45);
+				else if (relxdiffer <= 0 && relydiffer >= 0)
+					return HelpMath.checkDirection(getAngle() + 135);
+				else if (relxdiffer <= 0 && relydiffer <= 0)
+					return HelpMath.checkDirection(getAngle() + 225);
+				else
+					return HelpMath.checkDirection(getAngle() + 315);
+			}
+			else if (Math.abs(relxdiffer) > Math.abs(relydiffer))
 			{
 				if (relxdiffer >= 0)
 					return getAngle();

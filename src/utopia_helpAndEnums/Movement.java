@@ -193,6 +193,16 @@ public class Movement
 	{
 		double newspeed = HelpMath.getDirectionalForce(getDirection(), 
 				getSpeed(), direction);
+		
+		/*
+		if (newspeed < 0)
+		{
+			System.out.println("Negative speed");
+			System.out.println("OppMoveDir" + getDirection());
+			System.out.println("Angledifference: " + HelpMath.getAngleDifference180(direction, getDirection()));
+		}
+		*/
+		
 		return createMovement(direction, newspeed);
 	}
 	

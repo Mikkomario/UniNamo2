@@ -204,6 +204,8 @@ public abstract class Machine extends DimensionalDrawnObject implements
 			return;
 		
 		this.spritedrawer.drawSprite(g2d, 0, 0);
+		
+		drawCollisionArea(g2d);
 	}
 	
 	@Override
