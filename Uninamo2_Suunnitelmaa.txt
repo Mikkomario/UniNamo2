@@ -145,7 +145,7 @@ Työtehtäviä
 				- Testikomponentille tekstiä								DONE
 				- Testiobjektille tekstiä
 				- Testilaitteelle tekstiä
-			* Ohjekirjan materiaalin lataaminen tiedostosta					...
+			* Ohjekirjan materiaalin lataaminen tiedostosta					DONE
 			* Näpyteltävä testiversio										DONE
 				- "Haihtuva" johtoluokka									DONE
 				- Erillinen statsi inputnastaan, että klikkauksella 		Hylätty

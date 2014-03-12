@@ -99,11 +99,13 @@ public class ManualMaster extends GameObject
 				manualArea.getDrawer()), new SimplePage(rightPageX, pageY, 
 				MultiMediaHolder.getSpriteBank("manual").getSprite("signals"), 
 				manualArea.getDrawer())));
+		
 		// Creates a component page for testing
+		ComponentInfoHolder componentData = new ComponentInfoHolder();
 		this.pages.add(new DoublePage(new EmptyPage(), 
 				new ComponentPage(rightPageX, pageY, manualArea.getDrawer(), 
 				manualArea.getActorHandler(), manualArea.getMouseHandler(), 
-				manualArea, turnHandler, ComponentType.OR)));
+				manualArea, turnHandler, ComponentType.OR, componentData)));
 		
 		// Opens the first doublePage
 		this.pages.get(this.currentPageIndex).open();

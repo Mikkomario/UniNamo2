@@ -116,7 +116,7 @@ public class ComponentBox extends AbstractButton
 		// Also draws the text
 		g2d.setFont(GameSettings.basicFont);
 		g2d.setColor(Color.WHITE);
-		g2d.drawString(this.componentType.getName(), 5, 28);
+		g2d.drawString(this.componentType.toString(), 5, 28);
 	}
 	
 	

@@ -53,11 +53,13 @@ public class ComponentPage extends DrawnObject implements Page
 	 * about turn events
 	 * @param featuredType The ComponentType that will be demonstrated on this 
 	 * page
+	 * @param componentData The infoHolder that holds the data regarding the 
+	 * components
 	 */
 	public ComponentPage(int x, int y, DrawableHandler drawer, 
 			ActorHandler actorHandler, MouseListenerHandler mouseHandler, 
 			Room room, TurnHandler turnHandler, 
-			ComponentType featuredType)
+			ComponentType featuredType, ComponentInfoHolder componentData)
 	{
 		super(x, y, DepthConstants.NORMAL, drawer);
 		
@@ -70,7 +72,7 @@ public class ComponentPage extends DrawnObject implements Page
 		this.turnHandler = turnHandler;
 		this.room = room;
 		this.textDrawer = new TextDrawer(
-				"Here we will present cool data about the component shown above", 
+				componentData.getComponentData(featuredType), 
 				GameSettings.basicFont, Color.BLACK, 
 				ManualMaster.MANUALWIDTH / 2 - 50);
 		
@@ -85,7 +87,7 @@ public class ComponentPage extends DrawnObject implements Page
 	public void open()
 	{
 		this.testComponent = this.featuredComponentType.getNewComponent(
-				(int) getX(), (int) getY() - 100, this.drawer, this.actorHandler, 
+				(int) getX(), (int) getY() - 128, this.drawer, this.actorHandler, 
 				this.mouseHandler, this.room, null, null, this.turnHandler, true);
 		setVisible();
 	}
@@ -115,6 +117,9 @@ public class ComponentPage extends DrawnObject implements Page
 		// Draws the text
 		if (this.textDrawer != null)
 			this.textDrawer.drawText(g2d, 32, 200);
+		
+		// Draws the headline
+		g2d.drawString(this.featuredComponentType.getName(), 32, 50);
 	}
 
 	@Override
