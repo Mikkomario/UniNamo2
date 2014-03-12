@@ -37,12 +37,14 @@ public class MachinePage extends DescriptionPage implements Page
 	 * about step events
 	 * @param area The area where the manual is located at
 	 * @param featuredMachineType The MachineType shown on this page
+	 * @param infoHolder MachineInfoHolder that contains the descriptions of machines
 	 */
 	public MachinePage(int x, int y, DrawableHandler drawer, 
 			ActorHandler actorHandler, Area area, 
-			MachineType featuredMachineType)
+			MachineType featuredMachineType, MachineInfoHolder infoHolder)
 	{
-		super(x, y, drawer, area, new TextDrawer("This is a short description", 
+		super(x, y, drawer, area, new TextDrawer(
+				infoHolder.getMachineDescription(featuredMachineType), 
 				GameSettings.basicFont, Color.BLACK, ManualMaster.MANUALWIDTH 
 				/ 2 - 50), featuredMachineType.getName());
 		

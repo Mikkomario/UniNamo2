@@ -75,9 +75,6 @@ public abstract class OpenBankHolder extends FileReader
 	@Override
 	protected void onLine(String line)
 	{
-		// If the line starts with '*', skips it
-		if (line.startsWith("*"))
-			return;
 		// If the line starts with '&' ends the last bank and starts a new bank
 		if (line.startsWith("&")) {
 			if (this.lastbankname != null) {
@@ -144,7 +141,7 @@ public abstract class OpenBankHolder extends FileReader
 		this.initialized = true;
 		
 		// Reads the file
-		readFile(this.filename);
+		readFile(this.filename, "*");
 		// Adds the last Bank and releases the memory
 		if (this.lastcommands.size() > 0)
 		{

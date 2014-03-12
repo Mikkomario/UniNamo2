@@ -1,0 +1,3 @@
+* This file has the instructions for each machine in the game
+
+conveyorbelt#Conveyor Belt pushes objects above it either left or right depending on the inputs. The first input determines whether the belt should roll or not and the second input determines the direction (FALSE = right, TRUE = left).

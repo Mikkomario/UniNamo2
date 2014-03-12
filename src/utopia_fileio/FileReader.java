@@ -56,8 +56,9 @@ public abstract class FileReader
 	 *
 	 * @param filename The name of the file read (data/ is added 
 	 * automatically to the beginning)
+	 * @param commentIndicator The lines starting with this string will be ignored as comments
 	 */
-	public void readFile(String filename)
+	public void readFile(String filename, String commentIndicator)
 	{
 		// First checks if the file actually exists
 		File file = new File("data/" + filename);
@@ -85,6 +86,10 @@ public abstract class FileReader
 			
 			// Skips the empty lines
 			if (line.length() == 0)
+				continue;
+			
+			// Skips the lines recognised as comments
+			if (commentIndicator != null && line.startsWith(commentIndicator))
 				continue;
 			
 			onLine(line);

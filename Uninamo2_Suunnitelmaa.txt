@@ -141,12 +141,11 @@ Työtehtäviä
 			* Alustavan sisällön tuottaminen								...
 				- Tarvittavat enumeraatiot komponenteille, laitteille ja 	...
 				obstacleille
-					* getDescription
 					* getName												...
-					* createObject											...
+					* createObject											DONE
 				- Testikomponentille tekstiä								DONE
 				- Testiobjektille tekstiä
-				- Testilaitteelle tekstiä
+				- Testilaitteelle tekstiä									DONE
 			* Ohjekirjan materiaalin lataaminen tiedostosta					DONE
 			* Näpyteltävä testiversio										DONE
 				- "Haihtuva" johtoluokka									DONE

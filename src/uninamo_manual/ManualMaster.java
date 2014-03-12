@@ -109,10 +109,11 @@ public class ManualMaster extends GameObject
 				manualArea, turnHandler, ComponentType.OR, componentData)));
 		
 		// Creates a machine page for testing
+		MachineInfoHolder machineData = new MachineInfoHolder();
 		this.pages.add(new DoublePage(new EmptyPage(), 
 				new MachinePage(rightPageX, pageY, manualArea.getDrawer(), 
 				manualArea.getActorHandler(), 
-				manualArea, MachineType.CONVEYORBELT)));
+				manualArea, MachineType.CONVEYORBELT, machineData)));
 		
 		// Opens the first doublePage
 		this.pages.get(this.currentPageIndex).open();
