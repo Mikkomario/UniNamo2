@@ -18,7 +18,11 @@ Työtehtäviä
 			Point2D.Doubleen
 			* Boxit vaan liukuu jos ne on päällekkäin 
 			(laita liikuttaminen toisiin objekteihin)
-			* Ohjelma bugaa täydellisesti jos laittaa toisen beltin
+			* Ohjelma bugaa täydellisesti jos laittaa toisen beltin			DONE
+			* Boxit saattaa vieläkin työntyä liukuhihnan sisälle 
+			törmäystilanteissa
+			* Jos rämppää testiä koodimoodissa niin designmoodi piirtyy 
+			vaikka ei pitäisi
 		- Alkuvalmistelut													DONE
 			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE
@@ -110,8 +114,8 @@ Työtehtäviä
 			* VictoryHandler, joka chekkaa, onko kaikki voittolaitteet 		DONE
 			voittotilassa ja informoi lopullisen voiton
 		- Ohjekirja															...
-			* Ohjekirjan "näppäimen" toteuttaminen							...
-			* Ohjekirjan arkkitehtuuri
+			* Ohjekirjan "näppäimen" toteuttaminen							DONE
+			* Ohjekirjan arkkitehtuuri										...
 				- Testikomponentin luominen ja poistaminen
 				- Sivun vaihtaminen
 					* Sivunäppäin
@@ -122,19 +126,19 @@ Työtehtäviä
 					* Tekstin piirtäminen
 						- Checkkaa messagebox jos sieltä sais 
 						yleisen version väsättyä
-				- Ohjehallinta
+				- Ohjehallinta												...
 					* Sisältää
 						- Sivut listana
 						- Kirjanmerkit
-						- näppäimet
-						- taustan
-				- Ohjekirjan sulkeminen
-					* Sulkunäppäin
-			* Ohjekirjamoodin päälle asettaminen
-				- Muiden handlereiden epäaktivoiminen
-				- Oma area
-			* Alustavan sisällön tuottaminen
-				- Testikomponentille tekstiä
+						- näppäimet											...
+						- taustan											DONE
+				- Ohjekirjan sulkeminen										DONE
+					* Sulkunäppäin											DONE
+			* Ohjekirjamoodin päälle asettaminen							DONE
+				- Muiden handlereiden epäaktivoiminen						DONE
+				- Oma area													DONE
+			* Alustavan sisällön tuottaminen								...
+				- Testikomponentille tekstiä								DONE
 				- Testiobjektille tekstiä
 				- Testilaitteelle tekstiä
 			* Ohjekirjan materiaalin lataaminen tiedostosta					...
@@ -144,16 +148,6 @@ Työtehtäviä
 				vaihtaa tyyppiä
 		- Tee designmodesta resoluutiosta riippumaton (tullaan tulevaisuudessa 
 		skaalaamaan eri tavalla kuin coding)
-		- Säädöt
-			* Säätövalikon "näppäimen" toteuttaminen
-			* Säätövalikon arkkitehtuuri
-			* Säätövalikon moodin päälle asettaminen
-			* Säätövalikossa tarvittavat elementit
-			* Resoluution säätäminen
-			* Musiikin volyymin säätäminen
-			* Äänen volyymin säätäminen
-			* Efektien volyymin säätäminen
-			* Fullscreenin säätö
 		- Tehtävänannot
 			* Tehtävänantoarkkitehruuri
 			* Yksinkertaisen testitehtävänannon valmistaminen
@@ -183,12 +177,22 @@ Työtehtäviä
 				- Komponenttilaatikoiden luomisessa ilman erillisiä luokkia
 				- Ohjeiden lukemisessa
 	* Gold	---------------------------------------------------------------------
+		- Main menu
+			* Säätöihin, tehtävävalikkoon sekä kenttäeditoriin pääsy
+		- Säädöt
+			* Säätövalikon "näppäimen" toteuttaminen
+			* Säätövalikon arkkitehtuuri
+			* Säätövalikon moodin päälle asettaminen
+			* Säätövalikossa tarvittavat elementit
+			* Resoluution säätäminen
+			* Musiikin volyymin säätäminen
+			* Äänen volyymin säätäminen
+			* Efektien volyymin säätäminen
+			* Fullscreenin säätö
 		- Tehtävien valitseminen
 			* Tehtävien valintaympäristön luominen
 			* Tehtävän lopettaminen
 			* Tehtävän aloittaminen
-		- Main menu
-			* Säätöihin, tehtävävalikkoon sekä kenttäeditoriin pääsy
 		- Gold Graffat
 			* Komponentit
 			* Laitteet
@@ -303,6 +307,7 @@ Koneita
 		- Voi esim. jäädyttää kuplia
 	* Keksikone
 	* Magneutin
+	* Horisontaalinen hissi
 Objekteja
 	* Pigviini
 	* Rosvopigni

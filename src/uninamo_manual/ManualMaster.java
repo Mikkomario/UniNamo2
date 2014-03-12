@@ -3,7 +3,7 @@ package uninamo_manual;
 import uninamo_main.GameSettings;
 import uninamo_worlds.Area;
 import uninamo_worlds.AreaChanger;
-import utopia_backgrounds.Background;
+import utopia_backgrounds.Tile;
 import utopia_gameobjects.GameObject;
 import utopia_resourcebanks.MultiMediaHolder;
 
@@ -18,9 +18,11 @@ public class ManualMaster extends GameObject
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
-	private Background manualBack;
+	private Tile manualBack;
 	private AreaChanger areaChanger;
 	// TODO: Add page list
+	
+	private static final int MANUALWIDTH = 600, MANUALHEIGHT = 500;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -36,15 +38,23 @@ public class ManualMaster extends GameObject
 	{
 		super();
 		
+		// Starts the manual area
 		Area manualArea = areaChanger.getArea("manual");
+		manualArea.start();
 		
 		// Initializes attributes
 		this.areaChanger = areaChanger;
-		this.manualBack = new Background(GameSettings.screenWidth / 2, 
+		this.manualBack = new Tile(GameSettings.screenWidth / 2, 
 				GameSettings.screenHeight / 2, manualArea.getDrawer(), 
 				manualArea.getActorHandler(), 
 				MultiMediaHolder.getSpriteBank("manual"), 
-				"manualback");
+				"manualback", MANUALWIDTH, MANUALHEIGHT);
+		
+		// Creates stuff
+		new ManualCloseButton(GameSettings.screenWidth / 2 + MANUALWIDTH / 2 - 20, 
+				GameSettings.screenHeight / 2 - MANUALHEIGHT / 2 + 20, 
+				manualArea.getDrawer(), manualArea.getMouseHandler(), 
+				manualArea, this);
 		
 		// Deactivates the coding area
 		areaChanger.getArea("coding").disableOnlyMouse();
@@ -58,6 +68,7 @@ public class ManualMaster extends GameObject
 	{
 		// Kills the background and other stuff and returns to the coding area
 		this.manualBack.kill();
+		//System.out.println("Ends manual, starts coding");
 		this.areaChanger.getArea("manual").end();
 		this.areaChanger.getArea("coding").returnNormal();
 	}

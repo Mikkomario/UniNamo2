@@ -172,13 +172,30 @@ public class Room extends Handler
 	}
 	
 	/**
-	 * Adds a new object to the room. If the object is an (active) roomlistener, 
+	 * Adds a new object to the room. If the object is a roomListener, 
 	 * it will be automatically informed about the events in the room.
 	 *
 	 * @param g The object to be added
 	 */
 	public void addObject(GameObject g)
 	{
+		// If the object is active and the room isn't, inactivates the object
+		if (!this.active)
+		{
+			if (g instanceof LogicalHandled)
+			{
+				LogicalHandled l = (LogicalHandled) g;
+				if (l.isActive())
+					l.inactivate();
+			}
+			if (g instanceof Drawable)
+			{
+				Drawable d = (Drawable) g;
+				if (d.isVisible())
+					d.setInvisible();
+			}
+		}
+		
 		addHandled(g);
 		// If the object is a roomlistener, adds it to the listenerhandler as well
 		if (g instanceof RoomListener)
@@ -237,9 +254,13 @@ public class Room extends Handler
 	 */
 	public void end()
 	{
+		//System.out.println("Tries to end a room");
+		
 		// If the room had already been ended, nothing happens
 		if (!this.active)
 			return;
+		
+		//System.out.println("Ending room");
 		
 		endDisable();
 		
@@ -249,6 +270,8 @@ public class Room extends Handler
 		
 		this.active = false;
 		uninitialize();
+		
+		//System.out.println("Room ended");
 	}
 	
 	/**

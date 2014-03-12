@@ -123,6 +123,7 @@ public abstract class AbstractButton extends DimensionalDrawnObject implements
 	@Override
 	public void onRoomEnd(Room room)
 	{
+		//System.out.println("Button room ends");
 		// Dies at the end of the room
 		kill();
 	}
