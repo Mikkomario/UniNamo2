@@ -25,6 +25,8 @@ Työtehtäviä
 				työntää
 			* Jos rämppää testiä koodimoodissa niin designmoodi piirtyy 
 			vaikka ei pitäisi
+			* Boxit "hypähtelee" tai "rävähtää" silloin tällöin sivulle 
+			muutaman framen ajaksi
 		- Alkuvalmistelut													DONE
 			* Repositoryn luominen											DONE
 			* Ikkunan luominen												DONE

@@ -1,12 +1,13 @@
 package uninamo_manual;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 
+import uninamo_main.GameSettings;
 import uninamo_worlds.Area;
 import utopia_gameobjects.DrawnObject;
 import utopia_gameobjects.GameObject;
 import utopia_graphic.TextDrawer;
-import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.DepthConstants;
 
 /**
@@ -34,20 +35,19 @@ public abstract class DescriptionPage extends DrawnObject implements Page
 	 * 
 	 * @param x The x-coordinate of the center of the page
 	 * @param y The y-coordinate of the center of the page
-	 * @param drawer The drawableHandler that will draw the page
 	 * @param area The area the page is on
-	 * @param textDrawer The textDrawer that will draw the text shown on the 
-	 * page
+	 * @param description the description on the page
 	 * @param pagename The name shown at the top of the page 
 	 */
-	public DescriptionPage(int x, int y, DrawableHandler drawer, Area area, 
-			TextDrawer textDrawer, String pagename)
+	public DescriptionPage(int x, int y, Area area, 
+			String description, String pagename)
 	{
-		super(x, y, DepthConstants.NORMAL, drawer);
+		super(x, y, DepthConstants.NORMAL, area.getDrawer());
 		
 		// Initializes attributes
 		this.testObject = null;
-		this.textDrawer = textDrawer;
+		this.textDrawer = new TextDrawer(description, GameSettings.basicFont, 
+				Color.BLACK, ManualMaster.MANUALWIDTH / 2 - 50);
 		this.area = area;
 		this.pagename = pagename;
 		

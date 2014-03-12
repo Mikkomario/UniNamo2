@@ -1,0 +1,62 @@
+package uninamo_manual;
+
+import uninamo_gameplaysupport.SpriteDrawerObject;
+import uninamo_obstacles.ObstacleType;
+import uninamo_worlds.Area;
+import utopia_gameobjects.GameObject;
+import utopia_helpAndEnums.DepthConstants;
+
+/**
+ * ObstaclePage shows information about a certain obstacle
+ * 
+ * @author Mikko Hilpinen
+ * @since 12.3.2014
+ */
+public class ObstaclePage extends DescriptionPage
+{
+	// ATTRIBUTES	-----------------------------------------------------
+	
+	private SpriteDrawerObject imageDrawer;
+	
+	
+	// CONSTRUCTOR	-----------------------------------------------------
+	
+	/**
+	 * Creates a new obstaclePage to the given position
+	 * 
+	 * @param x The x-coordinate of the center of the page
+	 * @param y The y-coordinate of the center of the page
+	 * @param area The area where the page is located at
+	 * @param featuredType The type of obstacle shown on the page
+	 */
+	public ObstaclePage(int x, int y, Area area, ObstacleType featuredType)
+	{
+		super(x, y, area, "Description will be here", featuredType.getName());
+		
+		// Initializes attributes
+		this.imageDrawer = new SpriteDrawerObject(DepthConstants.FOREGROUND, 
+				area.getDrawer(), area.getActorHandler(), this, featuredType.getSprite());
+		double scale = 100.0 / this.imageDrawer.getSpriteDrawer().getSprite().getHeight();
+		this.imageDrawer.setScale(scale, scale);
+		this.imageDrawer.setPosition(getX(), getY() - 100);
+		
+		setInvisible();
+	}
+	
+	
+	// IMPLEMENTED METHODS	-----------------------------------------------
+
+	@Override
+	protected GameObject createTestObject(Area area)
+	{
+		// Doesn't create a testObject
+		return null;
+	}
+
+	@Override
+	public void kill()
+	{
+		// Also kills the imageDrawer
+		this.imageDrawer.kill();
+	}
+}

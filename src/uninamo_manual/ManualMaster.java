@@ -6,6 +6,7 @@ import uninamo_components.ComponentType;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_machinery.MachineType;
 import uninamo_main.GameSettings;
+import uninamo_obstacles.ObstacleType;
 import uninamo_userinterface.ManualButton;
 import uninamo_worlds.Area;
 import uninamo_worlds.AreaChanger;
@@ -104,16 +105,18 @@ public class ManualMaster extends GameObject
 		// Creates a component page for testing
 		ComponentInfoHolder componentData = new ComponentInfoHolder();
 		this.pages.add(new DoublePage(new EmptyPage(), 
-				new ComponentPage(rightPageX, pageY, manualArea.getDrawer(), 
-				manualArea.getActorHandler(), manualArea.getMouseHandler(), 
-				manualArea, turnHandler, ComponentType.OR, componentData)));
+				new ComponentPage(rightPageX, pageY, manualArea, turnHandler, 
+				ComponentType.OR, componentData)));
 		
 		// Creates a machine page for testing
 		MachineInfoHolder machineData = new MachineInfoHolder();
 		this.pages.add(new DoublePage(new EmptyPage(), 
-				new MachinePage(rightPageX, pageY, manualArea.getDrawer(), 
-				manualArea.getActorHandler(), 
+				new MachinePage(rightPageX, pageY, 
 				manualArea, MachineType.CONVEYORBELT, machineData)));
+		
+		// Creates an obstacle page for testing
+		this.pages.add(new DoublePage(new EmptyPage(), new ObstaclePage(
+				rightPageX, pageY, manualArea, ObstacleType.BOX)));
 		
 		// Opens the first doublePage
 		this.pages.get(this.currentPageIndex).open();

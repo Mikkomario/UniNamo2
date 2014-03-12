@@ -110,7 +110,7 @@ public abstract class Machine extends DimensionalDrawnObject implements
 			//System.out.println(position);
 			//System.out.println(componentArea);
 			
-			new MachineInputComponent((int) position.getX(), 
+			this.input = new MachineInputComponent((int) position.getX(), 
 					(int) position.getY(), componentArea.getDrawer(), 
 					componentArea.getActorHandler(), componentArea.getMouseHandler(), 
 					componentArea, testHandler, connectorRelay, 
@@ -228,15 +228,23 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	@Override
 	public void kill()
 	{
+		//System.out.println("Machine killed");
+		//System.out.println(this.input);
+		//System.out.println(this.output);
+		
 		// Also kills the components (which also affects the counters)
 		if (this.input != null)
 		{
+			//System.out.println("Machineinput killed");
+			
 			this.input.kill();
 			this.input = null;
 			inputComponentsCreated --;
 		}
 		if (this.output != null)
 		{
+			//System.out.println("Machineoutput killed");
+			
 			this.output.kill();
 			this.output = null;
 			outputComponentsCreated --;

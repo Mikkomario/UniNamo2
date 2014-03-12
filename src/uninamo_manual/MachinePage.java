@@ -1,15 +1,9 @@
 package uninamo_manual;
 
-import java.awt.Color;
-
 import uninamo_machinery.Machine;
 import uninamo_machinery.MachineType;
-import uninamo_main.GameSettings;
 import uninamo_worlds.Area;
 import utopia_gameobjects.GameObject;
-import utopia_graphic.TextDrawer;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
 
 /**
  * MachinePage features a single machine and contains a short description as 
@@ -32,21 +26,16 @@ public class MachinePage extends DescriptionPage implements Page
 	 * 
 	 * @param x The x-coordinate of the center of the page
 	 * @param y The y-coordinate of teh center of the page
-	 * @param drawer The drawableHandler that will draw the page
-	 * @param actorHandler The actorHandler that will inform the test machine 
-	 * about step events
 	 * @param area The area where the manual is located at
 	 * @param featuredMachineType The MachineType shown on this page
 	 * @param infoHolder MachineInfoHolder that contains the descriptions of machines
 	 */
-	public MachinePage(int x, int y, DrawableHandler drawer, 
-			ActorHandler actorHandler, Area area, 
+	public MachinePage(int x, int y, Area area, 
 			MachineType featuredMachineType, MachineInfoHolder infoHolder)
 	{
-		super(x, y, drawer, area, new TextDrawer(
+		super(x, y, area, 
 				infoHolder.getMachineDescription(featuredMachineType), 
-				GameSettings.basicFont, Color.BLACK, ManualMaster.MANUALWIDTH 
-				/ 2 - 50), featuredMachineType.getName());
+				featuredMachineType.getName());
 		
 		// Initializes attributes
 		this.featuredType = featuredMachineType;
