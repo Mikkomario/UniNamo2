@@ -3,17 +3,11 @@ package utopia_interfaceElements;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.font.FontRenderContext;
-import java.awt.font.LineBreakMeasurer;
-import java.awt.font.TextAttribute;
-import java.awt.font.TextLayout;
-import java.text.AttributedCharacterIterator;
-import java.text.AttributedString;
 
 import utopia_gameobjects.DrawnObject;
 import utopia_graphic.SingleSpriteDrawer;
 import utopia_graphic.Sprite;
+import utopia_graphic.TextDrawer;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 
@@ -37,11 +31,7 @@ public class MessageBox extends DrawnObject
 	protected static final int MARGIN = 15;
 	
 	private SingleSpriteDrawer spritedrawer;
-	private String message;
-	// The iterator used in drawing the message on the box
-	private AttributedCharacterIterator styledtextiterator;
-	private Font font;
-	private Color color;
+	private TextDrawer textDrawer;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -71,14 +61,8 @@ public class MessageBox extends DrawnObject
 		// Initializes the attributes
 		this.spritedrawer = new SingleSpriteDrawer(backgroundsprite, 
 				actorhandler, this);
-		this.message = message + "";
-		this.font = textfont;
-		this.color = textcolor;
-		
-		AttributedString attstring = new AttributedString(this.message);
-		attstring.addAttribute(TextAttribute.FONT, this.font);
-		
-		this.styledtextiterator = attstring.getIterator();
+		this.textDrawer = new TextDrawer(message + "", textfont, textcolor, 
+				this.spritedrawer.getSprite().getWidth() - MARGIN);
 		
 		// Adds the object to the handler(s)
 		if (drawer != null)
@@ -115,47 +99,8 @@ public class MessageBox extends DrawnObject
 		if (this.spritedrawer != null)
 			this.spritedrawer.drawSprite(g2d, 0, 0);
 		
-		// And then the text
-		g2d.setFont(this.font);
-		g2d.setColor(this.color);
-		
-		// From: http://docs.oracle.com/javase/7/docs/api/java/awt/font/LineBreakMeasurer.html
-		Point pen = new Point(MARGIN, MARGIN);
-		FontRenderContext frc = g2d.getFontRenderContext();
-
-		// "let styledText be an AttributedCharacterIterator containing at least
-		// one character"
-		
-		LineBreakMeasurer measurer = new LineBreakMeasurer(this.styledtextiterator, frc);
-		float wrappingWidth = this.spritedrawer.getSprite().getWidth() - MARGIN;
-		
-		while (measurer.getPosition() < this.message.length()/*fStyledText.length()*/)
-		{
-			TextLayout layout = measurer.nextLayout(wrappingWidth);
-		
-		    pen.y += (layout.getAscent());
-		    float dx = layout.isLeftToRight() ?
-		    		 0 : (wrappingWidth - layout.getAdvance());
-		
-		    layout.draw(g2d, pen.x + dx, pen.y);
-		    pen.y += layout.getDescent() + layout.getLeading();
-		}
-		
-		// From oracle docs: 
-		// http://docs.oracle.com/javase/7/docs/api/java/awt/font/TextLayout.html
-		/*
-		FontRenderContext frc = g2d.getFontRenderContext();
-		TextLayout layout = new TextLayout(this.message, this.font, frc);
-		layout.draw(g2d, (float) topLeft.getX(), (float) topLeft.getY());
-
-		Rectangle2D bounds = layout.getBounds();
-		bounds.setRect(
-				bounds.getX() + topLeft.getX(), 
-				bounds.getY() + topLeft.getY(), 
-				bounds.getWidth(), bounds.getHeight());
-		g2d.draw(bounds);
-		*/
-		//g2d.setFont(this.font);
-		//g2d.drawString(this.message, - getOriginX(), - getOriginY());
+		// And the text
+		if (this.textDrawer != null)
+			this.textDrawer.drawText(g2d, MARGIN, MARGIN);
 	}
 }

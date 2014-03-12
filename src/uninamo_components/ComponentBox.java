@@ -1,11 +1,9 @@
-package uninamo_componentBoxes;
+package uninamo_components;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
-import uninamo_components.ComponentType;
-import uninamo_components.ConnectorRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_main.GameSettings;

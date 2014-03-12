@@ -1,6 +1,6 @@
 package uninamo_worlds;
 
-import uninamo_componentBoxes.ComponentBox;
+import uninamo_components.ComponentBox;
 import uninamo_components.ComponentType;
 import uninamo_components.ConnectorRelay;
 import uninamo_gameplaysupport.TestHandler;
