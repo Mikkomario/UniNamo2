@@ -60,11 +60,7 @@ public class ManualButton extends AbstractButton implements TestListener
 	{
 		// On left click goes to the manual
 		if (button == MouseButton.LEFT && eventType == MouseButtonEventType.PRESSED)
-		{
-			System.out.println("Goes to manual");
-			// TODO: Go to manual
-			new ManualMaster(this.areaChanger);
-		}
+			new ManualMaster(this.areaChanger, this);
 	}
 
 	@Override
@@ -99,4 +95,22 @@ public class ManualButton extends AbstractButton implements TestListener
 		setVisible();
 		activate();
 	}
+	
+	/*
+	@Override
+	public void drawSelfBasic(Graphics2D g2d)
+	{
+		super.drawSelfBasic(g2d);
+		System.out.println("Draws the manualbutton, which is " + isVisible() + " visible");
+	}
+	*/
+	
+	/*
+	@Override
+	public void setVisible()
+	{
+		System.out.println("Sets the manualButton back to visible");
+		super.setVisible();
+	}
+	*/
 }

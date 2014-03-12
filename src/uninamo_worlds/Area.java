@@ -29,6 +29,7 @@ public class Area extends Room
 	private DrawableHandler drawer;
 	private CollisionHandler collisionhandler;
 	private GamePhase phase;
+	private boolean drawDisabled, mouseDisabled;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -55,6 +56,8 @@ public class Area extends Room
 		this.drawer = new DrawableHandler(false, true, DepthConstants.NORMAL, 
 				superDrawer);
 		this.collisionhandler = new CollisionHandler(false, superActorHandler);
+		this.drawDisabled = false;
+		this.mouseDisabled = false;
 	}
 
 	
@@ -124,8 +127,13 @@ public class Area extends Room
 	 */
 	public void returnNormal()
 	{
-		getMouseHandler().activate();
-		getDrawer().setVisible();
+		if (this.mouseDisabled)
+			getMouseHandler().activate();
+		if (this.drawDisabled)
+			getDrawer().setVisible();
+		
+		this.mouseDisabled = false;
+		this.drawDisabled = false;
 	}
 	
 	/**
@@ -135,6 +143,7 @@ public class Area extends Room
 	{
 		returnNormal();
 		getMouseHandler().inactivate();
+		this.mouseDisabled = true;
 	}
 	
 	/**
@@ -146,5 +155,8 @@ public class Area extends Room
 		
 		getMouseHandler().inactivate();
 		getDrawer().setInvisible();
+		
+		this.drawDisabled = true;
+		this.mouseDisabled = true;
 	}
 }

@@ -117,8 +117,8 @@ Työtehtäviä
 			* Ohjekirjan "näppäimen" toteuttaminen							DONE
 			* Ohjekirjan arkkitehtuuri										...
 				- Testikomponentin luominen ja poistaminen
-				- Sivun vaihtaminen
-					* Sivunäppäin
+				- Sivun vaihtaminen											DONE
+					* Sivunäppäin											DONE
 				- Sivun tekeminen luokkana?									...
 					* Ehkä kirja voi olla linkitetty lista sivuja?			...
 						- Kirjanmerkit hakuja
@@ -130,7 +130,7 @@ Työtehtäviä
 					* Sisältää												...
 						- Sivut listana										DONE
 						- Kirjanmerkit
-						- näppäimet											...
+						- näppäimet											DONE
 						- taustan											DONE
 				- Ohjekirjan sulkeminen										DONE
 					* Sulkunäppäin											DONE
@@ -138,6 +138,12 @@ Työtehtäviä
 				- Muiden handlereiden epäaktivoiminen						DONE
 				- Oma area													DONE
 			* Alustavan sisällön tuottaminen								...
+				- Tarvittavat enumeraatiot komponenteille, laitteille ja 
+				obstacleille
+					* getDescription
+					* getName
+					* createObject
+					* createTestComponent
 				- Testikomponentille tekstiä								DONE
 				- Testiobjektille tekstiä
 				- Testilaitteelle tekstiä

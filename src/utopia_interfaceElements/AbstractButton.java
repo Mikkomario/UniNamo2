@@ -183,7 +183,21 @@ public abstract class AbstractButton extends DimensionalDrawnObject implements
 			this.spritedrawer.setImageIndex(0);
 	}
 	*/
+	/*
+	@Override
+	public void setInvisible()
+	{
+		System.out.println("Sets " + getClass().getName() + " invisible.");
+		super.setInvisible();
+	}
 	
+	@Override
+	public void setVisible()
+	{
+		System.out.println("Sets " + getClass().getName() + " visible.");
+		super.setVisible();
+	}
+	*/
 	
 	// GETTERS & SETTERS	---------------------------------------------
 	

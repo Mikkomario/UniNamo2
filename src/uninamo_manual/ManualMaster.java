@@ -3,6 +3,7 @@ package uninamo_manual;
 import java.util.ArrayList;
 
 import uninamo_main.GameSettings;
+import uninamo_userinterface.ManualButton;
 import uninamo_worlds.Area;
 import uninamo_worlds.AreaChanger;
 import utopia_backgrounds.Tile;
@@ -23,6 +24,9 @@ public class ManualMaster extends GameObject
 	private Tile manualBack;
 	private AreaChanger areaChanger;
 	private ArrayList<DoublePage> pages;
+	private int currentPageIndex;
+	private ManualPageButton leftPageButton, rightPageButton;
+	private ManualButton manualButton;
 	
 	/**
 	 * ManualWidth tells the width of the manual's area
@@ -42,8 +46,9 @@ public class ManualMaster extends GameObject
 	 * 
 	 * @param areaChanger The areaChanger that will handle the transitions 
 	 * between areas and give access to different areas.
+	 * @param manualButton The manualButton in the coding area
 	 */
-	public ManualMaster(AreaChanger areaChanger)
+	public ManualMaster(AreaChanger areaChanger, ManualButton manualButton)
 	{
 		super();
 		
@@ -52,7 +57,9 @@ public class ManualMaster extends GameObject
 		manualArea.start();
 		
 		// Initializes attributes
+		this.manualButton = manualButton;
 		this.areaChanger = areaChanger;
+		this.currentPageIndex = 0;
 		this.manualBack = new Tile(GameSettings.screenWidth / 2, 
 				GameSettings.screenHeight / 2, manualArea.getDrawer(), 
 				manualArea.getActorHandler(), 
@@ -63,6 +70,12 @@ public class ManualMaster extends GameObject
 		// Creates buttons
 		new ManualCloseButton(GameSettings.screenWidth / 2 + MANUALWIDTH / 2 - 20, 
 				GameSettings.screenHeight / 2 - MANUALHEIGHT / 2 + 20, 
+				manualArea.getDrawer(), manualArea.getMouseHandler(), 
+				manualArea, this);
+		this.leftPageButton = new ManualPageButton(ManualPageButton.BACWARD, 
+				manualArea.getDrawer(), manualArea.getMouseHandler(), 
+				manualArea, this);
+		this.rightPageButton = new ManualPageButton(ManualPageButton.FORWARD, 
 				manualArea.getDrawer(), manualArea.getMouseHandler(), 
 				manualArea, this);
 		
@@ -82,7 +95,11 @@ public class ManualMaster extends GameObject
 				manualArea.getDrawer())));
 		
 		// Opens the first doublePage
-		this.pages.get(0).open();
+		this.pages.get(this.currentPageIndex).open();
+		
+		// Hides the manual button while the manual is open
+		this.manualButton.setInvisible();
+		//System.out.println(this.manualButton.isVisible());
 		
 		// Deactivates the coding area
 		areaChanger.getArea("coding").disableOnlyMouse();
@@ -103,9 +120,61 @@ public class ManualMaster extends GameObject
 		}
 		this.pages.clear();
 		
+		// Shows the manualButton since the manual is closed
+		this.manualButton.setVisible();
+		
 		//System.out.println("Ends manual, starts coding");
 		this.areaChanger.getArea("manual").end();
 		this.areaChanger.getArea("coding").returnNormal();
+	}
+	
+	
+	// OTHER METHODS	--------------------------------------------------
+	
+	/**
+	 * Closes the current pages and opens the next ones
+	 */
+	protected void openNextPages()
+	{
+		// Only opens next pages if possible
+		if (!nextPagesLeft())
+			return;
+		
+		// Closes the current pages and opens the next ones
+		this.pages.get(this.currentPageIndex).close();
+		this.currentPageIndex ++;
+		this.pages.get(this.currentPageIndex).open();
+	}
+	
+	/**
+	 * Closes the current pages and opens the previous ones
+	 */
+	protected void openPreviousPages()
+	{
+		// Only opens previous pages if possible
+		if (!previousPagesLeft())
+			return;
+		
+		// Closes the current pages and opens the previous ones
+		this.pages.get(this.currentPageIndex).close();
+		this.currentPageIndex --;
+		this.pages.get(this.currentPageIndex).open();
+	}
+	
+	/**
+	 * @return Are there any pages left to open on the left
+	 */
+	protected boolean previousPagesLeft()
+	{
+		return this.currentPageIndex > 0;
+	}
+	
+	/**
+	 * @return Are there any pages left to open on the right
+	 */
+	protected boolean nextPagesLeft()
+	{
+		return this.currentPageIndex < this.pages.size() - 1;
 	}
 	
 	
@@ -135,6 +204,10 @@ public class ManualMaster extends GameObject
 		{
 			this.leftPage.open();
 			this.rightPage.open();
+			
+			// Informs the buttons about a new page opening
+			ManualMaster.this.leftPageButton.onPageChange();
+			ManualMaster.this.rightPageButton.onPageChange();
 		}
 		
 		private void close()
