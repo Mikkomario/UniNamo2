@@ -57,6 +57,10 @@ public class AreaChanger
 		this.areas.put("design", new Area(MultiMediaHolder.getGamePhaseBank(
 				"default").getPhase("gameplay"), mousehandler, actorhandler, drawer));
 		new DesignObjectCreator(this, relay, testHandler);
+		
+		this.areas.put("manual", new Area(MultiMediaHolder.getGamePhaseBank(
+				"default").getPhase("gameplay"), mousehandler, actorhandler, 
+				drawer));
 	}
 
 	

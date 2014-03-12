@@ -69,6 +69,6 @@ public class CodingObjectCreator extends AreaObjectCreator
 				this.connectorRelay, this.timer);
 		
 		new ManualButton(GameSettings.screenWidth / 3, GameSettings.screenHeight, area.getDrawer(), 
-				area.getMouseHandler(), area);
+				area.getMouseHandler(), area, this.areaChanger);
 	}
 }

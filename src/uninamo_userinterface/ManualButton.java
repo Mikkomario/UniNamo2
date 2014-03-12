@@ -4,6 +4,8 @@ import java.awt.geom.Point2D.Double;
 
 import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
+import uninamo_manual.ManualMaster;
+import uninamo_worlds.AreaChanger;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.DepthConstants;
@@ -19,6 +21,11 @@ import utopia_worlds.Room;
  */
 public class ManualButton extends AbstractButton implements TestListener
 {
+	// ATTRIBUTES	------------------------------------------------------
+	
+	private AreaChanger areaChanger;
+	
+	
 	// CONSTRUCTOR	------------------------------------------------------
 	
 	/**
@@ -30,13 +37,17 @@ public class ManualButton extends AbstractButton implements TestListener
 	 * @param mousehandler The mouseListenerHandler that will inform the button 
 	 * about mouse events
 	 * @param room The room where the button will be staying
+	 * @param areaChanger The areaChanger that handles the transitions between areas
 	 */
 	public ManualButton(int x, int y, DrawableHandler drawer, 
-			MouseListenerHandler mousehandler, Room room)
+			MouseListenerHandler mousehandler, Room room, AreaChanger areaChanger)
 	{
 		super(x, y, DepthConstants.FOREGROUND, 
 				MultiMediaHolder.getSpriteBank("gameplayinterface").getSprite(
 				"manual"), drawer, mousehandler, room);
+		
+		// Initializes attributes
+		this.areaChanger = areaChanger;
 	}
 	
 	
@@ -52,6 +63,7 @@ public class ManualButton extends AbstractButton implements TestListener
 		{
 			System.out.println("Goes to manual");
 			// TODO: Go to manual
+			new ManualMaster(this.areaChanger);
 		}
 	}
 
