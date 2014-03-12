@@ -3,6 +3,7 @@ package uninamo_userinterface;
 import java.awt.geom.Point2D.Double;
 
 import uninamo_gameplaysupport.TestListener;
+import uninamo_gameplaysupport.TurnHandler;
 import uninamo_main.GameSettings;
 import uninamo_manual.ManualMaster;
 import uninamo_worlds.AreaChanger;
@@ -24,6 +25,7 @@ public class ManualButton extends AbstractButton implements TestListener
 	// ATTRIBUTES	------------------------------------------------------
 	
 	private AreaChanger areaChanger;
+	private TurnHandler turnHandler;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -38,9 +40,12 @@ public class ManualButton extends AbstractButton implements TestListener
 	 * about mouse events
 	 * @param room The room where the button will be staying
 	 * @param areaChanger The areaChanger that handles the transitions between areas
+	 * @param turnHandler The turnHandler that will inform the manual's objects 
+	 * about turn events
 	 */
 	public ManualButton(int x, int y, DrawableHandler drawer, 
-			MouseListenerHandler mousehandler, Room room, AreaChanger areaChanger)
+			MouseListenerHandler mousehandler, Room room, 
+			AreaChanger areaChanger, TurnHandler turnHandler)
 	{
 		super(x, y, DepthConstants.FOREGROUND, 
 				MultiMediaHolder.getSpriteBank("gameplayinterface").getSprite(
@@ -48,6 +53,7 @@ public class ManualButton extends AbstractButton implements TestListener
 		
 		// Initializes attributes
 		this.areaChanger = areaChanger;
+		this.turnHandler = turnHandler;
 	}
 	
 	
@@ -60,7 +66,7 @@ public class ManualButton extends AbstractButton implements TestListener
 	{
 		// On left click goes to the manual
 		if (button == MouseButton.LEFT && eventType == MouseButtonEventType.PRESSED)
-			new ManualMaster(this.areaChanger, this);
+			new ManualMaster(this.areaChanger, this.turnHandler, this);
 	}
 
 	@Override

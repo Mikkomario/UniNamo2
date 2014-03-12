@@ -258,8 +258,9 @@ public class Cable extends DimensionalDrawnObject implements
 	@Override
 	public boolean listensMouseEnterExit()
 	{
-		// Listens to enter and exit events if is not being dragged
-		return !isBeingDragged();
+		// Listens to enter and exit events if is not being dragged 
+		// (enter / exit is also disabled on test mode for output cables)
+		return !isBeingDragged() && !(this.testVersion && this.end == null);
 	}
 
 	@Override
@@ -418,7 +419,7 @@ public class Cable extends DimensionalDrawnObject implements
 			if (!this.testVersion)
 				startPoint = this.lastMousePosition;
 			else if (this.end != null)
-				startPoint = new Point2D.Double(this.end.getX() - 100, 
+				startPoint = new Point2D.Double(this.end.getX() - 75, 
 						this.end.getY());
 			else
 				startPoint = new Point2D.Double();
@@ -432,7 +433,7 @@ public class Cable extends DimensionalDrawnObject implements
 			if (!this.testVersion)
 				endPoint = this.lastMousePosition;
 			else if (this.start != null)
-				endPoint = new Point2D.Double(this.start.getX() + 100, 
+				endPoint = new Point2D.Double(this.start.getX() + 75, 
 						this.start.getY());
 			else
 				endPoint = new Point2D.Double();

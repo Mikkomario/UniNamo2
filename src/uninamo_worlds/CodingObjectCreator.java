@@ -71,7 +71,8 @@ public class CodingObjectCreator extends AreaObjectCreator
 		new ComponentBox(64, 90, area, this.testHandler, 
 				this.connectorRelay, this.timer, ComponentType.POWER);
 		
-		new ManualButton(GameSettings.screenWidth / 3, GameSettings.screenHeight, area.getDrawer(), 
-				area.getMouseHandler(), area, this.areaChanger);
+		new ManualButton(GameSettings.screenWidth / 3, GameSettings.screenHeight, 
+				area.getDrawer(), area.getMouseHandler(), area, 
+				this.areaChanger, this.timer);
 	}
 }

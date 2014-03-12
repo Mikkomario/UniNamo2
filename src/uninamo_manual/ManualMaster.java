@@ -2,6 +2,8 @@ package uninamo_manual;
 
 import java.util.ArrayList;
 
+import uninamo_components.ComponentType;
+import uninamo_gameplaysupport.TurnHandler;
 import uninamo_main.GameSettings;
 import uninamo_userinterface.ManualButton;
 import uninamo_worlds.Area;
@@ -46,9 +48,12 @@ public class ManualMaster extends GameObject
 	 * 
 	 * @param areaChanger The areaChanger that will handle the transitions 
 	 * between areas and give access to different areas.
+	 * @param turnHandler The turnHandler that will inform the created test 
+	 * components about turn events
 	 * @param manualButton The manualButton in the coding area
 	 */
-	public ManualMaster(AreaChanger areaChanger, ManualButton manualButton)
+	public ManualMaster(AreaChanger areaChanger, TurnHandler turnHandler, 
+			ManualButton manualButton)
 	{
 		super();
 		
@@ -83,6 +88,7 @@ public class ManualMaster extends GameObject
 		int leftPageX = GameSettings.screenWidth / 2 - MANUALWIDTH / 4;
 		int rightPageX = GameSettings.screenWidth / 2 + MANUALWIDTH / 4;
 		int pageY = GameSettings.screenHeight / 2;
+		
 		// Creates the turorial pages
 		this.pages.add(new DoublePage(new EmptyPage(), 
 				new SimplePage(rightPageX, pageY, 
@@ -93,6 +99,11 @@ public class ManualMaster extends GameObject
 				manualArea.getDrawer()), new SimplePage(rightPageX, pageY, 
 				MultiMediaHolder.getSpriteBank("manual").getSprite("signals"), 
 				manualArea.getDrawer())));
+		// Creates a component page for testing
+		this.pages.add(new DoublePage(new EmptyPage(), 
+				new ComponentPage(rightPageX, pageY, manualArea.getDrawer(), 
+				manualArea.getActorHandler(), manualArea.getMouseHandler(), 
+				manualArea, turnHandler, ComponentType.OR)));
 		
 		// Opens the first doublePage
 		this.pages.get(this.currentPageIndex).open();
