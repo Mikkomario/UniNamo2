@@ -9,7 +9,6 @@ import utopia_graphic.Sprite;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.DepthConstants;
-import utopia_resourcebanks.SpriteBank;
 
 /**
  * Background is a simple surface that can be drawn under other objects
@@ -35,17 +34,15 @@ public class Background extends DrawnObject
 	 * @param drawer The drawablehandler that draws the background
 	 * @param actorhandler The actorhandler that animates the background 
 	 * (optional, for animated backgrounds)
-	 * @param bank The spritebank that holds the textrure sprite
-	 * @param texturename The name of the texture in the bank
+	 * @param sprite The sprite that will be used to draw the background
 	 */
 	public Background(int x, int y, DrawableHandler drawer, 
-			ActorHandler actorhandler, SpriteBank bank, String texturename)
+			ActorHandler actorhandler, Sprite sprite)
 	{
 		super(x, y, DepthConstants.BOTTOM, drawer);
 
 		// Initializes attributes
-		this.texturedrawer = new SingleSpriteDrawer(bank.getSprite(texturename), 
-				actorhandler, this);
+		this.texturedrawer = new SingleSpriteDrawer(sprite, actorhandler, this);
 	}
 	
 	
@@ -111,8 +108,7 @@ public class Background extends DrawnObject
 	 * @param height The height of the surface (in pixels)
 	 * @param approximate Are the backgrounds scaled so that they all fit into the area. 
 	 * If false, the backgrounds may be placed partly outside the given area.
-	 * @param texturebank The spritebank that contains the texture used in the backgrounds
-	 * @param texturename The name of the texture used in the background
+	 * @param texture The sprite used to draw the background(s)
 	 * @param drawer The draweablehandler that will draw the backgrounds (optional)
 	 * @param animator The actorhandler that will animate the backgrounds (optional)
 	 * 
@@ -120,11 +116,8 @@ public class Background extends DrawnObject
 	 */
 	public static ArrayList<Background> getRepeatedBackground(
 			int minx, int miny, int width, int height, boolean approximate, 
-			SpriteBank texturebank, String texturename, 
-			DrawableHandler drawer, ActorHandler animator)
+			Sprite texture, DrawableHandler drawer, ActorHandler animator)
 	{
-		Sprite texture = texturebank.getSprite(texturename);
-		
 		// Calculates the number of backgrounds used horizontally and vertically
 		int backbasewidth = texture.getWidth();
 		int backbaseheight = texture.getHeight();
@@ -154,7 +147,7 @@ public class Background extends DrawnObject
 						(int) (xscale * backbasewidth/2), 
 						miny + (int) (iy * backbaseheight * yscale) + 
 						(int) (yscale * backbaseheight/2), 
-						drawer, animator, texturebank, texturename);
+						drawer, animator, texture);
 				newback.scale(xscale, yscale);
 				backs.add(newback);
 			}

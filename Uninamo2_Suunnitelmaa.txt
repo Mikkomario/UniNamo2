@@ -119,16 +119,16 @@ Työtehtäviä
 				- Testikomponentin luominen ja poistaminen
 				- Sivun vaihtaminen
 					* Sivunäppäin
-				- Sivun tekeminen luokkana?
-					* Ehkä kirja voi olla linkitetty lista sivuja?
+				- Sivun tekeminen luokkana?									...
+					* Ehkä kirja voi olla linkitetty lista sivuja?			...
 						- Kirjanmerkit hakuja
-					* Eri resurssityypeille ehkä omat pienet luokat
+					* Eri resurssityypeille ehkä omat pienet luokat			...
 					* Tekstin piirtäminen
 						- Checkkaa messagebox jos sieltä sais 
 						yleisen version väsättyä
 				- Ohjehallinta												...
-					* Sisältää
-						- Sivut listana
+					* Sisältää												...
+						- Sivut listana										DONE
 						- Kirjanmerkit
 						- näppäimet											...
 						- taustan											DONE

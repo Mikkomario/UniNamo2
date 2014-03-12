@@ -78,8 +78,9 @@ public abstract class AreaObjectCreator extends GameObject implements RoomListen
 			backs.add(new Tile(GameSettings.screenWidth / 2, 
 					GameSettings.screenHeight / 2, this.area.getDrawer(),
 					this.area.getActorHandler(), 
-					MultiMediaHolder.getSpriteBank(this.areaBackgroundBankName), 
-					this.areaBackgroundName, GameSettings.screenWidth, 
+					MultiMediaHolder.getSpriteBank(
+					this.areaBackgroundBankName).getSprite(
+					this.areaBackgroundName), GameSettings.screenWidth, 
 					GameSettings.screenHeight));
 			this.area.setBackgrounds(backs, false);
 		}

@@ -262,9 +262,9 @@ public class TileMap extends DimensionalDrawnObject
 					this.tileheight / 2;
 			
 			Tile newtile = new Tile(x, y, this.tiledrawer, this.tileanimator, 
-					banks.get(this.bankindexes[i]), 
-					texturenames.get(this.nameindexes[i]), 
-					this.tilewidth, this.tileheight);
+					banks.get(this.bankindexes[i]).getSprite(
+					texturenames.get(this.nameindexes[i])), this.tilewidth, 
+					this.tileheight);
 			
 			// Rotates and scales the tile
 			newtile.setAngle(this.rotations[i]);
