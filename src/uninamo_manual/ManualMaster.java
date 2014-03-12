@@ -31,6 +31,7 @@ public class ManualMaster extends GameObject
 	private int currentPageIndex;
 	private ManualPageButton leftPageButton, rightPageButton;
 	private ManualButton manualButton;
+	private BookMark[] bookMarks;
 	
 	/**
 	 * ManualWidth tells the width of the manual's area
@@ -119,6 +120,22 @@ public class ManualMaster extends GameObject
 		this.pages.add(new DoublePage(new EmptyPage(), new ObstaclePage(
 				rightPageX, pageY, manualArea, ObstacleType.BOX, obstacleData)));
 		
+		// Creates the bookmarks
+		int[] pagenumbers = new int[5];
+		pagenumbers[0] = 0; // Contents
+		pagenumbers[1] = 1; // Basics
+		pagenumbers[2] = 2; // Components
+		pagenumbers[3] = 3; // Machines
+		pagenumbers[4] = 4; // Obstacles
+		
+		this.bookMarks = new BookMark[5];
+		for (int i = 0; i < 5; i++)
+		{
+			this.bookMarks[i] = new BookMark(
+					30 + (int) ((i / 5.0) * (MANUALWIDTH / 2 - 40)), pagenumbers[i], 
+					i, manualArea, this);
+		}
+		
 		// Opens the first doublePage
 		this.pages.get(this.currentPageIndex).open();
 		
@@ -202,6 +219,23 @@ public class ManualMaster extends GameObject
 		return this.currentPageIndex < this.pages.size() - 1;
 	}
 	
+	/**
+	 * Changes the page to a certain index. The pages are indexed as double 
+	 * pages
+	 * 
+	 * @param newPageIndex The index of the new page(s) opened
+	 */
+	protected void goToPage(int newPageIndex)
+	{
+		if (this.currentPageIndex == newPageIndex || newPageIndex < 0 || 
+				newPageIndex >= this.pages.size())
+			return;
+		
+		this.pages.get(this.currentPageIndex).close();
+		this.currentPageIndex = newPageIndex;
+		this.pages.get(this.currentPageIndex).open();
+	}
+	
 	
 	// SUBCLASSES	------------------------------------------------------
 	
@@ -233,6 +267,13 @@ public class ManualMaster extends GameObject
 			// Informs the buttons about a new page opening
 			ManualMaster.this.leftPageButton.onPageChange();
 			ManualMaster.this.rightPageButton.onPageChange();
+			
+			// Informs the bookmarks
+			for (int i = 0; i < ManualMaster.this.bookMarks.length; i++)
+			{
+				ManualMaster.this.bookMarks[i].onPageChange(
+						ManualMaster.this.currentPageIndex);
+			}
 		}
 		
 		private void close()

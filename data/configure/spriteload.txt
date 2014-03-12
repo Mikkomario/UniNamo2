@@ -32,11 +32,7 @@ boxreal#images/obstacles/boxgoalreal_strip2.png#2#80#80
 
 &manual
 arrow#images/manual/arrow.png#1#32#29
-basics#images/manual/basics.png#1#32#80
-components#images/manual/components.png#1#32#80
-machinery#images/manual/machinery.png#1#32#80
-obstacles#images/manual/obstacles.png#1#32#80
-contents#images/manual/tableofcontents.png#1#32#80
+bookmark#images/manual/bookmarks_strip5.png#5#32#80
 manualback#images/manual/manualback.png#1#192#192
 contentstext#images/manual/tableofcontentstext.png#1#96#192
 close#images/manual/closebutton1.png#1#16#16

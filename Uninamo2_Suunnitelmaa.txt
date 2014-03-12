@@ -117,22 +117,22 @@ Työtehtäviä
 			toteuttaminen
 			* VictoryHandler, joka chekkaa, onko kaikki voittolaitteet 		DONE
 			voittotilassa ja informoi lopullisen voiton
-		- Ohjekirja															...
+		- Ohjekirja															DONE
 			* Ohjekirjan "näppäimen" toteuttaminen							DONE
-			* Ohjekirjan arkkitehtuuri										...
+			* Ohjekirjan arkkitehtuuri										DONE
 				- Testikomponentin luominen ja poistaminen					DONE
 				- Sivun vaihtaminen											DONE
 					* Sivunäppäin											DONE
-				- Sivun tekeminen luokkana?									...
+				- Sivun tekeminen luokkana?									DONE
 					* Ehkä kirja voi olla (linkitetty) lista sivuja?		DONE
 					* Eri resurssityypeille ehkä omat pienet luokat			DONE
 					* Tekstin piirtäminen									DONE
 						- Checkkaa messagebox jos sieltä sais 				DONE
 						yleisen version väsättyä
-				- Ohjehallinta												...
-					* Sisältää												...
+				- Ohjehallinta												DONE
+					* Sisältää												DONE
 						- Sivut listana										DONE
-						- Kirjanmerkit
+						- Kirjanmerkit										DONE
 						- näppäimet											DONE
 						- taustan											DONE
 				- Ohjekirjan sulkeminen										DONE
@@ -177,12 +177,14 @@ Työtehtäviä
 		- Voittoikkuna
 			* Komponenttikäytön analysointi
 			* Uusien tehtävien antaminen
-		- Parantelua
+		- Parantelua														...
 			* Testausmoodin selkeä näyttäminen koodipuolella
-			* Kerättävän stuffin näyttäminen voittokerääjässä
-			* Komponenttienumeraation toteuttaminen ja käyttäminen
-				- Komponenttilaatikoiden luomisessa ilman erillisiä luokkia
-				- Ohjeiden lukemisessa
+			* Kerättävän stuffin näyttäminen voittokerääjässä				...
+				- Oikea skaalaus
+				- Designmodessa designsprite ja testauksessa real
+			* Komponenttienumeraation toteuttaminen ja käyttäminen			DONE
+				- Komponenttilaatikoiden luomisessa ilman erillisiä luokkia	DONE
+				- Ohjeiden lukemisessa										DONE
 			* Nuolen piirtäminen johdossa
 	* Gold	---------------------------------------------------------------------
 		- Main menu
@@ -219,6 +221,9 @@ Työtehtäviä
 			* Ohjekirjassa näkyy vaan unlockatut
 			* Unlockkausten muistaminen
 			* Kenttäsidonnaiset komponentit
+		- Kenttien malliesimerkit
+			* Ratkaisujen tallentaminen ja lataaminen tiedostoista
+			* Ratkaisun ajaminen kentän alussa
 		- Kenttäeditori
 			* Kenttien tallentaminen tekstitiedostoon
 			* Kenttäeditorimoodiin siirtyminen
@@ -229,6 +234,9 @@ Työtehtäviä
 				- Laitesuunnitelmien liikuttelu
 				- Sama toimijoille ja maaleille
 				- Seinien / lattian rakentaminen
+			* Kentän validointi toteuttamalla
+				- Lopputuloksen testaaminen ja tallentaminen
+				- Editointiin palaaminen
 		- Hauskat extra laitteet ja obstaclet kenttäeditoriin
 			* Pongiin tarvittavat jutut
 			* Breakouttiin tarvittavat jutut
