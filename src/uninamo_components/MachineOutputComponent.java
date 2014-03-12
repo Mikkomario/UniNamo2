@@ -35,14 +35,16 @@ public class MachineOutputComponent extends Component
 	 * connectors
 	 * @param spritename The name of the sprite the component uses
 	 * @param outputs THe number of output connectors the component has
+	 * @param isForTesting Is the machine component created for simple 
+	 * demonstration purposes
 	 */
 	public MachineOutputComponent(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, MouseListenerHandler mousehandler,
 			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
-			String spritename, int outputs)
+			String spritename, int outputs, boolean isForTesting)
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler, 
-				connectorRelay, spritename, 0, outputs, false, false);
+				connectorRelay, spritename, 0, outputs, false, isForTesting);
 	}
 	
 	

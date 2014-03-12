@@ -44,14 +44,16 @@ public class MachineInputComponent extends Component
 	 * @param spritename The name of the sprite the component uses
 	 * @param inputs How many inputs does the component have
 	 * @param host the componen't host machine
+	 * @param isForTesting Is the machine component created for simple 
+	 * demonstration purposes
 	 */
 	public MachineInputComponent(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, MouseListenerHandler mousehandler,
 			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
-			String spritename, int inputs, Machine host)
+			String spritename, int inputs, Machine host, boolean isForTesting)
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler, 
-				connectorRelay, spritename, inputs, 0, false, false);
+				connectorRelay, spritename, inputs, 0, false, isForTesting);
 		
 		// Initializes attributes
 		this.host = host;

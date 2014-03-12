@@ -87,7 +87,7 @@ public class ComponentPage extends DrawnObject implements Page
 	public void open()
 	{
 		this.testComponent = this.featuredComponentType.getNewComponent(
-				(int) getX(), (int) getY() - 128, this.drawer, this.actorHandler, 
+				(int) getX(), (int) getY() - 64, this.drawer, this.actorHandler, 
 				this.mouseHandler, this.room, null, null, this.turnHandler, true);
 		setVisible();
 	}
@@ -116,10 +116,12 @@ public class ComponentPage extends DrawnObject implements Page
 	{
 		// Draws the text
 		if (this.textDrawer != null)
-			this.textDrawer.drawText(g2d, 32, 200);
+			this.textDrawer.drawText(g2d, 32, 256);
 		
 		// Draws the headline
 		g2d.drawString(this.featuredComponentType.getName(), 32, 50);
+		// And a note
+		g2d.drawString("Click the cables to test", 32, 128);
 	}
 
 	@Override

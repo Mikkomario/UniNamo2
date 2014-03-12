@@ -13,6 +13,7 @@ import uninamo_obstacles.Obstacle;
 import uninamo_worlds.Area;
 import utopia_handleds.Collidable;
 import utopia_handlers.ActorHandler;
+import utopia_handlers.CollidableHandler;
 import utopia_handlers.CollisionHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.CollisionType;
@@ -47,25 +48,29 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener,
 	 * @param drawer The DrawableHandler that will draw the belt
 	 * @param actorhandler The ActorHandler that will inform the belt about 
 	 * step events
+	 * @param collidableHandler The collidableHandler that will handle the 
+	 * belt's collision checking
 	 * @param collisionHandler the CollisionHandler that will handle the belt's 
-	 * collision checking and collision event informing
-	 * @param codingArea The coding area of the game where the components are 
+	 * collision event informing
+	 * @param componentArea The area of the game where the components are 
 	 * created
 	 * @param designArea The area where the machine is located at
 	 * @param testHandler The testHandler that will inform the object about 
 	 * test events
 	 * @param connectorRelay The connectorRelay that will handle the belts 
 	 * connectors
+	 * @param isForTesting Is the machine created for simple demonstration purposes
 	 */
 	public ConveyorBelt(int x, int y, DrawableHandler drawer,
-			ActorHandler actorhandler, CollisionHandler collisionHandler,
-			Area codingArea, Area designArea, TestHandler testHandler, 
-			ConnectorRelay connectorRelay)
+			ActorHandler actorhandler, CollidableHandler collidableHandler, 
+			CollisionHandler collisionHandler, Area componentArea, Area designArea, 
+			TestHandler testHandler, ConnectorRelay connectorRelay, 
+			boolean isForTesting)
 	{
 		super(x, y, true, CollisionType.BOX, drawer, actorhandler,
-				collisionHandler.getCollidableHandler(), codingArea, 
+				collidableHandler, componentArea, 
 				designArea, testHandler, connectorRelay,"belt", "beltreal", 
-				"machinecomponent", null, 2, 0);
+				"machinecomponent", null, 2, 0, isForTesting);
 		
 		// Initializes attributes
 		this.absolutePointsNeedUpdating = true;
@@ -89,7 +94,9 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener,
 		//collisionHandler.printHandledNumber();
 		
 		// Adds the object to the handler(s)
-		collisionHandler.addCollisionListener(this);
+		if (collisionHandler != null)
+			collisionHandler.addCollisionListener(this);
+		
 		getTransformationListenerHandler().addListener(this);
 	}
 	

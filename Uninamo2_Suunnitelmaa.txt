@@ -21,6 +21,8 @@ Työtehtäviä
 			* Ohjelma bugaa täydellisesti jos laittaa toisen beltin			DONE
 			* Boxit saattaa vieläkin työntyä liukuhihnan sisälle 
 			törmäystilanteissa
+				- Jos törmää toiseen boxiin (sivussa) samalla kun hihna 
+				työntää
 			* Jos rämppää testiä koodimoodissa niin designmoodi piirtyy 
 			vaikka ei pitäisi
 		- Alkuvalmistelut													DONE

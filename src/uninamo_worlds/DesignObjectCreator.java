@@ -82,13 +82,15 @@ public class DesignObjectCreator extends AreaObjectCreator
 		
 		new ConveyorBelt(400, GameSettings.screenHeight - 200, 
 				area.getDrawer(), area.getActorHandler(), 
+				area.getCollisionHandler().getCollidableHandler(), 
 				area.getCollisionHandler(), this.areaChanger.getArea("coding"), 
-				area, this.testHandler, this.connectorRelay);
+				area, this.testHandler, this.connectorRelay, false);
 		
 		new ConveyorBelt(580, GameSettings.screenHeight - 200, 
 				area.getDrawer(), area.getActorHandler(), 
+				area.getCollisionHandler().getCollidableHandler(),
 				area.getCollisionHandler(), this.areaChanger.getArea("coding"), 
-				area, this.testHandler, this.connectorRelay);
+				area, this.testHandler, this.connectorRelay, false);
 		
 		/*
 		new Box(430, 200, area.getDrawer(), 

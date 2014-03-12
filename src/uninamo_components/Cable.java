@@ -307,7 +307,7 @@ public class Cable extends DimensionalDrawnObject implements
 	{
 		if (this.spritedrawer == null)
 			return 0;
-		return this.spritedrawer.getSprite().getHeight();
+		return (int) (this.spritedrawer.getSprite().getHeight() * 1.25);
 	}
 
 	@Override

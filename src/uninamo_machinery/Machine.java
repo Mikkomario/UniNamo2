@@ -58,7 +58,7 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	 * @param actorhandler The actorHandler that will animate the object
 	 * @param collidablehandler The collidableHandler that will handle the 
 	 * machine's collision checking
-	 * @param codingArea The coding area where the machine components will be created
+	 * @param componentArea The coding area where the machine components will be created
 	 * @param designArea The area where the machine is located at
 	 * @param testHandler The testHandler that will inform the object about test events
 	 * @param connectorRelay The connectorRelay that will handle the machine's 
@@ -75,15 +75,17 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	 * has (0 if no input component is used)
 	 * @param outputs How many output connectors the machine's output component 
 	 * has (0 if no output component is used)
+	 * @param isForTesting Is the machine meant for testing / demonstration 
+	 * purposes (into the manual). The machine works a bit differently if so
 	 */
 	public Machine(int x, int y, boolean isSolid,
 			CollisionType collisiontype, DrawableHandler drawer, 
 			ActorHandler actorhandler, CollidableHandler collidablehandler, 
-			Area codingArea, Area designArea, TestHandler testHandler, 
+			Area componentArea, Area designArea, TestHandler testHandler, 
 			ConnectorRelay connectorRelay, 
 			String designSpriteName, String realSpriteName, 
 			String inputComponentSpriteName, String outputComponentSpriteName, 
-			int inputs, int outputs)
+			int inputs, int outputs, boolean isForTesting)
 	{
 		super(x, y, DepthConstants.NORMAL + 5, isSolid, collisiontype, drawer, 
 				collidablehandler);
@@ -101,24 +103,36 @@ public abstract class Machine extends DimensionalDrawnObject implements
 		{
 			Point2D.Double position = getNewComponentPosition(true);
 			
+			// If is in testing mode, simply puts the component near the machine
+			if (isForTesting)
+				position = new Point2D.Double(getX() - 100, getY() + 100);
+			
 			new MachineInputComponent((int) position.getX(), 
-					(int) position.getY(), codingArea.getDrawer(), 
-					codingArea.getActorHandler(), codingArea.getMouseHandler(), 
-					codingArea, testHandler, connectorRelay, 
-					inputComponentSpriteName, inputs, this);
+					(int) position.getY(), componentArea.getDrawer(), 
+					componentArea.getActorHandler(), componentArea.getMouseHandler(), 
+					componentArea, testHandler, connectorRelay, 
+					inputComponentSpriteName, inputs, this, isForTesting);
 			inputComponentsCreated ++;
 		}
 		
 		if (outputComponentSpriteName != null && outputs > 0)
 		{
 			Point2D.Double position = getNewComponentPosition(false);
+			
+			// If is in testing mode, simply puts the component near the machine
+			if (isForTesting)
+				position = new Point2D.Double(getX() + 100, getY() + 100);
+			
 			this.output = new MachineOutputComponent((int) position.getX(), 
-					(int) position.getY(), codingArea.getDrawer(), 
-					codingArea.getActorHandler(), codingArea.getMouseHandler(), 
-					codingArea, testHandler, connectorRelay, 
-					outputComponentSpriteName, outputs);
+					(int) position.getY(), componentArea.getDrawer(), 
+					componentArea.getActorHandler(), componentArea.getMouseHandler(), 
+					componentArea, testHandler, connectorRelay, 
+					outputComponentSpriteName, outputs, isForTesting);
 			outputComponentsCreated ++;
 		}
+		
+		// If is a test version, goes straight to "real" sprite
+		getSpriteDrawer().setSpriteIndex(1, false);
 		
 		// Adds the object to the handler(s)
 		if (designArea != null)
@@ -269,7 +283,7 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	}
 	
 	private static Point2D.Double getNewComponentPosition(boolean isInput)
-	{
+	{	
 		int x = GameSettings.screenWidth - 200;
 		int y = COMPONENTDISTANCE / 2 + 160;
 		int i = 0;
