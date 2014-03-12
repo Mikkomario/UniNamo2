@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import uninamo_components.ComponentType;
 import uninamo_gameplaysupport.TurnHandler;
+import uninamo_machinery.MachineType;
 import uninamo_main.GameSettings;
 import uninamo_userinterface.ManualButton;
 import uninamo_worlds.Area;
@@ -106,6 +107,12 @@ public class ManualMaster extends GameObject
 				new ComponentPage(rightPageX, pageY, manualArea.getDrawer(), 
 				manualArea.getActorHandler(), manualArea.getMouseHandler(), 
 				manualArea, turnHandler, ComponentType.OR, componentData)));
+		
+		// Creates a machine page for testing
+		this.pages.add(new DoublePage(new EmptyPage(), 
+				new MachinePage(rightPageX, pageY, manualArea.getDrawer(), 
+				manualArea.getActorHandler(), 
+				manualArea, MachineType.CONVEYORBELT)));
 		
 		// Opens the first doublePage
 		this.pages.get(this.currentPageIndex).open();

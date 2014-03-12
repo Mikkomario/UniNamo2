@@ -105,7 +105,10 @@ public abstract class Machine extends DimensionalDrawnObject implements
 			
 			// If is in testing mode, simply puts the component near the machine
 			if (isForTesting)
-				position = new Point2D.Double(getX() - 100, getY() + 100);
+				position = new Point2D.Double(getX() - 50, getY() + 75);
+			
+			//System.out.println(position);
+			//System.out.println(componentArea);
 			
 			new MachineInputComponent((int) position.getX(), 
 					(int) position.getY(), componentArea.getDrawer(), 
@@ -121,7 +124,7 @@ public abstract class Machine extends DimensionalDrawnObject implements
 			
 			// If is in testing mode, simply puts the component near the machine
 			if (isForTesting)
-				position = new Point2D.Double(getX() + 100, getY() + 100);
+				position = new Point2D.Double(getX() + 50, getY() + 75);
 			
 			this.output = new MachineOutputComponent((int) position.getX(), 
 					(int) position.getY(), componentArea.getDrawer(), 

@@ -3,17 +3,15 @@ package uninamo_manual;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import uninamo_components.Component;
 import uninamo_components.ComponentType;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_main.GameSettings;
-import utopia_gameobjects.DrawnObject;
+import uninamo_worlds.Area;
+import utopia_gameobjects.GameObject;
 import utopia_graphic.TextDrawer;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_worlds.Room;
 
 /**
  * ComponentPage features a short description of a component as well as a 
@@ -22,18 +20,12 @@ import utopia_worlds.Room;
  * @author Mikko Hilpinen
  * @since 12.3.2014
  */
-public class ComponentPage extends DrawnObject implements Page
+public class ComponentPage extends DescriptionPage implements Page
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
-	private Component testComponent;
 	private ComponentType featuredComponentType;
-	private TextDrawer textDrawer;
-	private DrawableHandler drawer;
-	private ActorHandler actorHandler;
 	private TurnHandler turnHandler;
-	private MouseListenerHandler mouseHandler;
-	private Room room;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -48,7 +40,7 @@ public class ComponentPage extends DrawnObject implements Page
 	 * @param actorHandler The actorHandler that will animate the shown component
 	 * @param mouseHandler The mouseListenerHandler that will inform the 
 	 * test component about mouse events
-	 * @param room The room where the test component will be put into
+	 * @param area The area where the test component will be put into
 	 * @param turnHandler The turnHandler that will inform the test component 
 	 * about turn events
 	 * @param featuredType The ComponentType that will be demonstrated on this 
@@ -58,79 +50,38 @@ public class ComponentPage extends DrawnObject implements Page
 	 */
 	public ComponentPage(int x, int y, DrawableHandler drawer, 
 			ActorHandler actorHandler, MouseListenerHandler mouseHandler, 
-			Room room, TurnHandler turnHandler, 
+			Area area, TurnHandler turnHandler, 
 			ComponentType featuredType, ComponentInfoHolder componentData)
 	{
-		super(x, y, DepthConstants.NORMAL, drawer);
-		
-		// Initializes attributes
-		this.testComponent = null;
-		this.featuredComponentType = featuredType;
-		this.drawer = drawer;
-		this.actorHandler = actorHandler;
-		this.mouseHandler = mouseHandler;
-		this.turnHandler = turnHandler;
-		this.room = room;
-		this.textDrawer = new TextDrawer(
+		super(x, y, drawer, area, new TextDrawer(
 				componentData.getComponentData(featuredType), 
 				GameSettings.basicFont, Color.BLACK, 
-				ManualMaster.MANUALWIDTH / 2 - 50);
+				ManualMaster.MANUALWIDTH / 2 - 50), featuredType.getName());
 		
-		// Is invisible until opened
-		setInvisible();
+		// Initializes attributes
+		this.featuredComponentType = featuredType;
+		this.turnHandler = turnHandler;
 	}
 	
 	
 	// IMPLEMENTED METHODS	----------------------------------------------
 
 	@Override
-	public void open()
-	{
-		this.testComponent = this.featuredComponentType.getNewComponent(
-				(int) getX(), (int) getY() - 64, this.drawer, this.actorHandler, 
-				this.mouseHandler, this.room, null, null, this.turnHandler, true);
-		setVisible();
-	}
-
-	@Override
-	public void close()
-	{
-		this.testComponent.kill();
-		setInvisible();
-	}
-
-	@Override
-	public int getOriginX()
-	{
-		return ManualMaster.MANUALWIDTH / 4;
-	}
-
-	@Override
-	public int getOriginY()
-	{
-		return ManualMaster.MANUALHEIGHT / 2;
-	}
-
-	@Override
 	public void drawSelfBasic(Graphics2D g2d)
 	{
-		// Draws the text
-		if (this.textDrawer != null)
-			this.textDrawer.drawText(g2d, 32, 256);
+		// Draws the normal stuff
+		super.drawSelfBasic(g2d);
 		
-		// Draws the headline
-		g2d.drawString(this.featuredComponentType.getName(), 32, 50);
 		// And a note
 		g2d.drawString("Click the cables to test", 32, 128);
 	}
 
 	@Override
-	public void kill()
+	protected GameObject createTestObject(Area area)
 	{
-		// Also kills the test component
-		this.testComponent.kill();
-		this.textDrawer = null;
-		
-		super.kill();
+		return this.featuredComponentType.getNewComponent((int) getX(), 
+				(int) getY() - 50, area.getDrawer(), area.getActorHandler(), 
+				area.getMouseHandler(), area, null, null, this.turnHandler, 
+				true);
 	}
 }

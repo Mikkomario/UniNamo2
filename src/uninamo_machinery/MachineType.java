@@ -37,8 +37,10 @@ public enum MachineType
 	public Machine getTestMachine(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, Area area)
 	{
+		//System.out.println(area);
+		
 		switch (this)
-		{
+		{		
 			case CONVEYORBELT: return new ConveyorBelt(x, y, drawer, 
 					actorhandler, null, null, area, area, null, null, true);
 		}

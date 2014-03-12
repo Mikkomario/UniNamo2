@@ -419,7 +419,7 @@ public class Cable extends DimensionalDrawnObject implements
 			if (!this.testVersion)
 				startPoint = this.lastMousePosition;
 			else if (this.end != null)
-				startPoint = new Point2D.Double(this.end.getX() - 75, 
+				startPoint = new Point2D.Double(this.end.getX() - 50, 
 						this.end.getY());
 			else
 				startPoint = new Point2D.Double();
@@ -433,7 +433,7 @@ public class Cable extends DimensionalDrawnObject implements
 			if (!this.testVersion)
 				endPoint = this.lastMousePosition;
 			else if (this.start != null)
-				endPoint = new Point2D.Double(this.start.getX() + 75, 
+				endPoint = new Point2D.Double(this.start.getX() + 50, 
 						this.start.getY());
 			else
 				endPoint = new Point2D.Double();
