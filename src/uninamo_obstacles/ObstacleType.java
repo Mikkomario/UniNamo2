@@ -57,4 +57,19 @@ public enum ObstacleType
 				", please update the method");
 		return "Name unknown";
 	}
+	
+	/**
+	 * @return The class that represents obstacles of this type
+	 */
+	public Class<?> getObstacleClass()
+	{
+		switch (this)
+		{
+			case BOX: return Box.class;
+		}
+		
+		System.err.println("Couldn't find a class for the obstacleType " + 
+				this + ", please update the method");
+		return null;
+	}
 }

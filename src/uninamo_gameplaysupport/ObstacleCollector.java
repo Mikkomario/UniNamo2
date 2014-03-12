@@ -6,6 +6,7 @@ import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
 import uninamo_obstacles.Obstacle;
+import uninamo_obstacles.ObstacleType;
 import utopia_gameobjects.DrawnObject;
 import utopia_graphic.MultiSpriteDrawer;
 import utopia_graphic.Sprite;
@@ -29,13 +30,14 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
-	private Class<?> collectedClass;
+	private ObstacleType collectedType;
 	private int neededAmount, collectsLeft;
 	private MultiSpriteDrawer spriteDrawer;
 	private Point2D.Double[] relativeColPoints, absoluteColPoints;
 	private boolean colPointsNeedUpdating, active;
 	private VictoryHandler victoryHandler;
 	private SpriteDrawerObject numberDrawer;
+	private SpriteDrawerObject collectableDrawer;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -53,20 +55,20 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 	 * @param testHandler The testHandler that will inform the object about test 
 	 * events
 	 * @param victoryHandler The victoryHandler that will check if the stage has been beaten
-	 * @param collectedClass The class the collector collects (must extend Obstacle class)
+	 * @param collectedType The type of obstacle the collector collects
 	 * @param neededAmount How many obstacles are collected before the collector is filled
 	 * @param designSpriteName The name of the sprite used to draw the object in design mode
 	 * @param realSpriteName The name of the sprite used to draw the object in test mode
 	 */
 	public ObstacleCollector(int x, int y, DrawableHandler drawer, 
 			CollisionHandler collisionHandler, TestHandler testHandler, 
-			VictoryHandler victoryHandler, Class<?> collectedClass, 
+			VictoryHandler victoryHandler, ObstacleType collectedType, 
 			int neededAmount, String designSpriteName, String realSpriteName)
 	{
 		super(x, y, DepthConstants.BACK, drawer);
 		
 		// Initializes attributes
-		this.collectedClass = collectedClass;
+		this.collectedType = collectedType;
 		this.neededAmount = neededAmount;
 		this.victoryHandler = victoryHandler;
 		this.collectsLeft = this.neededAmount;
@@ -85,23 +87,22 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 				drawer, null, this, 
 				MultiMediaHolder.getSpriteBank(
 				"gameplayinterface").getSprite("numbers"));
-		this.numberDrawer.setSize(this.spriteDrawer.getSprite().getWidth() - 10, 
-				this.spriteDrawer.getSprite().getHeight() - 10);
+		int width = this.spriteDrawer.getSprite().getWidth();
+		int height = this.spriteDrawer.getSprite().getHeight();
+		this.numberDrawer.setSize(width / 2 - 10, height - 10);
 		this.numberDrawer.getSpriteDrawer().setImageIndex(this.neededAmount);
+		this.numberDrawer.addPosition(- width / 4, 0);
+		
+		this.collectableDrawer = new SpriteDrawerObject(DepthConstants.BACK - 1, 
+				drawer, null, this, this.collectedType.getSprite());
+		this.collectableDrawer.setSize(width / 2 - 10, height - 10);
+		this.collectableDrawer.addPosition(width / 4, 0);
 		
 		// Adds the object to the handler(s)
 		if (collisionHandler != null)
 			collisionHandler.addCollisionListener(this);
 		if (testHandler != null)
 			testHandler.addTestable(this);
-		
-		// Checks if the class is acceptable
-		if (!Obstacle.class.isAssignableFrom(this.collectedClass))
-		{
-			System.err.println("ObstacleCollector doesn't support class " + 
-					this.collectedClass.getName());
-			kill();
-		}
 		
 		forceTransformationUpdate();
 	}
@@ -145,7 +146,7 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 	public void onCollision(ArrayList<Double> colpoints, Collidable collided,
 			double steps)
 	{
-		if (this.collectedClass.isInstance(collided))
+		if (this.collectedType.getObstacleClass().isInstance(collided))
 		{
 			// Collects the collided object
 			Obstacle o = (Obstacle) collided;
@@ -218,6 +219,10 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 	{
 		// Updates the collision points
 		this.colPointsNeedUpdating = true;
-		this.numberDrawer.setPosition(getPosition());
+		
+		int width = this.spriteDrawer.getSprite().getWidth();
+		
+		this.numberDrawer.setPosition(getX() - width / 4, getY());
+		this.collectableDrawer.setPosition(getX() + width / 4, getY());
 	}
 }

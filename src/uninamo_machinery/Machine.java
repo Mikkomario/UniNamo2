@@ -135,7 +135,8 @@ public abstract class Machine extends DimensionalDrawnObject implements
 		}
 		
 		// If is a test version, goes straight to "real" sprite
-		getSpriteDrawer().setSpriteIndex(1, false);
+		if (isForTesting)
+			getSpriteDrawer().setSpriteIndex(1, false);
 		
 		// Adds the object to the handler(s)
 		if (designArea != null)

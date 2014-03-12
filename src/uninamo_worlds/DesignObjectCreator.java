@@ -8,6 +8,7 @@ import uninamo_gameplaysupport.VictoryHandler;
 import uninamo_machinery.ConveyorBelt;
 import uninamo_main.GameSettings;
 import uninamo_obstacles.Box;
+import uninamo_obstacles.ObstacleType;
 import uninamo_userinterface.CodeTransitionButton;
 import uninamo_userinterface.TestingButton;
 
@@ -115,6 +116,6 @@ public class DesignObjectCreator extends AreaObjectCreator
 		
 		new ObstacleCollector(800, GameSettings.screenHeight - 200, area.getDrawer(), 
 				area.getCollisionHandler(), this.testHandler, victoryHandler, 
-				Box.class, 2, "boxdesign", "boxreal");
+				ObstacleType.BOX, 2, "boxdesign", "boxreal");
 	}
 }

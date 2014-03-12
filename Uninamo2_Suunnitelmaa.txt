@@ -125,7 +125,7 @@ Työtehtäviä
 					* Sivunäppäin											DONE
 				- Sivun tekeminen luokkana?									...
 					* Ehkä kirja voi olla (linkitetty) lista sivuja?		DONE
-					* Eri resurssityypeille ehkä omat pienet luokat			...
+					* Eri resurssityypeille ehkä omat pienet luokat			DONE
 					* Tekstin piirtäminen									DONE
 						- Checkkaa messagebox jos sieltä sais 				DONE
 						yleisen version väsättyä
@@ -140,13 +140,13 @@ Työtehtäviä
 			* Ohjekirjamoodin päälle asettaminen							DONE
 				- Muiden handlereiden epäaktivoiminen						DONE
 				- Oma area													DONE
-			* Alustavan sisällön tuottaminen								...
-				- Tarvittavat enumeraatiot komponenteille, laitteille ja 	...
+			* Alustavan sisällön tuottaminen								DONE
+				- Tarvittavat enumeraatiot komponenteille, laitteille ja 	DONE
 				obstacleille
-					* getName												...
+					* getName												DONE
 					* createObject											DONE
 				- Testikomponentille tekstiä								DONE
-				- Testiobjektille tekstiä
+				- Testiobjektille tekstiä									DONE
 				- Testilaitteelle tekstiä									DONE
 			* Ohjekirjan materiaalin lataaminen tiedostosta					DONE
 			* Näpyteltävä testiversio										DONE

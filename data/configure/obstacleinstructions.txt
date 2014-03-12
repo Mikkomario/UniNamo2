@@ -1,0 +1,3 @@
+* This file contains information about different obstacles in the game
+
+box#Thanks to the latest scientific discoveries, this box can break physics in so epic ways it leaves many developers confused.

@@ -28,15 +28,19 @@ public class ObstaclePage extends DescriptionPage
 	 * @param y The y-coordinate of the center of the page
 	 * @param area The area where the page is located at
 	 * @param featuredType The type of obstacle shown on the page
+	 * @param dataHodler The obstacleInfoHolder that provides information 
+	 * shown on the page
 	 */
-	public ObstaclePage(int x, int y, Area area, ObstacleType featuredType)
+	public ObstaclePage(int x, int y, Area area, ObstacleType featuredType, 
+			ObstacleInfoHolder dataHodler)
 	{
-		super(x, y, area, "Description will be here", featuredType.getName());
+		super(x, y, area, dataHodler.getObstacleDescription(featuredType), 
+				featuredType.getName());
 		
 		// Initializes attributes
 		this.imageDrawer = new SpriteDrawerObject(DepthConstants.FOREGROUND, 
 				area.getDrawer(), area.getActorHandler(), this, featuredType.getSprite());
-		double scale = 100.0 / this.imageDrawer.getSpriteDrawer().getSprite().getHeight();
+		double scale = 150.0 / this.imageDrawer.getSpriteDrawer().getSprite().getHeight();
 		this.imageDrawer.setScale(scale, scale);
 		this.imageDrawer.setPosition(getX(), getY() - 100);
 		
@@ -58,5 +62,7 @@ public class ObstaclePage extends DescriptionPage
 	{
 		// Also kills the imageDrawer
 		this.imageDrawer.kill();
+		
+		super.kill();
 	}
 }

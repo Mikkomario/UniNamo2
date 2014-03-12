@@ -115,8 +115,9 @@ public class ManualMaster extends GameObject
 				manualArea, MachineType.CONVEYORBELT, machineData)));
 		
 		// Creates an obstacle page for testing
+		ObstacleInfoHolder obstacleData = new ObstacleInfoHolder();
 		this.pages.add(new DoublePage(new EmptyPage(), new ObstaclePage(
-				rightPageX, pageY, manualArea, ObstacleType.BOX)));
+				rightPageX, pageY, manualArea, ObstacleType.BOX, obstacleData)));
 		
 		// Opens the first doublePage
 		this.pages.get(this.currentPageIndex).open();
