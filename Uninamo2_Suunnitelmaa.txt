@@ -121,7 +121,6 @@ Työtehtäviä
 					* Sivunäppäin											DONE
 				- Sivun tekeminen luokkana?									...
 					* Ehkä kirja voi olla linkitetty lista sivuja?			...
-						- Kirjanmerkit hakuja
 					* Eri resurssityypeille ehkä omat pienet luokat			...
 					* Tekstin piirtäminen
 						- Checkkaa messagebox jos sieltä sais 
@@ -138,19 +137,18 @@ Työtehtäviä
 				- Muiden handlereiden epäaktivoiminen						DONE
 				- Oma area													DONE
 			* Alustavan sisällön tuottaminen								...
-				- Tarvittavat enumeraatiot komponenteille, laitteille ja 
+				- Tarvittavat enumeraatiot komponenteille, laitteille ja 	...
 				obstacleille
 					* getDescription
-					* getName
-					* createObject
-					* createTestComponent
+					* getName												...
+					* createObject											...
 				- Testikomponentille tekstiä								DONE
 				- Testiobjektille tekstiä
 				- Testilaitteelle tekstiä
 			* Ohjekirjan materiaalin lataaminen tiedostosta					...
-			* Näpyteltävä testiversio
-				- Haihtuva johtoluokka
-				- Erillinen statsi inputnastaan, että klikkauksella 
+			* Näpyteltävä testiversio										Testaamatta
+				- Haihtuva johtoluokka										Testaamatta
+				- Erillinen statsi inputnastaan, että klikkauksella 		Hylätty
 				vaihtaa tyyppiä
 		- Tee designmodesta resoluutiosta riippumaton (tullaan tulevaisuudessa 
 		skaalaamaan eri tavalla kuin coding)
@@ -182,6 +180,7 @@ Työtehtäviä
 			* Komponenttienumeraation toteuttaminen ja käyttäminen
 				- Komponenttilaatikoiden luomisessa ilman erillisiä luokkia
 				- Ohjeiden lukemisessa
+			* Nuolen piirtäminen johdossa
 	* Gold	---------------------------------------------------------------------
 		- Main menu
 			* Säätöihin, tehtävävalikkoon sekä kenttäeditoriin pääsy

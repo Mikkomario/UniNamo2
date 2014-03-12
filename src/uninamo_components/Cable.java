@@ -33,7 +33,7 @@ public class Cable extends DimensionalDrawnObject implements
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private SingleSpriteDrawer spritedrawer;
-	private boolean active, lastSignalStatus, dragged, testing;
+	private boolean active, lastSignalStatus, dragged, testing, testVersion;
 	private OutputCableConnector start;
 	private InputCableConnector end;
 	private Point2D.Double lastMousePosition;
@@ -60,10 +60,15 @@ public class Cable extends DimensionalDrawnObject implements
 	 * connector positions
 	 * @param startConnector The connector the cable starts from (Optional if endConnector is provided)
 	 * @param endConnector The connector the cable ends to (optional if startConnector is provided)
+	 * @param isForTesting If this is true, the cable will go to testing mode 
+	 * where it can't be moved but the type of it's signal can be changed by 
+	 * clicking (provided it doesn't have an input that would dominate the 
+	 * signal type)
 	 */
 	public Cable(DrawableHandler drawer, MouseListenerHandler mousehandler, 
 			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
-			OutputCableConnector startConnector, InputCableConnector endConnector)
+			OutputCableConnector startConnector, InputCableConnector endConnector, 
+			boolean isForTesting)
 	{
 		super(0, 0, DepthConstants.NORMAL - 5, false, CollisionType.BOX, 
 				drawer, null);
@@ -72,7 +77,8 @@ public class Cable extends DimensionalDrawnObject implements
 		if (cableIsBeingDragged)
 			System.out.println("CABLE ALREADY DRAGGED!");
 		
-		cableIsBeingDragged = true;
+		if (!isForTesting)
+			cableIsBeingDragged = true;
 		
 		// Initializes attributes
 		this.spritedrawer = new SingleSpriteDrawer(
@@ -81,12 +87,13 @@ public class Cable extends DimensionalDrawnObject implements
 		this.active = true;
 		this.start = startConnector;
 		this.end = endConnector;
+		this.testVersion = isForTesting;
 		this.lastMousePosition = new Point2D.Double(
 				mousehandler.getMousePosition().getX(), 
 				mousehandler.getMousePosition().getY());
 		this.lastSignalStatus = false;
 		this.connectorRelay = connectorRelay;
-		this.dragged = true;
+		this.dragged = !isForTesting;
 		this.testing = false;
 		
 		updateTransformations();
@@ -147,6 +154,17 @@ public class Cable extends DimensionalDrawnObject implements
 			MouseButtonEventType eventType, Point2D.Double mousePosition,
 			double eventStepTime)
 	{
+		// If the cable is a test version, it fuctions differently
+		if (this.testVersion)
+		{
+			// On left click the signal type is changed (if the cable has no input)
+			if (this.start == null && button == MouseButton.LEFT && 
+					eventType == MouseButtonEventType.PRESSED)
+				onSignalChange(!this.lastSignalStatus, null);
+			
+			return;
+		}
+		
 		// On mouse release tries to place the cable on a connector
 		if (button == MouseButton.LEFT && eventType == 
 				MouseButtonEventType.RELEASED && isBeingDragged())
@@ -396,13 +414,29 @@ public class Cable extends DimensionalDrawnObject implements
 		if (this.start != null)
 			startPoint = this.start.getPosition();
 		else
-			startPoint = this.lastMousePosition;
+		{
+			if (!this.testVersion)
+				startPoint = this.lastMousePosition;
+			else if (this.end != null)
+				startPoint = new Point2D.Double(this.end.getX() - 100, 
+						this.end.getY());
+			else
+				startPoint = new Point2D.Double();
+		}
 		
 		// Updates scaling and rotation
 		if (this.end != null)
 			endPoint = this.end.getPosition();
 		else
-			endPoint = this.lastMousePosition;
+		{
+			if (!this.testVersion)
+				endPoint = this.lastMousePosition;
+			else if (this.start != null)
+				endPoint = new Point2D.Double(this.start.getX() + 100, 
+						this.start.getY());
+			else
+				endPoint = new Point2D.Double();
+		}
 		
 		setPosition(startPoint);
 		setAngle(HelpMath.pointDirection(startPoint.getX(), startPoint.getY(), 

@@ -36,7 +36,7 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	private Component host;
 	private Point2D.Double relativePoint;
 	private ArrayList<Cable> connectedCables;
-	private boolean testing;
+	private boolean testing, testVersion;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -54,10 +54,12 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	 * @param room The room where the connector resides at
 	 * @param relay The ConnectorRelay that will keep track of the connector
 	 * @param host The component to which the connector is tied to
+	 * @param isForTesting If this is true, the connector won't react to mouse 
+	 * at all.
 	 */
 	public CableConnector(int relativex, int relativey, DrawableHandler drawer, 
 			MouseListenerHandler mousehandler, Room room, 
-			ConnectorRelay relay, Component host)
+			ConnectorRelay relay, Component host, boolean isForTesting)
 	{
 		super(0, 0, host.getDepth() - 1, false, CollisionType.CIRCLE, drawer, 
 				null);
@@ -65,6 +67,7 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 		// Initializes attributes
 		this.relativePoint = new Point2D.Double(relativex, relativey);
 		this.host = host;
+		this.testVersion = isForTesting;
 		
 		Sprite[] sprites = new Sprite[2];
 		sprites[0] = MultiMediaHolder.getSpriteBank(
@@ -196,6 +199,10 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	@Override
 	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
 	{
+		// Functions differently if is just a test version
+		if (this.testVersion)
+			return MouseButtonEventScale.NONE;
+		
 		return MouseButtonEventScale.LOCAL;
 	}
 	
@@ -213,7 +220,8 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	@Override
 	public boolean listensMouseEnterExit()
 	{
-		return true;
+		// Listens to mouse enter & exit except if is just a test version
+		return !this.testVersion;
 	}
 	
 	@Override

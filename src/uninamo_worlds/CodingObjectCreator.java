@@ -1,6 +1,7 @@
 package uninamo_worlds;
 
-import uninamo_componentBoxes.PulseGeneratorComponentBox;
+import uninamo_componentBoxes.ComponentBox;
+import uninamo_components.ComponentType;
 import uninamo_components.ConnectorRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnTimer;
@@ -65,8 +66,10 @@ public class CodingObjectCreator extends AreaObjectCreator
 		new TestingButton(GameSettings.screenWidth - 110, 45, area.getDrawer(), 
 				area.getMouseHandler(), area, this.testHandler);
 		
-		new PulseGeneratorComponentBox(64, 30, area, this.testHandler, 
-				this.connectorRelay, this.timer);
+		new ComponentBox(64, 30, area, this.testHandler, 
+				this.connectorRelay, this.timer, ComponentType.PULSE);
+		new ComponentBox(64, 90, area, this.testHandler, 
+				this.connectorRelay, this.timer, ComponentType.POWER);
 		
 		new ManualButton(GameSettings.screenWidth / 3, GameSettings.screenHeight, area.getDrawer(), 
 				area.getMouseHandler(), area, this.areaChanger);

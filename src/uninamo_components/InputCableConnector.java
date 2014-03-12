@@ -45,13 +45,17 @@ public class InputCableConnector extends CableConnector
 	 * test events
 	 * @param relay The connectorRelay that will keep track of the connectors
 	 * @param host The host component the connector is tied to
+	 * @param isForTesting If this is true, the connector will go to test mode 
+	 * and not react to mouse. It will, however, create a test cable connected 
+	 * to it
 	 */
 	public InputCableConnector(int relativex, int relativey,
 			DrawableHandler drawer, MouseListenerHandler mousehandler, 
 			Room room, TestHandler testHandler, ConnectorRelay relay, 
-			Component host)
+			Component host, boolean isForTesting)
 	{
-		super(relativex, relativey, drawer, mousehandler, room, relay, host);
+		super(relativex, relativey, drawer, mousehandler, room, relay, host, 
+				isForTesting);
 		
 		// Initializes attributes
 		this.drawer = drawer;
@@ -59,9 +63,14 @@ public class InputCableConnector extends CableConnector
 		this.relay = relay;
 		this.room = room;
 		this.testHandler = testHandler;
-		
-		// Initializes attributes
 		this.lastSignalStatus = false;
+		
+		// If is on test mode, creates a test cable
+		if (isForTesting)
+		{
+			connectCable(new Cable(drawer, mousehandler, room, testHandler, 
+					relay, null, this, true));
+		}
 	}
 	
 	
@@ -78,7 +87,7 @@ public class InputCableConnector extends CableConnector
 				MouseButtonEventType.PRESSED && !Cable.cableIsBeingDragged)
 		{
 			connectCable(new Cable(this.drawer, this.mousehandler, this.room, 
-					this.testHandler, this.relay, null, this));
+					this.testHandler, this.relay, null, this, false));
 		}
 	}
 

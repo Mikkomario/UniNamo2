@@ -31,13 +31,16 @@ public class PowerSourceComponent extends Component
 	 * test events
 	 * @param connectorRelay A connectorRelay that will keep track of the 
 	 * connectors
+	 * @param isForTesting If this is true, the component will go to test mode 
+	 * where it won't react to mouse but will create test cables to its connectors
 	 */
 	public PowerSourceComponent(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, MouseListenerHandler mousehandler, 
-			Room room, TestHandler testHandler, ConnectorRelay connectorRelay)
+			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
+			boolean isForTesting)
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler, 
-				connectorRelay, "test", 0, 1, true);
+				connectorRelay, "test", 0, 1, true, isForTesting);
 		
 		// Informs the output(s) about the component's status
 		sendSignalToOutput(0, true);

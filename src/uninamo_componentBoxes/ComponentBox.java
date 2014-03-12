@@ -4,18 +4,15 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
+import uninamo_components.ComponentType;
 import uninamo_components.ConnectorRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_main.GameSettings;
 import uninamo_worlds.Area;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_interfaceElements.AbstractButton;
 import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Room;
 
 /**
  * ComponentBox is a box from which the user can drag components away from. 
@@ -24,7 +21,7 @@ import utopia_worlds.Room;
  * @author Mikko Hilpinen
  * @since 10.3.2014
  */
-public abstract class ComponentBox extends AbstractButton
+public class ComponentBox extends AbstractButton
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
@@ -32,6 +29,7 @@ public abstract class ComponentBox extends AbstractButton
 	private TestHandler testHandler;
 	private ConnectorRelay connectorRelay;
 	private TurnHandler turnHandler;
+	private ComponentType componentType;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -49,9 +47,11 @@ public abstract class ComponentBox extends AbstractButton
 	 * connectors 
 	 * @param turnHandler The turnHandler that will inform the objects about 
 	 * turn events 
+	 * @param componentType The type of component that will be dragged from the box
 	 */
 	public ComponentBox(int x, int y, Area area, TestHandler testHandler, 
-			ConnectorRelay connectorRelay, TurnHandler turnHandler)
+			ConnectorRelay connectorRelay, TurnHandler turnHandler, 
+			ComponentType componentType)
 	{
 		super(x, y, DepthConstants.BACK - 20, MultiMediaHolder.getSpriteBank(
 				"gameplayinterface").getSprite("componentbox"), area.getDrawer(), 
@@ -62,39 +62,11 @@ public abstract class ComponentBox extends AbstractButton
 		this.testHandler = testHandler;
 		this.connectorRelay = connectorRelay;
 		this.turnHandler = turnHandler;
+		this.componentType = componentType;
 		
 		getSpriteDrawer().setImageSpeed(0);
 		getSpriteDrawer().setImageIndex(0);
 	}
-	
-	
-	// ABSTRACT METHODS	--------------------------------------------------
-	
-	/**
-	 * @return The text shown in the front of the box
-	 */
-	protected abstract String getText();
-	
-	/**
-	 * Creates a new component using the given data
-	 * 
-	 * @param x The new x-coordinate of the component
-	 * @param y The new y-coordinate of the component
-	 * @param drawer The drawer that will draw the component
-	 * @param actorHandler The actorHandler that will animate the component
-	 * @param mouseHandler The mouseHandler that will inform the object about 
-	 * mouse events
-	 * @param room The room where the component will reside at
-	 * @param testHandler The testHandler that will inform the object about 
-	 * test events
-	 * @param connectorRelay The connectorRelay that holds the connectors
-	 * @param turnHandler The turnHandler that will inform the component about 
-	 * turn events
-	 */
-	protected abstract void createComponent(int x, int y, DrawableHandler drawer, 
-			ActorHandler actorHandler, MouseListenerHandler mouseHandler, 
-			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
-			TurnHandler turnHandler);
 	
 	
 	// IMPLEMENTED METHODS	----------------------------------------------
@@ -106,11 +78,11 @@ public abstract class ComponentBox extends AbstractButton
 	{
 		// On left click, creates a new component
 		if (button == MouseButton.LEFT && eventType == MouseButtonEventType.PRESSED)
-			createComponent((int) mousePosition.getX(), 
+			this.componentType.getNewComponent((int) mousePosition.getX(), 
 					(int) mousePosition.getY(), this.area.getDrawer(), 
 					this.area.getActorHandler(), this.area.getMouseHandler(), 
 					this.area, this.testHandler, this.connectorRelay, 
-					this.turnHandler);
+					this.turnHandler, false);
 	}
 
 	@Override
@@ -146,7 +118,7 @@ public abstract class ComponentBox extends AbstractButton
 		// Also draws the text
 		g2d.setFont(GameSettings.basicFont);
 		g2d.setColor(Color.WHITE);
-		g2d.drawString(getText(), 5, 28);
+		g2d.drawString(this.componentType.getName(), 5, 28);
 	}
 	
 	

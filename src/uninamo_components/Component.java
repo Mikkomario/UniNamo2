@@ -37,7 +37,7 @@ public abstract class Component extends DimensionalDrawnObject implements
 	private SingleSpriteDrawer spritedrawer;
 	private InputCableConnector[] inputs;
 	private OutputCableConnector[] outputs;
-	private boolean active, testing, dragged, diesWhenDropped;
+	private boolean active, testing, dragged, diesWhenDropped, testVersion;
 	private ConnectorRelay relay;
 	// Notice that this is relative to the origin, not top-left corner 
 	// (in other words is a relative absolute point)
@@ -67,16 +67,20 @@ public abstract class Component extends DimensionalDrawnObject implements
 	 * @param inputs How many input connectors the component has
 	 * @param outputs How many output connectors the component has
 	 * @param fromBox Was the component created by pulling it from a componentBox
+	 * @param isForTesting If this is true, the component will go to test mode 
+	 * where it won't react to mouse but will create test cables to its connectors
 	 */
 	public Component(int x, int y, DrawableHandler drawer, 
 			ActorHandler actorhandler, MouseListenerHandler mousehandler, 
 			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
-			String spritename, int inputs, int outputs, boolean fromBox)
+			String spritename, int inputs, int outputs, boolean fromBox, 
+			boolean isForTesting)
 	{
 		super(x, y, DepthConstants.NORMAL, false, CollisionType.BOX, drawer, 
 				null);
 		
 		// Initializes attributes
+		this.testVersion = isForTesting;
 		this.spritedrawer = new SingleSpriteDrawer(
 				MultiMediaHolder.getSpriteBank("components").getSprite(
 				spritename), actorhandler, this);
@@ -84,11 +88,11 @@ public abstract class Component extends DimensionalDrawnObject implements
 		this.inputs = new InputCableConnector[inputs];
 		this.outputs = new OutputCableConnector[outputs];
 		this.testing = false;
-		this.dragged = fromBox;
+		this.dragged = fromBox && !isForTesting;
 		this.relay = connectorRelay;
-		this.diesWhenDropped = fromBox;
+		this.diesWhenDropped = fromBox && !isForTesting;
 		this.lastRelativeMouseGrabPosition = new Point2D.Double();
-		if (fromBox)
+		if (fromBox && !isForTesting)
 			componentDragged = true;
 		
 		// Creates the connectors
@@ -96,14 +100,15 @@ public abstract class Component extends DimensionalDrawnObject implements
 		{
 			int relativey = (int) ((i + 1) * (getHeight() / (inputs + 1.0)));
 			this.inputs[i] = new InputCableConnector(0, relativey, drawer, 
-					mousehandler, room, testHandler, connectorRelay, this);
+					mousehandler, room, testHandler, connectorRelay, this, 
+					isForTesting);
 		}
 		for (int i = 0; i < outputs; i++)
 		{
 			int relativey = (int) ((i + 1) * (getHeight() / (outputs + 1.0)));
 			this.outputs[i] = new OutputCableConnector(getWidth() - 0, 
 					relativey, drawer, mousehandler, room, testHandler, 
-					connectorRelay, this);
+					connectorRelay, this, isForTesting);
 		}
 		
 		// Adds the object to the handler(s)
@@ -184,7 +189,8 @@ public abstract class Component extends DimensionalDrawnObject implements
 	@Override
 	public boolean listensMouseEnterExit()
 	{
-		return true;
+		// Doesn't listen to mouse if is just a test version
+		return !this.testVersion;
 	}
 
 	@Override
@@ -238,6 +244,10 @@ public abstract class Component extends DimensionalDrawnObject implements
 	@Override
 	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
 	{
+		// If is a test version, doesn't really care about the mouse
+		if (this.testVersion)
+			return MouseButtonEventScale.NONE;
+		
 		if (this.dragged)
 			return MouseButtonEventScale.GLOBAL;
 		

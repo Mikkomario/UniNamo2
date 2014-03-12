@@ -39,14 +39,16 @@ public class PulseGeneratorComponent extends Component implements TurnBased
 	 * connectors
 	 * @param turnHandler The turnHandler that informs the object about 
 	 * turn events
+	 * @param isForTesting If this is true, the component will go to test mode 
+	 * where it won't react to mouse but will create test cables to its connectors
 	 */
 	public PulseGeneratorComponent(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, MouseListenerHandler mousehandler,
 			Room room, TestHandler testHandler, ConnectorRelay connectorRelay,
-			TurnHandler turnHandler)
+			TurnHandler turnHandler, boolean isForTesting)
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler,
-				connectorRelay, "test", 0, 1, true);
+				connectorRelay, "test", 0, 1, true, isForTesting);
 		
 		// Initializes attributes
 		this.lastSignalType = false;
