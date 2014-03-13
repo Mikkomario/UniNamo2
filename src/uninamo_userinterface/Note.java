@@ -6,7 +6,7 @@ import java.awt.geom.Point2D.Double;
 
 import uninamo_main.GameSettings;
 import uninamo_worlds.Area;
-import utopia_graphic.TextDrawer;
+import utopia_graphic.MultiParagraphTextDrawer;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_interfaceElements.AbstractButton;
 import utopia_resourcebanks.MultiMediaHolder;
@@ -21,7 +21,7 @@ public class Note extends AbstractButton
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
-	private TextDrawer textDrawer;
+	private MultiParagraphTextDrawer textDrawer;
 	private int verticalMargin;
 	private int horizontalMargin;
 	
@@ -47,10 +47,9 @@ public class Note extends AbstractButton
 				area.getDrawer(), area.getMouseHandler(), area);
 		
 		// Initializes attributes
-		this.textDrawer = new TextDrawer(
-				"Text will be added here.\nTesting line change btw.", 
-				GameSettings.basicFont, Color.BLACK, 
-				getWidth() - horizontalMargin * 2, this);
+		this.textDrawer = new MultiParagraphTextDrawer(GameSettings.basicFont, 
+				Color.BLACK, getWidth() - horizontalMargin * 2, 5, this);
+		this.textDrawer.addText("Text will be added here.#Testing line change btw.", "#");
 		this.verticalMargin = verticalMargin;
 		this.horizontalMargin = horizontalMargin;
 	}
@@ -99,7 +98,7 @@ public class Note extends AbstractButton
 		
 		// Also draws the text
 		if (this.textDrawer != null)
-			this.textDrawer.drawText(g2d, this.horizontalMargin, 
+			this.textDrawer.drawTexts(g2d, this.horizontalMargin, 
 					this.verticalMargin);
 	}
 }

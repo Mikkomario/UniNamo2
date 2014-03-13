@@ -66,6 +66,24 @@ public class MultiParagraphTextDrawer
 	}
 	
 	/**
+	 * Adds some text to the drawer. The paragraphs are formed created by 
+	 * splitting the text.
+	 * 
+	 * @param text The text that contains multiple paragraphs.
+	 * @param paragraphChangeIndicator A string that indicates that there should 
+	 * be a paragraph change. For example "#" or a html element
+	 */
+	public void addText(String text, String paragraphChangeIndicator)
+	{
+		String[] paragraphs = text.split(paragraphChangeIndicator);
+		
+		for (int i = 0; i < paragraphs.length; i++)
+		{
+			addParagraph(paragraphs[i]);
+		}
+	}
+	
+	/**
 	 * Draws the texts to the given position. This method should be called in 
 	 * another drawing method like Drawable's drawSelf method.
 	 * 
@@ -85,5 +103,17 @@ public class MultiParagraphTextDrawer
 			y += this.texts.get(i).drawText(g2d, horizontalTranslation, y) + 
 					this.gap;
 		}
+	}
+	
+	/**
+	 * Removes all the text from the drawer
+	 */
+	public void clear()
+	{
+		for (TextDrawer text : this.texts)
+		{
+			text.kill();
+		}
+		this.texts.clear();
 	}
 }
