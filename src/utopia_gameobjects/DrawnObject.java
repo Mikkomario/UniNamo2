@@ -909,7 +909,7 @@ public abstract class DrawnObject extends GameObject implements Drawable
 		
 		for (Point2D.Double p: relativePoints)
 		{
-			g2d.drawRect((int) p.x, (int) p.y, 5, 5);
+			g2d.drawRect((int) p.x - 2, (int) p.y - 2, 5, 5);
 		}
 		
 		g2d.setColor(new Color(0, 0, 0));

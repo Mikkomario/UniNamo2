@@ -38,3 +38,7 @@ contentstext#images/manual/tableofcontentstext.png#1#96#192
 close#images/manual/closebutton1.png#1#16#16
 cables#images/manual/creatingcables.png#1#96#192
 signals#images/manual/signals.png#1#96#192
+
+&mission
+docket#images/ui/docket_v2_strip2.png#2#646#92
+description#images/ui/description.png#2#320#240

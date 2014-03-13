@@ -14,10 +14,15 @@ Työtehtäviä
 				- Tarvittavat numerot muuttuu mystisesti...
 			* ComponentBoxin luominen hidastaa ohjelman käynnistymistä 
 			omituisen paljon
+				- Kokeile piirtosyvyysjärjestämisalgoritmin muokkausta
+					* Lokeroitu järjestelmä
+					* "Swapper" -algoritmi
 			* Vaihda MouseListenerHandlerin mousePositionjutut Point2D:stä 	DONE
 			Point2D.Doubleen
 			* Boxit vaan liukuu jos ne on päällekkäin 
 			(laita liikuttaminen toisiin objekteihin)
+				- Vaihtoehtoisesti valmista toimiva kitkasysteemi 
+				sekä liikemäärän hallinta
 			* Ohjelma bugaa täydellisesti jos laittaa toisen beltin			DONE
 			* Boxit saattaa vieläkin työntyä liukuhihnan sisälle 
 			törmäystilanteissa
@@ -153,30 +158,44 @@ Työtehtäviä
 				- "Haihtuva" johtoluokka									DONE
 				- Erillinen statsi inputnastaan, että klikkauksella 		Hylätty
 				vaihtaa tyyppiä
-		- Tee designmodesta resoluutiosta riippumaton (tullaan 
-		tulevaisuudessa skaalaamaan eri tavalla kuin coding)
 		- Tehtävänannot
 			* Tehtävänantoarkkitehruuri
+				- Kuvausluokka												DONE
+					* Lyhyt kuvaus -lappu									DONE
+					* Pidempi kuvaus -kirje									...
+					* Kuvauksen sulkeminen (klikkaamalla?)					DONE
+					* Kuvausten lataaminen tiedostosta kentän alussa
+				- Demonappula
+					* Demonappulan poistaminen kun menee ekan kerran 
+					koodiin
+					* Samalla voi palauttaa testinappulan
 			* Yksinkertaisen testitehtävänannon valmistaminen
-			* Tehtävänannon selostaminen lyhyessä kuvauksessa
 			* Tarvittavan moodin piirtäminen ja muiden deaktivoiminen
+			* Tehtävänannon lataaminen tiedostosta
+				- Mukaan lukien kaikki kentän laitteet ja obstaclet sekä 
+				collectorit
+		- Kenttien lukeminen tekstitiedostosta
+			* Tunnistettujen kenttien polkujen tallentaminen 
+			ja lukeminen tekstitiedostosta
+				- Eli niin kutsuttu kenttäpankki
+		- Sound effectien lisääminen peliin
+			* Resurssien lataaminen ohjelman alussa
+			* Äänten soittamisen implementointi
+		- Musiikin lisääminen peliin
+			* Resurssinhallinta
+			* Tarvittavat resurssit
+			* Musiikin soittaminen kentän alussa
+		- Samanlaisten input- ja outputkomponenttien (ja laitteiden) 
+		erotteleminen toisistaan numeroilla / nimillä 
+			* (vois näkyä myös designvaiheessa koneissa)
+		- Voittoikkuna
+			* Komponenttikäytön analysointi
+			* Uusien tehtävien antaminen
 		- Kahden näkymän piirtäminen testausmoodissa (ja muuten)
 			* Kameroiden implementointi
 			* Kameran koon ja sijainnin muuttaminen testausvaiheessa
 			* Näppäin käyttöliittymään, josta kuvan saa päälle tai pois
-		- Kenttien lukeminen tekstitiedostosta
-			* Tunnistettujen kenttien polkujen tallentaminen 
-			ja lukeminen tekstitiedostosta
-			* Laitteiden, toimijoiden sekä tehtävänantojen luominen 
-			komentojen pohjalta
-		- Sound effectien lisääminen peliin
-			* Resurssien lataaminen ohjelman alussa
-			* Äänten soittamisen implementointi
-		- Samanlaisten input- ja outputkomponenttien (ja laitteiden) 
-		erotteleminen toisistaan numeroilla
-		- Voittoikkuna
-			* Komponenttikäytön analysointi
-			* Uusien tehtävien antaminen
+			* Piirtosyvyysongelman ratkaiseminen
 		- Parantelua														...
 			* Testausmoodin selkeä näyttäminen koodipuolella
 			* Kerättävän stuffin näyttäminen voittokerääjässä				...
@@ -186,9 +205,17 @@ Työtehtäviä
 				- Komponenttilaatikoiden luomisessa ilman erillisiä luokkia	DONE
 				- Ohjeiden lukemisessa										DONE
 			* Nuolen piirtäminen johdossa
+			* "Back to Coding":in vaihtaminen "Start Coding":iksi kentän 
+			alussa ja takaisin ekan klikkauksen jälkeen
+			* Fysiikkamoottorin paranteleminen
+				- Pyörimisen, kitkan sekä liikemäärän ottaminen mukaan
 	* Gold	---------------------------------------------------------------------
 		- Main menu
 			* Säätöihin, tehtävävalikkoon sekä kenttäeditoriin pääsy
+			* Tarvittavat käyttöliittymäelementit
+			* Tarvittavan "moden" aktivoiminen
+		- Tee designmodesta resoluutiosta riippumaton (tullaan 
+		tulevaisuudessa skaalaamaan eri tavalla kuin coding)
 		- Säädöt
 			* Säätövalikon "näppäimen" toteuttaminen
 			* Säätövalikon arkkitehtuuri
@@ -199,6 +226,9 @@ Työtehtäviä
 			* Äänen volyymin säätäminen
 			* Efektien volyymin säätäminen
 			* Fullscreenin säätö
+			* Pelin nopeuden säätäminen
+			* Asetusten tallentaminen
+			* Asetusten lataaminen pelin alussa
 		- Tehtävien valitseminen
 			* Tehtävien valintaympäristön luominen
 			* Tehtävän lopettaminen
@@ -207,6 +237,8 @@ Työtehtäviä
 			* Komponentit
 			* Laitteet
 			* Toimijat
+			* Backgroundit
+			* Ohjekirja
 		- Erilaisten komponenttien valmistus
 			* Tarvittavat resurssit
 			* Tarvittavat laatikot
@@ -246,7 +278,7 @@ Työtehtäviä
 				- Hiirikuuntelija
 		- Mainokset uusien laitteiden kanssa
 		- Jokaisella kentällä rajattu budjetti ja kaikki 
-		- komponentit maksaa
+		komponentit maksaa
 			* Valuutan hankkiminen
 				- Päiväpalkka ja tehtäväpalkkiot?
 			* Myös erinomaiset mikrotransaktiomahdollisuudet

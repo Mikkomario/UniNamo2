@@ -47,7 +47,7 @@ public abstract class DescriptionPage extends DrawnObject implements Page
 		// Initializes attributes
 		this.testObject = null;
 		this.textDrawer = new TextDrawer(description, GameSettings.basicFont, 
-				Color.BLACK, ManualMaster.MANUALWIDTH / 2 - 50);
+				Color.BLACK, ManualMaster.MANUALWIDTH / 2 - 50, this);
 		this.area = area;
 		this.pagename = pagename;
 		

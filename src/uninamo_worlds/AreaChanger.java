@@ -8,6 +8,7 @@ import uninamo_gameplaysupport.TurnTimer;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
+import utopia_resourcebanks.GamePhaseBank;
 import utopia_resourcebanks.MultiMediaHolder;
 
 /**
@@ -48,19 +49,24 @@ public class AreaChanger
 		TestHandler testHandler = new TestHandler(null);
 		
 		// Creates areas
-		this.areas.put("coding", new Area(MultiMediaHolder.getGamePhaseBank(
-				"default").getPhase("gameplay"), mousehandler, actorhandler, drawer));
+		GamePhaseBank phaseBank = MultiMediaHolder.getGamePhaseBank("default");
+		
+		this.areas.put("coding", new Area(phaseBank.getPhase("gameplay"), 
+				mousehandler, actorhandler, drawer));
 		TurnTimer turnTimer = new TurnTimer(testHandler, 
 				this.areas.get("coding"), actorhandler);
 		new CodingObjectCreator(this, relay, testHandler, turnTimer);
 		
-		this.areas.put("design", new Area(MultiMediaHolder.getGamePhaseBank(
-				"default").getPhase("gameplay"), mousehandler, actorhandler, drawer));
+		this.areas.put("design", new Area(phaseBank.getPhase("gameplay"), 
+				mousehandler, actorhandler, drawer));
 		new DesignObjectCreator(this, relay, testHandler);
 		
-		this.areas.put("manual", new Area(MultiMediaHolder.getGamePhaseBank(
-				"default").getPhase("gameplay"), mousehandler, actorhandler, 
-				drawer));
+		this.areas.put("manual", new Area(phaseBank.getPhase("gameplay"), 
+				mousehandler, actorhandler, drawer));
+		
+		this.areas.put("mission", new Area(phaseBank.getPhase("gameplay"), 
+				mousehandler, actorhandler, drawer));
+		new MissionObjectCreator(this);
 	}
 
 	

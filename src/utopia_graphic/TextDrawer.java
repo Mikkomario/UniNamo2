@@ -11,6 +11,9 @@ import java.awt.font.TextLayout;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 
+import utopia_gameobjects.DrawnObject;
+import utopia_listeners.TransformationListener;
+
 /**
  * TextDrawer draws text over a certain area. The text is broken into lines in 
  * a working fashion. The textDrawer is not independent and should be used by 
@@ -19,7 +22,7 @@ import java.text.AttributedString;
  * @author Mikko Hilpinen
  * @since 12.3.2014
  */
-public class TextDrawer
+public class TextDrawer implements TransformationListener
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
@@ -28,6 +31,10 @@ public class TextDrawer
 	private Font font;
 	private Color color;
 	private int areaWidth;
+	
+	private LineBreakMeasurer measurer;
+	private boolean measurerNeedsUpdating, dead;
+	private DrawnObject user;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -41,8 +48,11 @@ public class TextDrawer
 	 * @param textColor The color with which the text will be drawn
 	 * @param textAreaWidth The width of the area the text will cover 
 	 * (No transformations are included here)
+	 * @param user The user to which this textDrawer is tied to. If null, the 
+	 * drawer won't update its status and won't die unless specifically called
 	 */
-	public TextDrawer(String text, Font font, Color textColor, int textAreaWidth)
+	public TextDrawer(String text, Font font, Color textColor, int textAreaWidth, 
+			DrawnObject user)
 	{
 		// Initializes attributes
 		this.text = text;
@@ -50,6 +60,52 @@ public class TextDrawer
 		this.color = textColor;
 		this.areaWidth = textAreaWidth;
 		setText(text);
+		this.measurer = null;
+		this.measurerNeedsUpdating = true;
+		this.dead = false;
+		this.user = user;
+		
+		if (user != null)
+			user.getTransformationListenerHandler().addListener(this);
+	}
+	
+	
+	// IMPLEMENTED METHODS	----------------------------------------------
+	
+	@Override
+	public boolean isActive()
+	{
+		return true;
+	}
+
+	@Override
+	public void activate()
+	{
+		// Can't be deactivated
+	}
+
+	@Override
+	public void inactivate()
+	{
+		// Can't be deactivated
+	}
+
+	@Override
+	public boolean isDead()
+	{
+		return this.dead || this.user.isDead();
+	}
+
+	@Override
+	public void kill()
+	{
+		this.dead = true;
+	}
+
+	@Override
+	public void onTransformationEvent(TransformationEvent e)
+	{
+		this.measurerNeedsUpdating = true;
 	}
 
 	
@@ -72,6 +128,8 @@ public class TextDrawer
 		attstring.addAttribute(TextAttribute.FONT, this.font);
 		
 		this.styledtextiterator = attstring.getIterator();
+		
+		this.measurerNeedsUpdating = true;
 	}
 	
 	
@@ -86,26 +144,25 @@ public class TextDrawer
 	 * translated horizontally
 	 * @param verticalTranslation How much the top-left corner of the text is 
 	 * translated vertically
+	 * @return How high the written text was
 	 */
-	public void drawText(Graphics2D g2d, int horizontalTranslation, int verticalTranslation)
+	public int drawText(Graphics2D g2d, int horizontalTranslation, int verticalTranslation)
 	{
 		// And then the text
-		g2d.setFont(this.font);
+		//g2d.setFont(this.font);
 		g2d.setColor(this.color);
 		
 		// From: http://docs.oracle.com/javase/7/docs/api/java/awt/font/LineBreakMeasurer.html
 		Point pen = new Point(horizontalTranslation, verticalTranslation);
-		FontRenderContext frc = g2d.getFontRenderContext();
-
-		// "let styledText be an AttributedCharacterIterator containing at least
-		// one character"
 		
-		LineBreakMeasurer measurer = new LineBreakMeasurer(this.styledtextiterator, frc);
+		if (this.measurerNeedsUpdating)
+			updateLineBreakMeasurer(g2d);
+		
 		float wrappingWidth = this.areaWidth;
 		
-		while (measurer.getPosition() < this.text.length()/*fStyledText.length()*/)
+		while (this.measurer.getPosition() < this.text.length()/*fStyledText.length()*/)
 		{
-			TextLayout layout = measurer.nextLayout(wrappingWidth);
+			TextLayout layout = this.measurer.nextLayout(wrappingWidth);
 		
 		    pen.y += (layout.getAscent());
 		    float dx = layout.isLeftToRight() ?
@@ -114,6 +171,8 @@ public class TextDrawer
 		    layout.draw(g2d, pen.x + dx, pen.y);
 		    pen.y += layout.getDescent() + layout.getLeading();
 		}
+		
+		return pen.y - verticalTranslation;
 		
 		// From oracle docs: 
 		// http://docs.oracle.com/javase/7/docs/api/java/awt/font/TextLayout.html
@@ -131,5 +190,16 @@ public class TextDrawer
 		*/
 		//g2d.setFont(this.font);
 		//g2d.drawString(this.message, - getOriginX(), - getOriginY());
+	}
+	
+	private void updateLineBreakMeasurer(Graphics2D g2d)
+	{
+		FontRenderContext frc = g2d.getFontRenderContext();
+
+		// "let styledText be an AttributedCharacterIterator containing at least
+		// one character"
+		
+		this.measurer = 
+				new LineBreakMeasurer(this.styledtextiterator, frc);
 	}
 }

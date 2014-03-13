@@ -67,9 +67,10 @@ public class Main
 				mainactorhandler, maindrawer);
 		areachanger.getArea("design").start();
 		areachanger.getArea("coding").start();
+		areachanger.getArea("mission").start();
 		
 		// TODO: This causes occasional errors
-		areachanger.getArea("design").disableMouseAndDrawing();
+		areachanger.getArea("coding").disableMouseAndDrawing();
 		
 		// Also activates FPS test
 		new FpsApsTest(mainactorhandler, maindrawer);
