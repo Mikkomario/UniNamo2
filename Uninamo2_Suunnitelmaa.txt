@@ -158,20 +158,16 @@ Työtehtäviä
 				- "Haihtuva" johtoluokka									DONE
 				- Erillinen statsi inputnastaan, että klikkauksella 		Hylätty
 				vaihtaa tyyppiä
-		- Tehtävänannot
-			* Tehtävänantoarkkitehruuri
+		- Tehtävänannot														...
+			* Tehtävänantoarkkitehruuri										DONE
 				- Kuvausluokka												DONE
 					* Lyhyt kuvaus -lappu									DONE
-					* Pidempi kuvaus -kirje									...
+					* Pidempi kuvaus -kirje									DONE
 					* Kuvauksen sulkeminen (klikkaamalla?)					DONE
-					* Kuvausten lataaminen tiedostosta kentän alussa
-				- Demonappula
-					* Demonappulan poistaminen kun menee ekan kerran 
-					koodiin
-					* Samalla voi palauttaa testinappulan
-			* Yksinkertaisen testitehtävänannon valmistaminen
-			* Tarvittavan moodin piirtäminen ja muiden deaktivoiminen
-			* Tehtävänannon lataaminen tiedostosta
+					* Kuvausten lataaminen tiedostosta kentän alussa		DONE
+			* Yksinkertaisen testitehtävänannon valmistaminen				DONE
+			* Tarvittavan moodin piirtäminen ja muiden deaktivoiminen		DONE
+			* Tehtävänannon lataaminen tiedostosta							DONE
 				- Mukaan lukien kaikki kentän laitteet ja obstaclet sekä 
 				collectorit
 		- Kenttien lukeminen tekstitiedostosta
@@ -233,6 +229,9 @@ Työtehtäviä
 			* Tehtävien valintaympäristön luominen
 			* Tehtävän lopettaminen
 			* Tehtävän aloittaminen
+		- Kenttien demot
+			* Demonappula
+			* Koodiratkaisujen tallentaminen ja lukeminen
 		- Gold Graffat
 			* Komponentit
 			* Laitteet

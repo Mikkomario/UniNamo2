@@ -37,10 +37,11 @@ public class Note extends AbstractButton
 	 * right of the text
 	 * @param verticalMargin How many empty pixels there are above the text
 	 * @param spriteName The name of the sprite used on the background
+	 * @param content The contents of the note. # marks a paragraph change
 	 * @param area The area where the notes are shown
 	 */
 	public Note(int x, int y, int horizontalMargin, int verticalMargin, 
-			String spriteName, Area area)
+			String spriteName, String content, Area area)
 	{
 		super(x, y, DepthConstants.FOREGROUND, 
 				MultiMediaHolder.getSpriteBank("mission").getSprite(spriteName), 
@@ -48,8 +49,8 @@ public class Note extends AbstractButton
 		
 		// Initializes attributes
 		this.textDrawer = new MultiParagraphTextDrawer(GameSettings.basicFont, 
-				Color.BLACK, getWidth() - horizontalMargin * 2, 5, this);
-		this.textDrawer.addText("Text will be added here.#Testing line change btw.", "#");
+				Color.BLACK, getWidth() - horizontalMargin * 2, 10, this);
+		this.textDrawer.addText(content, "#");
 		this.verticalMargin = verticalMargin;
 		this.horizontalMargin = horizontalMargin;
 	}

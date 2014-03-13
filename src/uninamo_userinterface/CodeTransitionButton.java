@@ -95,6 +95,9 @@ public class CodeTransitionButton extends AbstractButton
 			//System.out.println("Transition to coding");
 			newArea = this.areaChanger.getArea("coding");
 			oldArea = this.areaChanger.getArea("design");
+			
+			// Also removes the mission area
+			this.areaChanger.getArea("mission").end();
 		}
 		
 		oldArea.disableMouseAndDrawing();

@@ -1,7 +1,6 @@
 package uninamo_worlds;
 
-import uninamo_main.GameSettings;
-import uninamo_userinterface.Note;
+import uninamo_missionHandling.MissionInitializer;
 
 /**
  * MissionObjectCreator creates the necessary objects at the start of the 
@@ -12,6 +11,11 @@ import uninamo_userinterface.Note;
  */
 public class MissionObjectCreator extends AreaObjectCreator
 {
+	// ATTRIBUTES	-----------------------------------------------------
+	
+	private AreaChanger areaChanger;
+	
+	
 	// CONSTRUCTOR	-----------------------------------------------------
 	
 	/**
@@ -23,6 +27,9 @@ public class MissionObjectCreator extends AreaObjectCreator
 	public MissionObjectCreator(AreaChanger areaChanger)
 	{
 		super(areaChanger.getArea("mission"), null, null);
+		
+		// Initializes attributes
+		this.areaChanger = areaChanger;
 	}
 	
 	
@@ -31,10 +38,7 @@ public class MissionObjectCreator extends AreaObjectCreator
 	@Override
 	protected void createObjects(Area area)
 	{
-		// Creates the notes
-		new Note(2 * GameSettings.screenWidth / 3, GameSettings.screenHeight / 2, 
-				75, 75, "description", area);
-		new Note(GameSettings.screenWidth / 2 + 64, GameSettings.screenHeight - 200, 
-				75, 32, "docket", area);
+		// Creates the MissionInitializer
+		new MissionInitializer("missions/teststage.txt", this.areaChanger);
 	}
 }
