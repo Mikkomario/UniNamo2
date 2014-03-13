@@ -168,9 +168,9 @@ Työtehtäviä
 			* Yksinkertaisen testitehtävänannon valmistaminen				DONE
 			* Tarvittavan moodin piirtäminen ja muiden deaktivoiminen		DONE
 			* Tehtävänannon lataaminen tiedostosta							DONE
-				- Mukaan lukien kaikki kentän laitteet ja obstaclet sekä 
+				- Mukaan lukien kaikki kentän laitteet ja obstaclet sekä 	...
 				collectorit
-		- Kenttien lukeminen tekstitiedostosta
+		- Kenttien lukeminen tekstitiedostosta								...
 			* Tunnistettujen kenttien polkujen tallentaminen 
 			ja lukeminen tekstitiedostosta
 				- Eli niin kutsuttu kenttäpankki

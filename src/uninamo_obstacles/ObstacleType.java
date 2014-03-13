@@ -1,6 +1,12 @@
 package uninamo_obstacles;
 
+import uninamo_gameplaysupport.TestHandler;
+import uninamo_worlds.Area;
 import utopia_graphic.Sprite;
+import utopia_handlers.ActorHandler;
+import utopia_handlers.CollidableHandler;
+import utopia_handlers.CollisionHandler;
+import utopia_handlers.DrawableHandler;
 import utopia_resourcebanks.MultiMediaHolder;
 
 /**
@@ -70,6 +76,34 @@ public enum ObstacleType
 		
 		System.err.println("Couldn't find a class for the obstacleType " + 
 				this + ", please update the method");
+		return null;
+	}
+	
+	/**
+	 * Creates a new obstacle of this type
+	 * 
+	 * @param x The x-coordinate of the created obstacle
+	 * @param y The y-coordinate of the created obstacle
+	 * @param area The area where the obstacle will be located at
+	 * @param testHandler The testHandler that will inform the obstacle about 
+	 * test events
+	 * @return A new obstacle of this type
+	 */
+	public Obstacle getNewObstacle(int x, int y, Area area, TestHandler testHandler)
+	{
+		DrawableHandler drawer = area.getDrawer();
+		CollisionHandler collisionHandler = area.getCollisionHandler();
+		CollidableHandler collidableHandler = collisionHandler.getCollidableHandler();
+		ActorHandler actorHandler = area.getActorHandler();
+		
+		switch (this)
+		{
+			case BOX: return new Box(x, y, drawer, collidableHandler, 
+					collisionHandler, actorHandler, area, testHandler);
+		}
+		
+		System.err.println("Could not create an obstacle of type " + this + 
+				", please update the method");
 		return null;
 	}
 }

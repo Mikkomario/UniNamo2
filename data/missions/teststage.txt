@@ -6,3 +6,12 @@ Welcome to Namotech. A lot depends on this so we expect high quality software de
 &note1
 1) Get coding and check the manual#2) Move the boxes on the conveyor belt to the right.#3) Profit
 
+&machines
+conveyorbelt#400#600
+conveyorbelt#600#600
+
+&obstacles
+box#400#400
+box#400#200
+
+* TODO: Add obstacleCollectors

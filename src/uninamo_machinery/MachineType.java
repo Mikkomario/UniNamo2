@@ -1,7 +1,11 @@
 package uninamo_machinery;
 
+import uninamo_components.ConnectorRelay;
+import uninamo_gameplaysupport.TestHandler;
 import uninamo_worlds.Area;
 import utopia_handlers.ActorHandler;
+import utopia_handlers.CollidableHandler;
+import utopia_handlers.CollisionHandler;
 import utopia_handlers.DrawableHandler;
 
 /**
@@ -46,6 +50,40 @@ public enum MachineType
 		}
 		
 		System.err.println("Can't create a machine of type " + this + 
+				", please update the method");
+		return null;
+	}
+	
+	/**
+	 * Creates a new machine of this type
+	 * 
+	 * @param x The x-coordinate of the created machine
+	 * @param y The y-coordinate of the created machine
+	 * @param machineArea The Area where the machine will be
+	 * @param componentArea The area where the machine's component(s) will be
+	 * @param testHandler The testHandler that informs the machine about test events
+	 * @param connectorRelay The connectorRelay that will handle the machine's 
+	 * connectors
+	 * @return A new machine of this type
+	 */
+	public Machine getNewMachine(int x, int y, Area machineArea, 
+			Area componentArea, TestHandler testHandler, 
+			ConnectorRelay connectorRelay)
+	{
+		DrawableHandler drawer = machineArea.getDrawer();
+		ActorHandler actorHandler = machineArea.getActorHandler();
+		CollisionHandler collisionHandler = machineArea.getCollisionHandler();
+		CollidableHandler collidableHandler = collisionHandler.getCollidableHandler();
+		
+		switch (this)
+		{
+			case CONVEYORBELT: return new ConveyorBelt(x, y, drawer, 
+					actorHandler, collidableHandler, collisionHandler, 
+					componentArea, machineArea, testHandler, connectorRelay, 
+					false);
+		}
+		
+		System.err.println("Couldn't create a machine of type " + this + 
 				", please update the method");
 		return null;
 	}

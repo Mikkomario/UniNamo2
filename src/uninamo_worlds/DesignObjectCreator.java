@@ -1,13 +1,10 @@
 package uninamo_worlds;
 
-import uninamo_components.ConnectorRelay;
 import uninamo_gameplaysupport.InvisibleWall;
 import uninamo_gameplaysupport.ObstacleCollector;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.VictoryHandler;
-import uninamo_machinery.ConveyorBelt;
 import uninamo_main.GameSettings;
-import uninamo_obstacles.Box;
 import uninamo_obstacles.ObstacleType;
 import uninamo_userinterface.CodeTransitionButton;
 import uninamo_userinterface.TestingButton;
@@ -24,7 +21,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private AreaChanger areaChanger;
-	private ConnectorRelay connectorRelay;
+	//private ConnectorRelay connectorRelay;
 	private TestHandler testHandler;
 	//private TurnTimer timer;
 	
@@ -36,19 +33,18 @@ public class DesignObjectCreator extends AreaObjectCreator
 	 * the area starts.
 	 * 
 	 * @param areaChanger The areaChanger that handles different areas
-	 * @param connectorRelay The connectorRelay that is used in the coding area.
 	 * @param testHandler The testHandler that will inform the objects about 
 	 * test events
 	 */
 	public DesignObjectCreator(AreaChanger areaChanger, 
-			ConnectorRelay connectorRelay, TestHandler testHandler/*, 
+			TestHandler testHandler/*, 
 			TurnTimer turnTimer*/)
 	{
 		super(areaChanger.getArea("design"), "paper", "gameplaybackgrounds");
 		
 		// Initializes attributes
 		this.areaChanger = areaChanger;
-		this.connectorRelay = connectorRelay;
+		//this.connectorRelay = connectorRelay;
 		this.testHandler = testHandler;
 		//this.timer = turnTimer;
 	}
@@ -80,6 +76,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 		new TestingButton(GameSettings.screenWidth - 110, 
 				GameSettings.screenHeight - 45, area.getDrawer(), 
 				area.getMouseHandler(), area, this.testHandler);
+		/*
 		
 		new ConveyorBelt(400, GameSettings.screenHeight - 200, 
 				area.getDrawer(), area.getActorHandler(), 
@@ -92,7 +89,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 				area.getCollisionHandler().getCollidableHandler(),
 				area.getCollisionHandler(), this.areaChanger.getArea("coding"), 
 				area, this.testHandler, this.connectorRelay, false);
-		
+		*/
 		/*
 		new Box(430, 200, area.getDrawer(), 
 				area.getCollisionHandler().getCollidableHandler(), 
@@ -105,7 +102,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 				area.getCollisionHandler(), area.getActorHandler(), area, 
 				this.testHandler);
 		*/
-		
+		/*
 		for (int i = 0; i < 5; i++)
 		{
 			new Box(400, 200 - 200 * i, area.getDrawer(), 
@@ -113,7 +110,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 					area.getCollisionHandler(), area.getActorHandler(), area, 
 					this.testHandler);
 		}
-		
+		*/
 		new ObstacleCollector(800, GameSettings.screenHeight - 200, area.getDrawer(), 
 				area.getCollisionHandler(), this.testHandler, victoryHandler, 
 				ObstacleType.BOX, 2, "boxdesign", "boxreal");
