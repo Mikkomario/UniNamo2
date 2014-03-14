@@ -16,7 +16,7 @@ import utopia_worlds.Room;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public class MachineInputComponent extends Component
+public class MachineInputComponent extends MachineComponent
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
@@ -46,14 +46,16 @@ public class MachineInputComponent extends Component
 	 * @param host the componen't host machine
 	 * @param isForTesting Is the machine component created for simple 
 	 * demonstration purposes
+	 * @param hostName The name of the machine that created this component
 	 */
 	public MachineInputComponent(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, MouseListenerHandler mousehandler,
 			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
-			String spritename, int inputs, Machine host, boolean isForTesting)
+			String spritename, int inputs, Machine host, boolean isForTesting, 
+			String hostName)
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler, 
-				connectorRelay, spritename, inputs, 0, false, isForTesting);
+				connectorRelay, spritename, inputs, 0, isForTesting, hostName);
 		
 		// Initializes attributes
 		this.host = host;
@@ -95,18 +97,5 @@ public class MachineInputComponent extends Component
 			return false;
 		
 		return this.signaldata.get(0);
-	}
-	
-	@Override
-	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
-	{
-		// MachineInputComponents don't react to mouse
-		return MouseButtonEventScale.NONE;
-	}
-	
-	@Override
-	public boolean listensMouseEnterExit()
-	{
-		return false;
 	}
 }

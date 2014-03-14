@@ -59,18 +59,20 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener,
 	 * test events
 	 * @param connectorRelay The connectorRelay that will handle the belts 
 	 * connectors
+	 * @param machineCounter The machineCounter that will count the created 
+	 * machine(s) (optional)
 	 * @param isForTesting Is the machine created for simple demonstration purposes
 	 */
 	public ConveyorBelt(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, CollidableHandler collidableHandler, 
 			CollisionHandler collisionHandler, Area componentArea, Area designArea, 
 			TestHandler testHandler, ConnectorRelay connectorRelay, 
-			boolean isForTesting)
+			MachineCounter machineCounter, boolean isForTesting)
 	{
 		super(x, y, true, CollisionType.BOX, drawer, actorhandler,
 				collidableHandler, componentArea, 
-				designArea, testHandler, connectorRelay,"belt", "beltreal", 
-				"machinecomponent", null, 2, 0, isForTesting);
+				designArea, testHandler, connectorRelay, machineCounter, "belt", 
+				"beltreal", "machinecomponent", null, 2, 0, isForTesting);
 		
 		// Initializes attributes
 		this.absolutePointsNeedUpdating = true;
@@ -180,6 +182,12 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener,
 	{
 		// Remembers that the collision points need updating
 		this.absolutePointsNeedUpdating = true;
+	}
+	
+	@Override
+	public MachineType getMachineType()
+	{
+		return MachineType.CONVEYORBELT;
 	}
 	
 	

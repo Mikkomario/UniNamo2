@@ -79,7 +79,7 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 		this.connectedCables = new ArrayList<Cable>();
 		
 		// Updates radius
-		setRadius(this.spritedrawer.getSprite().getWidth() / 2);
+		setRadius(2 * this.spritedrawer.getSprite().getWidth() / 3);
 		
 		// Updates the position
 		updateAbsolutePosition();

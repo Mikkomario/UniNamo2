@@ -14,4 +14,5 @@ conveyorbelt#600#600
 box#400#400
 box#400#200
 
-* TODO: Add obstacleCollectors
+&collectors
+box#2#800#550#boxdesign#boxreal

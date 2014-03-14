@@ -1,5 +1,6 @@
 package uninamo_machinery;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
@@ -38,6 +39,8 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	private MachineOutputComponent output;
 	private MachineInputComponent input;
 	private MultiSpriteDrawer spritedrawer;
+	private String name;
+	private boolean testing;
 	
 	private static int inputComponentsCreated = 0;
 	private static int outputComponentsCreated = 0;
@@ -63,6 +66,8 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	 * @param testHandler The testHandler that will inform the object about test events
 	 * @param connectorRelay The connectorRelay that will handle the machine's 
 	 * components' connectors
+	 * @param machineCounter The machineCounter that counts the created machines 
+	 * (optional)
 	 * @param designSpriteName The name of the sprite the machine uses in the 
 	 * design view
 	 * @param realSpriteName The name of the sprite the machine uses in the 
@@ -82,7 +87,7 @@ public abstract class Machine extends DimensionalDrawnObject implements
 			CollisionType collisiontype, DrawableHandler drawer, 
 			ActorHandler actorhandler, CollidableHandler collidablehandler, 
 			Area componentArea, Area designArea, TestHandler testHandler, 
-			ConnectorRelay connectorRelay, 
+			ConnectorRelay connectorRelay, MachineCounter machineCounter, 
 			String designSpriteName, String realSpriteName, 
 			String inputComponentSpriteName, String outputComponentSpriteName, 
 			int inputs, int outputs, boolean isForTesting)
@@ -97,6 +102,22 @@ public abstract class Machine extends DimensionalDrawnObject implements
 		this.spritedrawer = new MultiSpriteDrawer(sprites, actorhandler, this);
 		this.output = null;
 		this.input = null;
+		this.testing = false;
+		
+		// Increases the counter (if possible)
+		if (machineCounter != null)
+			machineCounter.countNewMachine(getMachineType());
+		
+		// Creates the name
+		String typeName = getMachineType().toString();
+		// Shortens the name if it's too long
+		if (typeName.length() > 4)
+			typeName = typeName.substring(0, 4);
+		// Adds the number
+		if (machineCounter != null)
+			this.name = typeName + machineCounter.getMachineTypeAmount(getMachineType());
+		else
+			this.name = typeName;
 		
 		// Creates components
 		if (inputComponentSpriteName != null && inputs > 0)
@@ -114,7 +135,8 @@ public abstract class Machine extends DimensionalDrawnObject implements
 					(int) position.getY(), componentArea.getDrawer(), 
 					componentArea.getActorHandler(), componentArea.getMouseHandler(), 
 					componentArea, testHandler, connectorRelay, 
-					inputComponentSpriteName, inputs, this, isForTesting);
+					inputComponentSpriteName, inputs, this, isForTesting, 
+					toString());
 			inputComponentsCreated ++;
 		}
 		
@@ -130,7 +152,8 @@ public abstract class Machine extends DimensionalDrawnObject implements
 					(int) position.getY(), componentArea.getDrawer(), 
 					componentArea.getActorHandler(), componentArea.getMouseHandler(), 
 					componentArea, testHandler, connectorRelay, 
-					outputComponentSpriteName, outputs, isForTesting);
+					outputComponentSpriteName, outputs, isForTesting, 
+					toString());
 			outputComponentsCreated ++;
 		}
 		
@@ -158,6 +181,11 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	 * input signal came from
 	 */
 	public abstract void onSignalEvent(boolean signalType, int inputIndex);
+	
+	/**
+	 * @return What kind of machineType the class represents
+	 */
+	public abstract MachineType getMachineType();
 	
 	
 	// IMPLEMENTED METHODS	---------------------------------------------
@@ -223,6 +251,14 @@ public abstract class Machine extends DimensionalDrawnObject implements
 		
 		this.spritedrawer.drawSprite(g2d, 0, 0);
 		
+		// And the name of the machine (if on design mode)
+		if (!this.testing)
+		{
+			g2d.setFont(GameSettings.basicFont);
+			g2d.setColor(Color.WHITE);
+			g2d.drawString(toString(), 0, 0);
+		}
+		
 		drawCollisionArea(g2d);
 	}
 	
@@ -259,6 +295,7 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	{
 		// Changes the sprite
 		getSpriteDrawer().setSpriteIndex(1, false);
+		this.testing = true;
 	}
 
 	@Override
@@ -266,10 +303,17 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	{
 		// Changes the sprite
 		getSpriteDrawer().setSpriteIndex(0, false);
+		this.testing = false;
 	}
 	
 	
 	// OTHER METHODS	-------------------------------------------------
+	
+	@Override
+	public String toString()
+	{
+		return this.name;
+	}
 	
 	/**
 	 * @return The spritedrawer that draws the machine's sprites
@@ -309,7 +353,7 @@ public abstract class Machine extends DimensionalDrawnObject implements
 		
 		while (i < components)
 		{
-			y += COMPONENTDISTANCE;
+			y += COMPONENTDISTANCE + 15;
 			
 			if (y > GameSettings.screenHeight - COMPONENTDISTANCE / 2 + 160)
 			{
@@ -317,7 +361,7 @@ public abstract class Machine extends DimensionalDrawnObject implements
 					x -= COMPONENTDISTANCE;
 				else
 					x += COMPONENTDISTANCE;
-				y = COMPONENTDISTANCE / 2;
+				y = COMPONENTDISTANCE / 2 + 160;
 			}
 			
 			i++;

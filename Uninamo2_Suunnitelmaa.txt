@@ -158,7 +158,7 @@ Työtehtäviä
 				- "Haihtuva" johtoluokka									DONE
 				- Erillinen statsi inputnastaan, että klikkauksella 		Hylätty
 				vaihtaa tyyppiä
-		- Tehtävänannot														...
+		- Tehtävänannot														DONE
 			* Tehtävänantoarkkitehruuri										DONE
 				- Kuvausluokka												DONE
 					* Lyhyt kuvaus -lappu									DONE
@@ -168,24 +168,39 @@ Työtehtäviä
 			* Yksinkertaisen testitehtävänannon valmistaminen				DONE
 			* Tarvittavan moodin piirtäminen ja muiden deaktivoiminen		DONE
 			* Tehtävänannon lataaminen tiedostosta							DONE
-				- Mukaan lukien kaikki kentän laitteet ja obstaclet sekä 	...
+				- Mukaan lukien kaikki kentän laitteet ja obstaclet sekä 	DONE
 				collectorit
-		- Kenttien lukeminen tekstitiedostosta								...
-			* Tunnistettujen kenttien polkujen tallentaminen 
-			ja lukeminen tekstitiedostosta
-				- Eli niin kutsuttu kenttäpankki
 		- Sound effectien lisääminen peliin
+			* Tarvittavat (testi) resurssit
 			* Resurssien lataaminen ohjelman alussa
 			* Äänten soittamisen implementointi
 		- Musiikin lisääminen peliin
 			* Resurssinhallinta
 			* Tarvittavat resurssit
 			* Musiikin soittaminen kentän alussa
-		- Samanlaisten input- ja outputkomponenttien (ja laitteiden) 
+		- Samanlaisten input- ja outputkomponenttien (ja laitteiden) 		DONE
 		erotteleminen toisistaan numeroilla / nimillä 
-			* (vois näkyä myös designvaiheessa koneissa)
+			* (vois näkyä myös designvaiheessa koneissa)					DONE
+			* MachineCounter -luokka joka laskee luotuja masiinoita			DONE
+			* Järjestysnumeron tallentaminen alussa							DONE
+				- Number = counter.getCurrentAmount(this.type)				DONE
+				- Kannattaa tallentaa tekstinä (type + number)				DONE
 		- Voittoikkuna
+			* Voittoon siirtyminen
+				- Ratkaisun lähetysnäppäin designmodeen (näkyvä)
+					* Joudutaan kyllä ottamaan pois testin loppuessa
+				- Huoneiden lopettaminen ja aloittaminen
+					* Uusi gamephase: results
 			* Komponenttikäytön analysointi
+				- Käytettyjen komponenttityyppien ja määrien piirtäminen
+					* ComponentCounter
+					* GetSprite tyyppienumeraatioon
+					* SimpleComponentSpriteDrawer class piirtämiseen
+				- Käytetyn rahan laskeminen
+					* GetPrice tyyppienumeraatioon
+				- Grading
+					* Käytetyn rahan vertaaminen tavoitteeseen
+					* Arvosanan piirtäminen
 			* Uusien tehtävien antaminen
 		- Kahden näkymän piirtäminen testausmoodissa (ja muuten)
 			* Kameroiden implementointi
@@ -229,9 +244,17 @@ Työtehtäviä
 			* Tehtävien valintaympäristön luominen
 			* Tehtävän lopettaminen
 			* Tehtävän aloittaminen
+			* Tunnistettujen kenttien polkujen tallentaminen 
+			ja lukeminen tekstitiedostosta
+				- Eli niin kutsuttu kenttäpankki
+			* Tehtävien unlockkaaminen saamalla toisia 
+			suoritettua (hyvillä gradeilla)
 		- Kenttien demot
 			* Demonappula
 			* Koodiratkaisujen tallentaminen ja lukeminen
+			* Saa muuten varmaan bugattua koko roskan jos 
+			ratkaisee kentän kytkemällä komponentin itseensä 
+			(kenttää ei enää demossa pääse läpi)
 		- Gold Graffat
 			* Komponentit
 			* Laitteet
@@ -388,3 +411,34 @@ Huomioita / Ideoita
 		- Paperin ääntä
 		- Kolinaa ja kolketta
 		- Puisten laatikoiden avautumista
+	* Pelissä merkittävässä roolissa on tulot, budjetointi sekä tutkimus
+		- Erillinen Research -näkymä jossa voi unlockata
+			* Komponentteja
+			* Laitteita
+			* Tehtäviä
+				- Vain sellaisia, jotka voi toteuttaa nykyisillä komponenteilla & laitteilla
+			* Tehokkuutta
+				- Komponenttien hinnat alas
+				- Koneiden hinnat alas
+				- Huom: Ei vaikuta "odotettuihin kustannuksiin" / budjettiin, joiden mukaan tulot lasketaan
+		- Budjetti -attribuutti, jota voi käyttää seuraaviin
+			* Tutkimukseen
+			* Tehtävän aloittamiseen
+				- Budjetista otetaan pois oletetut kustannukset
+					* Mukaanlukien engineer (good) -suoritustason komponenttikustannukset
+						- = a * kentän mallivastauksen kustannukset (a tulee engineeristä)
+					* Samoin koneiden kustannukset (vakio)
+					* Oletetut kustannukset per yksikkö kerrotaan sitten tuotantointensiteetillä 
+					(= 1 M)
+		- Lisää budjettia saadaan
+			* Joka kuukauden alussa (1 kk = oikean elämän päivä?)
+				- Projekteista
+					* Jos alle 1 M kappaletta myyty
+						- Saadan myytyä n kappaletta 15% katteella (suhteessa odotettuihin kustannuksiin)
+							* Kaikki rahat suoraan budjettiin (eli 115% kappalekustannuksista * n)
+							* n riippuu elinkaaren vaiheesta sekä satunnaismuuttujasta
+					* Muuten
+						- Saadaan myytyä n kappaletta 15% katteella, mutta kustannukset otetaan pois
+							* Eli voittoa tulee 15% * kustannukset * n
+								- Missä n lähestyy nollaa ajan kuluessa (* 1/kk tai jotain) ja riippuu myös 
+								satunnaismuuttujasta

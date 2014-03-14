@@ -46,7 +46,7 @@ public enum MachineType
 		switch (this)
 		{		
 			case CONVEYORBELT: return new ConveyorBelt(x, y, drawer, 
-					actorhandler, null, null, area, area, null, null, true);
+					actorhandler, null, null, area, area, null, null, null, true);
 		}
 		
 		System.err.println("Can't create a machine of type " + this + 
@@ -64,11 +64,13 @@ public enum MachineType
 	 * @param testHandler The testHandler that informs the machine about test events
 	 * @param connectorRelay The connectorRelay that will handle the machine's 
 	 * connectors
+	 * @param machineCounter The machineCounter that will count the created 
+	 * machine (optional)
 	 * @return A new machine of this type
 	 */
 	public Machine getNewMachine(int x, int y, Area machineArea, 
 			Area componentArea, TestHandler testHandler, 
-			ConnectorRelay connectorRelay)
+			ConnectorRelay connectorRelay, MachineCounter machineCounter)
 	{
 		DrawableHandler drawer = machineArea.getDrawer();
 		ActorHandler actorHandler = machineArea.getActorHandler();
@@ -80,7 +82,7 @@ public enum MachineType
 			case CONVEYORBELT: return new ConveyorBelt(x, y, drawer, 
 					actorHandler, collidableHandler, collisionHandler, 
 					componentArea, machineArea, testHandler, connectorRelay, 
-					false);
+					machineCounter, false);
 		}
 		
 		System.err.println("Couldn't create a machine of type " + this + 

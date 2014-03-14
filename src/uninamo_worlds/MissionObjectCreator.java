@@ -18,6 +18,7 @@ public class MissionObjectCreator extends AreaObjectCreator
 	private AreaChanger areaChanger;
 	private TestHandler testHandler;
 	private ConnectorRelay connectorRelay;
+	//private VictoryHandler victoryHandler;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -30,10 +31,11 @@ public class MissionObjectCreator extends AreaObjectCreator
 	 * @param testHandler The testHandler that will inform the created objects 
 	 * about test events
 	 * @param connectorRelay The connectorRelay that will handle the created 
-	 * connectors 
+	 * connectors
 	 */
 	public MissionObjectCreator(AreaChanger areaChanger, 
-			TestHandler testHandler, ConnectorRelay connectorRelay)
+			TestHandler testHandler, ConnectorRelay connectorRelay/*, 
+			VictoryHandler victoryHandler*/)
 	{
 		super(areaChanger.getArea("mission"), null, null);
 		
@@ -41,6 +43,7 @@ public class MissionObjectCreator extends AreaObjectCreator
 		this.areaChanger = areaChanger;
 		this.testHandler = testHandler;
 		this.connectorRelay = connectorRelay;
+		//this.victoryHandler = victoryHandler;
 	}
 	
 	
@@ -51,6 +54,6 @@ public class MissionObjectCreator extends AreaObjectCreator
 	{
 		// Creates the MissionInitializer
 		new MissionInitializer("missions/teststage.txt", this.areaChanger, 
-				this.testHandler, this.connectorRelay);
+				this.testHandler, this.connectorRelay/*, this.victoryHandler*/);
 	}
 }

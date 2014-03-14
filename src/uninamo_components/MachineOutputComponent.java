@@ -13,7 +13,7 @@ import utopia_worlds.Room;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public class MachineOutputComponent extends Component
+public class MachineOutputComponent extends MachineComponent
 {
 	// CONSTRUCTOR	------------------------------------------------------
 	
@@ -37,14 +37,17 @@ public class MachineOutputComponent extends Component
 	 * @param outputs THe number of output connectors the component has
 	 * @param isForTesting Is the machine component created for simple 
 	 * demonstration purposes
+	 * @param hostName The name of the machine that created this component
 	 */
 	public MachineOutputComponent(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, MouseListenerHandler mousehandler,
 			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
-			String spritename, int outputs, boolean isForTesting)
+			String spritename, int outputs, boolean isForTesting, 
+			String hostName)
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler, 
-				connectorRelay, spritename, 0, outputs, false, isForTesting);
+				connectorRelay, spritename, 0, outputs, isForTesting, 
+				hostName);
 	}
 	
 	
@@ -62,19 +65,6 @@ public class MachineOutputComponent extends Component
 	{
 		// Cannot inform any specific signal since the component has (possibly) 
 		// multiple outputs
-		return false;
-	}
-	
-	@Override
-	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
-	{
-		// MachineInputComponents don't react to mouse
-		return MouseButtonEventScale.NONE;
-	}
-	
-	@Override
-	public boolean listensMouseEnterExit()
-	{
 		return false;
 	}
 	
