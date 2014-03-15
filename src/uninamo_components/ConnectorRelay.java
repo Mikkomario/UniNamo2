@@ -103,4 +103,69 @@ public class ConnectorRelay extends Handler
 		
 		return this.lastFoundConnector;
 	}
+	
+	/**
+	 * Searches trough the relay for the given ID.
+	 * 
+	 * @param ID The ID that is searched for
+	 * @return A connector with the given ID or null if no such connector 
+	 * exists in this relay
+	 */
+	public CableConnector getConnectorWithID(String ID)
+	{
+		// Creates a handling operator and starts the search
+		IDFindOperator operator = new IDFindOperator(ID);
+		handleObjects(operator);
+		
+		// Returns the connector that was found (or null)
+		return operator.getConnector();
+	}
+	
+	
+	// SUBCLASSES	-----------------------------------------------------
+	
+	private class IDFindOperator extends HandlingOperator
+	{
+		// ATTRIBUTES	-------------------------------------------------
+		
+		private String idToBeFound;
+		private CableConnector foundConnector;
+		
+		
+		// CONSTRUCTOR	-------------------------------------------------
+		
+		public IDFindOperator(String idToBeFound)
+		{
+			// Initializes attributes
+			this.idToBeFound = idToBeFound;
+			this.foundConnector = null;
+		}
+		
+		
+		// IMPLEMENTED METHODS	-----------------------------------------
+		
+		@Override
+		protected boolean handleObject(Handled h)
+		{
+			CableConnector c = (CableConnector) h;
+			
+			//System.out.println("Searching... CurrentID: " + c.getID());
+			
+			if (c.getID().equals(this.idToBeFound))
+			{
+				this.foundConnector = c;
+				return false;
+			}
+			
+			return true;
+		}
+		
+		
+		// OTHER METHODS	---------------------------------------------
+		
+		public CableConnector getConnector()
+		{
+			return this.foundConnector;
+		}
+	}
 }

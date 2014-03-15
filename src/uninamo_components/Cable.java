@@ -73,12 +73,24 @@ public class Cable extends DimensionalDrawnObject implements
 		super(0, 0, DepthConstants.NORMAL - 5, false, CollisionType.BOX, 
 				drawer, null);
 		
-		// The cable starts as being dragged
-		if (cableIsBeingDragged)
-			System.out.println("CABLE ALREADY DRAGGED!");
-		
-		if (!isForTesting)
+		if (!isForTesting && (startConnector == null || endConnector == null))
+		{
+			// The cable starts as being dragged
+			if (cableIsBeingDragged)
+				System.out.println("CABLE ALREADY DRAGGED!");
+			
 			cableIsBeingDragged = true;
+			this.dragged = true;
+		}
+		else
+			this.dragged = false;
+		
+		/*
+		System.out.println("-------");
+		System.out.println("start: " + startConnector);
+		System.out.println("end: " + endConnector);
+		System.out.println(this.dragged);
+		*/
 		
 		// Initializes attributes
 		this.spritedrawer = new SingleSpriteDrawer(
@@ -93,7 +105,6 @@ public class Cable extends DimensionalDrawnObject implements
 				mousehandler.getMousePosition().getY());
 		this.lastSignalStatus = false;
 		this.connectorRelay = connectorRelay;
-		this.dragged = !isForTesting;
 		this.testing = false;
 		
 		updateTransformations();

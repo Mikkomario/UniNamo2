@@ -66,7 +66,7 @@ public class AreaChanger
 		
 		this.areas.put("mission", new Area(phaseBank.getPhase("gameplay"), 
 				mousehandler, actorhandler, drawer));
-		new MissionObjectCreator(this, testHandler, relay);
+		new MissionObjectCreator(this, testHandler, relay, turnTimer);
 	}
 
 	

@@ -16,3 +16,11 @@ box#400#200
 
 &collectors
 box#2#800#550#boxdesign#boxreal
+
+&components
+T1#power#300#400
+T2#or#450#400
+
+&cables
+T1O0#T2I0
+T2O0#T2I1

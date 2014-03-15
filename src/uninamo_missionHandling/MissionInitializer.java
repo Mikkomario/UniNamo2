@@ -1,8 +1,14 @@
 package uninamo_missionHandling;
 
+import uninamo_components.Cable;
+import uninamo_components.ComponentType;
 import uninamo_components.ConnectorRelay;
+import uninamo_components.InputCableConnector;
+import uninamo_components.NormalComponent;
+import uninamo_components.OutputCableConnector;
 import uninamo_gameplaysupport.ObstacleCollector;
 import uninamo_gameplaysupport.TestHandler;
+import uninamo_gameplaysupport.TurnHandler;
 import uninamo_gameplaysupport.VictoryHandler;
 import uninamo_machinery.MachineCounter;
 import uninamo_machinery.MachineType;
@@ -30,6 +36,7 @@ public class MissionInitializer extends FileReader
 	private ConnectorRelay connectorRelay;
 	private VictoryHandler victoryHandler;
 	private MachineCounter machineCounter;
+	private TurnHandler turnHandler;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -45,10 +52,12 @@ public class MissionInitializer extends FileReader
 	 * about test events (if applicable)
 	 * @param connectorRelay The connectorHandler that will keep track of the 
 	 * created connectors (if any)
+	 * @param turnHandler The turnHandler that will inform the objects about turn 
+	 * events (if applicable)
 	 */
 	public MissionInitializer(String instructionFileName, AreaChanger areaChanger, 
-			TestHandler testHandler, ConnectorRelay connectorRelay 
-			/*,VictoryHandler victoryHandler*/)
+			TestHandler testHandler, ConnectorRelay connectorRelay, 
+			TurnHandler turnHandler)
 	{
 		// Initializes atributes
 		this.mode = null;
@@ -57,6 +66,7 @@ public class MissionInitializer extends FileReader
 		this.connectorRelay = connectorRelay;
 		this.victoryHandler = new VictoryHandler(null);
 		this.machineCounter = new MachineCounter();
+		this.turnHandler = turnHandler;
 		
 		// Reads the data / initializes the mission
 		readFile(instructionFileName, "*");
@@ -82,7 +92,8 @@ public class MissionInitializer extends FileReader
 		// Otherwise creates new objects according to the mode
 		else
 			this.mode.createNewInstance(line, this.areaChanger, this.testHandler, 
-					this.connectorRelay, this.victoryHandler, this.machineCounter);
+					this.connectorRelay, this.victoryHandler, this.machineCounter, 
+					this.turnHandler);
 	}
 
 	
@@ -90,14 +101,15 @@ public class MissionInitializer extends FileReader
 	
 	private enum Mode
 	{
-		NOTE1, NOTE2, OBSTACLES, MACHINES, COLLECTORS;
+		NOTE1, NOTE2, OBSTACLES, MACHINES, COLLECTORS, COMPONENTS, CABLES;
 		
 		
 		// METHODS	-----------------------------------------------------
 		
 		private void createNewInstance(String commandLine, AreaChanger areaChanger, 
 				TestHandler testHandler, ConnectorRelay connectorRelay, 
-				VictoryHandler victoryHandler, MachineCounter machineCounter)
+				VictoryHandler victoryHandler, MachineCounter machineCounter, 
+				TurnHandler turnHandler)
 		{		
 			// Creates a new instance of this mode's object type
 			switch (this)
@@ -208,6 +220,82 @@ public class MissionInitializer extends FileReader
 							area.getCollisionHandler(), testHandler, 
 							victoryHandler, collectedType, amount, commands[4], 
 							commands[5]);
+					break;
+				}
+				case COMPONENTS:
+				{
+					String[] commands = commandLine.split("#");
+					ComponentType componentType = null;
+					
+					// Finds the componentType given in the second argument
+					for (ComponentType type : ComponentType.values())
+					{
+						if (type.toString().equalsIgnoreCase(commands[1]))
+						{
+							componentType = type;
+							break;
+						}
+					}
+					
+					// Changes the x and y from arguments 3 and 4 to integers
+					int x = 0;
+					int y = 0;
+					
+					try
+					{
+						x = Integer.parseInt(commands[2]);
+						y = Integer.parseInt(commands[3]);
+					}
+					catch (NumberFormatException nfe)
+					{
+						System.err.println("Component's given location on line " 
+								+ commandLine + " is not made of integers");
+						nfe.printStackTrace();
+					}
+					
+					// Creates the component and gives it a new ID
+					Area codingArea = areaChanger.getArea("coding");
+					NormalComponent component = componentType.getNewComponent(x, y, 
+							codingArea.getDrawer(), 
+							codingArea.getActorHandler(), 
+							codingArea.getMouseHandler(), codingArea, 
+							testHandler, connectorRelay, turnHandler, 
+							false);
+					component.stopDrag();
+					component.setID(commands[0]);
+					
+					break;
+				}
+				case CABLES:
+				{
+					String[] commands = commandLine.split("#");
+					
+					OutputCableConnector start = null;
+					InputCableConnector end = null;
+					
+					// Finds the start and end connectors based on the IDs
+					try
+					{
+						start = (OutputCableConnector) connectorRelay.getConnectorWithID(commands[0]);
+						end = (InputCableConnector) connectorRelay.getConnectorWithID(commands[1]);
+						
+						if (start == null)
+							System.err.println("Couldn't find a connector with ID: " + commands[0]);
+						if (end == null)
+							System.err.println("Couldn't find a connector with ID: " + commands[1]);
+					}
+					catch (ClassCastException cce)
+					{
+						System.err.println("Failed to read connectors in cable "
+								+ "creation from line " + commandLine);
+						break;
+					}
+					
+					// Creates a new cable between the connectors
+					Area codingArea = areaChanger.getArea("coding");
+					new Cable(codingArea.getDrawer(), 
+							codingArea.getMouseHandler(), codingArea, 
+							testHandler, connectorRelay, start, end, false);
 					break;
 				}
 			}

@@ -2,6 +2,7 @@ package uninamo_components;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
+import java.util.Random;
 
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
@@ -98,7 +99,9 @@ public abstract class Component extends DimensionalDrawnObject implements
 			componentDragged = true;
 		
 		// Generates the id
-		this.id = componentsCreated + "";
+		// TODO: There's still a small chance that two components will have the 
+		// same ID after loading
+		this.id = componentsCreated + "." + new Random().nextInt(1000);
 		componentsCreated ++;
 		
 		// Creates the connectors
@@ -358,6 +361,14 @@ public abstract class Component extends DimensionalDrawnObject implements
 	
 	
 	// OTHER METHODS	-------------------------------------------------
+	
+	/**
+	 * Stops the component from being dragged
+	 */
+	public void stopDrag()
+	{
+		this.dragged = false;
+	}
 	
 	/**
 	 * Informs a specific output about a signal change
