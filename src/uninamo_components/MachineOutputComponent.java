@@ -47,7 +47,7 @@ public class MachineOutputComponent extends MachineComponent
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler, 
 				connectorRelay, spritename, 0, outputs, isForTesting, 
-				hostName);
+				hostName + "O");
 	}
 	
 	

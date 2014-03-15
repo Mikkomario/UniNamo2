@@ -12,11 +12,11 @@ Työtehtäviä
 			* Jos törmää hirveän lujaa niin menee toisen objektin sisälle	DONE
 			* EpicBOx tippuu lattian läpi!									Väistetty?
 				- Tarvittavat numerot muuttuu mystisesti...
-			* ComponentBoxin luominen hidastaa ohjelman käynnistymistä 
+			* ComponentBoxin luominen hidastaa ohjelman käynnistymistä 		Väistetty?
 			omituisen paljon
-				- Kokeile piirtosyvyysjärjestämisalgoritmin muokkausta
-					* Lokeroitu järjestelmä
-					* "Swapper" -algoritmi
+				- Kokeile piirtosyvyysjärjestämisalgoritmin muokkausta		DONE
+					* Lokeroitu järjestelmä									DONE
+					* "Swapper" -algoritmi									Hylätty
 			* Vaihda MouseListenerHandlerin mousePositionjutut Point2D:stä 	DONE
 			Point2D.Doubleen
 			* Boxit vaan liukuu jos ne on päällekkäin 
@@ -200,6 +200,8 @@ Työtehtäviä
 					* GetPrice tyyppienumeraatioon
 				- Grading
 					* Käytetyn rahan vertaaminen tavoitteeseen
+						- Tavoitte pitää tässä vaiheessa vielä vaan 
+						heittää
 					* Arvosanan piirtäminen
 			* Uusien tehtävien antaminen
 		- Kahden näkymän piirtäminen testausmoodissa (ja muuten)
@@ -252,6 +254,7 @@ Työtehtäviä
 		- Kenttien demot
 			* Demonappula
 			* Koodiratkaisujen tallentaminen ja lukeminen
+				- Myös komponenttianalyysiä varten kustannusten lasku
 			* Saa muuten varmaan bugattua koko roskan jos 
 			ratkaisee kentän kytkemällä komponentin itseensä 
 			(kenttää ei enää demossa pääse läpi)

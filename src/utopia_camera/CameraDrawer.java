@@ -29,12 +29,14 @@ public class CameraDrawer extends DrawnObjectHandler
 	 *
 	 * @param autodeath Will the drawer die when it doesn't have anything to 
 	 * draw anymore
+	 * @param depthLayers How many layers of depth handling are needed. The 
+	 * less the content's depth changes, the more layers there should be. [1, 6]
 	 * @param camera The camera that draws the drawer and that is used to check 
 	 * which objects should be drawn
 	 */
-	public CameraDrawer(boolean autodeath, BasicCamera camera)
+	public CameraDrawer(boolean autodeath, int depthLayers, BasicCamera camera)
 	{
-		super(autodeath, true, DepthConstants.BACK, null);
+		super(autodeath, true, DepthConstants.BACK, depthLayers, null);
 		
 		// Initializes attributes
 		this.camera = camera;

@@ -46,15 +46,17 @@ public class BasicCamera extends BasicPhysicDrawnObject
 	 * the act-event
 	 * @param screenWidth The width of the screen
 	 * @param screenHeight The height of the screen
+	 * @param depthLayers How many layers of depth handling there should be. 
+	 * The less the content's depth changes, the more there should be. [1, 6]
 	 */
-	public BasicCamera(int x, int y, int screenWidth, int screenHeight,  
-			DrawableHandler drawer, ActorHandler actorhandler)
+	public BasicCamera(int x, int y, int screenWidth, int screenHeight, 
+			int depthLayers, DrawableHandler drawer, ActorHandler actorhandler)
 	{
 		super(x, y, DepthConstants.BACK, false, CollisionType.BOX, drawer, 
 				null, null, actorhandler);
 		
 		// Initializes attributes
-		this.drawer =  new CameraDrawer(false, this);
+		this.drawer =  new CameraDrawer(false, depthLayers, this);
 		this.screenHeight = screenHeight;
 		this.screenWidth = screenWidth;
 	}

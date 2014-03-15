@@ -19,12 +19,14 @@ public class DrawnObjectHandler extends DrawableHandler
 	 * @param autodeath Will the handler automatically die when it runs out of handleds
 	 * @param usesDepth Does the handler sort the drawn objects according to their depth
 	 * @param depth How 'deep' the handler draws the objects
+	 * @param depthLayers How many depth layers are needed. The less the 
+	 * content changes its depth, the larger the number can be. [1, 6]
 	 * @param superhandler Which drawablehandler will draw the handler and its content
 	 */
 	public DrawnObjectHandler(boolean autodeath, boolean usesDepth, int depth, 
-			DrawableHandler superhandler)
+			int depthLayers, DrawableHandler superhandler)
 	{
-		super(autodeath, usesDepth, depth, superhandler);
+		super(autodeath, usesDepth, depth, depthLayers, superhandler);
 	}
 	
 	

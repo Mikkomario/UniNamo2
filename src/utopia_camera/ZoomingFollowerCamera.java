@@ -31,6 +31,8 @@ public class ZoomingFollowerCamera extends FollowerCamera
 	 * act-event
 	 * @param screenWidth The width of the screen
 	 * @param screenHeight The height of the screen
+	 * @param depthLayers How many layers of depth handling there should be. 
+	 * The less the content's depth changes, the more there should be. [1, 6]
 	 * @param followed The followed PhysicDrawnObject
 	 * @param minimumzoomspeed How much speed the followed object has to have 
 	 * before the camera starts to zoom out (0+)
@@ -38,11 +40,12 @@ public class ZoomingFollowerCamera extends FollowerCamera
 	 * (0+, default 1.0)
 	 */
 	public ZoomingFollowerCamera(DrawableHandler drawer,
-			ActorHandler actorhandler, int screenWidth, int screenHeight,
-			BasicPhysicDrawnObject followed, double minimumzoomspeed, double 
-			zoommodifier)
+			ActorHandler actorhandler, int screenWidth, int screenHeight, 
+			int depthLayers, BasicPhysicDrawnObject followed, 
+			double minimumzoomspeed, double zoommodifier)
 	{
-		super(drawer, actorhandler, screenWidth, screenHeight, followed);
+		super(drawer, actorhandler, screenWidth, screenHeight, depthLayers, 
+				followed);
 		// Initializes attributes
 		this.minimumspeed = minimumzoomspeed;
 		this.zoommodifier = zoommodifier;

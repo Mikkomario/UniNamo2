@@ -30,13 +30,16 @@ public class FollowerCamera extends BasicCamera
 	 * act-event
 	 * @param screenWidth The width of the screen
 	 * @param screenHeight The height of the screen
+	 * @param depthLayers How many layers of depth handling there should be. 
+	 * The less the content's depth changes, the more there should be. [1, 6]
 	 * @param followed The followed PhysicDrawnObject
 	 */
 	public FollowerCamera(DrawableHandler drawer, ActorHandler actorhandler,
-			int screenWidth, int screenHeight, BasicPhysicDrawnObject followed)
+			int screenWidth, int screenHeight, int depthLayers, 
+			BasicPhysicDrawnObject followed)
 	{
 		super((int) (followed.getX()), (int) (followed.getY()), 
-				screenWidth, screenHeight, drawer, actorhandler);
+				screenWidth, screenHeight, depthLayers, drawer, actorhandler);
 
 		// Initializes attributes
 		this.followed = followed;

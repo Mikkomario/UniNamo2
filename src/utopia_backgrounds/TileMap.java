@@ -245,7 +245,7 @@ public class TileMap extends DimensionalDrawnObject
 			return;
 		
 		// Initializes the tiledrawer
-		this.tiledrawer = new DrawableHandler(false, false, getDepth(), 
+		this.tiledrawer = new DrawableHandler(false, false, getDepth(), 0, 
 				this.parentdrawer);
 		
 		// Creates all the tiles

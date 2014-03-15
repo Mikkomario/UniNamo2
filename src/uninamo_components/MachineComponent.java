@@ -47,20 +47,20 @@ public abstract class MachineComponent extends Component
 	 * @param outputs How many output connectors the component has
 	 * @param isForTesting Is the component created for testing purposes 
 	 * (= for the manual)
-	 * @param hostName The name of the machine that created this component
+	 * @param componentName The name of this component
 	 */
 	public MachineComponent(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, MouseListenerHandler mousehandler,
 			Room room, TestHandler testHandler, ConnectorRelay connectorRelay,
 			String spritename, int inputs, int outputs, boolean isForTesting, 
-			String hostName)
+			String componentName)
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler,
 				connectorRelay, spritename, inputs, outputs, false,
 				isForTesting);
 		
 		// Initializes attributes
-		this.name = hostName;
+		this.name = componentName;
 	}
 	
 	

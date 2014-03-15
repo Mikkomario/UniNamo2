@@ -101,11 +101,10 @@ public class BookMark extends AbstractButton
 		
 		// If the page is the same as the pageIndex, changes depth, otherwise 
 		// rechanges if (if necessary)
-		/* TODO: This didn't work for some reason...
+		
 		if (newPageIndex == this.pageIndex)
 			setDepth(DepthConstants.NORMAL);
 		else if (getDepth() == DepthConstants.NORMAL)
 			setDepth(DepthConstants.BOTTOM);
-		*/
 	}
 }

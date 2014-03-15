@@ -53,7 +53,7 @@ public class Area extends Room
 		this.mousehandler = new MouseListenerHandler(false, superActorHandler, 
 				superMouseHandler);
 		this.actorhandler = new ActorHandler(false, superActorHandler);
-		this.drawer = new DrawableHandler(false, true, DepthConstants.NORMAL, 
+		this.drawer = new DrawableHandler(false, true, DepthConstants.NORMAL, 5, 
 				superDrawer);
 		this.collisionhandler = new CollisionHandler(false, superActorHandler);
 		this.drawDisabled = false;

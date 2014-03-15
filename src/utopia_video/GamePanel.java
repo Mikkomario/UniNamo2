@@ -43,7 +43,8 @@ public class GamePanel extends JPanel
 		this.yscale = 1;
 		this.width = width;
 		this.height = height;
-		this.drawer = new DrawableHandler(false, true, DepthConstants.NORMAL, 
+		// TODO: Check that 5 is good
+		this.drawer = new DrawableHandler(false, true, DepthConstants.NORMAL, 5,
 				null);
 		
 		//Let's format our panel

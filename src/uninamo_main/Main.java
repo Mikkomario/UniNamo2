@@ -38,7 +38,7 @@ public class Main
 		// Initializes handlers
 		ActorHandler mainactorhandler = new ActorHandler(false, null);
 		DrawableHandler maindrawer = new DrawableHandler(false, true, 
-				DepthConstants.NORMAL, null);
+				DepthConstants.NORMAL, 5, null);
 		//KeyListenerHandler mainkeyhandler = new KeyListenerHandler(false, null);
 		MouseListenerHandler mainmousehandler = 
 				new MouseListenerHandler(false, null, null);
