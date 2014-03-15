@@ -89,4 +89,10 @@ public abstract class MachineComponent extends Component
 		g2d.setFont(GameSettings.basicFont);
 		g2d.drawString(this.name, 0, 0);
 	}
+	
+	@Override
+	public String getID()
+	{
+		return this.name;
+	}
 }

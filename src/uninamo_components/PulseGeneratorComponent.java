@@ -13,7 +13,7 @@ import utopia_worlds.Room;
  * 
  * @author Mikko Hilpinen
  */
-public class PulseGeneratorComponent extends Component implements TurnBased
+public class PulseGeneratorComponent extends NormalComponent implements TurnBased
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
@@ -89,5 +89,11 @@ public class PulseGeneratorComponent extends Component implements TurnBased
 		// Resets the signal on test start
 		this.lastSignalType = false;
 		sendSignalToOutput(0, this.lastSignalType);
+	}
+
+	@Override
+	public ComponentType getType()
+	{
+		return ComponentType.PULSE;
 	}
 }

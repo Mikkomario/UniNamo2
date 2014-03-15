@@ -98,6 +98,14 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	}
 	
 	
+	// ABSTRACT METHODS	-------------------------------------------------
+	
+	/**
+	 * @return The unique identifier of the connector
+	 */
+	public abstract String getID();
+	
+	
 	// IMPLEMENTED METHODS	---------------------------------------------
 
 	@Override

@@ -251,9 +251,9 @@ Työtehtäviä
 				- Eli niin kutsuttu kenttäpankki
 			* Tehtävien unlockkaaminen saamalla toisia 
 			suoritettua (hyvillä gradeilla)
-		- Kenttien demot
+		- Kenttien demot												...
 			* Demonappula
-			* Koodiratkaisujen tallentaminen ja lukeminen
+			* Koodiratkaisujen tallentaminen ja lukeminen				...
 				- Myös komponenttianalyysiä varten kustannusten lasku
 			* Saa muuten varmaan bugattua koko roskan jos 
 			ratkaisee kentän kytkemällä komponentin itseensä 

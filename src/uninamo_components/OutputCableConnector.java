@@ -24,6 +24,7 @@ public class OutputCableConnector extends CableConnector
 	private ConnectorRelay relay;
 	private Room room;
 	private TestHandler testHandler;
+	private String hostConnectInfo;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -43,6 +44,7 @@ public class OutputCableConnector extends CableConnector
 	 * about test events
 	 * @param relay The connectorRelay that will keep track of the connectors
 	 * @param host The component the connector is tied to
+	 * @param outputIndex Which of the host's output connectors this one is
 	 * @param isForTesting If this is true, the connector will go to test mode 
 	 * and not react to mouse. It will, however create a test cable connected 
 	 * to it
@@ -50,7 +52,7 @@ public class OutputCableConnector extends CableConnector
 	public OutputCableConnector(int relativex, int relativey,
 			DrawableHandler drawer, MouseListenerHandler mousehandler, 
 			Room room, TestHandler testHandler, ConnectorRelay relay, 
-			Component host, boolean isForTesting)
+			Component host, int outputIndex, boolean isForTesting)
 	{
 		super(relativex, relativey, drawer, mousehandler, room, relay, host, 
 				isForTesting);
@@ -62,6 +64,7 @@ public class OutputCableConnector extends CableConnector
 		this.relay = relay;
 		this.room = room;
 		this.testHandler = testHandler;
+		this.hostConnectInfo = "O" + outputIndex;
 		
 		// Changes the look of the connector
 		getSpriteDrawer().setSpriteIndex(1, false);
@@ -135,5 +138,11 @@ public class OutputCableConnector extends CableConnector
 		
 		// In addition to removal, resets signal status to false
 		c.onSignalChange(false, this);
+	}
+
+	@Override
+	public String getID()
+	{
+		return getHost().getID() + this.hostConnectInfo;
 	}
 }

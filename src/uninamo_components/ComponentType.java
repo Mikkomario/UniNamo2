@@ -54,7 +54,7 @@ public enum ComponentType
 	 * purposes. If so, it doesn't react to mouse but will use test cables
 	 * @return A component of this componentType
 	 */
-	public Component getNewComponent(int x, int y, DrawableHandler drawer, 
+	public NormalComponent getNewComponent(int x, int y, DrawableHandler drawer, 
 			ActorHandler actorHandler, MouseListenerHandler mouseHandler, 
 			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
 			TurnHandler turnHandler, boolean isTestComponent)

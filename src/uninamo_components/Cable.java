@@ -406,6 +406,31 @@ public class Cable extends DimensionalDrawnObject implements
 	
 	// OTHER METHODS	-------------------------------------------------
 	
+	/**
+	 * @return Returns the data needed for recreating the cable. The data is 
+	 * in string format and has the following syntax:<br>
+	 * startConnectorID#endConnectorID<br>
+	 * If one of the IDs can't be obtained, a warning is given and it is 
+	 * replaced with 'NONE'
+	 */
+	public String getSaveData()
+	{
+		String start = "NONE";
+		String end = "NONE";
+		
+		if (this.start != null)
+			start = this.start.getID();
+		else
+			System.err.println("Trying to save a cable with no start");
+		
+		if (this.end != null)
+			end = this.end.getID();
+		else
+			System.err.println("Trying to save a cable with no end");
+		
+		return start + "#" + end;
+	}
+	
 	// Updates the position and form of the cable
 	private void updateTransformations()
 	{

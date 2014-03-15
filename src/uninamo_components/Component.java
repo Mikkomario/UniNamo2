@@ -34,6 +34,7 @@ public abstract class Component extends DimensionalDrawnObject implements
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
+	private String id;
 	private SingleSpriteDrawer spritedrawer;
 	private InputCableConnector[] inputs;
 	private OutputCableConnector[] outputs;
@@ -44,6 +45,7 @@ public abstract class Component extends DimensionalDrawnObject implements
 	private Point2D.Double lastRelativeMouseGrabPosition;
 	
 	private static boolean componentDragged = false;
+	private static int componentsCreated = 0;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -95,12 +97,16 @@ public abstract class Component extends DimensionalDrawnObject implements
 		if (fromBox && !isForTesting)
 			componentDragged = true;
 		
+		// Generates the id
+		this.id = componentsCreated + "";
+		componentsCreated ++;
+		
 		// Creates the connectors
 		for (int i = 0; i < inputs; i++)
 		{
 			int relativey = (int) ((i + 1) * (getHeight() / (inputs + 1.0)));
 			this.inputs[i] = new InputCableConnector(0, relativey, drawer, 
-					mousehandler, room, testHandler, connectorRelay, this, 
+					mousehandler, room, testHandler, connectorRelay, this, i, 
 					isForTesting);
 		}
 		for (int i = 0; i < outputs; i++)
@@ -108,7 +114,7 @@ public abstract class Component extends DimensionalDrawnObject implements
 			int relativey = (int) ((i + 1) * (getHeight() / (outputs + 1.0)));
 			this.outputs[i] = new OutputCableConnector(getWidth() - 0, 
 					relativey, drawer, mousehandler, room, testHandler, 
-					connectorRelay, this, isForTesting);
+					connectorRelay, this, i, isForTesting);
 		}
 		
 		// Adds the object to the handler(s)
@@ -336,6 +342,18 @@ public abstract class Component extends DimensionalDrawnObject implements
 		}
 		
 		super.kill();
+	}
+	
+	
+	// GETTERS & SETTERS	---------------------------------------------
+	
+	/**
+	 * @return The identifier of this component. No other component has the 
+	 * same identifier
+	 */
+	public String getID()
+	{
+		return this.id;
 	}
 	
 	

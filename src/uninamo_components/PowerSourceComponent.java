@@ -13,7 +13,7 @@ import utopia_worlds.Room;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public class PowerSourceComponent extends Component
+public class PowerSourceComponent extends NormalComponent
 {
 	// CONSTRUCTOR	-----------------------------------------------------
 	
@@ -56,5 +56,11 @@ public class PowerSourceComponent extends Component
 	public boolean getSignalStatus()
 	{
 		return true;
+	}
+
+	@Override
+	public ComponentType getType()
+	{
+		return ComponentType.POWER;
 	}
 }

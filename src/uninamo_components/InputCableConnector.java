@@ -24,6 +24,7 @@ public class InputCableConnector extends CableConnector
 	private ConnectorRelay relay;
 	private Room room;
 	private TestHandler testHandler;
+	private String hostConnectInfo;
 	
 	// TODO: These should be moved to the superclass
 	
@@ -45,6 +46,7 @@ public class InputCableConnector extends CableConnector
 	 * test events
 	 * @param relay The connectorRelay that will keep track of the connectors
 	 * @param host The host component the connector is tied to
+	 * @param inputIndex Which if the host's inputs this connector is
 	 * @param isForTesting If this is true, the connector will go to test mode 
 	 * and not react to mouse. It will, however, create a test cable connected 
 	 * to it
@@ -52,7 +54,7 @@ public class InputCableConnector extends CableConnector
 	public InputCableConnector(int relativex, int relativey,
 			DrawableHandler drawer, MouseListenerHandler mousehandler, 
 			Room room, TestHandler testHandler, ConnectorRelay relay, 
-			Component host, boolean isForTesting)
+			Component host, int inputIndex, boolean isForTesting)
 	{
 		super(relativex, relativey, drawer, mousehandler, room, relay, host, 
 				isForTesting);
@@ -64,6 +66,7 @@ public class InputCableConnector extends CableConnector
 		this.room = room;
 		this.testHandler = testHandler;
 		this.lastSignalStatus = false;
+		this.hostConnectInfo = "I" + inputIndex;
 		
 		// If is on test mode, creates a test cable
 		if (isForTesting)
@@ -137,6 +140,13 @@ public class InputCableConnector extends CableConnector
 		// In addition to removal, recalculates the signal status
 		onSignalChange(false, c);
 	}
+	
+	@Override
+	public String getID()
+	{
+		return getHost().getID() + this.hostConnectInfo;
+	}
+	
 	
 	// OTHER METHODS	-------------------------------------------------
 	

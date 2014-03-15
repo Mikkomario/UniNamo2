@@ -13,7 +13,7 @@ import utopia_worlds.Room;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public class OrComponent extends Component
+public class OrComponent extends NormalComponent
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
@@ -68,5 +68,11 @@ public class OrComponent extends Component
 	public boolean getSignalStatus()
 	{
 		return this.signalStatus;
+	}
+
+	@Override
+	public ComponentType getType()
+	{
+		return ComponentType.OR;
 	}
 }
