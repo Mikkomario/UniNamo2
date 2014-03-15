@@ -111,6 +111,12 @@ public class Cable extends DimensionalDrawnObject implements
 		this.spritedrawer.setImageSpeed(0);
 		this.spritedrawer.setImageIndex(0);
 		
+		// Updates the signal status and informs the end connector (if possible)
+		if (this.start != null)
+			this.start.connectCable(this);
+		if (this.end != null)
+			this.end.connectCable(this);
+		
 		// Adds the object to the handler(s)
 		if (room != null)
 			room.addObject(this);

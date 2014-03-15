@@ -90,8 +90,8 @@ public class OutputCableConnector extends CableConnector
 		if (button == MouseButton.LEFT && eventType == 
 				MouseButtonEventType.PRESSED && !Cable.cableIsBeingDragged)
 		{
-			connectCable(new Cable(this.drawer, this.mousehandler, this.room, 
-					this.testHandler, this.relay, this, null, false));
+			new Cable(this.drawer, this.mousehandler, this.room, 
+					this.testHandler, this.relay, this, null, false);
 		}
 	}
 
