@@ -368,6 +368,7 @@ public abstract class Component extends DimensionalDrawnObject implements
 	public void stopDrag()
 	{
 		this.dragged = false;
+		componentDragged = false;
 	}
 	
 	/**

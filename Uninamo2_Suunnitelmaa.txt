@@ -185,6 +185,13 @@ Työtehtäviä
 			* Järjestysnumeron tallentaminen alussa							DONE
 				- Number = counter.getCurrentAmount(this.type)				DONE
 				- Kannattaa tallentaa tekstinä (type + number)				DONE
+		- Kenttien demot													...
+			* Demonappula													DONE
+			* Koodiratkaisujen (tallentaminen ja) lukeminen					...
+				- Myös komponenttianalyysiä varten kustannusten lasku
+			* Saa muuten varmaan bugattua koko roskan jos 
+			ratkaisee kentän kytkemällä komponentin itseensä 
+			(kenttää ei enää demossa pääse läpi)
 		- Voittoikkuna
 			* Voittoon siirtyminen
 				- Ratkaisun lähetysnäppäin designmodeen (näkyvä)
@@ -251,13 +258,6 @@ Työtehtäviä
 				- Eli niin kutsuttu kenttäpankki
 			* Tehtävien unlockkaaminen saamalla toisia 
 			suoritettua (hyvillä gradeilla)
-		- Kenttien demot												...
-			* Demonappula
-			* Koodiratkaisujen tallentaminen ja lukeminen				...
-				- Myös komponenttianalyysiä varten kustannusten lasku
-			* Saa muuten varmaan bugattua koko roskan jos 
-			ratkaisee kentän kytkemällä komponentin itseensä 
-			(kenttää ei enää demossa pääse läpi)
 		- Gold Graffat
 			* Komponentit
 			* Laitteet

@@ -58,6 +58,10 @@ public class TestingButton extends AbstractButton implements TestListener
 		getSpriteDrawer().setImageSpeed(0);
 		getSpriteDrawer().setImageIndex(0);
 		
+		// Goes to hiding until the button is needed
+		setInvisible();
+		inactivate();
+		
 		// Adds the object to the handler(s)
 		if (testHandler != null)
 			testHandler.addTestable(this);

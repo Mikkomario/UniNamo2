@@ -1,7 +1,7 @@
 * Data for the first test stage
 
-&note2
-Welcome to Namotech. A lot depends on this so we expect high quality software development from you.#You can start coding ASAP, but remember to check the designs and test your creations. We understand that you're fresh from the university so we left an manual on your desk to help you out.#Now get working so we can start making revenue!
+*&note2
+*Welcome to Namotech. A lot depends on this so we expect high quality software development from you.#You can start coding ASAP, but remember to check the designs and test your creations. We understand that you're fresh from the university so we left an manual on your desk to help you out.#Now get working so we can start making revenue!
 
 &note1
 1) Get coding and check the manual#2) Move the boxes on the conveyor belt to the right.#3) Profit
@@ -23,4 +23,5 @@ T2#or#450#400
 
 &cables
 T1O0#T2I0
-T2O0#T2I1
+T2O0#CONV1II0
+T2O0#CONV2II0

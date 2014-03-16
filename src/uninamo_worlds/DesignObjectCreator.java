@@ -4,6 +4,7 @@ import uninamo_gameplaysupport.InvisibleWall;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_main.GameSettings;
 import uninamo_userinterface.CodeTransitionButton;
+import uninamo_userinterface.DemoButton;
 import uninamo_userinterface.TestingButton;
 
 /**
@@ -68,11 +69,14 @@ public class DesignObjectCreator extends AreaObjectCreator
 				area.getCollisionHandler().getCollidableHandler(), area);
 		
 		// Creates objects
-		new CodeTransitionButton(area.getDrawer(), area.getMouseHandler(), 
-				area, CodeTransitionButton.TOCODE, this.areaChanger);
-		new TestingButton(GameSettings.screenWidth - 110, 
+		DemoButton demoButton = new DemoButton(600, 80, area.getDrawer(), 
+				area.getMouseHandler(), area, this.testHandler);
+		TestingButton testButton = new TestingButton(GameSettings.screenWidth - 110, 
 				GameSettings.screenHeight - 45, area.getDrawer(), 
 				area.getMouseHandler(), area, this.testHandler);
+		new CodeTransitionButton(area.getDrawer(), area.getMouseHandler(), 
+				area, CodeTransitionButton.TOCODE, this.areaChanger, 
+				this.testHandler, testButton, demoButton);
 		/*
 		
 		new ConveyorBelt(400, GameSettings.screenHeight - 200, 
