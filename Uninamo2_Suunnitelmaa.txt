@@ -229,6 +229,8 @@ Työtehtäviä
 			alussa ja takaisin ekan klikkauksen jälkeen
 			* Fysiikkamoottorin paranteleminen
 				- Pyörimisen, kitkan sekä liikemäärän ottaminen mukaan
+			* Muistinvapauttamisen varmentaminen heittämällä tarpeettomia 
+			attribuutteja nulliksi
 	* Gold	---------------------------------------------------------------------
 		- Main menu
 			* Säätöihin, tehtävävalikkoon sekä kenttäeditoriin pääsy

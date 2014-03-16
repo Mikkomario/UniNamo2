@@ -36,15 +36,18 @@ public class OrComponent extends NormalComponent
 	 * @param testHandler The testHandler that will inform the object about test events
 	 * @param connectorRelay A connectorRelay that will keep track of the 
 	 * connectors
+	 * @param componentRelay The componentRelay that will keep track of the 
+	 * component (optional)
 	 * @param isForTesting If this is true, the component will go to test mode 
 	 * where it won't react to mouse but will create test cables to its connectors
 	 */
 	public OrComponent(int x, int y, DrawableHandler drawer, ActorHandler actorHandler, 
 			MouseListenerHandler mousehandler, Room room, TestHandler testHandler, 
-			ConnectorRelay connectorRelay, boolean isForTesting)
+			ConnectorRelay connectorRelay, NormalComponentRelay componentRelay, 
+			boolean isForTesting)
 	{
 		super(x, y, drawer, actorHandler, mousehandler, room, testHandler, 
-				connectorRelay, "test", 2, 1, true, isForTesting);
+				connectorRelay, componentRelay, "test", 2, 1, true, isForTesting);
 		
 		// Initializes attributes
 		this.signalStatus = false;

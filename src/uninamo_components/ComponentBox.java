@@ -28,6 +28,7 @@ public class ComponentBox extends AbstractButton
 	private ConnectorRelay connectorRelay;
 	private TurnHandler turnHandler;
 	private ComponentType componentType;
+	private NormalComponentRelay componentRelay;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -43,13 +44,15 @@ public class ComponentBox extends AbstractButton
 	 * events
 	 * @param connectorRelay The connectorRelay that will handle the created 
 	 * connectors 
+	 * @param componentRelay The componentRelay that will keep track of the 
+	 * created components
 	 * @param turnHandler The turnHandler that will inform the objects about 
 	 * turn events 
 	 * @param componentType The type of component that will be dragged from the box
 	 */
 	public ComponentBox(int x, int y, Area area, TestHandler testHandler, 
-			ConnectorRelay connectorRelay, TurnHandler turnHandler, 
-			ComponentType componentType)
+			ConnectorRelay connectorRelay, NormalComponentRelay componentRelay, 
+			TurnHandler turnHandler, ComponentType componentType)
 	{
 		super(x, y, DepthConstants.BACK - 20, MultiMediaHolder.getSpriteBank(
 				"gameplayinterface").getSprite("componentbox"), area.getDrawer(), 
@@ -61,6 +64,7 @@ public class ComponentBox extends AbstractButton
 		this.connectorRelay = connectorRelay;
 		this.turnHandler = turnHandler;
 		this.componentType = componentType;
+		this.componentRelay = componentRelay;
 		
 		getSpriteDrawer().setImageSpeed(0);
 		getSpriteDrawer().setImageIndex(0);
@@ -80,7 +84,7 @@ public class ComponentBox extends AbstractButton
 					(int) mousePosition.getY(), this.area.getDrawer(), 
 					this.area.getActorHandler(), this.area.getMouseHandler(), 
 					this.area, this.testHandler, this.connectorRelay, 
-					this.turnHandler, false);
+					this.componentRelay, this.turnHandler, false);
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package uninamo_worlds;
 import uninamo_components.ComponentBox;
 import uninamo_components.ComponentType;
 import uninamo_components.ConnectorRelay;
+import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnTimer;
 import uninamo_main.GameSettings;
@@ -25,6 +26,7 @@ public class CodingObjectCreator extends AreaObjectCreator
 	private ConnectorRelay connectorRelay;
 	private TestHandler testHandler;
 	private TurnTimer timer;
+	private NormalComponentRelay componentRelay;
 	
 	
 	// CONSTRUCTOR	----------------------------------------------------
@@ -37,13 +39,15 @@ public class CodingObjectCreator extends AreaObjectCreator
 	 * game
 	 * @param connectorRelay The connectorRelay that contains the connectors 
 	 * used in the area
+	 * @param componentRelay The componentRelay that will keep track of the 
+	 * created components
 	 * @param testHandler The testHandler that will inform the objects about 
 	 * test events
 	 * @param timer The turnTimer that informs the objects about turn events
 	 */
 	public CodingObjectCreator(AreaChanger areaChanger, 
-			ConnectorRelay connectorRelay, TestHandler testHandler, 
-			TurnTimer timer)
+			ConnectorRelay connectorRelay, NormalComponentRelay componentRelay, 
+			TestHandler testHandler, TurnTimer timer)
 	{
 		super(areaChanger.getArea("coding"), null, null);
 		
@@ -52,6 +56,7 @@ public class CodingObjectCreator extends AreaObjectCreator
 		this.connectorRelay = connectorRelay;
 		this.testHandler = testHandler;
 		this.timer = timer;
+		this.componentRelay = componentRelay;
 	}
 	
 	
@@ -66,9 +71,9 @@ public class CodingObjectCreator extends AreaObjectCreator
 				area.getMouseHandler(), area, this.testHandler);
 		
 		new ComponentBox(64, 30, area, this.testHandler, 
-				this.connectorRelay, this.timer, ComponentType.PULSE);
+				this.connectorRelay, this.componentRelay, this.timer, ComponentType.PULSE);
 		new ComponentBox(64, 90, area, this.testHandler, 
-				this.connectorRelay, this.timer, ComponentType.POWER);
+				this.connectorRelay, this.componentRelay, this.timer, ComponentType.POWER);
 		
 		new ManualButton(GameSettings.screenWidth / 3, GameSettings.screenHeight, 
 				area.getDrawer(), area.getMouseHandler(), area, 

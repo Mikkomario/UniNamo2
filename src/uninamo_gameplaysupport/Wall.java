@@ -11,5 +11,5 @@ import utopia_handleds.PhysicalCollidable;
  */
 public interface Wall extends PhysicalCollidable
 {
-	
+	// Wall doesn't force any methods
 }

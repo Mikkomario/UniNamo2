@@ -67,7 +67,7 @@ public class ComponentPage extends DescriptionPage implements Page
 	{
 		return this.featuredComponentType.getNewComponent((int) getX(), 
 				(int) getY() - 50, area.getDrawer(), area.getActorHandler(), 
-				area.getMouseHandler(), area, null, null, this.turnHandler, 
+				area.getMouseHandler(), area, null, null, null, this.turnHandler, 
 				true);
 	}
 }

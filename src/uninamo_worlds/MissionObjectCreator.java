@@ -1,6 +1,7 @@
 package uninamo_worlds;
 
 import uninamo_components.ConnectorRelay;
+import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_missionHandling.MissionInitializer;
@@ -20,6 +21,7 @@ public class MissionObjectCreator extends AreaObjectCreator
 	private TestHandler testHandler;
 	private ConnectorRelay connectorRelay;
 	private TurnHandler turnHandler;
+	private NormalComponentRelay componentRelay;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -33,12 +35,14 @@ public class MissionObjectCreator extends AreaObjectCreator
 	 * about test events
 	 * @param connectorRelay The connectorRelay that will handle the created 
 	 * connectors
+	 * @param componentRelay The componentRelay that will keep track of the 
+	 * created components
 	 * @param turnHandler The turnHandler that will inform the objects about 
 	 * turn events
 	 */
 	public MissionObjectCreator(AreaChanger areaChanger, 
 			TestHandler testHandler, ConnectorRelay connectorRelay, 
-			TurnHandler turnHandler)
+			NormalComponentRelay componentRelay, TurnHandler turnHandler)
 	{
 		super(areaChanger.getArea("mission"), null, null);
 		
@@ -47,6 +51,7 @@ public class MissionObjectCreator extends AreaObjectCreator
 		this.testHandler = testHandler;
 		this.connectorRelay = connectorRelay;
 		this.turnHandler = turnHandler;
+		this.componentRelay = componentRelay;
 	}
 	
 	
@@ -57,6 +62,7 @@ public class MissionObjectCreator extends AreaObjectCreator
 	{
 		// Creates the MissionInitializer
 		new MissionInitializer("missions/teststage.txt", this.areaChanger, 
-				this.testHandler, this.connectorRelay, this.turnHandler);
+				this.testHandler, this.connectorRelay, this.componentRelay, 
+				this.turnHandler);
 	}
 }

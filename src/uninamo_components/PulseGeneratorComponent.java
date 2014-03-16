@@ -37,6 +37,8 @@ public class PulseGeneratorComponent extends NormalComponent implements TurnBase
 	 * test events
 	 * @param connectorRelay The connectorRelay that keeps track of all the 
 	 * connectors
+	 * @param componentRelay The componentRelay that will keep track of the 
+	 * component
 	 * @param turnHandler The turnHandler that informs the object about 
 	 * turn events
 	 * @param isForTesting If this is true, the component will go to test mode 
@@ -44,11 +46,12 @@ public class PulseGeneratorComponent extends NormalComponent implements TurnBase
 	 */
 	public PulseGeneratorComponent(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, MouseListenerHandler mousehandler,
-			Room room, TestHandler testHandler, ConnectorRelay connectorRelay,
+			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
+			NormalComponentRelay componentRelay, 
 			TurnHandler turnHandler, boolean isForTesting)
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler,
-				connectorRelay, "test", 0, 1, true, isForTesting);
+				connectorRelay, componentRelay, "test", 0, 1, true, isForTesting);
 		
 		// Initializes attributes
 		this.lastSignalType = false;

@@ -48,6 +48,8 @@ public enum ComponentType
 	 * test events (optional)
 	 * @param connectorRelay The connectorRelay that will handle the connectors 
 	 * of the component
+	 * @param componentRelay The componentRelay that will keep track of the 
+	 * component
 	 * @param turnHandler The turnHandler that will inform the component about 
 	 * turn events (if applicable)
 	 * @param isTestComponent Will the component be used only for testing 
@@ -57,18 +59,20 @@ public enum ComponentType
 	public NormalComponent getNewComponent(int x, int y, DrawableHandler drawer, 
 			ActorHandler actorHandler, MouseListenerHandler mouseHandler, 
 			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
+			NormalComponentRelay componentRelay, 
 			TurnHandler turnHandler, boolean isTestComponent)
 	{
 		switch (this)
 		{
 			case OR: return new OrComponent(x, y, drawer, actorHandler, 
-					mouseHandler, room, testHandler, connectorRelay, isTestComponent);
+					mouseHandler, room, testHandler, connectorRelay, 
+					componentRelay, isTestComponent);
 			case PULSE: return new PulseGeneratorComponent(x, y, drawer, 
 					actorHandler, mouseHandler, room, testHandler, 
-					connectorRelay, turnHandler, isTestComponent);
+					connectorRelay, componentRelay, turnHandler, isTestComponent);
 			case POWER: return new PowerSourceComponent(x, y, drawer, 
 					actorHandler, mouseHandler, room, testHandler, 
-					connectorRelay, isTestComponent);
+					connectorRelay, componentRelay, isTestComponent);
 			default: System.err.println("Couldn't create the component. "
 					+ "Please update ComponentType.getNewComponent method"); 
 				break;

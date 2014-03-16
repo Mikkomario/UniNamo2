@@ -3,6 +3,7 @@ package uninamo_worlds;
 import java.util.HashMap;
 
 import uninamo_components.ConnectorRelay;
+import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnTimer;
 import utopia_handlers.ActorHandler;
@@ -42,10 +43,9 @@ public class AreaChanger
 		// Initializes attributes
 		this.areas = new HashMap<String, Area>();
 		
-		// TODO Create areas
-		
 		// Creates shared resources
-		ConnectorRelay relay = new ConnectorRelay();
+		ConnectorRelay connectorRelay = new ConnectorRelay();
+		NormalComponentRelay componentRelay = new NormalComponentRelay();
 		TestHandler testHandler = new TestHandler(null);
 		
 		// Creates areas
@@ -55,7 +55,8 @@ public class AreaChanger
 				mousehandler, actorhandler, drawer));
 		TurnTimer turnTimer = new TurnTimer(testHandler, 
 				this.areas.get("coding"), actorhandler);
-		new CodingObjectCreator(this, relay, testHandler, turnTimer);
+		new CodingObjectCreator(this, connectorRelay, componentRelay, 
+				testHandler, turnTimer);
 		
 		this.areas.put("design", new Area(phaseBank.getPhase("gameplay"), 
 				mousehandler, actorhandler, drawer));
@@ -66,7 +67,8 @@ public class AreaChanger
 		
 		this.areas.put("mission", new Area(phaseBank.getPhase("gameplay"), 
 				mousehandler, actorhandler, drawer));
-		new MissionObjectCreator(this, testHandler, relay, turnTimer);
+		new MissionObjectCreator(this, testHandler, connectorRelay, 
+				componentRelay, turnTimer);
 	}
 
 	

@@ -5,6 +5,7 @@ import uninamo_components.ComponentType;
 import uninamo_components.ConnectorRelay;
 import uninamo_components.InputCableConnector;
 import uninamo_components.NormalComponent;
+import uninamo_components.NormalComponentRelay;
 import uninamo_components.OutputCableConnector;
 import uninamo_gameplaysupport.ObstacleCollector;
 import uninamo_gameplaysupport.TestHandler;
@@ -37,6 +38,7 @@ public class MissionInitializer extends FileReader
 	private VictoryHandler victoryHandler;
 	private MachineCounter machineCounter;
 	private TurnHandler turnHandler;
+	private NormalComponentRelay componentRelay;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -52,12 +54,14 @@ public class MissionInitializer extends FileReader
 	 * about test events (if applicable)
 	 * @param connectorRelay The connectorHandler that will keep track of the 
 	 * created connectors (if any)
+	 * @param componentRelay The ComponenRelay that will keep track of the 
+	 * created components (if any)
 	 * @param turnHandler The turnHandler that will inform the objects about turn 
 	 * events (if applicable)
 	 */
 	public MissionInitializer(String instructionFileName, AreaChanger areaChanger, 
 			TestHandler testHandler, ConnectorRelay connectorRelay, 
-			TurnHandler turnHandler)
+			NormalComponentRelay componentRelay, TurnHandler turnHandler)
 	{
 		// Initializes atributes
 		this.mode = null;
@@ -67,6 +71,7 @@ public class MissionInitializer extends FileReader
 		this.victoryHandler = new VictoryHandler(null);
 		this.machineCounter = new MachineCounter();
 		this.turnHandler = turnHandler;
+		this.componentRelay = componentRelay;
 		
 		// Reads the data / initializes the mission
 		readFile(instructionFileName, "*");
@@ -92,8 +97,8 @@ public class MissionInitializer extends FileReader
 		// Otherwise creates new objects according to the mode
 		else
 			this.mode.createNewInstance(line, this.areaChanger, this.testHandler, 
-					this.connectorRelay, this.victoryHandler, this.machineCounter, 
-					this.turnHandler);
+					this.connectorRelay, this.componentRelay, 
+					this.victoryHandler, this.machineCounter, this.turnHandler);
 	}
 
 	
@@ -108,9 +113,12 @@ public class MissionInitializer extends FileReader
 		
 		private void createNewInstance(String commandLine, AreaChanger areaChanger, 
 				TestHandler testHandler, ConnectorRelay connectorRelay, 
+				NormalComponentRelay componentRelay, 
 				VictoryHandler victoryHandler, MachineCounter machineCounter, 
 				TurnHandler turnHandler)
 		{		
+			// TODO: Refactor this awful method
+			
 			// Creates a new instance of this mode's object type
 			switch (this)
 			{
@@ -259,8 +267,8 @@ public class MissionInitializer extends FileReader
 							codingArea.getDrawer(), 
 							codingArea.getActorHandler(), 
 							codingArea.getMouseHandler(), codingArea, 
-							testHandler, connectorRelay, turnHandler, 
-							false);
+							testHandler, connectorRelay, componentRelay, 
+							turnHandler, false);
 					component.stopDrag();
 					component.setID(commands[0]);
 					

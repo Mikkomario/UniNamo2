@@ -37,6 +37,8 @@ public abstract class NormalComponent extends Component
 	 * events
 	 * @param connectorRelay A connectorRelay that will keep track of the 
 	 * connectors
+	 * @param componentRelay The NormalComponentRelay that will keep track of 
+	 * the component (optional)
 	 * @param spritename The name of the component sprite used to draw the 
 	 * component
 	 * @param inputs How many input connectors the component has
@@ -47,9 +49,9 @@ public abstract class NormalComponent extends Component
 	 */
 	public NormalComponent(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, MouseListenerHandler mousehandler,
-			Room room, TestHandler testHandler, ConnectorRelay connectorRelay,
-			String spritename, int inputs, int outputs, boolean fromBox,
-			boolean isForTesting)
+			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
+			NormalComponentRelay componentRelay, String spritename, int inputs, 
+			int outputs, boolean fromBox, boolean isForTesting)
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler,
 				connectorRelay, spritename, inputs, outputs, fromBox,
@@ -60,6 +62,11 @@ public abstract class NormalComponent extends Component
 		if (typeName.length() > 4)
 			typeName = typeName.substring(0, 4);
 		this.id = typeName + super.getID();
+		
+		
+		// Adds the object to the handler(s)
+		if (componentRelay != null)
+			componentRelay.addComponent(this);
 	}
 	
 	
