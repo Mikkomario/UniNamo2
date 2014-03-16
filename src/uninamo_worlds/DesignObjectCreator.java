@@ -3,9 +3,9 @@ package uninamo_worlds;
 import uninamo_gameplaysupport.InvisibleWall;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_main.GameSettings;
-import uninamo_userinterface.CodeTransitionButton;
 import uninamo_userinterface.DemoButton;
 import uninamo_userinterface.TestingButton;
+import uninamo_userinterface.ToCodeButton;
 
 /**
  * DesignObjectCreator creates the objects needed in the design area. It also 
@@ -74,48 +74,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 		TestingButton testButton = new TestingButton(GameSettings.screenWidth - 110, 
 				GameSettings.screenHeight - 45, area.getDrawer(), 
 				area.getMouseHandler(), area, this.testHandler);
-		new CodeTransitionButton(area.getDrawer(), area.getMouseHandler(), 
-				area, CodeTransitionButton.TOCODE, this.areaChanger, 
-				this.testHandler, testButton, demoButton);
-		/*
-		
-		new ConveyorBelt(400, GameSettings.screenHeight - 200, 
-				area.getDrawer(), area.getActorHandler(), 
-				area.getCollisionHandler().getCollidableHandler(), 
-				area.getCollisionHandler(), this.areaChanger.getArea("coding"), 
-				area, this.testHandler, this.connectorRelay, false);
-		
-		new ConveyorBelt(580, GameSettings.screenHeight - 200, 
-				area.getDrawer(), area.getActorHandler(), 
-				area.getCollisionHandler().getCollidableHandler(),
-				area.getCollisionHandler(), this.areaChanger.getArea("coding"), 
-				area, this.testHandler, this.connectorRelay, false);
-		*/
-		/*
-		new Box(430, 200, area.getDrawer(), 
-				area.getCollisionHandler().getCollidableHandler(), 
-				area.getCollisionHandler(), area.getActorHandler(), area, 
-				this.testHandler);
-		
-		*//*
-		new Box(600, 200, area.getDrawer(), 
-				area.getCollisionHandler().getCollidableHandler(), 
-				area.getCollisionHandler(), area.getActorHandler(), area, 
-				this.testHandler);
-		*/
-		/*
-		for (int i = 0; i < 5; i++)
-		{
-			new Box(400, 200 - 200 * i, area.getDrawer(), 
-					area.getCollisionHandler().getCollidableHandler(), 
-					area.getCollisionHandler(), area.getActorHandler(), area, 
-					this.testHandler);
-		}
-		*/
-		/*
-		new ObstacleCollector(800, GameSettings.screenHeight - 200, area.getDrawer(), 
-				area.getCollisionHandler(), this.testHandler, victoryHandler, 
-				ObstacleType.BOX, 2, "boxdesign", "boxreal");
-		*/
+		new ToCodeButton(this.areaChanger, this.testHandler, testButton, 
+				demoButton);
 	}
 }
