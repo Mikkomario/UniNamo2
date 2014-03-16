@@ -2,6 +2,7 @@ package uninamo_userinterface;
 
 import java.awt.geom.Point2D;
 
+import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
@@ -22,6 +23,7 @@ public class ToCodeButton extends CodeTransitionButton implements TestListener
 	private TestingButton testButton;
 	private TestHandler testHandler;
 	private DemoButton demoButton;
+	private NormalComponentRelay demoComponentRelay;
 	private boolean hasBeenClicked;
 	
 	
@@ -37,9 +39,12 @@ public class ToCodeButton extends CodeTransitionButton implements TestListener
 	 * click 
 	 * @param demoButton The demoButton which will be removed after the first 
 	 * transition
+	 * @param demoComponentRelay The componentRelay that holds the components 
+	 * used to demo the stage
 	 */
 	public ToCodeButton(AreaChanger areaChanger, TestHandler testHandler,
-			TestingButton testingButton, DemoButton demoButton)
+			TestingButton testingButton, DemoButton demoButton, 
+			NormalComponentRelay demoComponentRelay)
 	{
 		super(GameSettings.screenHeight, areaChanger.getArea("design"), 
 				areaChanger.getArea("coding"));
@@ -48,6 +53,7 @@ public class ToCodeButton extends CodeTransitionButton implements TestListener
 		this.testButton = testingButton;
 		this.testHandler = testHandler;
 		this.demoButton = demoButton;
+		this.demoComponentRelay = demoComponentRelay;
 		this.hasBeenClicked = false;
 		
 		// Adds the object to the handler(s)
@@ -85,6 +91,11 @@ public class ToCodeButton extends CodeTransitionButton implements TestListener
 				this.testButton.setVisible();
 				this.testButton.activate();
 				this.testButton = null;
+			}
+			if (this.demoComponentRelay != null)
+			{
+				this.demoComponentRelay.killAllComponents();
+				this.demoComponentRelay = null;
 			}
 		}
 		

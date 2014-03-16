@@ -1,4 +1,4 @@
-package uninamo_missionHandling;
+package uninamo_worlds;
 
 import uninamo_components.Cable;
 import uninamo_components.ComponentType;
@@ -16,8 +16,6 @@ import uninamo_machinery.MachineType;
 import uninamo_main.GameSettings;
 import uninamo_obstacles.ObstacleType;
 import uninamo_userinterface.Note;
-import uninamo_worlds.Area;
-import uninamo_worlds.AreaChanger;
 import utopia_fileio.FileReader;
 
 /**

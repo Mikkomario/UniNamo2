@@ -60,7 +60,7 @@ public class AreaChanger
 		
 		this.areas.put("design", new Area(phaseBank.getPhase("gameplay"), 
 				mousehandler, actorhandler, drawer));
-		new DesignObjectCreator(this, testHandler);
+		new DesignObjectCreator(this, testHandler, componentRelay);
 		
 		this.areas.put("manual", new Area(phaseBank.getPhase("gameplay"), 
 				mousehandler, actorhandler, drawer));

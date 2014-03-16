@@ -135,7 +135,10 @@ public class StepHandler extends ActorHandler implements Runnable
 			{
 				try
 				{
-					wait(this.nextupdatemillis - System.currentTimeMillis());
+					// TODO: Apparently this can become negative under very 
+					// rare circumstances (added the second check, hope it helps)
+					if (System.currentTimeMillis() < this.nextupdatemillis)
+						wait(this.nextupdatemillis - System.currentTimeMillis());
 				}
 				catch (InterruptedException exception)
 				{

@@ -1,5 +1,6 @@
 package uninamo_worlds;
 
+import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.InvisibleWall;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_main.GameSettings;
@@ -19,9 +20,8 @@ public class DesignObjectCreator extends AreaObjectCreator
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private AreaChanger areaChanger;
-	//private ConnectorRelay connectorRelay;
 	private TestHandler testHandler;
-	//private TurnTimer timer;
+	private NormalComponentRelay componentRelay;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -33,18 +33,18 @@ public class DesignObjectCreator extends AreaObjectCreator
 	 * @param areaChanger The areaChanger that handles different areas
 	 * @param testHandler The testHandler that will inform the objects about 
 	 * test events
+	 * @param componentRelay The componentRelay that holds the information 
+	 * about created components
 	 */
 	public DesignObjectCreator(AreaChanger areaChanger, 
-			TestHandler testHandler/*, 
-			TurnTimer turnTimer*/)
+			TestHandler testHandler, NormalComponentRelay componentRelay)
 	{
 		super(areaChanger.getArea("design"), "paper", "gameplaybackgrounds");
 		
 		// Initializes attributes
 		this.areaChanger = areaChanger;
-		//this.connectorRelay = connectorRelay;
+		this.componentRelay = componentRelay;
 		this.testHandler = testHandler;
-		//this.timer = turnTimer;
 	}
 
 	
@@ -75,6 +75,6 @@ public class DesignObjectCreator extends AreaObjectCreator
 				GameSettings.screenHeight - 45, area.getDrawer(), 
 				area.getMouseHandler(), area, this.testHandler);
 		new ToCodeButton(this.areaChanger, this.testHandler, testButton, 
-				demoButton);
+				demoButton, this.componentRelay);
 	}
 }

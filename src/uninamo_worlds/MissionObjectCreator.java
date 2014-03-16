@@ -4,7 +4,6 @@ import uninamo_components.ConnectorRelay;
 import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnHandler;
-import uninamo_missionHandling.MissionInitializer;
 
 /**
  * MissionObjectCreator creates the necessary objects at the start of the 
