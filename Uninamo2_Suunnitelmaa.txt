@@ -283,6 +283,9 @@ Työtehtäviä
 			* Ratkaisun ajaminen kentän alussa
 		- Kenttäeditori
 			* Kenttien tallentaminen tekstitiedostoon
+				- Koneiden id:t pitää ehkä laittaa uusiks tallennusvaiheessa 
+				koska laskuri ei oo paras tapa nimetä tallennuksia 
+				(riippuu järjestyksestä ja menee sekaisin kun poistaa jotain)
 			* Kenttäeditorimoodiin siirtyminen
 				- Resurssiallokaatio?
 			* Resurssieditorin käyttöliittymä
