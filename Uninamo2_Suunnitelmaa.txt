@@ -188,7 +188,7 @@ Työtehtäviä
 		- Kenttien demot													...
 			* Demonappula													DONE
 			* Koodiratkaisujen (tallentaminen ja) lukeminen					DONE
-				- Myös komponenttianalyysiä varten kustannusten lasku
+				- Myös komponenttianalyysiä varten kustannusten lasku		...
 			* Saa muuten varmaan bugattua koko roskan jos 					Jep jep
 			ratkaisee kentän kytkemällä komponentin itseensä 
 			(kenttää ei enää demossa pääse läpi)
@@ -254,15 +254,24 @@ Työtehtäviä
 			* Pelin nopeuden säätäminen
 			* Asetusten tallentaminen
 			* Asetusten lataaminen pelin alussa
+		- Käyttäjän progression tallentaminen ja lukeminen
+			* Tarvittavat staattiset luokat
+			* Tietojen päivittäminen tiedostosta pelin alussa
 		- Tehtävien valitseminen
 			* Tehtävien valintaympäristön luominen
 			* Tehtävän lopettaminen
 			* Tehtävän aloittaminen
-			* Tunnistettujen kenttien polkujen tallentaminen 
-			ja lukeminen tekstitiedostosta
-				- Eli niin kutsuttu kenttäpankki
-			* Tehtävien unlockkaaminen saamalla toisia 
-			suoritettua (hyvillä gradeilla)
+			* Unlockattujen tehtävien lisääminen käyttäjätietoihin
+		- Research mode
+			* Käynnissä olevien tutkimusten tallentaminen 
+			käyttäjätietoihin
+			* Tutkimusalueen käyttöliittymä
+			* Tutkimuksen aloittaminen
+			* Tutkimuksen lopettaminen
+				- Tuloksista ilmoittaminen
+			* Komponenttien unlockkaaminen
+			* Kenttien unlockkaaminen
+			* Alennusten toiminta sekä unlockkaaminen
 		- Gold Graffat
 			* Komponentit
 			* Laitteet
@@ -279,18 +288,12 @@ Työtehtäviä
 		- Erilaisten toimijoiden valmistus
 			* Tarvittavat resurssit
 			* Interaktioiden toteuttaminen
-		- Käytettävissä olevien komponenttien rajoittaminen
-			* Ohjekirjassa näkyy vaan unlockatut
-			* Unlockkausten muistaminen
-			* Kenttäsidonnaiset komponentit
-		- Kenttien malliesimerkit
-			* Ratkaisujen tallentaminen ja lataaminen tiedostoista
-			* Ratkaisun ajaminen kentän alussa
 		- Kenttäeditori
 			* Kenttien tallentaminen tekstitiedostoon
 				- Koneiden id:t pitää ehkä laittaa uusiks tallennusvaiheessa 
 				koska laskuri ei oo paras tapa nimetä tallennuksia 
 				(riippuu järjestyksestä ja menee sekaisin kun poistaa jotain)
+					* Ei välttämättä ongelma jos ID:t luodaan vasta tallennettaessa
 			* Kenttäeditorimoodiin siirtyminen
 				- Resurssiallokaatio?
 			* Resurssieditorin käyttöliittymä
@@ -318,7 +321,6 @@ Työtehtäviä
 			* Raha voi olla ihan yleinen resurssi
 			* Vasta tehtävän palauttaessa maksetaan komponentit
 			* Kyseessä yrityksen raha
-			* Joskus komponentit alennuksessa
 		- Taustalla kuuluvat äänet
 			* "Onpa jännä"
 			* "Hmmm..."
@@ -434,15 +436,14 @@ Huomioita / Ideoita
 				- Huom: Ei vaikuta "odotettuihin kustannuksiin" / budjettiin, joiden mukaan tulot lasketaan
 		- Budjetti -attribuutti, jota voi käyttää seuraaviin
 			* Tutkimukseen
-			* Tehtävän aloittamiseen
-				- Budjetista otetaan pois oletetut kustannukset
-					* Mukaanlukien engineer (good) -suoritustason komponenttikustannukset
-						- = a * kentän mallivastauksen kustannukset (a tulee engineeristä)
-					* Samoin koneiden kustannukset (vakio)
-					* Oletetut kustannukset per yksikkö kerrotaan sitten tuotantointensiteetillä 
-					(= 1 M)
+			* Tehtävän tekemiseen
+				- Budjetista otetaan pois toteutuneet kustannukset
+					* Voitto lasketaan engineer (good) -suoritustason komponenttikustannuksilla
+						- = a * kentän mallivastauksen kustannukset (a tulee engineeristä) * tuottokerroin
+					* Samoin koneiden kustannukset (vakio) vaikuttaa
+					* Tuottoihin ja kustannuksiin otetaan tuotantointensiteetti (= 1 M) mukaan
 		- Lisää budjettia saadaan
-			* Joka kuukauden alussa (1 kk = oikean elämän päivä?)
+			* Joka kuukauden alussa (1 kk = oikean elämän päivä tai suoritettu tehtävä?)
 				- Projekteista
 					* Jos alle 1 M kappaletta myyty
 						- Saadan myytyä n kappaletta 15% katteella (suhteessa odotettuihin kustannuksiin)
@@ -453,3 +454,4 @@ Huomioita / Ideoita
 							* Eli voittoa tulee 15% * kustannukset * n
 								- Missä n lähestyy nollaa ajan kuluessa (* 1/kk tai jotain) ja riippuu myös 
 								satunnaismuuttujasta
+		- Jos rahaa on < 0, on pakko odottaa eikä voi tehdä mitään. Muuten voi mennä miinukselle jos haluaa

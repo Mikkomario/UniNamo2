@@ -21,6 +21,7 @@ public class CurrentCostDrawer extends DrawnObject implements RoomListener
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private double currentCosts;
+	private String currentCostString;
 	
 	// TODO: Add machine costs from future machineRelay class or something like 
 	// that
@@ -40,6 +41,7 @@ public class CurrentCostDrawer extends DrawnObject implements RoomListener
 		
 		// Initializes attributes
 		this.currentCosts = 0;
+		this.currentCostString = "0";
 		
 		// Adds the object to the handler(s)
 		if (area != null)
@@ -78,7 +80,7 @@ public class CurrentCostDrawer extends DrawnObject implements RoomListener
 	public void drawSelfBasic(Graphics2D g2d)
 	{
 		// Draws the current total
-		g2d.drawString("Current Costs: " + this.currentCosts + " M €", 0, 0);
+		g2d.drawString("Current Costs: " + this.currentCostString + " M €", 0, 0);
 	}
 	
 	
@@ -92,5 +94,8 @@ public class CurrentCostDrawer extends DrawnObject implements RoomListener
 	public void addCosts(double amount)
 	{
 		this.currentCosts += amount;
+		
+		// Rounds the value
+		this.currentCostString = String.format("%.2f", this.currentCosts);
 	}
 }

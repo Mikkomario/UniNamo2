@@ -121,7 +121,7 @@ public class MissionInitializer extends FileReader
 			switch (this)
 			{
 				case NOTE1: 
-					new Note(GameSettings.screenWidth / 2 + 64, GameSettings.screenHeight - 200, 
+					new Note(GameSettings.screenWidth / 2 + 64, GameSettings.screenHeight / 2, 
 							75, 32, "docket", commandLine, areaChanger.getArea("mission"));
 					break;
 				case NOTE2:

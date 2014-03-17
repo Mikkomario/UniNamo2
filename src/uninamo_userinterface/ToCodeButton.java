@@ -25,6 +25,7 @@ public class ToCodeButton extends CodeTransitionButton implements TestListener
 	private DemoButton demoButton;
 	private NormalComponentRelay demoComponentRelay;
 	private boolean hasBeenClicked;
+	private AreaChanger areaChanger;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -55,6 +56,7 @@ public class ToCodeButton extends CodeTransitionButton implements TestListener
 		this.demoButton = demoButton;
 		this.demoComponentRelay = demoComponentRelay;
 		this.hasBeenClicked = false;
+		this.areaChanger = areaChanger;
 		
 		// Adds the object to the handler(s)
 		if (testHandler != null)
@@ -75,6 +77,9 @@ public class ToCodeButton extends CodeTransitionButton implements TestListener
 				eventType == MouseButtonEventType.PRESSED)
 		{
 			this.hasBeenClicked = true;
+			
+			// Ends the mission area as well
+			this.areaChanger.getArea("mission").end();
 			
 			if (this.demoButton != null)
 			{
