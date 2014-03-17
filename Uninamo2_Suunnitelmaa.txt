@@ -187,9 +187,9 @@ Työtehtäviä
 				- Kannattaa tallentaa tekstinä (type + number)				DONE
 		- Kenttien demot													...
 			* Demonappula													DONE
-			* Koodiratkaisujen (tallentaminen ja) lukeminen					...
+			* Koodiratkaisujen (tallentaminen ja) lukeminen					DONE
 				- Myös komponenttianalyysiä varten kustannusten lasku
-			* Saa muuten varmaan bugattua koko roskan jos 
+			* Saa muuten varmaan bugattua koko roskan jos 					Jep jep
 			ratkaisee kentän kytkemällä komponentin itseensä 
 			(kenttää ei enää demossa pääse läpi)
 		- Voittoikkuna
@@ -231,6 +231,9 @@ Työtehtäviä
 				- Pyörimisen, kitkan sekä liikemäärän ottaminen mukaan
 			* Muistinvapauttamisen varmentaminen heittämällä tarpeettomia 
 			attribuutteja nulliksi
+			* Refaktoroi mahdottomia parametrijoukkoja yhdistämällä niitä 
+			mahdollisiksi kokonaisuuksiksi (vähän niinku areaChanger 
+			yhistää areat ja areat kaikki perushandlerit)
 	* Gold	---------------------------------------------------------------------
 		- Main menu
 			* Säätöihin, tehtävävalikkoon sekä kenttäeditoriin pääsy

@@ -1,6 +1,7 @@
 package uninamo_components;
 
 import uninamo_gameplaysupport.TestHandler;
+import uninamo_userinterface.CurrentCostDrawer;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
@@ -38,16 +39,19 @@ public class OrComponent extends NormalComponent
 	 * connectors
 	 * @param componentRelay The componentRelay that will keep track of the 
 	 * component (optional)
+	 * @param costDrawer The currentCostDrawer that will be affected by the 
+	 * component (optional)
 	 * @param isForTesting If this is true, the component will go to test mode 
 	 * where it won't react to mouse but will create test cables to its connectors
 	 */
 	public OrComponent(int x, int y, DrawableHandler drawer, ActorHandler actorHandler, 
 			MouseListenerHandler mousehandler, Room room, TestHandler testHandler, 
 			ConnectorRelay connectorRelay, NormalComponentRelay componentRelay, 
-			boolean isForTesting)
+			CurrentCostDrawer costDrawer, boolean isForTesting)
 	{
 		super(x, y, drawer, actorHandler, mousehandler, room, testHandler, 
-				connectorRelay, componentRelay, "test", 2, 1, true, isForTesting);
+				connectorRelay, componentRelay, costDrawer, "test", 2, 1, true, 
+				isForTesting);
 		
 		// Initializes attributes
 		this.signalStatus = false;

@@ -1,6 +1,7 @@
 package uninamo_components;
 
 import uninamo_gameplaysupport.TestHandler;
+import uninamo_userinterface.CurrentCostDrawer;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
@@ -33,16 +34,20 @@ public class PowerSourceComponent extends NormalComponent
 	 * connectors
 	 * @param componentRelay The componentRelay that will keep track of the 
 	 * component
+	 * @param costDrawer The costDrawer that will be affected by the component 
+	 * (optional)
 	 * @param isForTesting If this is true, the component will go to test mode 
 	 * where it won't react to mouse but will create test cables to its connectors
 	 */
 	public PowerSourceComponent(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, MouseListenerHandler mousehandler, 
 			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
-			NormalComponentRelay componentRelay, boolean isForTesting)
+			NormalComponentRelay componentRelay, CurrentCostDrawer costDrawer, 
+			boolean isForTesting)
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler, 
-				connectorRelay, componentRelay, "test", 0, 1, true, isForTesting);
+				connectorRelay, componentRelay, costDrawer, "test", 0, 1, true, 
+				isForTesting);
 		
 		// Informs the output(s) about the component's status
 		sendSignalToOutput(0, true);

@@ -2,6 +2,7 @@ package uninamo_components;
 
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnHandler;
+import uninamo_userinterface.CurrentCostDrawer;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
@@ -50,6 +51,8 @@ public enum ComponentType
 	 * of the component
 	 * @param componentRelay The componentRelay that will keep track of the 
 	 * component
+	 * @param costDrawer The costDrawer that will be affected by the component 
+	 * (optional)
 	 * @param turnHandler The turnHandler that will inform the component about 
 	 * turn events (if applicable)
 	 * @param isTestComponent Will the component be used only for testing 
@@ -59,20 +62,21 @@ public enum ComponentType
 	public NormalComponent getNewComponent(int x, int y, DrawableHandler drawer, 
 			ActorHandler actorHandler, MouseListenerHandler mouseHandler, 
 			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
-			NormalComponentRelay componentRelay, 
+			NormalComponentRelay componentRelay, CurrentCostDrawer costDrawer, 
 			TurnHandler turnHandler, boolean isTestComponent)
 	{
 		switch (this)
 		{
 			case OR: return new OrComponent(x, y, drawer, actorHandler, 
 					mouseHandler, room, testHandler, connectorRelay, 
-					componentRelay, isTestComponent);
+					componentRelay, costDrawer, isTestComponent);
 			case PULSE: return new PulseGeneratorComponent(x, y, drawer, 
 					actorHandler, mouseHandler, room, testHandler, 
-					connectorRelay, componentRelay, turnHandler, isTestComponent);
+					connectorRelay, componentRelay, costDrawer, turnHandler, 
+					isTestComponent);
 			case POWER: return new PowerSourceComponent(x, y, drawer, 
 					actorHandler, mouseHandler, room, testHandler, 
-					connectorRelay, componentRelay, isTestComponent);
+					connectorRelay, componentRelay, costDrawer, isTestComponent);
 			default: System.err.println("Couldn't create the component. "
 					+ "Please update ComponentType.getNewComponent method"); 
 				break;
@@ -93,5 +97,20 @@ public enum ComponentType
 			case POWER: return "Power Source";
 			default: return "Failed to recognize";
 		}
+	}
+	
+	/**
+	 * @return How much does a component of this type cost?
+	 */
+	public double getPrice()
+	{
+		switch (this)
+		{
+			case OR: return 0.3;
+			case PULSE: return 0.8;
+			case POWER: return 0.2;
+		}
+		
+		return 0;
 	}
 }

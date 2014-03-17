@@ -8,6 +8,7 @@ import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnTimer;
 import uninamo_main.GameSettings;
 import uninamo_userinterface.CodeTransitionButton;
+import uninamo_userinterface.CurrentCostDrawer;
 import uninamo_userinterface.ManualButton;
 import uninamo_userinterface.TestingButton;
 
@@ -70,10 +71,14 @@ public class CodingObjectCreator extends AreaObjectCreator
 		new TestingButton(GameSettings.screenWidth - 110, 45, area.getDrawer(), 
 				area.getMouseHandler(), area, this.testHandler);
 		
+		CurrentCostDrawer costDrawer = new CurrentCostDrawer(area);
+		
 		new ComponentBox(64, 30, area, this.testHandler, 
-				this.connectorRelay, this.componentRelay, this.timer, ComponentType.PULSE);
+				this.connectorRelay, this.componentRelay, costDrawer, 
+				this.timer, ComponentType.PULSE);
 		new ComponentBox(64, 90, area, this.testHandler, 
-				this.connectorRelay, this.componentRelay, this.timer, ComponentType.POWER);
+				this.connectorRelay, this.componentRelay, costDrawer, 
+				this.timer, ComponentType.POWER);
 		
 		new ManualButton(GameSettings.screenWidth / 3, GameSettings.screenHeight, 
 				area.getDrawer(), area.getMouseHandler(), area, 

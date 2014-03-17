@@ -111,7 +111,7 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	@Override
 	public boolean isActive()
 	{
-		return this.host.isActive() && !this.testing;
+		return !this.testing;
 	}
 
 	@Override

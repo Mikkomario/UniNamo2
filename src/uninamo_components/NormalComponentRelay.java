@@ -2,6 +2,8 @@ package uninamo_components;
 
 import utopia_handleds.Handled;
 import utopia_handlers.Handler;
+import utopia_listeners.RoomListener;
+import utopia_worlds.Room;
 
 /**
  * ComponentRelay keeps track of all the created components 
@@ -11,7 +13,7 @@ import utopia_handlers.Handler;
  * @author Mikko Hilpinen
  * @since 16.3.2014
  */
-public class NormalComponentRelay extends Handler
+public class NormalComponentRelay extends Handler implements RoomListener
 {
 	// CONSTRUCTOR	-----------------------------------------------------
 	
@@ -38,6 +40,18 @@ public class NormalComponentRelay extends Handler
 		// Kills the component (part of the killComponents functionality)
 		h.kill();
 		return true;
+	}
+	
+	@Override
+	public void onRoomStart(Room room)
+	{
+		// Creates a new componentCostDrawer
+	}
+
+	@Override
+	public void onRoomEnd(Room room)
+	{
+		// Kills the componentCostDrawer
 	}
 	
 	

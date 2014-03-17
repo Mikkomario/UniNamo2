@@ -7,6 +7,7 @@ import java.awt.geom.Point2D;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_main.GameSettings;
+import uninamo_userinterface.CurrentCostDrawer;
 import uninamo_worlds.Area;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_interfaceElements.AbstractButton;
@@ -29,6 +30,7 @@ public class ComponentBox extends AbstractButton
 	private TurnHandler turnHandler;
 	private ComponentType componentType;
 	private NormalComponentRelay componentRelay;
+	private CurrentCostDrawer costDrawer;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -46,13 +48,16 @@ public class ComponentBox extends AbstractButton
 	 * connectors 
 	 * @param componentRelay The componentRelay that will keep track of the 
 	 * created components
+	 * @param costDrawer The costDrawer that will be affected by the created 
+	 * components
 	 * @param turnHandler The turnHandler that will inform the objects about 
 	 * turn events 
 	 * @param componentType The type of component that will be dragged from the box
 	 */
 	public ComponentBox(int x, int y, Area area, TestHandler testHandler, 
 			ConnectorRelay connectorRelay, NormalComponentRelay componentRelay, 
-			TurnHandler turnHandler, ComponentType componentType)
+			CurrentCostDrawer costDrawer, TurnHandler turnHandler, 
+			ComponentType componentType)
 	{
 		super(x, y, DepthConstants.BACK - 20, MultiMediaHolder.getSpriteBank(
 				"gameplayinterface").getSprite("componentbox"), area.getDrawer(), 
@@ -65,6 +70,7 @@ public class ComponentBox extends AbstractButton
 		this.turnHandler = turnHandler;
 		this.componentType = componentType;
 		this.componentRelay = componentRelay;
+		this.costDrawer = costDrawer;
 		
 		getSpriteDrawer().setImageSpeed(0);
 		getSpriteDrawer().setImageIndex(0);
@@ -84,7 +90,7 @@ public class ComponentBox extends AbstractButton
 					(int) mousePosition.getY(), this.area.getDrawer(), 
 					this.area.getActorHandler(), this.area.getMouseHandler(), 
 					this.area, this.testHandler, this.connectorRelay, 
-					this.componentRelay, this.turnHandler, false);
+					this.componentRelay, this.costDrawer, this.turnHandler, false);
 	}
 
 	@Override

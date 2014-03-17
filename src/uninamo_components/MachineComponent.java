@@ -67,19 +67,6 @@ public abstract class MachineComponent extends Component
 	// IMPLEMENTED METHODS	----------------------------------------------
 	
 	@Override
-	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
-	{
-		// MachineInputComponents don't react to mouse
-		return MouseButtonEventScale.NONE;
-	}
-	
-	@Override
-	public boolean listensMouseEnterExit()
-	{
-		return false;
-	}
-	
-	@Override
 	public void drawSelfBasic(Graphics2D g2d)
 	{
 		super.drawSelfBasic(g2d);

@@ -3,6 +3,7 @@ package uninamo_components;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnBased;
 import uninamo_gameplaysupport.TurnHandler;
+import uninamo_userinterface.CurrentCostDrawer;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
@@ -39,6 +40,8 @@ public class PulseGeneratorComponent extends NormalComponent implements TurnBase
 	 * connectors
 	 * @param componentRelay The componentRelay that will keep track of the 
 	 * component
+	 * @param costDrawer The costDrawer that will be affected by the component 
+	 * (optional)
 	 * @param turnHandler The turnHandler that informs the object about 
 	 * turn events
 	 * @param isForTesting If this is true, the component will go to test mode 
@@ -47,11 +50,12 @@ public class PulseGeneratorComponent extends NormalComponent implements TurnBase
 	public PulseGeneratorComponent(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, MouseListenerHandler mousehandler,
 			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
-			NormalComponentRelay componentRelay, 
+			NormalComponentRelay componentRelay, CurrentCostDrawer costDrawer, 
 			TurnHandler turnHandler, boolean isForTesting)
 	{
 		super(x, y, drawer, actorhandler, mousehandler, room, testHandler,
-				connectorRelay, componentRelay, "test", 0, 1, true, isForTesting);
+				connectorRelay, componentRelay, costDrawer, "test", 0, 1, true, 
+				isForTesting);
 		
 		// Initializes attributes
 		this.lastSignalType = false;

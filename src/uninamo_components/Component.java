@@ -1,12 +1,9 @@
 package uninamo_components;
 
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
 import java.util.Random;
 
 import uninamo_gameplaysupport.TestHandler;
-import uninamo_gameplaysupport.TestListener;
-import uninamo_main.GameSettings;
 import utopia_gameobjects.DimensionalDrawnObject;
 import utopia_graphic.SingleSpriteDrawer;
 import utopia_handlers.ActorHandler;
@@ -14,8 +11,6 @@ import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.CollisionType;
 import utopia_helpAndEnums.DepthConstants;
-import utopia_helpAndEnums.HelpMath;
-import utopia_listeners.AdvancedMouseListener;
 import utopia_listeners.RoomListener;
 import utopia_resourcebanks.MultiMediaHolder;
 import utopia_worlds.Room;
@@ -24,14 +19,13 @@ import utopia_worlds.Room;
  * Components are key elements in the game. Components can be placed on the 
  * workbench and together they form logical systems. Components are connected 
  * with cables and send, process and / or receive signal(s) using 
- * signalprocessors. Components can be moved around by dragging and dropping.
+ * signalprocessors.
  * 
  * @author Mikko Hilpinen
  * @since 8.3.2014
  */
 public abstract class Component extends DimensionalDrawnObject implements
-		AdvancedMouseListener, SignalReceiver, SignalSender, RoomListener, 
-		TestListener
+		SignalReceiver, SignalSender, RoomListener
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
@@ -39,13 +33,7 @@ public abstract class Component extends DimensionalDrawnObject implements
 	private SingleSpriteDrawer spritedrawer;
 	private InputCableConnector[] inputs;
 	private OutputCableConnector[] outputs;
-	private boolean active, testing, dragged, diesWhenDropped, testVersion;
-	private ConnectorRelay relay;
-	// Notice that this is relative to the origin, not top-left corner 
-	// (in other words is a relative absolute point)
-	private Point2D.Double lastRelativeMouseGrabPosition;
 	
-	private static boolean componentDragged = false;
 	private static int componentsCreated = 0;
 	
 	
@@ -83,20 +71,11 @@ public abstract class Component extends DimensionalDrawnObject implements
 				null);
 		
 		// Initializes attributes
-		this.testVersion = isForTesting;
 		this.spritedrawer = new SingleSpriteDrawer(
 				MultiMediaHolder.getSpriteBank("components").getSprite(
 				spritename), actorhandler, this);
-		this.active = true;
 		this.inputs = new InputCableConnector[inputs];
 		this.outputs = new OutputCableConnector[outputs];
-		this.testing = false;
-		this.dragged = fromBox && !isForTesting;
-		this.relay = connectorRelay;
-		this.diesWhenDropped = fromBox && !isForTesting;
-		this.lastRelativeMouseGrabPosition = new Point2D.Double();
-		if (fromBox && !isForTesting)
-			componentDragged = true;
 		
 		// Generates the id
 		// TODO: There's still a small chance that two components will have the 
@@ -123,10 +102,6 @@ public abstract class Component extends DimensionalDrawnObject implements
 		// Adds the object to the handler(s)
 		if (room != null)
 			room.addObject(this);
-		if (mousehandler != null)
-			mousehandler.addMouseListener(this);
-		if (testHandler != null)
-			testHandler.addTestable(this);
 		
 		// Resets the transform status
 		forceTransformationUpdate();
@@ -136,131 +111,10 @@ public abstract class Component extends DimensionalDrawnObject implements
 	// IMPLEMENTED METHODS	----------------------------------------------
 
 	@Override
-	public boolean isActive()
-	{
-		return this.active && !this.testing;
-	}
-
-	@Override
-	public void activate()
-	{
-		this.active = true;
-	}
-
-	@Override
-	public void inactivate()
-	{
-		this.active = false;
-	}
-
-	@Override
 	public Class<?>[] getSupportedListenerClasses()
 	{
 		// Doesn't limit collisionListeners
 		return null;
-	}
-
-	@Override
-	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Point2D.Double mousePosition,
-			double eventStepTime)
-	{
-		// If the component (and not one of its connectors) is clicked, it 
-		// is considered a grab
-		if (button == MouseButton.LEFT && 
-				eventType == MouseButtonEventType.PRESSED && !componentDragged &&
-				this.relay.getConnectorAtPoint(mousePosition, null) == null)
-		{
-			this.dragged = true;
-			componentDragged = true;
-			this.lastRelativeMouseGrabPosition = new Point2D.Double(getX() - 
-					mousePosition.getX(), getY() - mousePosition.getY());
-		}
-		// If the button is released, also releases the grab
-		else if (button == MouseButton.LEFT && 
-				eventType == MouseButtonEventType.RELEASED && this.dragged)
-		{
-			this.dragged = false;
-			componentDragged = false;
-			
-			// If the component was supposed to die upon drop, dies
-			if (this.diesWhenDropped)
-				kill();
-		}
-	}
-
-	@Override
-	public boolean listensPosition(Point2D.Double testedPosition)
-	{
-		return pointCollides(testedPosition);
-	}
-
-	@Override
-	public boolean listensMouseEnterExit()
-	{
-		// Doesn't listen to mouse if is just a test version
-		return !this.testVersion;
-	}
-
-	@Override
-	public void onMousePositionEvent(MousePositionEventType eventType,
-			Point2D.Double mousePosition, double eventStepTime)
-	{
-		if (this.dragged)
-			return;
-		
-		if (eventType == MousePositionEventType.ENTER)
-			setScale(GameSettings.interfaceScaleFactor, 
-					GameSettings.interfaceScaleFactor);
-		else if (eventType == MousePositionEventType.EXIT)
-			setScale(1, 1);
-	}
-
-	@Override
-	public void onMouseMove(Point2D.Double newMousePosition)
-	{
-		// If being dragged, jumps into the mouse's position
-		if (this.dragged)
-		{
-			setPosition(newMousePosition.getX() + 
-					this.lastRelativeMouseGrabPosition.getX(), 
-					newMousePosition.getY() + 
-					this.lastRelativeMouseGrabPosition.getY());
-			// If the position is near an edge of the screen, prepares to die, 
-			// may also return from this state
-			if (HelpMath.pointIsInRange(getPosition(), 64, 
-					GameSettings.screenWidth - 64, 64, 
-					GameSettings.screenHeight - 64))
-			{
-				if (this.diesWhenDropped)
-				{
-					this.diesWhenDropped = false;
-					setScale(GameSettings.interfaceScaleFactor, 
-							GameSettings.interfaceScaleFactor);
-				}
-			}
-			else
-			{
-				if (!this.diesWhenDropped)
-				{
-					this.diesWhenDropped = true;
-					setScale(0.5, 0.5);
-				}
-			}
-		}
-	}
-
-	@Override
-	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
-	{
-		// If is a test version, doesn't really care about the mouse
-		if (this.testVersion)
-			return MouseButtonEventScale.NONE;
-		
-		if (this.dragged)
-			return MouseButtonEventScale.GLOBAL;
-		
-		return MouseButtonEventScale.LOCAL;
 	}
 
 	@Override
@@ -318,18 +172,6 @@ public abstract class Component extends DimensionalDrawnObject implements
 	}
 	
 	@Override
-	public void onTestStart()
-	{
-		this.testing = true;
-	}
-
-	@Override
-	public void onTestEnd()
-	{
-		this.testing = false;
-	}
-	
-	@Override
 	public void kill()
 	{
 		// Also kills the connectors
@@ -361,15 +203,6 @@ public abstract class Component extends DimensionalDrawnObject implements
 	
 	
 	// OTHER METHODS	-------------------------------------------------
-	
-	/**
-	 * Stops the component from being dragged
-	 */
-	public void stopDrag()
-	{
-		this.dragged = false;
-		componentDragged = false;
-	}
 	
 	/**
 	 * Informs a specific output about a signal change

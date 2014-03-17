@@ -261,11 +261,11 @@ public class MissionInitializer extends FileReader
 					
 					// Creates the component and gives it a new ID
 					Area codingArea = areaChanger.getArea("coding");
-					NormalComponent component = componentType.getNewComponent(x, y, 
-							codingArea.getDrawer(), 
+					NormalComponent component = componentType.getNewComponent(
+							x, y, codingArea.getDrawer(), 
 							codingArea.getActorHandler(), 
 							codingArea.getMouseHandler(), codingArea, 
-							testHandler, connectorRelay, componentRelay, 
+							testHandler, connectorRelay, componentRelay, null, 
 							turnHandler, false);
 					component.stopDrag();
 					component.setID(commands[0]);
