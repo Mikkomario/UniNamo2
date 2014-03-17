@@ -24,6 +24,8 @@ public abstract class AreaObjectCreator extends GameObject implements RoomListen
 	private Area area;
 	private String areaBackgroundName, areaBackgroundBankName;
 	
+	// TODO: Add an object initializer here
+	
 	
 	// CONSTRUCTOR	----------------------------------------------------
 	

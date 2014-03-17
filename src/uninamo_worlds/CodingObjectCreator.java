@@ -66,7 +66,7 @@ public class CodingObjectCreator extends AreaObjectCreator
 	@Override
 	protected void createObjects(Area area)
 	{
-		// Creates a set of (test) objects
+		// Creates the interface elements
 		new CodeTransitionButton(0, area, this.areaChanger.getArea("design"));
 		new TestingButton(GameSettings.screenWidth - 110, 45, area.getDrawer(), 
 				area.getMouseHandler(), area, this.testHandler);
@@ -83,5 +83,9 @@ public class CodingObjectCreator extends AreaObjectCreator
 		new ManualButton(GameSettings.screenWidth / 3, GameSettings.screenHeight, 
 				area.getDrawer(), area.getMouseHandler(), area, 
 				this.areaChanger, this.timer);
+		
+		// Creates the demo components
+		new CodingInitializer(area, this.componentRelay, this.connectorRelay, 
+				this.testHandler, this.timer);
 	}
 }

@@ -1,5 +1,6 @@
 package uninamo_gameplaysupport;
 
+import uninamo_userinterface.FinishButton;
 import utopia_handleds.Handled;
 import utopia_handlers.Handler;
 
@@ -15,20 +16,21 @@ public class VictoryHandler extends Handler implements VictoryCondition
 	// ATTRIBUTES	------------------------------------------------------
 	
 	private boolean lastClearStatus;
+	private FinishButton finishButton;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
 	
 	/**
 	 * Creates a new empty victoryHandler
-	 * 
-	 * @param superhandler The victoryHandler that will handle this handler
+	 * @param finishButton The finishButton that will be shown after the 
 	 */
-	public VictoryHandler(VictoryHandler superhandler)
+	public VictoryHandler(FinishButton finishButton)
 	{
-		super(false, superhandler);
+		super(false, null);
 		
 		// Initializes attributes
+		this.finishButton = finishButton;
 		this.lastClearStatus = false;
 	}
 	
@@ -80,8 +82,11 @@ public class VictoryHandler extends Handler implements VictoryCondition
 	 */
 	public void recheck()
 	{
-		// TODO: Add a real victory reaction
-		if (isClear())
-			System.out.println("VICTORY");
+		// Shows the victory button
+		if (isClear() && this.finishButton != null)
+		{
+			this.finishButton.setVisible();
+			this.finishButton.activate();
+		}
 	}
 }

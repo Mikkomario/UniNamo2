@@ -5,6 +5,7 @@ import java.util.HashMap;
 import uninamo_components.ConnectorRelay;
 import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.TestHandler;
+import uninamo_gameplaysupport.TotalCostAnalyzer;
 import uninamo_gameplaysupport.TurnTimer;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.DrawableHandler;
@@ -44,8 +45,9 @@ public class AreaChanger
 		this.areas = new HashMap<String, Area>();
 		
 		// Creates shared resources
+		TotalCostAnalyzer costAnalyzer = new TotalCostAnalyzer();
 		ConnectorRelay connectorRelay = new ConnectorRelay();
-		NormalComponentRelay componentRelay = new NormalComponentRelay();
+		NormalComponentRelay componentRelay = new NormalComponentRelay(costAnalyzer);
 		TestHandler testHandler = new TestHandler(null);
 		
 		// Creates areas
@@ -60,15 +62,14 @@ public class AreaChanger
 		
 		this.areas.put("design", new Area(phaseBank.getPhase("gameplay"), 
 				mousehandler, actorhandler, drawer));
-		new DesignObjectCreator(this, testHandler, componentRelay);
+		new DesignObjectCreator(this, testHandler, componentRelay, connectorRelay);
 		
 		this.areas.put("manual", new Area(phaseBank.getPhase("gameplay"), 
 				mousehandler, actorhandler, drawer));
 		
 		this.areas.put("mission", new Area(phaseBank.getPhase("gameplay"), 
 				mousehandler, actorhandler, drawer));
-		new MissionObjectCreator(this, testHandler, connectorRelay, 
-				componentRelay, turnTimer);
+		new MissionObjectCreator(this.areas.get("mission"));
 	}
 
 	

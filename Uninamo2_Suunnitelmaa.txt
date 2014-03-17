@@ -185,10 +185,10 @@ Työtehtäviä
 			* Järjestysnumeron tallentaminen alussa							DONE
 				- Number = counter.getCurrentAmount(this.type)				DONE
 				- Kannattaa tallentaa tekstinä (type + number)				DONE
-		- Kenttien demot													...
+		- Kenttien demot													Testaamatta
 			* Demonappula													DONE
 			* Koodiratkaisujen (tallentaminen ja) lukeminen					DONE
-				- Myös komponenttianalyysiä varten kustannusten lasku		...
+				- Myös komponenttianalyysiä varten kustannusten lasku		Testaamatta
 			* Saa muuten varmaan bugattua koko roskan jos 					Jep jep
 			ratkaisee kentän kytkemällä komponentin itseensä 
 			(kenttää ei enää demossa pääse läpi)
@@ -198,43 +198,22 @@ Työtehtäviä
 					* Joudutaan kyllä ottamaan pois testin loppuessa
 				- Huoneiden lopettaminen ja aloittaminen
 					* Uusi gamephase: results
-			* Komponenttikäytön analysointi
+			* Komponenttikäytön analysointi									...
 				- Käytettyjen komponenttityyppien ja määrien piirtäminen
-					* ComponentCounter
+					* ComponentCounter										...
 					* GetSprite tyyppienumeraatioon
 					* SimpleComponentSpriteDrawer class piirtämiseen
-				- Käytetyn rahan laskeminen
-					* GetPrice tyyppienumeraatioon
-				- Grading
-					* Käytetyn rahan vertaaminen tavoitteeseen
-						- Tavoitte pitää tässä vaiheessa vielä vaan 
-						heittää
+				- Käytetyn rahan laskeminen									...
+					* GetPrice tyyppienumeraatioon							DONE
+				- Grading													...
+					* Käytetyn rahan vertaaminen tavoitteeseen				...
 					* Arvosanan piirtäminen
 			* Uusien tehtävien antaminen
-		- Kahden näkymän piirtäminen testausmoodissa (ja muuten)
+		- Kahden näkymän piirtäminen testausmoodissa (ja muuten)			Hylätty
 			* Kameroiden implementointi
 			* Kameran koon ja sijainnin muuttaminen testausvaiheessa
 			* Näppäin käyttöliittymään, josta kuvan saa päälle tai pois
 			* Piirtosyvyysongelman ratkaiseminen
-		- Parantelua														...
-			* Testausmoodin selkeä näyttäminen koodipuolella
-			* Kerättävän stuffin näyttäminen voittokerääjässä				...
-				- Oikea skaalaus
-				- Designmodessa designsprite ja testauksessa real
-			* Komponenttienumeraation toteuttaminen ja käyttäminen			DONE
-				- Komponenttilaatikoiden luomisessa ilman erillisiä luokkia	DONE
-				- Ohjeiden lukemisessa										DONE
-			* Nuolen piirtäminen johdossa
-			* "Back to Coding":in vaihtaminen "Start Coding":iksi kentän 
-			alussa ja takaisin ekan klikkauksen jälkeen
-			* Fysiikkamoottorin paranteleminen
-				- Pyörimisen, kitkan sekä liikemäärän ottaminen mukaan
-			* Muistinvapauttamisen varmentaminen heittämällä tarpeettomia 
-			attribuutteja nulliksi
-			* Refaktoroi mahdottomia parametrijoukkoja yhdistämällä niitä 
-			mahdollisiksi kokonaisuuksiksi (vähän niinku areaChanger 
-			yhistää areat ja areat kaikki perushandlerit)
-	* Gold	---------------------------------------------------------------------
 		- Main menu
 			* Säätöihin, tehtävävalikkoon sekä kenttäeditoriin pääsy
 			* Tarvittavat käyttöliittymäelementit
@@ -272,6 +251,30 @@ Työtehtäviä
 			* Komponenttien unlockkaaminen
 			* Kenttien unlockkaaminen
 			* Alennusten toiminta sekä unlockkaaminen
+		- Parantelua														...
+			* Testausmoodin selkeä näyttäminen koodipuolella
+			* Kerättävän stuffin näyttäminen voittokerääjässä				...
+				- Oikea skaalaus
+				- Designmodessa designsprite ja testauksessa real
+			* Komponenttienumeraation toteuttaminen ja käyttäminen			DONE
+				- Komponenttilaatikoiden luomisessa ilman erillisiä luokkia	DONE
+				- Ohjeiden lukemisessa										DONE
+			* Nuolen piirtäminen johdossa
+			* "Back to Coding":in vaihtaminen "Start Coding":iksi kentän 
+			alussa ja takaisin ekan klikkauksen jälkeen
+			* Fysiikkamoottorin paranteleminen
+				- Pyörimisen, kitkan sekä liikemäärän ottaminen mukaan
+			* Muistinvapauttamisen varmentaminen heittämällä tarpeettomia 
+			attribuutteja nulliksi
+			* Refaktoroi mahdottomia parametrijoukkoja yhdistämällä niitä 
+			mahdollisiksi kokonaisuuksiksi (vähän niinku areaChanger 
+			yhistää areat ja areat kaikki perushandlerit)
+			* Lisää joku yksinkertainen "InterfaceScaler" -luokka, joka 
+			hoitaa yhdessä paikkaa scale, rescale -toiminnon
+			* Refaktoroi areasysteemit niin ettei tule jaettuja resursseja
+				- Jokaiseen initializerit jotka lataa vaan esim. komponentteja 
+				tai vaikka laitteita
+	* Gold	---------------------------------------------------------------------
 		- Gold Graffat
 			* Komponentit
 			* Laitteet
@@ -313,6 +316,9 @@ Työtehtäviä
 				- Näppäinkuuntelija
 				- Hiirikuuntelija
 		- Mainokset uusien laitteiden kanssa
+			* Voi myös olla randomgeneroidut uutisotsikot
+				- "I just couldn't live without it!"
+				- "<Insert product name here>, MASSIVE SUCCESS!!!"
 		- Jokaisella kentällä rajattu budjetti ja kaikki 
 		komponentit maksaa
 			* Valuutan hankkiminen

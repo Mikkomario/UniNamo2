@@ -95,6 +95,8 @@ public abstract class Machine extends DimensionalDrawnObject implements
 		super(x, y, DepthConstants.NORMAL + 5, isSolid, collisiontype, drawer, 
 				collidablehandler);
 		
+		//System.out.println("Machine connector handler " + connectorRelay);
+		
 		// Initializes attributes
 		Sprite[] sprites = new Sprite[2];
 		sprites[0] = MultiMediaHolder.getSpriteBank("machines").getSprite(designSpriteName);

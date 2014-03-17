@@ -1,10 +1,14 @@
 package uninamo_worlds;
 
+import uninamo_components.ConnectorRelay;
 import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.InvisibleWall;
 import uninamo_gameplaysupport.TestHandler;
+import uninamo_gameplaysupport.VictoryHandler;
+import uninamo_machinery.MachineCounter;
 import uninamo_main.GameSettings;
 import uninamo_userinterface.DemoButton;
+import uninamo_userinterface.FinishButton;
 import uninamo_userinterface.TestingButton;
 import uninamo_userinterface.ToCodeButton;
 
@@ -22,6 +26,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 	private AreaChanger areaChanger;
 	private TestHandler testHandler;
 	private NormalComponentRelay componentRelay;
+	private ConnectorRelay connectorRelay;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -35,9 +40,12 @@ public class DesignObjectCreator extends AreaObjectCreator
 	 * test events
 	 * @param componentRelay The componentRelay that holds the information 
 	 * about created components
+	 * @param connectorRelay The connectorRelay that will keep track of the 
+	 * created connectors
 	 */
 	public DesignObjectCreator(AreaChanger areaChanger, 
-			TestHandler testHandler, NormalComponentRelay componentRelay)
+			TestHandler testHandler, NormalComponentRelay componentRelay, 
+			ConnectorRelay connectorRelay)
 	{
 		super(areaChanger.getArea("design"), "paper", "gameplaybackgrounds");
 		
@@ -45,6 +53,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 		this.areaChanger = areaChanger;
 		this.componentRelay = componentRelay;
 		this.testHandler = testHandler;
+		this.connectorRelay = connectorRelay;
 	}
 
 	
@@ -53,9 +62,6 @@ public class DesignObjectCreator extends AreaObjectCreator
 	@Override
 	protected void createObjects(Area area)
 	{
-		// Creates the victoryHandler
-		//VictoryHandler victoryHandler = new VictoryHandler(null);
-		
 		// Creates the invisible walls
 		new InvisibleWall(0, 1, 0, 
 				area.getCollisionHandler().getCollidableHandler(), area);
@@ -68,7 +74,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 		new InvisibleWall(-1, 0, GameSettings.screenHeight - 80, 
 				area.getCollisionHandler().getCollidableHandler(), area);
 		
-		// Creates objects
+		// Creates interface elements
 		DemoButton demoButton = new DemoButton(600, 80, area.getDrawer(), 
 				area.getMouseHandler(), area, this.testHandler);
 		TestingButton testButton = new TestingButton(GameSettings.screenWidth - 110, 
@@ -76,5 +82,17 @@ public class DesignObjectCreator extends AreaObjectCreator
 				area.getMouseHandler(), area, this.testHandler);
 		new ToCodeButton(this.areaChanger, this.testHandler, testButton, 
 				demoButton, this.componentRelay);
+		FinishButton finishButton = new FinishButton(this.areaChanger, 
+				this.testHandler);
+		
+		// Creates a new victoryHandler
+		VictoryHandler victoryHandler = new VictoryHandler(finishButton);
+		
+		// Creates a new machine counter
+		MachineCounter machineCounter = new MachineCounter();
+		
+		// Creates stage objects
+		new DesignInitializer(this.areaChanger, this.testHandler, 
+				machineCounter, this.connectorRelay, victoryHandler);
 	}
 }

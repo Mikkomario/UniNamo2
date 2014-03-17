@@ -73,6 +73,9 @@ public class Cable extends DimensionalDrawnObject implements
 		super(0, 0, DepthConstants.NORMAL - 5, false, CollisionType.BOX, 
 				drawer, null);
 		
+		//System.out.println(startConnector);
+		//System.out.println(endConnector);
+		
 		if (!isForTesting && (startConnector == null || endConnector == null))
 		{
 			// The cable starts as being dragged

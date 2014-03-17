@@ -1,5 +1,6 @@
 package uninamo_components;
 
+import uninamo_gameplaysupport.TotalCostAnalyzer;
 import utopia_handleds.Handled;
 import utopia_handlers.Handler;
 import utopia_listeners.RoomListener;
@@ -15,14 +16,24 @@ import utopia_worlds.Room;
  */
 public class NormalComponentRelay extends Handler implements RoomListener
 {
+	// ATTRIBUTES	-----------------------------------------------------
+	
+	private TotalCostAnalyzer costAnalyzer;
+	
+	
 	// CONSTRUCTOR	-----------------------------------------------------
 	
 	/**
 	 * Creates a new empty componentRelay
+	 * @param costAnalyzer The costAnalyzer that analyzes the data from the 
+	 * component relay when necessary
 	 */
-	public NormalComponentRelay()
+	public NormalComponentRelay(TotalCostAnalyzer costAnalyzer)
 	{
 		super(false, null);
+		
+		// Initializes attributes
+		this.costAnalyzer = costAnalyzer;
 	}
 
 	
@@ -74,5 +85,57 @@ public class NormalComponentRelay extends Handler implements RoomListener
 		addHandled(c);
 	}
 	
-	// TODO: Add handlingOperator for component cost calculations
+	/**
+	 * Calculates the current componentCosts and informs them as the demo costs
+	 */
+	public void calculateDemoCosts()
+	{
+		// Creates a new handlingOperator to calculate the costs
+		CostOperator operator = new CostOperator();
+		
+		handleObjects(operator);
+		
+		// Informs the costAnalyzer about the findings
+		this.costAnalyzer.setDemoComponentCosts(operator.getTotalCosts());
+	}
+	
+	
+	// SUBCLASSES	-----------------------------------------------------
+	
+	private class CostOperator extends HandlingOperator
+	{
+		// ATTRIBUTES	-------------------------------------------------
+		
+		private double currentCosts;
+		
+		
+		// CONSTRUCTOR	-------------------------------------------------
+		
+		public CostOperator()
+		{
+			// Initializes attributes
+			this.currentCosts = 0;
+		}
+		
+		
+		// IMPLEMENTED METHODS	-----------------------------------------
+		
+		@Override
+		protected boolean handleObject(Handled h)
+		{
+			// Adds the component's costs to the total costs
+			NormalComponent c = (NormalComponent) h;
+			this.currentCosts += c.getType().getPrice();
+			
+			return true;
+		}
+		
+		
+		// OTHER METHODS	---------------------------------------------
+		
+		public double getTotalCosts()
+		{
+			return this.currentCosts;
+		}
+	}
 }

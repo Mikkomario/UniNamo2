@@ -113,6 +113,8 @@ public class ConnectorRelay extends Handler
 	 */
 	public CableConnector getConnectorWithID(String ID)
 	{
+		//System.out.println(this);
+		
 		// Creates a handling operator and starts the search
 		IDFindOperator operator = new IDFindOperator(ID);
 		handleObjects(operator);
