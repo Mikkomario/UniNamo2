@@ -71,6 +71,9 @@ public abstract class MachineComponent extends Component
 	{
 		super.drawSelfBasic(g2d);
 		
+		if (this.name == null)
+			return;
+		
 		// Also draws the name of the component
 		g2d.setColor(Color.BLACK);
 		g2d.setFont(GameSettings.basicFont);

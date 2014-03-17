@@ -11,7 +11,7 @@ conveyorbelt#400#600
 conveyorbelt#600#600
 
 &obstacles
-box#400#400
+*box#400#400
 box#400#200
 
 &collectors
