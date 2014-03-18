@@ -107,8 +107,8 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 	{
 		Point originPoint = getDoublePointAsPoint(origin);
 		
-		printMoments();
-		System.out.println("Asked for: " + originPoint.x + ", " + originPoint.y);
+		//printMoments();
+		//System.out.println("Asked for: " + originPoint.x + ", " + originPoint.y);
 		
 		if (this.moments.containsKey(originPoint))
 			return this.moments.get(originPoint);
@@ -519,6 +519,7 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 		return new Point2D.Double(point.getX(), point.getY());
 	}
 	
+	@SuppressWarnings("unused")
 	private void printMoments()
 	{
 		for (Point p : this.moments.keySet())
