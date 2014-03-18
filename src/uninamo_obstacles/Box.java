@@ -1,6 +1,5 @@
 package uninamo_obstacles;
 
-import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
@@ -12,7 +11,6 @@ import utopia_handlers.CollidableHandler;
 import utopia_handlers.CollisionHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.CollisionType;
-import utopia_helpAndEnums.Material;
 import utopia_worlds.Room;
 
 /**
@@ -49,7 +47,7 @@ public class Box extends Obstacle implements Wall
 		
 		setBoxCollisionPrecision(2, 0);
 		
-		setMoment(new Point2D.Double(getOriginX(), getOriginY()), 2);
+		setRotation(-2);
 	}
 	
 	
@@ -59,7 +57,7 @@ public class Box extends Obstacle implements Wall
 	protected void resetStatus()
 	{
 		// Does nothing
-		setMoment(new Point2D.Double(getOriginX(), getOriginY()), 2);
+		setRotation(-2);
 	}
 
 	@Override
@@ -67,17 +65,5 @@ public class Box extends Obstacle implements Wall
 			Collidable collided, double steps)
 	{
 		// Does nothing
-	}
-
-	@Override
-	public int getZHeight()
-	{
-		return getWidth();
-	}
-
-	@Override
-	public int getDensity()
-	{
-		return Material.WOOD.getDensity();
 	}
 }

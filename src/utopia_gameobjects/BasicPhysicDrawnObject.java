@@ -75,6 +75,7 @@ public abstract class BasicPhysicDrawnObject extends CollidingDrawnObject
 		// Handles the movement of the object
 		move(steps);
 		rotate(steps);
+		implyRotationFriction(steps);
 	}
 	
 	
@@ -266,15 +267,16 @@ public abstract class BasicPhysicDrawnObject extends CollidingDrawnObject
 		checkMaxRotation();
 	}
 	
-	// Rotates teh object and handles the rotation friction
-	private void rotate(double steps)
+	/**
+	 * This method rotates the object according to it's rotation. This method 
+	 * is called automatically in the physicObject's act(double) method and 
+	 * should really only concern subclasses that would override it.
+	 * 
+	 * @param steps How many steps the rotation takes place
+	 */
+	protected void rotate(double steps)
 	{
 		addAngle(getRotation() * steps);
-		
-		if (getRotationFriction() == 0)
-			return;
-		
-		implyRotationFriction(steps);
 	}
 	
 	// Slows the speed the amount of given friction
@@ -286,6 +288,10 @@ public abstract class BasicPhysicDrawnObject extends CollidingDrawnObject
 	// Slows the rotation speed the amount of given friction
 	private void implyRotationFriction(double steps)
 	{	
+		// Only implies friction if there is any
+		if (getRotationFriction() == 0)
+			return;
+		
 		// Slows down the object's rotation
 		if (Math.abs(getRotation()) <= getRotationFriction() * steps)
 			this.rotation = 0;

@@ -18,7 +18,7 @@ import utopia_helpAndEnums.Movement;
  * @author Mikko Hilpinen
  * @since 18.3.2014
  */
-public abstract class RotatingBasicPhysicDrawnObject2 extends AdvancedPhysicDrawnObject
+public abstract class RotatingBasicPhysicDrawnObject2 extends BouncingBasicPhysicDrawnObject
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
@@ -83,8 +83,19 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends AdvancedPhysicDraw
 				//System.out.println("Resets to origin");
 			}
 		}
+	}
+	
+	@Override
+	protected void rotate(double steps)
+	{
+		// If the current rotation axis is the origin, works just normally
+		if (currentAxisIsOrigin())
+			super.rotate(steps);
 		
-		// TODO: Add rotation friction and rotate the object
+		// Otherwise rotates the object around a specific axis
+		else
+			rotateAroundRelativePoint(getRotation() * steps, 
+					this.currentRotationAxis);
 	}
 		
 		
@@ -138,7 +149,7 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends AdvancedPhysicDraw
 			return;
 		
 		// Next steps only affect rotating objects
-		if (getMoment(this.currentRotationAxis) == 0)
+		if (getRotation() == 0)
 			return;
 		
 		// Remembers that the object collided
@@ -160,7 +171,7 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends AdvancedPhysicDraw
 		
 		// Changes the rotation axis to the collision point and transforms the 
 		// rotation
-		if (getMoment(this.currentRotationAxis) != 0)
+		if (getRotation() != 0)
 			changeRotationAxisTo(negateTransformations(collisionpoint));
 	}
 	
@@ -170,7 +181,7 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends AdvancedPhysicDraw
 		// Calculates the movement of the point (based on the rotation of the object)
 		// V = r*w
 		Movement pointMovement = Movement.createMovement(directionToPoint + 90, 
-				r * getMoment(this.currentRotationAxis));
+				r * getRotation());
 		
 		// Calculates the opposing force for the movement
 		Movement oppMovement = 
@@ -194,7 +205,7 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends AdvancedPhysicDraw
 		
 		// Checks towards which direction the friction pushes the object
 		double frictionDirection = directionToPoint - 90;
-		if (getMoment(this.currentRotationAxis) < 0)
+		if (getRotation() < 0)
 			frictionDirection = directionToPoint + 90;
 		
 		Movement frictionMovement = Movement.createMovement(frictionDirection, 
@@ -226,7 +237,7 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends AdvancedPhysicDraw
 				(steps * (Math.pow(getWidth(), 2) + Math.pow(getHeight(), 2)));*/
 		
 		// Applies the rotation speed change
-		addMoment(this.currentRotationAxis, rotationSign * deltaRotSpeed);
+		addRotation(rotationSign * deltaRotSpeed);
 		
 		// Adds compensation angle
 		rotateAroundRelativePoint(rotationSign * deltaRotSpeed, this.currentRotationAxis);
@@ -235,7 +246,7 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends AdvancedPhysicDraw
 	private void changeRotationAxisTo(Point2D.Double newRelativeAxis)
 	{	
 		// If the rotation axis is not the origin, changes it back first
-		if (this.currentRotationAxis.getX() != getOriginX() || this.currentRotationAxis.getY() != getOriginY())
+		if (!currentAxisIsOrigin())
 			resetRotationAxisToOrigin();
 		
 		// Calculates the distance to the new axis
@@ -246,7 +257,7 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends AdvancedPhysicDraw
 		this.currentMomentMass = this.defaultMomentMass + r2;
 		
 		// Remembers the current / old rotation speed
-		double oldRotSpeed2 = Math.pow(getMoment(this.currentRotationAxis), 2);
+		double oldRotSpeed2 = Math.pow(getRotation(), 2);
 		
 		// Calculates the object's new rotation speed around the new axis
 		// wa = sqrt(J1 * w1^2 / Ja)
@@ -261,14 +272,11 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends AdvancedPhysicDraw
 				/ ((1.0 / 12.0) * w2plush2 + r2));
 		*/
 		
-		// Depletes the normal rotation
-		setMoment(this.currentRotationAxis, 0);
-		
-		// And transforms it to new rotation
-		addMoment(newRelativeAxis, newSpeed);
-		
 		// Remembers the new axis
 		this.currentRotationAxis = newRelativeAxis;
+		
+		// Changes the rotation to the new amount
+		setRotation(newSpeed);
 	}
 	
 	private void resetRotationAxisToOrigin()
@@ -276,7 +284,7 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends AdvancedPhysicDraw
 		// wo = sqrt(Ja * wa^2 / J1)
 		
 		// Calculates the old rotation speed ^2 (wa^2)
-		double oldRotSpeed2 = Math.pow(getMoment(this.currentRotationAxis), 2);
+		double oldRotSpeed2 = Math.pow(getRotation(), 2);
 		
 		// Calculates the new speed
 		double newSpeed = Math.sqrt(this.currentMomentMass * oldRotSpeed2 / 
@@ -292,16 +300,19 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends AdvancedPhysicDraw
 				oldRotSpeed2 / ((1.0 / 12.0) * w2plush2));
 		*/
 		
-		// Deletes the moment
-		setMoment(this.currentRotationAxis, 0);
-		
 		// Changes back to normal rotation
 		this.currentRotationAxis = new Point2D.Double(getOriginX(), getOriginY());
-		setMoment(this.currentRotationAxis, newSpeed);
+		setRotation(newSpeed);
 	}
 	
 	private double getW2PlusH2()
 	{
 		return Math.pow(getWidth(), 2) + Math.pow(getHeight(), 2);
+	}
+	
+	private boolean currentAxisIsOrigin()
+	{
+		return (this.currentRotationAxis.getX() == getOriginX() && 
+				this.currentRotationAxis.getY() == getOriginY());
 	}
 }
