@@ -1,6 +1,7 @@
 package utopia_gameobjects;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 
 import utopia_handleds.PhysicalCollidable;
 import utopia_handlers.ActorHandler;
@@ -12,8 +13,14 @@ import utopia_helpAndEnums.HelpMath;
 import utopia_helpAndEnums.Movement;
 
 @SuppressWarnings("javadoc")
-public abstract class RotatingBasicPhysicDrawnObject2 extends BasicPhysicDrawnObject
+public abstract class RotatingBasicPhysicDrawnObject2 extends AdvancedPhysicDrawnObject
 {
+	// ATTRIBUTES	------------------------------------------------------
+	
+	private Point2D.Double currentRotationAxis;
+	
+	
+	// CONSTRUCTOR	------------------------------------------------------
 
 	public RotatingBasicPhysicDrawnObject2(int x, int y, int depth,
 			boolean isSolid, CollisionType collisiontype,
@@ -22,11 +29,18 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BasicPhysicDrawnOb
 	{
 		super(x, y, depth, isSolid, collisiontype, drawer, collidablehandler,
 				collisionhandler, actorhandler);
-		// TODO Auto-generated constructor stub
+		
+		// Initializes attributes
+		this.currentRotationAxis = new Point2D.Double(0, 0);
 	}
 		
 		
 	// OTHER METHODS	--------------------------------------------------
+	
+	protected void setupRotationOrigin(double x, double y)
+	{
+		this.currentRotationAxis = new Point2D.Double(x, y);
+	}
 	
 	/**
 	 * Slows the objects directional movement (tangentual to the opposing force) 
@@ -37,6 +51,7 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BasicPhysicDrawnOb
 	 * @param frictionmodifier f with which the friction is calculated [0, 1]
 	 * @see bounceWithoutRotationFrom
 	 */
+	/*
 	protected void addWallFriction(Movement oppmovement, double frictionmodifier)
 	{
 		double friction = oppmovement.getSpeed() * frictionmodifier;
@@ -44,6 +59,7 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BasicPhysicDrawnOb
 		setMovement(getMovement().getDirectionalllyDiminishedMovement(
 				oppmovement.getDirection() + 90, friction));
 	}
+	*/
 	
 	/**
 	 * The object bounces from a certain object it collides with. This doesn't 
@@ -95,16 +111,30 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BasicPhysicDrawnOb
 		bounce(bounciness, frictionmodifier, oppmovement, forcedir);
 		
 		// Calculates necessary stuff
-		double directionToPoint = HelpMath.pointDirection(getX(), getY(), collisionpoint.getX(), 
-				collisionpoint.getY());
-		double r = HelpMath.pointDistance(getX(), getY(), 
+		Point2D.Double absoluteRotationAxis = transform(this.currentRotationAxis);
+		double directionToPoint = HelpMath.pointDirection(
+				absoluteRotationAxis.getX(), absoluteRotationAxis.getY(), 
 				collisionpoint.getX(), collisionpoint.getY());
+		double r = HelpMath.pointDistance(absoluteRotationAxis.getX(), 
+				absoluteRotationAxis.getY(), collisionpoint.getX(), collisionpoint.getY());
+		
+		// Next steps only affect rotating objects
+		if (getMoment(this.currentRotationAxis) == 0)
+		{
+			//System.out.println("Not rotating :)");
+			return;
+		}
 		
 		// Next calculates the rotation stopper
 		addOpposingRotation(forcedir, steps, directionToPoint, r);
 		// Also rotation friction
 		addRotationFriction(oppmovement, frictionmodifier, directionToPoint, 
 				steps, r);
+		
+		// Changes the rotation axis to the collision point and transforms the 
+		// rotation
+		if (getMoment(this.currentRotationAxis) != 0)
+			changeRotationAxisTo(negateTransformations(collisionpoint));
 	}
 	
 	private void bounce(double bounciness, double frictionmodifier, 
@@ -128,15 +158,13 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BasicPhysicDrawnOb
 	
 	private void addOpposingRotation(double oppForceDirection, double steps, 
 			double directionToPoint, double r)
-	{
-		// If there is no rotation, does nothing
-		if (getRotation() == 0)
-			return;
+	{	
+		System.out.println("Adds opposing rotation");
 		
 		// Calculates the movement of the point (based on the rotation of the object)
 		// V = r*w
 		Movement pointMovement = Movement.createMovement(directionToPoint + 90, 
-				r * getRotation());
+				r * getMoment(this.currentRotationAxis));
 		
 		// Calculates the opposing force for the movement
 		Movement oppMovement = 
@@ -159,11 +187,13 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BasicPhysicDrawnOb
 	private void addRotationFriction(Movement oppMovement, 
 			double frictionModifier, double directionToPoint, double steps, double r)
 	{
+		System.out.println("Adds rotation friction");
+		
 		// Tukivoima * dt * kitkakerroin tukivoimaa kohtisuoraan suuntaan
 		// Calculates the friction movement
 		
 		double frictionDirection = directionToPoint - 90;
-		if (getRotation() < 0)
+		if (getMoment(this.currentRotationAxis) < 0)
 			frictionDirection = directionToPoint + 90;
 		
 		Movement frictionMovement = Movement.createMovement(frictionDirection, 
@@ -187,9 +217,58 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BasicPhysicDrawnOb
 				(steps * (Math.pow(getWidth(), 2) + Math.pow(getHeight(), 2)));
 		
 		// Applies the rotation speed change
-		addRotation(rotationSign * deltaRotSpeed);
+		addMoment(this.currentRotationAxis, rotationSign * deltaRotSpeed);
 		
 		// Adds compoensation angle
-		addAngle(rotationSign * deltaRotSpeed);
+		rotateAroundRelativePoint(rotationSign * deltaRotSpeed, this.currentRotationAxis);
+		//addAngle(rotationSign * deltaRotSpeed);
+	}
+	
+	private void changeRotationAxisTo(Point2D.Double newRelativeAxis)
+	{	
+		System.out.println("Changes axis");
+		
+		double w2plush2 = Math.pow(getWidth(), 2) + Math.pow(getHeight(), 2);
+		
+		// If the rotation axis is not the origin, changes it back first
+		if (this.currentRotationAxis.getX() != getOriginX() || this.currentRotationAxis.getY() != getOriginY())
+			resetRotationAxisToOrigin(w2plush2);
+		
+		// Calculates the distance to the new axis
+		double r2 = Math.pow(HelpMath.pointDistance(getOriginX(), getOriginY(), 
+				newRelativeAxis.getX(), newRelativeAxis.getY()), 2);
+		
+		double oldRotSpeed2 = Math.pow(getMoment(this.currentRotationAxis), 2);
+		
+		// Calculates the new rotation speed (using a secret method)
+		double newSpeed = Math.sqrt(((1.0 / 12.0) * oldRotSpeed2 * w2plush2) 
+				/ ((1.0 / 12.0) * w2plush2 + r2));
+		
+		// Depletes the normal rotation
+		setMoment(this.currentRotationAxis, 0);
+		
+		// And transforms it to new rotation
+		addMoment(newRelativeAxis, newSpeed);
+		
+		// Remembers the new axis
+		this.currentRotationAxis = newRelativeAxis;
+	}
+	
+	private void resetRotationAxisToOrigin(double w2plush2)
+	{
+		double r2 = Math.pow(HelpMath.pointDistance(getOriginX(), getOriginY(), 
+				this.currentRotationAxis.getX(), this.currentRotationAxis.getY()), 2);
+		
+		double oldRotSpeed2 = Math.pow(getMoment(this.currentRotationAxis), 2);
+		
+		double newSpeed = Math.sqrt(((1.0 / 12.0) * w2plush2 + r2) * 
+				oldRotSpeed2 / ((1.0 / 12.0) * w2plush2));
+		
+		// Deletes the moment
+		setMoment(this.currentRotationAxis, 0);
+		
+		// Changes back to normal rotation
+		this.currentRotationAxis = new Point2D.Double(getOriginX(), getOriginY());
+		setMoment(this.currentRotationAxis, newSpeed);
 	}
 }

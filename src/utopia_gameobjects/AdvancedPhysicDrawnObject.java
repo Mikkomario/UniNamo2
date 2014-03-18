@@ -1,5 +1,6 @@
 package utopia_gameobjects;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,9 +10,7 @@ import utopia_handlers.CollidableHandler;
 import utopia_handlers.CollisionHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.CollisionType;
-import utopia_helpAndEnums.HelpMath;
 import utopia_helpAndEnums.Material;
-import utopia_helpAndEnums.Movement;
 
 /**
  * In addition to bouncingbasicphysicobject's functions. Advanced physicobject 
@@ -25,7 +24,7 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 	// ATTRIBUTES	------------------------------------------------------
 	
 	// Contains each moment affecting the object
-	private HashMap<Point2D.Double, Double> moments;
+	private HashMap<Point, Double> moments;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -55,7 +54,7 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 				collisionhandler, actorhandler);
 		
 		// Initializes attributes
-		this.moments = new HashMap<Point2D.Double, Double>();
+		this.moments = new HashMap<Point, Double>();
 	}
 	
 	
@@ -106,10 +105,18 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 	 */
 	protected double getMoment(Point2D.Double origin)
 	{
-		if (this.moments.containsKey(origin))
-			return this.moments.get(origin);
+		Point originPoint = getDoublePointAsPoint(origin);
+		
+		printMoments();
+		System.out.println("Asked for: " + originPoint.x + ", " + originPoint.y);
+		
+		if (this.moments.containsKey(originPoint))
+			return this.moments.get(originPoint);
 		else
+		{
+			System.out.println("No such moment");
 			return 0;
+		}
 	}
 	
 	/**
@@ -120,7 +127,7 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 	 */
 	protected void setMoment(Point2D.Double origin, double moment)
 	{
-		this.moments.put(origin, moment);
+		this.moments.put(getDoublePointAsPoint(origin), moment);
 	}
 	
 	
@@ -129,13 +136,15 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 	/**
 	 * Adds a new moment to the object.
 	 *
-	 * @param p The point around which the object will rotate (relative pixel)
+	 * @param origin The point around which the object will rotate (relative pixel)
 	 * @param force How much the object rotates around the point (degrees / step)
 	 */
-	public void addMoment(Point2D.Double p, double force)
+	public void addMoment(Point2D.Double origin, double force)
 	{
-		if (p == null)
+		if (origin == null)
 			return;
+		
+		Point p = getDoublePointAsPoint(origin);
 		
 		// If there is no moment affecting the given point, it is added as a 
 		// new moment
@@ -162,6 +171,7 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 	 * @param bounciness How much the object bounces away from the given object (0+)
 	 * @param frictionmodifier How much energy is lost during the collision [0, 1]
 	 */
+	/*
 	public void bounceFrom(DimensionalDrawnObject d, Point2D.Double collisionpoint, 
 			double bounciness, double frictionmodifier)
 	{
@@ -185,7 +195,9 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 		bounce(collisionpoint, bounciness, frictionmodifier, oppmovement, 
 				opprotationforce, forcedir);
 	}
+	*/
 	
+	/*
 	private void bounce(Point2D.Double collisionpoint, double bounciness, 
 			double frictionmodifier, Movement oppmovement, 
 			double opprotationspeed, double forcedir)
@@ -206,6 +218,7 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 				addWallFriction(oppmovement, frictionmodifier);
 		}
 	}
+	*/
 	
 	/**
 	 * Bounces from an object pushing it away at the same time
@@ -218,6 +231,7 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 	 * @warning This method doesn't fully work yet and lots of speed is gained 
 	 * each time this method is called. The repairs are in progress.
 	 */
+	/*
 	protected void bounceInteractivelyFrom(AdvancedPhysicDrawnObject d, 
 			Point2D.Double collisionpoint, double bounciness, 
 			double frictionmodifier)
@@ -308,6 +322,7 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 					rotationspeedloss, oppdir);
 		}
 	}
+	*/
 	
 	/**
 	 * Calculates the speed of a single pixel in the object
@@ -315,12 +330,15 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 	 * @param pixel The pixel's relative coordinates
 	 * @return The pixel's x- and y-movement (absolute pixels / step)
 	 */
+	/*
 	protected Movement getPixelMovement(Point2D.Double pixel)
 	{
 		return Movement.movementSum(getMovement(), 
 				getPixelRotationMovement(pixel));
 	}
+	*/
 	
+	/*
 	private Movement getPixelRotationMovement(Point2D.Double pixel)
 	{
 		// TODO: Check if this should be +90 or -90
@@ -344,13 +362,15 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 		
 		return pixelmovement;
 	}
+	*/
 	
 	// Rotates the object according to the moments affecting the object
+	@SuppressWarnings("javadoc")
 	private void implyMoments(double steps)
 	{
 		// TODO: Take rotationfriction into account somewhere?
-		for (Point2D.Double p: this.moments.keySet())
-			rotateAroundRelativePoint(this.moments.get(p) * steps, p);
+		for (Point p: this.moments.keySet())
+			rotateAroundRelativePoint(this.moments.get(p) * steps, getPointAsDoublePoint(p));
 	}
 	
 	private void implyRotationFrictionToMoments(double steps)
@@ -359,11 +379,10 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 		if (this.moments.isEmpty())
 			return;
 
-		ArrayList<Point2D.Double> momentstobeended = 
-				new ArrayList<Point2D.Double>();
+		ArrayList<Point> momentstobeended = new ArrayList<Point>();
 		
 		// Goes through all the moments
-		for (Point2D.Double p: this.moments.keySet())
+		for (Point p: this.moments.keySet())
 		{
 			double f = this.moments.get(p);
 			
@@ -394,7 +413,7 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 			return;
 		
 		// limits the moment(s) if needed
-		for (Point2D.Double momentorigin: this.moments.keySet())
+		for (Point momentorigin: this.moments.keySet())
 		{
 			double moment = this.moments.get(momentorigin);
 			
@@ -410,6 +429,7 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 		}
 	}
 	
+	/*
 	private void addForce(double force, double forcedir, Point2D.Double forcepixel)
 	{
 		// TODO: Make addforce add as much force as is lost in the addOpposingForce method 
@@ -441,7 +461,8 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 			addMoment(negateTransformations(colpoint), moment);
 		}
 	}
-	
+	*/
+	/*
 	private double calculateMoment(double forcedir, double force, 
 			Point2D.Double forcepixel, Point2D.Double rotationpixel)
 	{
@@ -458,7 +479,8 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 		return HelpMath.getDirectionalForce(forcedir, force, tangle) 
 				* r / getMaxRangeFromOrigin();
 	}
-	
+	*/
+	/*
 	private int getVolume()
 	{
 		// For ball-like objects, uses the ball's method for calculating volyme
@@ -485,5 +507,23 @@ public abstract class AdvancedPhysicDrawnObject extends BouncingBasicPhysicDrawn
 	private int getMass()
 	{
 		return getVolume() * getDensity();
+	}
+	*/
+	private static Point getDoublePointAsPoint(Point2D.Double doublePoint)
+	{
+		return new Point((int) doublePoint.getX(), (int) doublePoint.getY());
+	}
+	
+	private static Point2D.Double getPointAsDoublePoint(Point point)
+	{
+		return new Point2D.Double(point.getX(), point.getY());
+	}
+	
+	private void printMoments()
+	{
+		for (Point p : this.moments.keySet())
+		{
+			System.out.println("MomentOrigin: " + p.x + ", " + p.y);
+		}
 	}
 }

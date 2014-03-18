@@ -87,6 +87,8 @@ public abstract class Obstacle extends RotatingBasicPhysicDrawnObject2 implement
 		this.started = false;
 		this.startPosition = new Point2D.Double(x, y);
 		
+		setupRotationOrigin(getOriginX(), getOriginY());
+		
 		// Adds the object to the handler(s)
 		if (room != null)
 			room.addObject(this);

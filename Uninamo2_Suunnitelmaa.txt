@@ -351,6 +351,7 @@ Komponentteja
 		- Bistable
 		- Binäärimuunnin
 		- (Käänteinen flipflop)
+		- Disa (input 3 valitsee, kumpaa inputtia viedään outputtiin)
 	* Looginen input
 		- Pulse Generator
 		- Power Generator
