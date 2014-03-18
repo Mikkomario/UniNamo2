@@ -17,6 +17,7 @@ import utopia_handlers.CollidableHandler;
 import utopia_handlers.CollisionHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.CollisionType;
+import utopia_helpAndEnums.Movement;
 import utopia_listeners.CollisionListener;
 import utopia_listeners.TransformationListener;
 
@@ -164,7 +165,14 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener,
 			
 			Obstacle o = (Obstacle) collided;
 			
-			o.getMovement().setHSpeed(GameSettings.normalTurnSpeed * this.speedSign);
+			double optimalSpeed = GameSettings.normalTurnSpeed * this.speedSign;
+			
+			if (this.speedSign == 1)
+			{
+				if (o.getMovement().getHSpeed() < optimalSpeed)
+					o.addImpulse(new Movement(1, 0), colpoints.get(0), steps);
+			}
+			//o.getMovement().setHSpeed(GameSettings.normalTurnSpeed * this.speedSign);
 			//o.addPosition(GameSettings.normalTurnSpeed * this.speedSign * steps, 0);
 		}
 	}

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_gameplaysupport.Wall;
-import utopia_gameobjects.RotatingBasicPhysicDrawnObject2;
+import utopia_gameobjects.RotatingBasicPhysicDrawnObject;
 import utopia_graphic.MultiSpriteDrawer;
 import utopia_graphic.Sprite;
 import utopia_handleds.Collidable;
@@ -32,7 +32,7 @@ import utopia_worlds.Room;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public abstract class Obstacle extends RotatingBasicPhysicDrawnObject2 implements 
+public abstract class Obstacle extends RotatingBasicPhysicDrawnObject implements 
 	RoomListener, TestListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
@@ -191,7 +191,8 @@ public abstract class Obstacle extends RotatingBasicPhysicDrawnObject2 implement
 	public void act(double steps)
 	{
 		// Adds gravity
-		addMotion(270, 0.75 * steps);
+		//addMotion(270, 0.75 * steps);
+		addImpulse(Movement.createMovement(270, 0.75), getPosition(), steps);
 		
 		super.act(steps);
 	}

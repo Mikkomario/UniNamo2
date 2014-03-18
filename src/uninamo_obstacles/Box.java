@@ -47,7 +47,7 @@ public class Box extends Obstacle implements Wall
 		
 		setBoxCollisionPrecision(2, 0);
 		
-		setRotation(-2);
+		setAngle(-10);
 	}
 	
 	
@@ -57,7 +57,8 @@ public class Box extends Obstacle implements Wall
 	protected void resetStatus()
 	{
 		// Does nothing
-		setRotation(-2);
+		setRotation(0);
+		setAngle(-10);
 	}
 
 	@Override

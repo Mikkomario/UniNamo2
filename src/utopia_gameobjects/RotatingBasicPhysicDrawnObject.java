@@ -18,7 +18,7 @@ import utopia_helpAndEnums.Movement;
  * @author Mikko Hilpinen
  * @since 18.3.2014
  */
-public abstract class RotatingBasicPhysicDrawnObject2 extends BouncingBasicPhysicDrawnObject
+public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysicDrawnObject
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
@@ -47,7 +47,7 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BouncingBasicPhysi
 	 * @param actorhandler The actorHandler that will inform the object about 
 	 * step events
 	 */
-	public RotatingBasicPhysicDrawnObject2(int x, int y, int depth,
+	public RotatingBasicPhysicDrawnObject(int x, int y, int depth,
 			boolean isSolid, CollisionType collisiontype,
 			DrawableHandler drawer, CollidableHandler collidablehandler,
 			CollisionHandler collisionhandler, ActorHandler actorhandler)
@@ -111,6 +111,44 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BouncingBasicPhysi
 		this.currentRotationAxis = new Point2D.Double(getOriginX(), getOriginY());
 		this.defaultMomentMass = (1.0 / 12.0) * getW2PlusH2();
 		this.currentMomentMass = this.defaultMomentMass;
+		
+		//changeRotationAxisTo(new Point2D.Double(0, 0));
+	}
+	
+	/**
+	 * Adds movement to the object but also might make the object rotate. The 
+	 * impulse that causes the movement has a specific position and duration
+	 * 
+	 * @param forceMovement The movement vector of the impulse. Includes the 
+	 * direction of the impulse as well as the force (don't apply time modifier here)
+	 * @param absoluteForcePosition To which position the force is applied to 
+	 * (usually would be inside the object)
+	 * @param steps How long the impulse affects the object in steps
+	 */
+	public void addImpulse(Movement forceMovement, 
+			Point2D.Double absoluteForcePosition, double steps)
+	{
+		// Applies movement like normally
+		addMotion(forceMovement.getDirection(), forceMovement.getSpeed() * steps);
+		
+		// Calculates necessary stats TODO: Create a nice method for these
+		
+		Point2D.Double absoluteRotationAxis = transform(this.currentRotationAxis);
+		double directionToPoint = HelpMath.pointDirection(
+				absoluteRotationAxis.getX(), absoluteRotationAxis.getY(), 
+				absoluteForcePosition.getX(), absoluteForcePosition.getY());
+		double r = HelpMath.pointDistance(absoluteRotationAxis.getX(), 
+				absoluteRotationAxis.getY(), absoluteForcePosition.getX(), 
+				absoluteForcePosition.getY());
+		
+		//System.out.println(absoluteRotationAxis);
+		//System.out.println(r);
+		
+		// Testing stronger movements
+		//Movement extra = Movement.getMultipliedMovement(forceMovement, 3);
+		
+		// Also causes rotation
+		slowRotationWithMovement(forceMovement, directionToPoint, steps, r);		
 	}
 	
 	/**
@@ -149,9 +187,8 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BouncingBasicPhysi
 			return;
 		
 		// Next steps only affect rotating objects
-		if (getRotation() == 0)
-			return;
-		
+		//if (getRotation() != 0)
+		//{	
 		// Remembers that the object collided
 		this.actsSinceLastCollision = 0;
 		
@@ -168,11 +205,11 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BouncingBasicPhysi
 		// Also rotation friction
 		addRotationFriction(oppmovement, frictionmodifier, directionToPoint, 
 				steps, r);
+		//}
 		
 		// Changes the rotation axis to the collision point and transforms the 
 		// rotation
-		if (getRotation() != 0)
-			changeRotationAxisTo(negateTransformations(collisionpoint));
+		changeRotationAxisTo(negateTransformations(collisionpoint));
 	}
 	
 	private void addOpposingRotation(double oppForceDirection, double steps, 
@@ -245,6 +282,15 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BouncingBasicPhysi
 	
 	private void changeRotationAxisTo(Point2D.Double newRelativeAxis)
 	{	
+		// If the axis is that already, does nothing
+		//if (newRelativeAxis.equals(this.currentRotationAxis))
+		//	return;
+		if (Math.abs(newRelativeAxis.getX() - this.currentRotationAxis.getX()) 
+				< 5 && Math.abs(newRelativeAxis.getY() - this.currentRotationAxis.getY()) < 5)
+			return;
+		
+		//System.out.println(Math.abs(newRelativeAxis.getY() - this.currentRotationAxis.getY()));
+		
 		// If the rotation axis is not the origin, changes it back first
 		if (!currentAxisIsOrigin())
 			resetRotationAxisToOrigin();
