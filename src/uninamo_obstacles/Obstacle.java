@@ -87,7 +87,7 @@ public abstract class Obstacle extends RotatingBasicPhysicDrawnObject2 implement
 		this.started = false;
 		this.startPosition = new Point2D.Double(x, y);
 		
-		setupRotationOrigin(getOriginX(), getOriginY());
+		setupRotationOrigin();
 		
 		// Adds the object to the handler(s)
 		if (room != null)
@@ -131,7 +131,7 @@ public abstract class Obstacle extends RotatingBasicPhysicDrawnObject2 implement
 			
 			// TODO: Munch these numbers further if need be
 			bounceWithRotationFrom(wall, HelpMath.getAveragePoint(colpoints), 
-					0, 0.25, 1, steps);
+					0, 0.25, steps);
 		}
 	}
 

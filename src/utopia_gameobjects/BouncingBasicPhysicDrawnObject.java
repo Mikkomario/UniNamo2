@@ -79,17 +79,11 @@ public abstract class BouncingBasicPhysicDrawnObject extends BasicPhysicDrawnObj
 	 * and a smaller number means that the object loses speed upon the collision)
 	 * @param frictionmodifier How much the collision affects speed that isn't 
 	 * directional to the opposing force (0+).
-	 * @param compenstationMovementFactor How much the colliding object is 
-	 * pushed back from the other object at the moment of collision. The pushed 
-	 * amount depends on the collision force and is calculated with in the 
-	 * following way: x = opposing force * compoensationMovementFactor, 0 means 
-	 * that there is no compensation movement
 	 * @param steps How many steps does the collision take to happen
 	 */
 	public void bounceWithoutRotationFrom(PhysicalCollidable p, 
 			Point2D.Double collisionpoint, double bounciness, 
-			double frictionmodifier, double compenstationMovementFactor, 
-			double steps)
+			double frictionmodifier, double steps)
 	{	
 		// If there's no speed, doesn't do anything
 		if (getMovement().getSpeed() == 0)
@@ -97,10 +91,6 @@ public abstract class BouncingBasicPhysicDrawnObject extends BasicPhysicDrawnObj
 		
 		// Calculates the direction, towards which the force is applied
 		double forcedir = p.getCollisionForceDirection(collisionpoint);
-		
-		//System.out.println("Opporigi" + forcedir);
-		
-		//System.out.println(getMovement().getDirectionalMovement(forcedir).getDirection());
 		
 		// Calculates the actual amount of force applied to the object
 		Movement oppmovement = Movement.getMultipliedMovement(
@@ -110,21 +100,12 @@ public abstract class BouncingBasicPhysicDrawnObject extends BasicPhysicDrawnObj
 		// If the object would be pushed inside the collided object, doesn't 
 		// do anything
 		if (HelpMath.getAngleDifference180(oppmovement.getDirection(), forcedir) >= 45)
-		{
-			//System.out.println("Skips the push");
 			return;
-		}
-		
-		//System.out.println("Oppforce: " + oppmovement.getDirection());
-		//System.out.println(forcedir != oppmovement.getDirection());
 		
 		// Applies some of the force as compensation movement
-		if (compenstationMovementFactor != 0)
-		{
-			addPosition(Movement.getMultipliedMovement(oppmovement, 
-					compenstationMovementFactor));
-		}
+		addPosition(oppmovement);
 		
+		// Adds the actual force
 		bounce(bounciness, frictionmodifier, oppmovement, forcedir);
 	}
 	
