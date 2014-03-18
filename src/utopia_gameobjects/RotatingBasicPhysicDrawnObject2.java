@@ -94,8 +94,17 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BasicPhysicDrawnOb
 		
 		bounce(bounciness, frictionmodifier, oppmovement, forcedir);
 		
+		// Calculates necessary stuff
+		double directionToPoint = HelpMath.pointDirection(getX(), getY(), collisionpoint.getX(), 
+				collisionpoint.getY());
+		double r = HelpMath.pointDistance(getX(), getY(), 
+				collisionpoint.getX(), collisionpoint.getY());
+		
 		// Next calculates the rotation stopper
-		addOpposingRotation(collisionpoint, forcedir, steps);
+		addOpposingRotation(forcedir, steps, directionToPoint, r);
+		// Also rotation friction
+		addRotationFriction(oppmovement, frictionmodifier, directionToPoint, 
+				steps, r);
 	}
 	
 	private void bounce(double bounciness, double frictionmodifier, 
@@ -117,8 +126,8 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BasicPhysicDrawnOb
 		}
 	}
 	
-	private void addOpposingRotation(Point2D.Double collisionPoint, 
-			double oppForceDirection, double steps)
+	private void addOpposingRotation(double oppForceDirection, double steps, 
+			double directionToPoint, double r)
 	{
 		// If there is no rotation, does nothing
 		if (getRotation() == 0)
@@ -126,10 +135,6 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BasicPhysicDrawnOb
 		
 		// Calculates the movement of the point (based on the rotation of the object)
 		// V = r*w
-		double directionToPoint = HelpMath.pointDirection(getX(), getY(), collisionPoint.getX(), 
-				collisionPoint.getY());
-		double r = HelpMath.pointDistance(getX(), getY(), 
-				collisionPoint.getX(), collisionPoint.getY());
 		Movement pointMovement = Movement.createMovement(directionToPoint + 90, 
 				r * getRotation());
 		
@@ -144,6 +149,32 @@ public abstract class RotatingBasicPhysicDrawnObject2 extends BasicPhysicDrawnOb
 				oppForceDirection) >= 45)
 			return;
 		
+		slowRotationWithMovement(oppMovement, directionToPoint, steps, r);
+		
+		// Test prints
+		//System.out.println("Rotation increased: " + rotationSign * deltaRotSpeed);
+		//System.out.println(getRotation());
+	}
+	
+	private void addRotationFriction(Movement oppMovement, 
+			double frictionModifier, double directionToPoint, double steps, double r)
+	{
+		// Tukivoima * dt * kitkakerroin tukivoimaa kohtisuoraan suuntaan
+		// Calculates the friction movement
+		
+		double frictionDirection = directionToPoint - 90;
+		if (getRotation() < 0)
+			frictionDirection = directionToPoint + 90;
+		
+		Movement frictionMovement = Movement.createMovement(frictionDirection, 
+				oppMovement.getSpeed() * frictionModifier);
+		
+		slowRotationWithMovement(frictionMovement, directionToPoint, steps, r);
+	}
+	
+	// Adds the actual rotation
+	private void slowRotationWithMovement(Movement oppMovement, double directionToPoint, double steps, double r)
+	{
 		// Calculates the tangentual force ft (for some reason the tangent goes to the other direction this time)
 		Movement tangentualOppForce = oppMovement.getDirectionalMovement(directionToPoint - 90);
 		
