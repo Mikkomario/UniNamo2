@@ -177,20 +177,15 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 		double forcedir = p.getCollisionForceDirection(collisionpoint);
 		
 		// Calculates the actual amount of force applied to the object
+		/*
 		Movement oppmovement = Movement.getMultipliedMovement(
 				getMovement().getOpposingMovement().getDirectionalMovement(
 				forcedir), steps);
-		
-		// If the object would be pushed inside the collided object, doesn't 
-		// do anything
-		if (HelpMath.getAngleDifference180(oppmovement.getDirection(), forcedir) >= 45)
-			return;
-		
-		// Next steps only affect rotating objects
-		//if (getRotation() != 0)
-		//{	
-		// Remembers that the object collided
-		this.actsSinceLastCollision = 0;
+		*/
+		/* TODO: This works least worst
+		Movement oppmovement = getMovement().getOpposingMovement().getDirectionalMovement(
+				forcedir);
+		*/
 		
 		// Calculates necessary stuff
 		Point2D.Double absoluteRotationAxis = transform(this.currentRotationAxis);
@@ -200,16 +195,37 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 		double r = HelpMath.pointDistance(absoluteRotationAxis.getX(), 
 				absoluteRotationAxis.getY(), collisionpoint.getX(), collisionpoint.getY());
 		
-		// Next calculates the rotation stopper
-		addOpposingRotation(forcedir, steps, directionToPoint, r);
-		// Also rotation friction
-		addRotationFriction(oppmovement, frictionmodifier, directionToPoint, 
-				steps, r);
-		//}
+		// v = rw, dir = pointDir + 90
+		Movement oppmovement = Movement.createMovement(directionToPoint + 90, r * getRotation()).getOpposingMovement();
 		
-		// Changes the rotation axis to the collision point and transforms the 
-		// rotation
-		changeRotationAxisTo(negateTransformations(collisionpoint));
+		// If the object would be pushed inside the collided object, doesn't 
+		// do anything
+		//if (HelpMath.getAngleDifference180(oppmovement.getDirection(), forcedir) >= 45)
+		//	return;
+		
+		//if (oppmovement.getSpeed() > 1)
+		//	System.out.println(oppmovement.getSpeed());
+		
+		// Next steps only affect rotating objects
+		//if (getRotation() != 0)
+		//{	
+		// Remembers that the object collided
+		this.actsSinceLastCollision = 0;
+		
+		if (r > 1)
+		{
+			// Next calculates the rotation stopper
+			addOpposingRotation(forcedir, steps, directionToPoint, r);
+			// Also rotation friction
+			addRotationFriction(oppmovement, frictionmodifier, directionToPoint, 
+					steps, r);
+			
+			//}
+			
+			// Changes the rotation axis to the collision point and transforms the 
+			// rotation
+			changeRotationAxisTo(negateTransformations(collisionpoint));
+		}
 	}
 	
 	private void addOpposingRotation(double oppForceDirection, double steps, 
@@ -248,6 +264,12 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 		Movement frictionMovement = Movement.createMovement(frictionDirection, 
 				oppMovement.getSpeed() * frictionModifier);
 		
+		/*
+		double frictionSpeed = frictionMovement.getSpeed();
+		if (frictionSpeed > 1)
+		System.out.println(frictionSpeed);
+		*/
+		
 		// Applies the force
 		slowRotationWithMovement(frictionMovement, directionToPoint, steps, r);
 	}
@@ -272,6 +294,17 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 				(this.currentMomentMass * steps);
 				/*(12 * tangentualOppForce.getSpeed() * r) / 
 				(steps * (Math.pow(getWidth(), 2) + Math.pow(getHeight(), 2)));*/
+		
+		if (Math.abs(deltaRotSpeed) > 2)
+		{
+			System.out.println("Error? -----------------------------");
+			System.out.println("Movement: " + oppMovement);
+			System.out.println("R: " + r);
+			System.out.println("TangentualDirection: " + (directionToPoint - 90));
+			System.out.println(deltaRotSpeed);
+			//addRotation(rotationSign * deltaRotSpeed * -1);
+			//return;
+		}
 		
 		// Applies the rotation speed change
 		addRotation(rotationSign * deltaRotSpeed);

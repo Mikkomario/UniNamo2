@@ -105,6 +105,9 @@ public abstract class BouncingBasicPhysicDrawnObject extends BasicPhysicDrawnObj
 		// Applies some of the force as compensation movement
 		addPosition(oppmovement);
 		
+		// Adds a bit extra to push the object away
+		//addPosition(Movement.createMovement(oppmovement.getDirection(), 1));
+		
 		// Adds the actual force
 		bounce(bounciness, frictionmodifier, oppmovement, forcedir);
 	}

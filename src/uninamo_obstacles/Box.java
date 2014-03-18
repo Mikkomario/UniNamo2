@@ -45,7 +45,7 @@ public class Box extends Obstacle implements Wall
 				collisionhandler, actorhandler, room, testHandler, "boxdesign", 
 				"boxreal");
 		
-		setBoxCollisionPrecision(2, 0);
+		setBoxCollisionPrecision(4, 0);
 		
 		setAngle(-10);
 	}
@@ -57,7 +57,7 @@ public class Box extends Obstacle implements Wall
 	protected void resetStatus()
 	{
 		// Does nothing
-		setRotation(0);
+		setRotation(-5);
 		setAngle(-10);
 	}
 

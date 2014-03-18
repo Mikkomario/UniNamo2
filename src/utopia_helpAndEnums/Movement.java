@@ -56,6 +56,15 @@ public class Movement
 	}
 	
 	
+	// IMPLEMENTED METHODS	----------------------------------------------
+	
+	@Override
+	public String toString()
+	{
+		return "Movement with direction: " + getDirection() + " and speed: " + getSpeed();
+	}
+	
+	
 	// GETTERS & SETTERS	----------------------------------------------
 	
 	/**
