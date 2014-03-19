@@ -2,6 +2,7 @@ package utopia_gameobjects;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import utopia_handleds.PhysicalCollidable;
 import utopia_handlers.ActorHandler;
@@ -180,68 +181,14 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 			ArrayList<Point2D.Double> collisionPoints, double bounciness, 
 			double frictionModifier, double steps)
 	{
-		boolean pointsFormALine = false;
-		double lineDirection = 0;
+		// Collects the necessary data about the collision
+		CollisionData data = new CollisionData(collisionPoints, p);
 		
-		// If there are multiple points, checks if they form a line
-		if (collisionPoints.size() > 1)
+		// Applies collisions to each affected point
+		for (Point2D.Double effectPoint : data.getData().keySet())
 		{
-			pointsFormALine = true;
-			lineDirection = HelpMath.pointDirection(
-					collisionPoints.get(0).getX(), 
-					collisionPoints.get(0).getY(), 
-					collisionPoints.get(1).getX(), 
-					collisionPoints.get(1).getY());
-			
-			for (int i = 2; i < collisionPoints.size(); i++)
-			{
-				double line2Direction = HelpMath.pointDirection(
-						collisionPoints.get(0).getX(), 
-						collisionPoints.get(0).getY(), 
-						collisionPoints.get(i).getX(), 
-						collisionPoints.get(i).getY());
-				if (Math.abs(line2Direction - lineDirection) > 2)
-				{
-					// TODO: In practice there's always a line here
-					pointsFormALine = false;
-					break;
-				}
-			}
-		}
-		
-		// If the collisionPoints form a line, calculates the force direction 
-		// a bit differently
-		if (pointsFormALine)
-		{
-			// The direction is tangentual to a line defined by the two points
-			double forceDirection = lineDirection + 90;
-			double defaultDirection1 = p.getCollisionForceDirection(collisionPoints.get(0));
-			double defaultDirection2 = p.getCollisionForceDirection(collisionPoints.get(1));
-			// May flip the direction around since it can only be known with the object
-			if (HelpMath.getAngleDifference180(forceDirection, defaultDirection1) > 90 
-					|| HelpMath.getAngleDifference180(forceDirection, defaultDirection2) > 90)
-				forceDirection -= 180;
-			
-			// If the force direction would "almost" be one of the default force directions, chooses that
-			
-			if (HelpMath.getAngleDifference180(forceDirection, defaultDirection1) < 10)
-				forceDirection = defaultDirection1;
-			else if (HelpMath.getAngleDifference180(forceDirection, defaultDirection2) < 10)
-				forceDirection = defaultDirection2;
-			
-			// TODO: Also, if colliding with multiple objects, can get bad
-			
-			// Adds collisions
-			BounceWithRotation(p, forceDirection, HelpMath.getAveragePoint(collisionPoints), bounciness, 
-					frictionModifier, steps);
-			
-			return;
-		}
-		
-		// Collides in all the positions
-		for (Point2D.Double colpoint : collisionPoints)
-		{
-			bounceWithRotationFrom(p, colpoint, 0, 0.25, steps);
+			BounceWithRotation(p, data.getData().get(effectPoint), 
+					effectPoint, bounciness, frictionModifier, steps);
 		}
 	}
 	
@@ -479,5 +426,114 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 	{
 		return (this.currentRotationAxis.getX() == getOriginX() && 
 				this.currentRotationAxis.getY() == getOriginY());
+	}
+	
+	
+	// SUBCLASSES	----------------------------------------------------
+	
+	/**
+	 * CollisionData calculates the necessary data for collision handling: 
+	 * the collision effect points as well as the directions towards which 
+	 * the force is applied at each point.
+	 * 
+	 * @author Mikko Hilpinen
+	 * @since 20.3.2014
+	 */
+	protected class CollisionData
+	{
+		// ATTRIBUTES	------------------------------------------------
+		
+		private HashMap<Point2D.Double, Double> effectPointsAndDirections;
+		
+		
+		// CONSTRUCTOR	------------------------------------------------
+		
+		/**
+		 * Creates a new CollisionData using the given collision points and 
+		 * collided object
+		 * 
+		 * @param collisionPoints The points at which the collision happens
+		 * @param p The collided object
+		 */
+		protected CollisionData(ArrayList<Point2D.Double> collisionPoints, PhysicalCollidable p)
+		{
+			this.effectPointsAndDirections = new HashMap<Point2D.Double, Double>();
+			
+			// Calculates the stuff
+			boolean pointsFormALine = false;
+			double lineDirection = 0;
+			
+			// If there are multiple points, checks if they form a line
+			if (collisionPoints.size() > 1)
+			{
+				pointsFormALine = true;
+				lineDirection = HelpMath.pointDirection(
+						collisionPoints.get(0).getX(), 
+						collisionPoints.get(0).getY(), 
+						collisionPoints.get(1).getX(), 
+						collisionPoints.get(1).getY());
+				
+				for (int i = 2; i < collisionPoints.size(); i++)
+				{
+					double line2Direction = HelpMath.pointDirection(
+							collisionPoints.get(0).getX(), 
+							collisionPoints.get(0).getY(), 
+							collisionPoints.get(i).getX(), 
+							collisionPoints.get(i).getY());
+					if (Math.abs(line2Direction - lineDirection) > 2)
+					{
+						// TODO: In practice there's always a line here
+						pointsFormALine = false;
+						break;
+					}
+				}
+			}
+			
+			// If the collisionPoints form a line, calculates the force direction 
+			// a bit differently
+			if (pointsFormALine)
+			{
+				// The direction is tangentual to a line defined by the two points
+				double forceDirection = lineDirection + 90;
+				double defaultDirection1 = p.getCollisionForceDirection(collisionPoints.get(0));
+				double defaultDirection2 = p.getCollisionForceDirection(collisionPoints.get(1));
+				// May flip the direction around since it can only be known with the object
+				if (HelpMath.getAngleDifference180(forceDirection, defaultDirection1) > 90 
+						|| HelpMath.getAngleDifference180(forceDirection, defaultDirection2) > 90)
+					forceDirection -= 180;
+				
+				// If the force direction would "almost" be one of the default force directions, chooses that
+				
+				if (HelpMath.getAngleDifference180(forceDirection, defaultDirection1) < 10)
+					forceDirection = defaultDirection1;
+				else if (HelpMath.getAngleDifference180(forceDirection, defaultDirection2) < 10)
+					forceDirection = defaultDirection2;
+				
+				// The effect's point is formed with an average value
+				this.effectPointsAndDirections.put(HelpMath.getAveragePoint(collisionPoints), forceDirection);
+			}
+			// Otherwise uses separate collision directions for all the points
+			else
+			{
+				for (Point2D.Double colPoint : collisionPoints)
+				{
+					this.effectPointsAndDirections.put(colPoint, 
+							p.getCollisionForceDirection(colPoint));
+				}
+			}
+		}
+		
+		
+		// GETTERS & SETTERS	------------------------------------------
+		
+		/**
+		 * @return The data the onject has collected. The keys of the map are 
+		 * affected collision points and the values are directions towards 
+		 * which the force is applied at that point.
+		 */
+		protected HashMap<Point2D.Double, Double> getData()
+		{
+			return this.effectPointsAndDirections;
+		}
 	}
 }
