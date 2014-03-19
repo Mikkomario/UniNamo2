@@ -15,3 +15,4 @@ Teemu Alonen
 Based on Utopia Game Engine
   - Lead: Mikko Hilpinen
   - Assisting: Unto Solala
+  - Physics Consulting: Teemu Alonen
