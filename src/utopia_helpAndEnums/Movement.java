@@ -199,20 +199,21 @@ public class Movement
 	 * @return The projected movement
 	 */
 	public Movement getDirectionalMovement(double direction)
+	{	
+		return createMovement(direction, getDirectionalSpeed(direction));
+	}
+	
+	/**
+	 * Returns the movement's speed towards the given direction. If the movement 
+	 * is moving away from the direction, the result will be negative.
+	 * 
+	 * @param direction The what direction's speed is asked for
+	 * @return The speed the movement has towards the given direction
+	 */
+	public double getDirectionalSpeed(double direction)
 	{
-		double newspeed = HelpMath.getDirectionalForce(getDirection(), 
+		return HelpMath.getDirectionalForce(getDirection(), 
 				getSpeed(), direction);
-		
-		/*
-		if (newspeed < 0)
-		{
-			System.out.println("Negative speed");
-			System.out.println("OppMoveDir" + getDirection());
-			System.out.println("Angledifference: " + HelpMath.getAngleDifference180(direction, getDirection()));
-		}
-		*/
-		
-		return createMovement(direction, newspeed);
 	}
 	
 	/**

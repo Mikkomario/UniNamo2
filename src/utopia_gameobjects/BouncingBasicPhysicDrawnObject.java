@@ -121,7 +121,8 @@ public abstract class BouncingBasicPhysicDrawnObject extends BasicPhysicDrawnObj
 		
 		// If the object would be pushed inside the collided object, doesn't 
 		// do anything
-		if (HelpMath.getAngleDifference180(oppmovement.getDirection(), forceDirection) >= 45)
+		//if (HelpMath.getAngleDifference180(oppmovement.getDirection(), forceDirection) >= 45)
+		if (oppmovement.getDirectionalSpeed(forceDirection) <= 0)
 			return;
 		
 		// Applies some of the force as compensation movement
@@ -131,6 +132,8 @@ public abstract class BouncingBasicPhysicDrawnObject extends BasicPhysicDrawnObj
 		{
 			moves ++;
 			addPosition(Movement.createMovement(forceDirection, 1));
+			//if (getMovement().getDirectionalSpeed(forceDirection) > 0)
+			//	setMovement(getMovement().getDirectionalllyDiminishedMovement(forceDirection, 1));
 		}
 		
 		// Adds a bit extra to push the object away

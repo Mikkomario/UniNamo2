@@ -26,6 +26,7 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 	private Point2D.Double currentRotationAxis;
 	private int actsSinceLastCollision;
 	private double defaultMomentMass, currentMomentMass;
+	private ArrayList<Point2D.Double> rotationAxisCandidates;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -59,6 +60,7 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 		// Initializes attributes (Most of these need to be initialized after 
 		// the subclass is done)
 		this.currentRotationAxis = new Point2D.Double(0, 0);
+		this.rotationAxisCandidates = new ArrayList<Point2D.Double>();
 		this.actsSinceLastCollision = 1000;
 		this.defaultMomentMass = 0;
 		this.currentMomentMass = 0;
@@ -83,6 +85,14 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 				resetRotationAxisToOrigin();
 				//System.out.println("Resets to origin");
 			}
+		}
+		
+		// If there are rotation axis candidates, sets their average as the new axis
+		if (this.rotationAxisCandidates.size() > 0)
+		{
+			//System.out.println(rotationAxisCandidates.size());
+			changeRotationAxisTo(HelpMath.getAveragePoint(this.rotationAxisCandidates));
+			this.rotationAxisCandidates.clear();
 		}
 	}
 	
@@ -149,7 +159,7 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 		//Movement extra = Movement.getMultipliedMovement(forceMovement, 3);
 		
 		// Also causes rotation
-		slowRotationWithMovement(forceMovement, directionToPoint, steps, r);		
+		addMomentWithMovement(forceMovement, directionToPoint, steps, r);		
 	}
 	
 	/**
@@ -192,6 +202,7 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 						collisionPoints.get(i).getY());
 				if (Math.abs(line2Direction - lineDirection) > 2)
 				{
+					// TODO: In practice there's always a line here
 					pointsFormALine = false;
 					break;
 				}
@@ -218,23 +229,11 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 			else if (HelpMath.getAngleDifference180(forceDirection, defaultDirection2) < 10)
 				forceDirection = defaultDirection2;
 			
-			
-			// TODO: Only works if the calculated point actually is the axis 
-			// point
 			// TODO: Also, if colliding with multiple objects, can get bad
-			// TODO: For simple walls can cause "sliding" into the wall since 
-			// force direction goes nuts
 			
 			// Adds collisions
 			BounceWithRotation(p, forceDirection, HelpMath.getAveragePoint(collisionPoints), bounciness, 
 					frictionModifier, steps);
-			/*
-			for (Point2D.Double colpoint : collisionPoints)
-			{
-				BounceWithRotation(forceDirection, colpoint, bounciness, 
-						frictionModifier, steps);
-			}
-			*/
 			
 			return;
 		}
@@ -317,7 +316,8 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 			
 			// Changes the rotation axis to the collision point and transforms the 
 			// rotation
-			changeRotationAxisTo(negateTransformations(collisionpoint));
+			this.rotationAxisCandidates.add(negateTransformations(collisionpoint));
+			//changeRotationAxisTo(negateTransformations(collisionpoint));
 		}
 	}
 	
@@ -341,12 +341,11 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 		
 		// If the rotation would push the object to the wrong direction, doesn't 
 		// do anything
-		if (HelpMath.getAngleDifference180(oppMovement.getDirection(), 
-				oppForceDirection) >= 45)
+		if (oppMovement.getDirectionalSpeed(oppForceDirection) < 0)
 			return;
 		
 		// Applies the force
-		slowRotationWithMovement(oppMovement, directionToPoint, steps, r);
+		addMomentWithMovement(oppMovement, directionToPoint, steps, r);
 	}
 	
 	private void addRotationFriction(Movement oppMovement, 
@@ -369,11 +368,11 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 		*/
 		
 		// Applies the force
-		slowRotationWithMovement(frictionMovement, directionToPoint, steps, r);
+		addMomentWithMovement(frictionMovement, directionToPoint, steps, r);
 	}
 	
 	// Adds the actual rotation
-	private void slowRotationWithMovement(Movement oppMovement, 
+	private void addMomentWithMovement(Movement oppMovement, 
 			double directionToPoint, double steps, double r)
 	{
 		// Calculates the tangentual force ft that actually causes rotation
