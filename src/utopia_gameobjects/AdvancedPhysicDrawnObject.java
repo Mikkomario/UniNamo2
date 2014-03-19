@@ -101,8 +101,8 @@ public abstract class AdvancedPhysicDrawnObject extends RotatingBasicPhysicDrawn
 	 * @param steps How many steps does the collision take to happen
 	 */
 	public void collideInteractivelyWith(AdvancedPhysicDrawnObject p, 
-			ArrayList<Point2D.Double> collisionPoints, double bounciness, 
-			double frictionModifier, double steps)
+			ArrayList<Point2D.Double> collisionPoints/*, double bounciness, 
+			double frictionModifier, */,double steps)
 	{
 		// Collects the necessary data about the collision
 		CollisionData data = new CollisionData(collisionPoints, p);
@@ -130,14 +130,30 @@ public abstract class AdvancedPhysicDrawnObject extends RotatingBasicPhysicDrawn
 		
 		// Calculates the speed changes of each object
 		// Ptot / 2 - Pstart
-		double magicImpulseForceThis = totalMomentum / 2 - momentumStartThis;
-		double magicImpulseForceOther = totalMomentum / 2 - momentumStartOther;
+		double magicImpulseForceThis = (totalMomentum / 2 - momentumStartThis) / getMass();
+		double magicImpulseForceOther = (totalMomentum / 2 - momentumStartOther) / getMass();
+		
+		Movement impulseMovementThis = Movement.createMovement(collisionForceDirection, 
+				magicImpulseForceThis);
+		Movement impulseMovementOther = Movement.createMovement(collisionForceDirection, 
+				magicImpulseForceOther);
 		
 		// Applies the changes as impulses
-		addImpulse(Movement.createMovement(collisionForceDirection, 
-				magicImpulseForceThis), collisionPoint, steps);
-		p.addImpulse(Movement.createMovement(collisionForceDirection, 
-				magicImpulseForceOther), collisionPoint, steps);
+		addImpulse(impulseMovementThis, collisionPoint, steps);
+		p.addImpulse(impulseMovementOther, collisionPoint, steps);
+		
+		addPosition(impulseMovementThis);
+		p.addPosition(impulseMovementOther);
+		
+		Point2D.Double relativeColPoint = negateTransformations(collisionPoint);
+		int moves = 0;
+		while (p.pointCollides(transform(relativeColPoint)) && moves < 10)
+		{
+			moves ++;
+			addPosition(Movement.createMovement(collisionForceDirection, 1));
+			//if (getMovement().getDirectionalSpeed(forceDirection) > 0)
+			//	setMovement(getMovement().getDirectionalllyDiminishedMovement(forceDirection, 1));
+		}
 	}
 	
 	// Calculates the object's momentum on the given axis

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_gameplaysupport.Wall;
-import utopia_gameobjects.RotatingBasicPhysicDrawnObject;
+import utopia_gameobjects.AdvancedPhysicDrawnObject;
 import utopia_graphic.MultiSpriteDrawer;
 import utopia_graphic.Sprite;
 import utopia_handleds.Collidable;
@@ -31,7 +31,7 @@ import utopia_worlds.Room;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public abstract class Obstacle extends RotatingBasicPhysicDrawnObject implements 
+public abstract class Obstacle extends AdvancedPhysicDrawnObject implements 
 	RoomListener, TestListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
@@ -120,20 +120,22 @@ public abstract class Obstacle extends RotatingBasicPhysicDrawnObject implements
 	@Override
 	public void onCollision(ArrayList<Double> colpoints, Collidable collided, 
 			double steps)
-	{
+	{	
 		// if the collided object is a wall, bounces away from it
 		if (collided instanceof Wall)
 		{
-			Wall wall = (Wall) collided;
-			
-			//System.out.println(getMovement().getVSpeed());
-			
-			// TODO: Munch these numbers further if need be
-			bounceWithRotationFrom(wall, colpoints, 0, 0.25, steps);
-			/*
-			bounceWithRotationFrom(wall, HelpMath.getAveragePoint(colpoints), 
-					0, 0.25, steps);
-			*/
+			// If the collided object also is an advancedPhysicDrawnObject, uses 
+			// a more "sophisticated" collision method
+			if (collided instanceof AdvancedPhysicDrawnObject)
+			{
+				collideInteractivelyWith((AdvancedPhysicDrawnObject) collided, 
+						colpoints, steps);
+			}
+			else
+			{
+				// TODO: Munch these numbers further if need be
+				bounceWithRotationFrom((Wall) collided, colpoints, 0, 0.25, steps);
+			}
 		}
 	}
 

@@ -11,6 +11,7 @@ import utopia_handlers.CollidableHandler;
 import utopia_handlers.CollisionHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.CollisionType;
+import utopia_helpAndEnums.Material;
 import utopia_worlds.Room;
 
 /**
@@ -47,7 +48,7 @@ public class Box extends Obstacle implements Wall
 		
 		setBoxCollisionPrecision(3, 0);
 		
-		setAngle(-10);
+		getMovement().setHSpeed(5);
 	}
 	
 	
@@ -57,8 +58,7 @@ public class Box extends Obstacle implements Wall
 	protected void resetStatus()
 	{
 		// Does nothing
-		setRotation(-5);
-		setAngle(-10);
+		getMovement().setHSpeed(5);
 	}
 
 	@Override
@@ -66,5 +66,17 @@ public class Box extends Obstacle implements Wall
 			Collidable collided, double steps)
 	{
 		// Does nothing
+	}
+
+	@Override
+	public int getZHeight()
+	{
+		return getWidth();
+	}
+
+	@Override
+	public double getDensity()
+	{
+		return Material.WOOD.getDensity();
 	}
 }
