@@ -129,11 +129,7 @@ public abstract class Obstacle extends RotatingBasicPhysicDrawnObject implements
 			//System.out.println(getMovement().getVSpeed());
 			
 			// TODO: Munch these numbers further if need be
-			
-			for (Point2D.Double colpoint : colpoints)
-			{
-				bounceWithRotationFrom(wall, colpoint, 0, 0.25, steps);
-			}
+			bounceWithRotationFrom(wall, colpoints, 0, 0.25, steps);
 			/*
 			bounceWithRotationFrom(wall, HelpMath.getAveragePoint(colpoints), 
 					0, 0.25, steps);

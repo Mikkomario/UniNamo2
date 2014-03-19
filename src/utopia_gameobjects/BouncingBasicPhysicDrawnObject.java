@@ -91,25 +91,53 @@ public abstract class BouncingBasicPhysicDrawnObject extends BasicPhysicDrawnObj
 		
 		// Calculates the direction, towards which the force is applied
 		double forcedir = p.getCollisionForceDirection(collisionpoint);
+		Point2D.Double relativeColPoint = negateTransformations(collisionpoint);
 		
+		bounceWithoutRotation(p, forcedir, bounciness, frictionmodifier, steps, relativeColPoint);
+	}
+	
+	/**
+	 * Causes opposing movement towards the given direction.
+	 * @param p The physical object that was collided with
+	 * @param forceDirection The direction towards which the opposing movement 
+	 * is applied
+	 * @param bounciness How much the object bounces away from the given 
+	 * object (0+) (1 means that the object doesn't lose speed in the collision 
+	 * and a smaller number means that the object loses speed upon the collision)
+	 * @param frictionModifier How much the collision affects speed that isn't 
+	 * directional to the opposing force (0+).
+	 * @param steps How many steps does the collision take to happen
+	 * @param relativeColPoint What was the relative collision position this object 
+	 * collided the other with
+	 */
+	protected void bounceWithoutRotation(PhysicalCollidable p, double forceDirection, 
+			double bounciness, double frictionModifier, double steps, 
+			Point2D.Double relativeColPoint)
+	{
 		// Calculates the actual amount of force applied to the object
 		Movement oppmovement = Movement.getMultipliedMovement(
 				getMovement().getOpposingMovement().getDirectionalMovement(
-				forcedir), steps);
+				forceDirection), steps);
 		
 		// If the object would be pushed inside the collided object, doesn't 
 		// do anything
-		if (HelpMath.getAngleDifference180(oppmovement.getDirection(), forcedir) >= 45)
+		if (HelpMath.getAngleDifference180(oppmovement.getDirection(), forceDirection) >= 45)
 			return;
 		
 		// Applies some of the force as compensation movement
 		addPosition(oppmovement);
+		int moves = 0;
+		while (p.pointCollides(transform(relativeColPoint)) && moves < 10)
+		{
+			moves ++;
+			addPosition(Movement.createMovement(forceDirection, 1));
+		}
 		
 		// Adds a bit extra to push the object away
 		//addPosition(Movement.createMovement(oppmovement.getDirection(), 1));
 		
 		// Adds the actual force
-		bounce(bounciness, frictionmodifier, oppmovement, forcedir);
+		bounce(bounciness, frictionModifier, oppmovement, forceDirection);
 	}
 	
 	private void bounce(double bounciness, double frictionmodifier, 

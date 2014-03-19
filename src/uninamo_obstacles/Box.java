@@ -45,7 +45,7 @@ public class Box extends Obstacle implements Wall
 				collisionhandler, actorhandler, room, testHandler, "boxdesign", 
 				"boxreal");
 		
-		setBoxCollisionPrecision(4, 0);
+		setBoxCollisionPrecision(3, 0);
 		
 		setAngle(-10);
 	}

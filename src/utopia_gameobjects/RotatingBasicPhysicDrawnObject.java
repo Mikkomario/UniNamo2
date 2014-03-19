@@ -1,6 +1,7 @@
 package utopia_gameobjects;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 import utopia_handleds.PhysicalCollidable;
 import utopia_handlers.ActorHandler;
@@ -153,6 +154,100 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 	
 	/**
 	 * The object collides with the other object. This collision may change 
+	 * the object's rotation. Multiple collision points are used in the 
+	 * calculations
+	 *
+	 * @param p The object collided with
+	 * @param collisionPoints The points in which the collision happens (absolute)
+	 * @param bounciness How much the object bounces away from the given 
+	 * object (0+) (1 means that the object doesn't lose speed in the collision 
+	 * and a smaller number means that the object loses speed upon the collision)
+	 * @param frictionModifier How much the collision affects speed that isn't 
+	 * directional to the opposing force (0+).
+	 * @param steps How many steps does the collision take to happen
+	 */
+	public void bounceWithRotationFrom(PhysicalCollidable p, 
+			ArrayList<Point2D.Double> collisionPoints, double bounciness, 
+			double frictionModifier, double steps)
+	{
+		boolean pointsFormALine = false;
+		double lineDirection = 0;
+		
+		// If there are multiple points, checks if they form a line
+		if (collisionPoints.size() > 1)
+		{
+			pointsFormALine = true;
+			lineDirection = HelpMath.pointDirection(
+					collisionPoints.get(0).getX(), 
+					collisionPoints.get(0).getY(), 
+					collisionPoints.get(1).getX(), 
+					collisionPoints.get(1).getY());
+			
+			for (int i = 2; i < collisionPoints.size(); i++)
+			{
+				double line2Direction = HelpMath.pointDirection(
+						collisionPoints.get(0).getX(), 
+						collisionPoints.get(0).getY(), 
+						collisionPoints.get(i).getX(), 
+						collisionPoints.get(i).getY());
+				if (Math.abs(line2Direction - lineDirection) > 2)
+				{
+					pointsFormALine = false;
+					break;
+				}
+			}
+		}
+		
+		// If the collisionPoints form a line, calculates the force direction 
+		// a bit differently
+		if (pointsFormALine)
+		{
+			// The direction is tangentual to a line defined by the two points
+			double forceDirection = lineDirection + 90;
+			double defaultDirection1 = p.getCollisionForceDirection(collisionPoints.get(0));
+			double defaultDirection2 = p.getCollisionForceDirection(collisionPoints.get(1));
+			// May flip the direction around since it can only be known with the object
+			if (HelpMath.getAngleDifference180(forceDirection, defaultDirection1) > 90 
+					|| HelpMath.getAngleDifference180(forceDirection, defaultDirection2) > 90)
+				forceDirection -= 180;
+			
+			// If the force direction would "almost" be one of the default force directions, chooses that
+			
+			if (HelpMath.getAngleDifference180(forceDirection, defaultDirection1) < 10)
+				forceDirection = defaultDirection1;
+			else if (HelpMath.getAngleDifference180(forceDirection, defaultDirection2) < 10)
+				forceDirection = defaultDirection2;
+			
+			
+			// TODO: Only works if the calculated point actually is the axis 
+			// point
+			// TODO: Also, if colliding with multiple objects, can get bad
+			// TODO: For simple walls can cause "sliding" into the wall since 
+			// force direction goes nuts
+			
+			// Adds collisions
+			BounceWithRotation(p, forceDirection, HelpMath.getAveragePoint(collisionPoints), bounciness, 
+					frictionModifier, steps);
+			/*
+			for (Point2D.Double colpoint : collisionPoints)
+			{
+				BounceWithRotation(forceDirection, colpoint, bounciness, 
+						frictionModifier, steps);
+			}
+			*/
+			
+			return;
+		}
+		
+		// Collides in all the positions
+		for (Point2D.Double colpoint : collisionPoints)
+		{
+			bounceWithRotationFrom(p, colpoint, 0, 0.25, steps);
+		}
+	}
+	
+	/**
+	 * The object collides with the other object. This collision may change 
 	 * the object's rotation.
 	 *
 	 * @param p The object collided with
@@ -168,24 +263,20 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 			Point2D.Double collisionpoint, double bounciness, 
 			double frictionmodifier, double steps)
 	{	
-		// Collides with the object like usually
-		// TODO: I probably have to take the functionality back later
-		bounceWithoutRotationFrom(p, collisionpoint, bounciness, 
-				frictionmodifier, steps);
-		
 		// Calculates the direction, towards which the force is applied
 		double forcedir = p.getCollisionForceDirection(collisionpoint);
 		
-		// Calculates the actual amount of force applied to the object
-		/*
-		Movement oppmovement = Movement.getMultipliedMovement(
-				getMovement().getOpposingMovement().getDirectionalMovement(
-				forcedir), steps);
-		*/
-		/* TODO: This works least worst
-		Movement oppmovement = getMovement().getOpposingMovement().getDirectionalMovement(
-				forcedir);
-		*/
+		BounceWithRotation(p, forcedir, collisionpoint, bounciness, 
+				frictionmodifier, steps);
+	}
+	
+	private void BounceWithRotation(PhysicalCollidable p, double forceDirection, 
+			Point2D.Double collisionpoint, double bounciness, 
+			double frictionmodifier, double steps)
+	{
+		// Collides with the object like usually
+		bounceWithoutRotation(p, forceDirection, bounciness, frictionmodifier, 
+				steps, negateTransformations(collisionpoint));
 		
 		// Calculates necessary stuff
 		Point2D.Double absoluteRotationAxis = transform(this.currentRotationAxis);
@@ -196,7 +287,8 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 				absoluteRotationAxis.getY(), collisionpoint.getX(), collisionpoint.getY());
 		
 		// v = rw, dir = pointDir + 90
-		Movement oppmovement = Movement.createMovement(directionToPoint + 90, r * getRotation()).getOpposingMovement();
+		Movement oppmovement = Movement.createMovement(directionToPoint + 90, 
+				r * getRotation()).getOpposingMovement();
 		
 		// If the object would be pushed inside the collided object, doesn't 
 		// do anything
@@ -215,7 +307,8 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 		if (r > 1)
 		{
 			// Next calculates the rotation stopper
-			addOpposingRotation(forcedir, steps, directionToPoint, r);
+			addOpposingRotation(oppmovement, forceDirection, steps, directionToPoint, r);
+			//slowRotationWithMovement(oppmovement, directionToPoint, steps, r);
 			// Also rotation friction
 			addRotationFriction(oppmovement, frictionmodifier, directionToPoint, 
 					steps, r);
@@ -228,18 +321,23 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 		}
 	}
 	
-	private void addOpposingRotation(double oppForceDirection, double steps, 
+	private void addOpposingRotation(Movement colPointOppMovement, 
+			double oppForceDirection, double steps, 
 			double directionToPoint, double r)
 	{
 		// Calculates the movement of the point (based on the rotation of the object)
 		// V = r*w
-		Movement pointMovement = Movement.createMovement(directionToPoint + 90, 
-				r * getRotation());
+		//Movement pointMovement = Movement.createMovement(directionToPoint + 90, 
+		//		r * getRotation());
 		
 		// Calculates the opposing force for the movement
+		/*
 		Movement oppMovement = 
 				pointMovement.getOpposingMovement().getDirectionalMovement(
 				oppForceDirection);
+		*/
+		Movement oppMovement = 
+				colPointOppMovement.getDirectionalMovement(oppForceDirection);
 		
 		// If the rotation would push the object to the wrong direction, doesn't 
 		// do anything
@@ -294,17 +392,6 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 				(this.currentMomentMass * steps);
 				/*(12 * tangentualOppForce.getSpeed() * r) / 
 				(steps * (Math.pow(getWidth(), 2) + Math.pow(getHeight(), 2)));*/
-		
-		if (Math.abs(deltaRotSpeed) > 2)
-		{
-			System.out.println("Error? -----------------------------");
-			System.out.println("Movement: " + oppMovement);
-			System.out.println("R: " + r);
-			System.out.println("TangentualDirection: " + (directionToPoint - 90));
-			System.out.println(deltaRotSpeed);
-			//addRotation(rotationSign * deltaRotSpeed * -1);
-			//return;
-		}
 		
 		// Applies the rotation speed change
 		addRotation(rotationSign * deltaRotSpeed);
