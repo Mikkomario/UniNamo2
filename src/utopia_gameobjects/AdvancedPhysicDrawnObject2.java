@@ -185,7 +185,8 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 				absoluteForcePosition.getY());
 		
 		// Applies moment to the object
-		addMoment(force, directionToPoint, r, steps);		
+		// TODO: Return and debug
+		//addMoment(force, directionToPoint, r, steps);		
 	}
 	
 	/**
@@ -221,7 +222,8 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 				steps, collisionPoint);
 		
 		// Rotation momentum directional to the normal force goes to 0
-		setRotationMomentumTo(null, 0, 0, frictionModifier, steps, collisionPoint);
+		// TODO: Return and debug
+		//setRotationMomentumTo(null, 0, 0, frictionModifier, steps, collisionPoint);
 		
 		// Changes the rotation axis
 		this.actsSinceLastCollision = 0;
@@ -251,7 +253,7 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 			addCollisionFriction(other, normalForce, frictionModifier, 
 					absoluteEffectPoint, steps);
 			// Also adds compensation movement
-			addCompensationMovement(normalForce);
+			//addCompensationMovement(normalForce);
 		}
 	}
 	
@@ -512,8 +514,15 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		
 		// Checks if the friction should affect the other direction
 		if (HelpMath.getAngleDifference180(frictionForce.getDirection(), 
-				getMovement().getDirection()) > 90)
+				getMovement().getDirection()) < 90)
 			frictionForce = frictionForce.getOpposingMovement();
+		
+		// If the acceleration caused by friction would be larger than the 
+		// object's current speed towards the other direction, modifies the 
+		// friction smaller (a = F / m), F = m * a
+		double movementSpeed = getMovement().getDirectionalSpeed(frictionForce.getDirection() + 180);
+		if (frictionForce.getSpeed() / getMass() > movementSpeed)
+			frictionForce.setSpeed(movementSpeed * getMass());
 		
 		// Applies the force to the object
 		addImpulse(frictionForce, absoluteFrictionPosition, steps);
@@ -578,7 +587,6 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 							collisionPoints.get(i).getY());
 					if (Math.abs(line2Direction - lineDirection) > 2)
 					{
-						// TODO: In practice there's always a line here
 						pointsFormALine = false;
 						break;
 					}
