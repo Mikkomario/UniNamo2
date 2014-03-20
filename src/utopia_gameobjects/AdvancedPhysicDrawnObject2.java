@@ -186,7 +186,7 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		
 		// Applies moment to the object
 		// TODO: Return and debug
-		//addMoment(force, directionToPoint, r, steps);		
+		addMoment(force, directionToPoint, r, steps);		
 	}
 	
 	/**
@@ -265,6 +265,8 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	{
 		double rotationMomentumStart = getRotationMomentum();
 		
+		System.out.println("Start momentum: " + rotationMomentumStart);
+		
 		// Calculates the direction the effect point would have if it was 
 		// rotated by the object
 		double pointMovementDirection = HelpMath.pointDirection(getX(), getY(), 
@@ -272,9 +274,14 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		if (getRotation() < 0)
 			pointMovementDirection += 180;
 		
+		System.out.println("Point move direction: " + pointMovementDirection);
+		
 		// Calculates the force that created the momentum change (F = dp / dt)
 		Movement normalForce = Movement.createMovement(pointMovementDirection, 
 				(newRotationMomentum * energyLossModifier - rotationMomentumStart) / steps);
+		
+		System.out.println("Normal force: " + normalForce.getSpeed());
+		System.out.println("-----------------------");
 		
 		// Applies the force and adds friction as well
 		addImpulse(normalForce, absoluteEffectPoint, steps);
@@ -327,14 +334,15 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 				energyLossModifier, frictionModifier, steps, collisionPoint);
 		
 		// Calculates the new rotation momentums
-		double newRotationMomentumThis = getEndRotationMomentumOnCollisionWith(p);
-		double newRotationMomentumOther = p.getEndRotationMomentumOnCollisionWith(this);
+		//double newRotationMomentumThis = getEndRotationMomentumOnCollisionWith(p);
+		//double newRotationMomentumOther = p.getEndRotationMomentumOnCollisionWith(this);
 		
 		// Changes the rotation momentums
-		setRotationMomentumTo(p, newRotationMomentumThis, energyLossModifier, 
-				frictionModifier, steps, collisionPoint);
-		p.setRotationMomentumTo(this, newRotationMomentumOther, energyLossModifier, 
-				frictionModifier, steps, collisionPoint);
+		// TODO: Return and debug
+		//setRotationMomentumTo(p, newRotationMomentumThis, energyLossModifier, 
+		//		frictionModifier, steps, collisionPoint);
+		//p.setRotationMomentumTo(this, newRotationMomentumOther, energyLossModifier, 
+		//		frictionModifier, steps, collisionPoint);
 		
 		// Forces the object out of the other
 		getRelativePointAwayFromObject(p, negateTransformations(collisionPoint), 
@@ -385,6 +393,8 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	private double getRotationMomentum()
 	{
 		// the momentum caused by rotation: P = w * J
+		System.out.println("J: " + this.currentMomentMass);
+		System.out.println("Rotation: " + getRotation());
 		return getRotation() * this.currentMomentMass;
 	}
 	
@@ -404,6 +414,9 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		
 		// Applies the rotation speed change
 		addRotation(deltaRotSpeed);
+		
+		//if (deltaRotSpeed != 0)
+		//	System.out.println(deltaRotSpeed);
 		
 		// Adds compensation angle
 		rotateAroundRelativePoint(deltaRotSpeed, this.currentRotationAxis);

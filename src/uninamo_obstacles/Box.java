@@ -49,7 +49,7 @@ public class Box extends Obstacle implements Wall
 		setBoxCollisionPrecision(3, 0);
 		
 		getMovement().setHSpeed(-5);
-		System.out.println(getMass());
+		//System.out.println(getMass());
 	}
 	
 	
@@ -59,7 +59,7 @@ public class Box extends Obstacle implements Wall
 	protected void resetStatus()
 	{
 		// Does nothing
-		getMovement().setHSpeed(-5);
+		//getMovement().setHSpeed(-5);
 	}
 
 	@Override
