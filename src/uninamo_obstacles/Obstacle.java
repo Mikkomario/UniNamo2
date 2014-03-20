@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_gameplaysupport.Wall;
-import utopia_gameobjects.AdvancedPhysicDrawnObject;
+import utopia_gameobjects.AdvancedPhysicDrawnObject2;
 import utopia_graphic.MultiSpriteDrawer;
 import utopia_graphic.Sprite;
 import utopia_handleds.Collidable;
@@ -31,7 +31,7 @@ import utopia_worlds.Room;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public abstract class Obstacle extends AdvancedPhysicDrawnObject implements 
+public abstract class Obstacle extends AdvancedPhysicDrawnObject2 implements 
 	RoomListener, TestListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
@@ -126,15 +126,15 @@ public abstract class Obstacle extends AdvancedPhysicDrawnObject implements
 		{
 			// If the collided object also is an advancedPhysicDrawnObject, uses 
 			// a more "sophisticated" collision method
-			if (collided instanceof AdvancedPhysicDrawnObject)
+			if (collided instanceof AdvancedPhysicDrawnObject2)
 			{
-				collideInteractivelyWith((AdvancedPhysicDrawnObject) collided, 
-						colpoints, steps);
+				collideWith((AdvancedPhysicDrawnObject2) collided, 
+						colpoints, 0.1, 0.1, steps);
 			}
 			else
 			{
 				// TODO: Munch these numbers further if need be
-				bounceWithRotationFrom((Wall) collided, colpoints, 0, 0.1, steps);
+				titaniumCollision((Wall) collided, colpoints, 0.1, steps);
 			}
 		}
 	}
@@ -195,8 +195,9 @@ public abstract class Obstacle extends AdvancedPhysicDrawnObject implements
 	public void act(double steps)
 	{
 		// Adds gravity
-		//addMotion(270, 0.75 * steps);
-		addImpulse(Movement.createMovement(270, 0.75), getPosition(), steps);
+		// G = mg
+		addImpulse(Movement.createMovement(270, 0.75 * getMass()), 
+				getPosition(), steps);
 		
 		super.act(steps);
 	}

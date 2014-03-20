@@ -70,12 +70,6 @@ public class Box extends Obstacle implements Wall
 	}
 
 	@Override
-	public int getZHeight()
-	{
-		return getWidth();
-	}
-
-	@Override
 	public double getDensity()
 	{
 		return Material.WOOD.getDensity();

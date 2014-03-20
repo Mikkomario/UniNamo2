@@ -93,7 +93,7 @@ public enum Material
 	 */
 	public double getDensity()
 	{
-		return getRealDensity() / Math.pow(170, 3);
+		return getRealDensity() / Math.pow(170, 2);
 	}
 	
 	/**
