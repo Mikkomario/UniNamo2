@@ -171,9 +171,9 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	public void addImpulse(Movement force, 
 			Point2D.Double absoluteForcePosition, double steps)
 	{
-		// Changes the object's velocity (a = F / m)
+		// Changes the object's velocity (a = F / m), (dv = a * dt) -> dv = F * dt / m
 		// TODO: Change the addMotion's "force" to "acceleration"
-		addMotion(force.getDirection(), force.getSpeed() / getMass());
+		addMotion(force.getDirection(), force.getSpeed() * steps / getMass());
 		
 		// Calculates necessary stats
 		Point2D.Double absoluteRotationAxis = transform(this.currentRotationAxis);
@@ -231,7 +231,7 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		
 		// Also forces the object away from the collided object
 		getRelativePointAwayFromObject(p, negateTransformations(collisionPoint), 
-				forceDirection);
+				forceDirection, steps);
 	}
 	
 	// Note: other can be left null
@@ -277,18 +277,30 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		System.out.println("Point move direction: " + pointMovementDirection);
 		
 		// Calculates the force that created the momentum change (F = dp / dt)
+		//Movement normalForce = Movement.createMovement(pointMovementDirection, 
+		//		(newRotationMomentum * energyLossModifier - rotationMomentumStart) / steps);
+		
+		// TODO: Testing the new method: F = dp / (r * dt) Where r is from the range from rotation axis
+		// Almost works...
+		Point2D.Double absoluteAxisPosition = transform(this.currentRotationAxis);
+		double r = HelpMath.pointDistance(absoluteAxisPosition.getX(), 
+				absoluteAxisPosition.getY(), absoluteEffectPoint.getX(), 
+				absoluteEffectPoint.getY());
 		Movement normalForce = Movement.createMovement(pointMovementDirection, 
-				(newRotationMomentum * energyLossModifier - rotationMomentumStart) / steps);
+				(newRotationMomentum * energyLossModifier - rotationMomentumStart) / (r * steps));
 		
 		System.out.println("Normal force: " + normalForce.getSpeed());
 		System.out.println("-----------------------");
 		
 		// Applies the force and adds friction as well
 		addImpulse(normalForce, absoluteEffectPoint, steps);
+		//addMoment(normalForce, HelpMath.pointDirection(absoluteAxisPosition.getX(), 
+		//		absoluteAxisPosition.getY(), absoluteEffectPoint.getX(), 
+		//		absoluteEffectPoint.getY()), r, steps);
 		addCollisionFriction(other, normalForce, frictionModifier, 
 				absoluteEffectPoint, steps);
 		// Also adds compensation movement
-		addCompensationMovement(normalForce);
+		//addCompensationMovement(normalForce);
 	}
 	
 	/**
@@ -346,14 +358,14 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		
 		// Forces the object out of the other
 		getRelativePointAwayFromObject(p, negateTransformations(collisionPoint), 
-				forceDirection);
+				forceDirection, steps);
 	}
 	
 	private void getRelativePointAwayFromObject(PhysicalCollidable p, 
-			Point2D.Double relativeCollisionPoint, double escapeDirection)
+			Point2D.Double relativeCollisionPoint, double escapeDirection, double steps)
 	{
 		int moves = 0;
-		while (p.pointCollides(transform(relativeCollisionPoint)) && moves < 10)
+		while (p.pointCollides(transform(relativeCollisionPoint)) && moves < 10 * steps)
 		{
 			moves ++;
 			addPosition(Movement.createMovement(escapeDirection, 1));
