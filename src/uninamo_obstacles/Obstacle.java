@@ -134,7 +134,7 @@ public abstract class Obstacle extends AdvancedPhysicDrawnObject implements
 			else
 			{
 				// TODO: Munch these numbers further if need be
-				bounceWithRotationFrom((Wall) collided, colpoints, 0, 0.25, steps);
+				bounceWithRotationFrom((Wall) collided, colpoints, 0, 0.1, steps);
 			}
 		}
 	}

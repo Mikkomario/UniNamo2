@@ -333,9 +333,9 @@ public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysic
 			rotationSign = 1;
 		
 		// Calculates how much the rotation speed is affected
-		// dw = (TanForce * r) / (MomentMass * dt)
-		double deltaRotSpeed = (tangentualOppForce.getSpeed() * r) / 
-				(this.currentMomentMass * steps);
+		// dw = (TanForce * r * dt) / (MomentMass)
+		double deltaRotSpeed = (tangentualOppForce.getSpeed() * r * steps) / 
+				(this.currentMomentMass);
 				/*(12 * tangentualOppForce.getSpeed() * r) / 
 				(steps * (Math.pow(getWidth(), 2) + Math.pow(getHeight(), 2)));*/
 		

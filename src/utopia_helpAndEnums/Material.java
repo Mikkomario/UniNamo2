@@ -89,9 +89,17 @@ public enum Material
 	STONE;
 	
 	/**
+	 * @return The density of the material (kg/pxl^3)
+	 */
+	public double getDensity()
+	{
+		return getRealDensity() / Math.pow(170, 3);
+	}
+	
+	/**
 	 * @return The density of the material (kg/m3)
 	 */
-	public int getDensity()
+	private int getRealDensity()
 	{
 		switch (this)
 		{

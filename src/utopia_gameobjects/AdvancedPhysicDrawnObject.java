@@ -85,6 +85,7 @@ public abstract class AdvancedPhysicDrawnObject extends RotatingBasicPhysicDrawn
 		return 0;
 	}
 	
+	// TODO: Take scaling into account with mass and moment mass
 	
 	// OTHER METHODS	-------------------------------------------------
 	
@@ -126,12 +127,21 @@ public abstract class AdvancedPhysicDrawnObject extends RotatingBasicPhysicDrawn
 		double momentumStartOther = p.getDirectionalMomentum(collisionForceDirection);
 		
 		// Calculates the total momentum of the objects
-		double totalMomentum = momentumStartThis + momentumStartOther;
+		//double totalMomentum = momentumStartThis + momentumStartOther;
+		
+		// Calculates the new momentums ((2 * m1 * p2 + (m1 - m2) * p1) / (m1 + m2))
+		double momentumEndThis = (2 * getMass() * momentumStartOther + 
+				(getMass() - p.getMass() * momentumStartThis)) / (getMass() + p.getMass());
+		double momentumEndOther = (2 * p.getMass() * momentumStartThis + 
+				(p.getMass() - getMass() * momentumStartOther)) / (p.getMass() + getMass());
 		
 		// Calculates the speed changes of each object
 		// Ptot / 2 - Pstart
-		double magicImpulseForceThis = (totalMomentum / 2 - momentumStartThis) / getMass();
-		double magicImpulseForceOther = (totalMomentum / 2 - momentumStartOther) / getMass();
+		//double magicImpulseForceThis = (totalMomentum / 2 - momentumStartThis) / getMass();
+		//double magicImpulseForceOther = (totalMomentum / 2 - momentumStartOther) / p.getMass();
+		// TODO: Change the 0.8 into a nice variable
+		double magicImpulseForceThis = 0.8 * (momentumEndThis - momentumStartThis) / getMass();
+		double magicImpulseForceOther = 0.8 * (momentumEndOther - momentumStartOther) / p.getMass();
 		
 		Movement impulseMovementThis = Movement.createMovement(collisionForceDirection, 
 				magicImpulseForceThis);
@@ -161,5 +171,7 @@ public abstract class AdvancedPhysicDrawnObject extends RotatingBasicPhysicDrawn
 	{
 		// P = m * v
 		return getMass() * getMovement().getDirectionalSpeed(direction);
+		// Also adds the momentum caused by rotation: P2 = vp * J (* m because not taken into J)
+		// TODO: test adding this
 	}
 }
