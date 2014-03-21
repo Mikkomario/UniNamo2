@@ -193,13 +193,13 @@ public abstract class BasicPhysicDrawnObject extends CollidingDrawnObject
 	/**
 	 * Adds the objects movement towards the given direction
 	 *
-	 * @param direction Direction towards which the force is applied (degrees)
-	 * @param force The amount of force applied to the object (pxl / step)
+	 * @param direction Direction which is affected (degrees)
+	 * @param speedChange How much the object's directional speed changes (pxl / step)
 	 */
-	public void addMotion(double direction, double force)
+	public void addMotion(double direction, double speedChange)
 	{
 		this.movement = Movement.movementSum(getMovement(), 
-				Movement.createMovement(direction, force));
+				Movement.createMovement(direction, speedChange));
 	}
 	
 	/**

@@ -122,6 +122,22 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 					this.currentRotationAxis);
 	}
 	
+	@Override
+	public void setXScale(double xScale)
+	{
+		super.setXScale(xScale);
+		// Also updates the moment mass
+		updateDefaultMomentMass();
+	}
+	
+	@Override
+	public void setYScale(double yScale)
+	{
+		super.setYScale(yScale);
+		// Also updates the moment mass
+		updateDefaultMomentMass();
+	}
+	
 	
 	// GETTERS & SETTERS 	--------------------------------------------
 	
@@ -132,16 +148,15 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	{
 		// For boxes the mass is width * height * depth * density
 		if (getCollisionType() == CollisionType.BOX)
-			return getWidth() * getHeight() * getDensity();
+			return getWidth() * getXScale() * getHeight() * getYScale() * getDensity();
 		// For circles, returns (4 * Pi * r^3) / 3
 		else if (getCollisionType() == CollisionType.CIRCLE)
-			return Math.PI * Math.pow(getRadius(), 2);
+			return Math.PI * Math.pow(getRadius(), 2) * ((getXScale() + getYScale()) / 2);
 		// Not defined for walls
 		System.err.println("Can't calculate mass for object that is neither a box nor a circle");
 		return 0;
 	}
 	
-	// TODO: Take scaling into account with mass and moment mass
 	
 	// OTHER METHODS	-------------------------------------------------
 	
@@ -153,7 +168,7 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	protected void setupRotationOrigin()
 	{
 		this.currentRotationAxis = new Point2D.Double(getOriginX(), getOriginY());
-		this.defaultMomentMass = (1.0 / 12.0) * getW2PlusH2() * getMass();
+		updateDefaultMomentMass();
 		this.currentMomentMass = this.defaultMomentMass;
 		
 		//changeRotationAxisTo(new Point2D.Double(0, 0));
@@ -172,7 +187,6 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 			Point2D.Double absoluteForcePosition, double steps)
 	{
 		// Changes the object's velocity (a = F / m), (dv = a * dt) -> dv = F * dt / m
-		// TODO: Change the addMotion's "force" to "acceleration"
 		addMotion(force.getDirection(), force.getSpeed() * steps / getMass());
 		
 		// Calculates necessary stats
@@ -185,7 +199,6 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 				absoluteForcePosition.getY());
 		
 		// Applies moment to the object
-		// TODO: Return and debug
 		addMoment(force, directionToPoint, r, steps);		
 	}
 	
@@ -223,7 +236,8 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		
 		// Rotation momentum directional to the normal force goes to 0
 		// TODO: Return and debug
-		//setRotationMomentumTo(null, 0, 0, frictionModifier, steps, collisionPoint);
+		//setRotationMomentumTo(null, forceDirection, 0, 0, frictionModifier, 
+		//		steps, collisionPoint);
 		
 		// Changes the rotation axis
 		this.actsSinceLastCollision = 0;
@@ -259,38 +273,50 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	
 	// Other can be left null
 	private void setRotationMomentumTo(AdvancedPhysicDrawnObject2 other, 
-			double newRotationMomentum, 
+			double forceDirection, double newRotationMomentum, 
 			double energyLossModifier, double frictionModifier, double steps, 
 			Point2D.Double absoluteEffectPoint)
 	{
 		double rotationMomentumStart = getRotationMomentum();
 		
-		System.out.println("Start momentum: " + rotationMomentumStart);
+		//System.out.println("Start momentum: " + rotationMomentumStart);
 		
 		// Calculates the direction the effect point would have if it was 
 		// rotated by the object
 		double pointMovementDirection = HelpMath.pointDirection(getX(), getY(), 
 				absoluteEffectPoint.getX(), absoluteEffectPoint.getY()) + 90;
 		if (getRotation() < 0)
-			pointMovementDirection += 180;
+			pointMovementDirection -= 180;
 		
-		System.out.println("Point move direction: " + pointMovementDirection);
+		//System.out.println(pointMovementDirection);
+		// If the point is moving away from the force direction already, does nothing
+		if (HelpMath.getAngleDifference180(pointMovementDirection, forceDirection) < 90)
+		{
+			//System.out.println("Skips force");
+			return;
+		}
+		
+		//System.out.println("Point move direction: " + pointMovementDirection);
 		
 		// Calculates the force that created the momentum change (F = dp / dt)
 		//Movement normalForce = Movement.createMovement(pointMovementDirection, 
 		//		(newRotationMomentum * energyLossModifier - rotationMomentumStart) / steps);
 		
 		// TODO: Testing the new method: F = dp / (r * dt) Where r is from the range from rotation axis
-		// Almost works...
+		// Almost works... Or not
 		Point2D.Double absoluteAxisPosition = transform(this.currentRotationAxis);
 		double r = HelpMath.pointDistance(absoluteAxisPosition.getX(), 
 				absoluteAxisPosition.getY(), absoluteEffectPoint.getX(), 
 				absoluteEffectPoint.getY());
-		Movement normalForce = Movement.createMovement(pointMovementDirection, 
+		// TODO: Change direction
+		Movement normalForce = Movement.createMovement(pointMovementDirection + 180, 
 				(newRotationMomentum * energyLossModifier - rotationMomentumStart) / (r * steps));
+		normalForce = normalForce.getDirectionalMovement(forceDirection);
 		
-		System.out.println("Normal force: " + normalForce.getSpeed());
-		System.out.println("-----------------------");
+		System.out.println(normalForce.getSpeed());
+		
+		//System.out.println("Normal force: " + normalForce.getSpeed());
+		//System.out.println("-----------------------");
 		
 		// Applies the force and adds friction as well
 		addImpulse(normalForce, absoluteEffectPoint, steps);
@@ -373,12 +399,14 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	}
 	
 	// Note: force != acceleration
+	/*
 	private void addCompensationMovement(Movement force)
 	{
 		// Calculates the acceleration (F = ma -> a = F / m)
 		addPosition(Movement.createMovement(force.getDirection(), 
 				force.getSpeed() / getMass()));
 	}
+	*/
 	
 	private double getDirectionalEndMomentumOnCollisionWith(
 			AdvancedPhysicDrawnObject2 other, double direction)
@@ -405,8 +433,8 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	private double getRotationMomentum()
 	{
 		// the momentum caused by rotation: P = w * J
-		System.out.println("J: " + this.currentMomentMass);
-		System.out.println("Rotation: " + getRotation());
+		//System.out.println("J: " + this.currentMomentMass);
+		//System.out.println("Rotation: " + getRotation());
 		return getRotation() * this.currentMomentMass;
 	}
 	
@@ -450,11 +478,15 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 			resetRotationAxisToOrigin();
 		
 		// Calculates the distance to the new axis
-		double r2 = Math.pow(HelpMath.pointDistance(getOriginX(), getOriginY(), 
-				newRelativeAxis.getX(), newRelativeAxis.getY()), 2);
+		//double r2 = Math.pow(HelpMath.pointDistance(getOriginX(), getOriginY(), 
+		//		newRelativeAxis.getX(), newRelativeAxis.getY()), 2);
+		// With scaling included
+		double r2 = Math.pow(HelpMath.pointDistance(0, 0, (getOriginX() - 
+				newRelativeAxis.getX()) * getXScale(), (getOriginY() - 
+				newRelativeAxis.getY()) * getYScale()), 2);
 		
-		// Changes the moment mass (Ja = J1 + r^2)
-		this.currentMomentMass = this.defaultMomentMass + r2;
+		// Changes the moment mass (Ja = J1 + m * r^2)
+		this.currentMomentMass = this.defaultMomentMass + getMass() * r2;
 		
 		// Remembers the current / old rotation speed
 		double oldRotSpeed2 = Math.pow(getRotation(), 2);
@@ -463,14 +495,6 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		// wa = sqrt(J1 * w1^2 / Ja)
 		double newSpeed = Math.sqrt(this.defaultMomentMass * oldRotSpeed2 / 
 				this.currentMomentMass);
-		
-		/*
-		double w2plush2 = getW2PlusH2();
-		
-		// Calculates the new rotation speed (using a secret method)
-		double newSpeed = Math.sqrt(((1.0 / 12.0) * oldRotSpeed2 * w2plush2) 
-				/ ((1.0 / 12.0) * w2plush2 + r2));
-		*/
 		
 		// Remembers the new axis
 		this.currentRotationAxis = newRelativeAxis;
@@ -490,16 +514,6 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		double newSpeed = Math.sqrt(this.currentMomentMass * oldRotSpeed2 / 
 				this.defaultMomentMass);
 		
-		/*
-		double r2 = Math.pow(HelpMath.pointDistance(getOriginX(), getOriginY(), 
-				this.currentRotationAxis.getX(), this.currentRotationAxis.getY()), 2);
-		
-		double w2plush2 = getW2PlusH2();
-		
-		double newSpeed = Math.sqrt(((1.0 / 12.0) * w2plush2 + r2) * 
-				oldRotSpeed2 / ((1.0 / 12.0) * w2plush2));
-		*/
-		
 		// Changes back to normal rotation
 		this.currentRotationAxis = new Point2D.Double(getOriginX(), getOriginY());
 		setRotation(newSpeed);
@@ -507,7 +521,8 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	
 	private double getW2PlusH2()
 	{
-		return Math.pow(getWidth(), 2) + Math.pow(getHeight(), 2);
+		return Math.pow(getWidth() * getXScale(), 2) + 
+				Math.pow(getHeight() * getYScale(), 2);
 	}
 	
 	private boolean currentAxisIsOrigin()
@@ -556,6 +571,21 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		if (other != null)
 			other.addImpulse(frictionForce.getOpposingMovement(), 
 					absoluteFrictionPosition, steps);
+	}
+	
+	/**
+	 * This method should be called when the width, height or the density of 
+	 * the object changes
+	 */
+	protected void updateDefaultMomentMass()
+	{
+		double oldMomentMass = this.defaultMomentMass;
+		this.defaultMomentMass = (1.0 / 12.0) * getW2PlusH2() * getMass();
+		
+		// If the moment mass changed while the object is rotating, updates the 
+		// rotation speed
+		if (oldMomentMass != this.defaultMomentMass && getRotation() != 0)
+			resetRotationAxisToOrigin();
 	}
 	
 	

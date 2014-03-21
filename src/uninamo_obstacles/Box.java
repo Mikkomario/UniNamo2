@@ -48,7 +48,8 @@ public class Box extends Obstacle implements Wall
 		
 		setBoxCollisionPrecision(3, 0);
 		
-		getMovement().setHSpeed(-5);
+		//getMovement().setHSpeed(-5);
+		//setScale(1.5, 1.5);
 		//System.out.println(getMass());
 	}
 	
@@ -72,6 +73,6 @@ public class Box extends Obstacle implements Wall
 	@Override
 	public double getDensity()
 	{
-		return Material.WOOD.getDensity();
+		return Material.WOOD.getDensity() * 0.2;
 	}
 }

@@ -199,6 +199,7 @@ public abstract class Obstacle extends AdvancedPhysicDrawnObject2 implements
 		// G = mg
 		addImpulse(Movement.createMovement(270, 0.75 * getMass()), 
 				getPosition(), steps);
+		//scale(1.01, 1.01);
 		
 		super.act(steps);
 	}

@@ -170,7 +170,7 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener,
 			if (this.speedSign == 1)
 			{
 				if (o.getMovement().getHSpeed() < optimalSpeed)
-					o.addImpulse(new Movement(1, 0), colpoints.get(0), steps);
+					o.addImpulse(new Movement(500, 0), colpoints.get(0), steps);
 			}
 			//o.getMovement().setHSpeed(GameSettings.normalTurnSpeed * this.speedSign);
 			//o.addPosition(GameSettings.normalTurnSpeed * this.speedSign * steps, 0);
