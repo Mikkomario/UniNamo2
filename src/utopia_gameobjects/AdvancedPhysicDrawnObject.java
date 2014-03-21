@@ -95,10 +95,6 @@ public abstract class AdvancedPhysicDrawnObject extends RotatingBasicPhysicDrawn
 	 * 
 	 * @param p The collided object
 	 * @param collisionPoints The points at which the collision happens
-	 * @param bounciness How much the object bounces away from the given 
-	 * object (0+) (a positive number means that speed is generated so beware)
-	 * @param frictionModifier How much the collision affects speed that isn't 
-	 * directional to the opposing force (0+).
 	 * @param steps How many steps does the collision take to happen
 	 */
 	public void collideInteractivelyWith(AdvancedPhysicDrawnObject p, 

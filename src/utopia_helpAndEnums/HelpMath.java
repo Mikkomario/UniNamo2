@@ -28,6 +28,18 @@ public class HelpMath
 	}
 	
 	/**
+	 * Calculates the direction from one point to another (in degrees)
+	 * 
+	 * @param p1 The first point
+	 * @param p2 The second point
+	 * @return The direction from the first point to the second
+	 */
+	public static double pointDirection(Point2D.Double p1, Point2D.Double p2)
+	{
+		return pointDirection(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+	}
+	
+	/**
 	 * Calculates the direction from one point to another around the x-axis (in degrees). 
 	 * Should only be used in 3D projects.
 	 *
@@ -86,6 +98,18 @@ public class HelpMath
 		double b = y1 - y2;
 		
 		return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+	}
+	
+	/**
+	 * Calculates the distance between two points
+	 * 
+	 * @param p1 The first point
+	 * @param p2 The second point
+	 * @return The distance between points p1 and p2
+	 */
+	public static double pointDistance(Point2D.Double p1, Point2D.Double p2)
+	{
+		return pointDistance(p1.getX(), p1.getY(), p2.getX(), p2.getY());
 	}
 	
 	/**

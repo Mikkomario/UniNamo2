@@ -28,7 +28,8 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	private Point2D.Double currentRotationAxis;
 	private int actsSinceLastCollision;
 	private double defaultMomentMass, currentMomentMass;
-	private ArrayList<Point2D.Double> rotationAxisCandidates;
+	private HashMap<Point2D.Double, Double> rotationAxisCandidates;
+	//private ArrayList<Point2D.Double> rotationAxisCandidates;
 	
 	
 	// CONSTRUCTOR	----------------------------------------------------
@@ -62,7 +63,8 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		// Initializes attributes (Most of these need to be initialized after 
 		// the subclass is done)
 		this.currentRotationAxis = new Point2D.Double(0, 0);
-		this.rotationAxisCandidates = new ArrayList<Point2D.Double>();
+		//this.rotationAxisCandidates = new ArrayList<Point2D.Double>();
+		this.rotationAxisCandidates = new HashMap<Point2D.Double, Double>();
 		this.actsSinceLastCollision = 1000;
 		this.defaultMomentMass = 0;
 		this.currentMomentMass = 0;
@@ -104,7 +106,20 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		if (this.rotationAxisCandidates.size() > 0)
 		{
 			//System.out.println(rotationAxisCandidates.size());
-			changeRotationAxisTo(HelpMath.getAveragePoint(this.rotationAxisCandidates));
+			//changeRotationAxisTo(HelpMath.getAveragePoint(this.rotationAxisCandidates));
+			
+			// Uses the candidate wich had the largest point movement
+			Point2D.Double bestCandidate = null;
+			double bestMovement = -1;
+			for (Point2D.Double candidate : this.rotationAxisCandidates.keySet())
+			{
+				if (this.rotationAxisCandidates.get(candidate) > bestMovement)
+					bestCandidate = candidate;
+			}
+			
+			//System.out.println(this.rotationAxisCandidates.size());
+			
+			changeRotationAxisTo(bestCandidate);
 			this.rotationAxisCandidates.clear();
 		}
 	}
@@ -191,12 +206,9 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		
 		// Calculates necessary stats
 		Point2D.Double absoluteRotationAxis = transform(this.currentRotationAxis);
-		double directionToPoint = HelpMath.pointDirection(
-				absoluteRotationAxis.getX(), absoluteRotationAxis.getY(), 
-				absoluteForcePosition.getX(), absoluteForcePosition.getY());
-		double r = HelpMath.pointDistance(absoluteRotationAxis.getX(), 
-				absoluteRotationAxis.getY(), absoluteForcePosition.getX(), 
-				absoluteForcePosition.getY());
+		double directionToPoint = HelpMath.pointDirection(absoluteRotationAxis, 
+				absoluteForcePosition);
+		double r = HelpMath.pointDistance(absoluteRotationAxis, absoluteForcePosition);
 		
 		// Applies moment to the object
 		addMoment(force, directionToPoint, r, steps);		
@@ -230,6 +242,9 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	private void titaniumCollision(PhysicalCollidable p, double forceDirection, 
 			Point2D.Double collisionPoint, double frictionModifier, double steps)
 	{
+		// Changes the rotation axis
+		addCollisionPointAsRotationAxisCandidate(collisionPoint);
+		
 		// Momentum directional to the normal force goes to 0
 		setDirectionalMomentumTo(null, forceDirection, 0, 0, frictionModifier, 
 				steps, collisionPoint);
@@ -239,13 +254,20 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		//setRotationMomentumTo(null, forceDirection, 0, 0, frictionModifier, 
 		//		steps, collisionPoint);
 		
-		// Changes the rotation axis
-		this.actsSinceLastCollision = 0;
-		this.rotationAxisCandidates.add(negateTransformations(collisionPoint));
-		
 		// Also forces the object away from the collided object
 		getRelativePointAwayFromObject(p, negateTransformations(collisionPoint), 
 				forceDirection, steps);
+	}
+	
+	private void addCollisionPointAsRotationAxisCandidate(Point2D.Double collisionPoint)
+	{
+		// Changes the rotation axis
+		this.actsSinceLastCollision = 0;
+		// Calculates the point movement at the collision point and adds it as an axis candidate
+		Point2D.Double absoluteRotationAxis = transform(this.currentRotationAxis);
+		double pointMovement = HelpMath.pointDistance(
+				absoluteRotationAxis, collisionPoint) * Math.abs(getRotation());
+		this.rotationAxisCandidates.put(negateTransformations(collisionPoint), pointMovement);
 	}
 	
 	// Note: other can be left null
@@ -359,6 +381,10 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 			Point2D.Double collisionPoint, double forceDirection, 
 			double frictionModifier, double energyLossModifier, double steps)
 	{
+		// TODO: Test if this breaks stuff
+		// Changes rotation axis (maybe)
+		addCollisionPointAsRotationAxisCandidate(collisionPoint);
+		
 		// Calculates the new momentums for the objects
 		double newMomentumThis = getDirectionalEndMomentumOnCollisionWith(p, 
 				forceDirection);

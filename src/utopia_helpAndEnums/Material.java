@@ -89,7 +89,7 @@ public enum Material
 	STONE;
 	
 	/**
-	 * @return The density of the material (kg/pxl^3)
+	 * @return The density of the material (kg/170pxl^2 or something)
 	 */
 	public double getDensity()
 	{
