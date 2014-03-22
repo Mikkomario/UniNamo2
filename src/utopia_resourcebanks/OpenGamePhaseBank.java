@@ -45,7 +45,7 @@ public class OpenGamePhaseBank extends GamePhaseBank implements OpenBank
 			String[] arguments = command.split("#");
 			
 			// Checks that there are enough arguments
-			if (arguments.length < 2)
+			if (arguments.length < 1)
 			{
 				System.err.println("Couldn't load a GamePhase. Line " + command + 
 						"doensn't have enough arguments");

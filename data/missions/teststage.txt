@@ -19,9 +19,8 @@ box#2#800#550#boxdesign#boxreal
 
 &components
 T1#power#300#400
-T2#or#450#400
+*T2#or#450#400
 
 &cables
-T1O0#T2I0
-T2O0#CONV1II0
-T2O0#CONV2II0
+T1O0#CONV1II0
+T1O0#CONV2II0

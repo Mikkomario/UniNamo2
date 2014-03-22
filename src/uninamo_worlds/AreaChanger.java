@@ -44,15 +44,20 @@ public class AreaChanger
 		// Initializes attributes
 		this.areas = new HashMap<String, Area>();
 		
+		// Creates areas
+		GamePhaseBank phaseBank = MultiMediaHolder.getGamePhaseBank("default");
+		
+		// Results contains analysis of the costs of the previous mission
+		this.areas.put("results", new Area(phaseBank.getPhase("results"), 
+				mousehandler, actorhandler, drawer));
+		
 		// Creates shared resources
-		TotalCostAnalyzer costAnalyzer = new TotalCostAnalyzer();
+		TotalCostAnalyzer costAnalyzer = new TotalCostAnalyzer(this.areas.get("results"));
 		ConnectorRelay connectorRelay = new ConnectorRelay();
 		NormalComponentRelay componentRelay = new NormalComponentRelay(costAnalyzer);
 		TestHandler testHandler = new TestHandler(null);
 		
-		// Creates areas
-		GamePhaseBank phaseBank = MultiMediaHolder.getGamePhaseBank("default");
-		
+		// Coding area contains the user interface for "coding"
 		this.areas.put("coding", new Area(phaseBank.getPhase("gameplay"), 
 				mousehandler, actorhandler, drawer));
 		TurnTimer turnTimer = new TurnTimer(testHandler, 
@@ -60,14 +65,17 @@ public class AreaChanger
 		new CodingObjectCreator(this, connectorRelay, componentRelay, 
 				testHandler, turnTimer);
 		
+		// The design area contains the context and the mission stuff
 		this.areas.put("design", new Area(phaseBank.getPhase("gameplay"), 
 				mousehandler, actorhandler, drawer));
 		new DesignObjectCreator(this, testHandler, componentRelay, 
 				connectorRelay, costAnalyzer);
 		
+		// Manual contains useful information
 		this.areas.put("manual", new Area(phaseBank.getPhase("gameplay"), 
 				mousehandler, actorhandler, drawer));
 		
+		// Mission contains the short mission briefing shown at the start of a stage
 		this.areas.put("mission", new Area(phaseBank.getPhase("gameplay"), 
 				mousehandler, actorhandler, drawer));
 		new MissionObjectCreator(this.areas.get("mission"));

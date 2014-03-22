@@ -1,9 +1,18 @@
 package uninamo_gameplaysupport;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.HashMap;
 
 import uninamo_components.ComponentType;
 import uninamo_machinery.MachineType;
+import uninamo_main.GameSettings;
+import uninamo_worlds.Area;
+import utopia_gameobjects.DrawnObject;
+import utopia_handlers.DrawableHandler;
+import utopia_helpAndEnums.DepthConstants;
+import utopia_listeners.RoomListener;
+import utopia_worlds.Room;
 
 /**
  * TotalCostAnalyzer can calculate the final costs of the creation, analyze 
@@ -12,26 +21,64 @@ import uninamo_machinery.MachineType;
  * @author Mikko Hilpinen
  * @since 17.3.2014
  */
-public class TotalCostAnalyzer
+public class TotalCostAnalyzer implements RoomListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private double demoComponentCost;
 	private HashMap<ComponentType, Integer> componentAmounts;
 	private HashMap<MachineType, Integer> machineAmounts;
+	private DrawableHandler textDrawer;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
 	
 	/**
 	 * Creates a new totalCostAnalyzer. The data must be added separately.
+	 * @param area The area where the visualization will be drawn
 	 */
-	public TotalCostAnalyzer()
+	public TotalCostAnalyzer(Area area)
 	{
 		// Initializes attributes
 		this.demoComponentCost = 0;
 		this.componentAmounts = new HashMap<ComponentType, Integer>();
 		this.machineAmounts = new HashMap<MachineType, Integer>();
+		this.textDrawer = new DrawableHandler(false, false, 
+				DepthConstants.NORMAL, 0, area.getDrawer());
+		
+		// Adds the object to the handler(s)
+		if (area != null)
+			area.addRoomListener(this);
+	}
+	
+	
+	// IMPLEMENTED METHODS	---------------------------------------------
+	
+	@Override
+	public boolean isDead()
+	{
+		// Can't be killed
+		return false;
+	}
+
+	@Override
+	public void kill()
+	{
+		// Can't be killed
+	}
+
+	@Override
+	public void onRoomStart(Room room)
+	{
+		// Visualizes the data
+		visualizeCosts();
+	}
+	
+	@Override
+	public void onRoomEnd(Room room)
+	{
+		// Ends the visualization
+		// TODO: End visualization
 	}
 	
 	
@@ -77,5 +124,59 @@ public class TotalCostAnalyzer
 		this.machineAmounts.put(type, lastAmount + 1);
 	}
 	
-	// TODO: Add data visualization
+	/**
+	 * Creates an visualization of the costs.
+	 */
+	public void visualizeCosts()
+	{
+		// Creates the lines that visualize the costs
+		new TextLineDrawer(200, 200, "Demo costs: " + this.demoComponentCost, this.textDrawer);
+		
+		// TODO: Add lines
+	}
+	
+	
+	// SUBCLASSES	----------------------------------------------------
+	
+	private class TextLineDrawer extends DrawnObject
+	{
+		// ATTRIBUTES	-----------------------------------------------
+		
+		private String line;
+		
+		
+		// CONSTRUCTOR	------------------------------------------------
+		
+		public TextLineDrawer(int x, int y, String line, DrawableHandler drawer)
+		{
+			super(x, y, DepthConstants.NORMAL, drawer);
+			
+			// Initializes attributes
+			this.line = line;
+		}
+		
+		
+		// IMPLEMENTED METHODS	----------------------------------------
+
+		@Override
+		public int getOriginX()
+		{
+			return 0;
+		}
+
+		@Override
+		public int getOriginY()
+		{
+			return 0;
+		}
+
+		@Override
+		public void drawSelfBasic(Graphics2D g2d)
+		{
+			// Draws the text
+			g2d.setFont(GameSettings.basicFont);
+			g2d.setColor(Color.BLACK);
+			g2d.drawString(this.line, 0, 0);
+		}
+	}
 }

@@ -3,3 +3,4 @@
 
 &default
 gameplay#sprite:components,gameplaybackgrounds,gameplayinterface,machines,obstacles,goals,manual,mission
+results

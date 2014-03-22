@@ -15,8 +15,10 @@ import utopia_handlers.CollisionHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_listeners.CollisionListener;
+import utopia_listeners.RoomListener;
 import utopia_listeners.TransformationListener;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Room;
 
 /**
  * ObstacleCollectors require a certain number of a certain object to fill up. 
@@ -26,7 +28,7 @@ import utopia_resourcebanks.MultiMediaHolder;
  * @since 11.3.2014
  */
 public class ObstacleCollector extends DrawnObject implements CollisionListener, 
-	TestListener, TransformationListener
+	TestListener, TransformationListener, RoomListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
@@ -52,6 +54,7 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 	 * @param drawer The drawableHandler that will draw the collector
 	 * @param collisionHandler The collisionHandler that will inform the object 
 	 * about collision events
+	 * @param room The room where the collector resides
 	 * @param testHandler The testHandler that will inform the object about test 
 	 * events
 	 * @param victoryHandler The victoryHandler that will check if the stage has been beaten
@@ -61,7 +64,7 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 	 * @param realSpriteName The name of the sprite used to draw the object in test mode
 	 */
 	public ObstacleCollector(int x, int y, DrawableHandler drawer, 
-			CollisionHandler collisionHandler, TestHandler testHandler, 
+			CollisionHandler collisionHandler, Room room, TestHandler testHandler, 
 			VictoryHandler victoryHandler, ObstacleType collectedType, 
 			int neededAmount, String designSpriteName, String realSpriteName)
 	{
@@ -103,6 +106,8 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 			collisionHandler.addCollisionListener(this);
 		if (testHandler != null)
 			testHandler.addTestable(this);
+		if (room != null)
+			room.addObject(this);
 		
 		forceTransformationUpdate();
 	}
@@ -224,5 +229,18 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 		
 		this.numberDrawer.setPosition(getX() - width / 4, getY());
 		this.collectableDrawer.setPosition(getX() + width / 4, getY());
+	}
+
+	@Override
+	public void onRoomStart(Room room)
+	{
+		// Does nothing
+	}
+
+	@Override
+	public void onRoomEnd(Room room)
+	{
+		// Dies at the end of the room
+		kill();
 	}
 }

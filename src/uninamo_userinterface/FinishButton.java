@@ -65,7 +65,9 @@ public class FinishButton extends AbstractButton implements TestListener
 			double eventStepTime)
 	{
 		// Changes to the results area
-		// TODO: Add stuff
+		this.areaChanger.getArea("coding").end();
+		this.areaChanger.getArea("design").end();
+		this.areaChanger.getArea("results").start();
 	}
 
 	@Override
