@@ -74,19 +74,21 @@ public class DesignObjectCreator extends AreaObjectCreator
 		new InvisibleWall(-1, 0, GameSettings.screenHeight - 80, 
 				area.getCollisionHandler().getCollidableHandler(), area);
 		
-		// Creates interface elements
-		DemoButton demoButton = new DemoButton(600, 80, area.getDrawer(), 
-				area.getMouseHandler(), area, this.testHandler);
-		TestingButton testButton = new TestingButton(GameSettings.screenWidth - 110, 
-				GameSettings.screenHeight - 45, area.getDrawer(), 
-				area.getMouseHandler(), area, this.testHandler);
-		new ToCodeButton(this.areaChanger, this.testHandler, testButton, 
-				demoButton, this.componentRelay);
+		
 		FinishButton finishButton = new FinishButton(this.areaChanger, 
 				this.testHandler);
 		
 		// Creates a new victoryHandler
 		VictoryHandler victoryHandler = new VictoryHandler(finishButton);
+		
+		// Creates interface elements
+		DemoButton demoButton = new DemoButton(600, 80, area.getDrawer(), 
+				area.getMouseHandler(), area, this.testHandler, victoryHandler);
+		TestingButton testButton = new TestingButton(GameSettings.screenWidth - 110, 
+				GameSettings.screenHeight - 45, area.getDrawer(), 
+				area.getMouseHandler(), area, this.testHandler);
+		new ToCodeButton(this.areaChanger, this.testHandler, testButton, 
+				demoButton, this.componentRelay);
 		
 		// Creates a new machine counter
 		MachineCounter machineCounter = new MachineCounter();

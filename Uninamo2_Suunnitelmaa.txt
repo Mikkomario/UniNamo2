@@ -192,10 +192,10 @@ Työtehtäviä
 			* Saa muuten varmaan bugattua koko roskan jos 					Jep jep
 			ratkaisee kentän kytkemällä komponentin itseensä 
 			(kenttää ei enää demossa pääse läpi)
-		- Voittoikkuna
+		- Voittoikkuna														...
 			* Voittoon siirtyminen
-				- Ratkaisun lähetysnäppäin designmodeen (näkyvä)
-					* Joudutaan kyllä ottamaan pois testin loppuessa
+				- Ratkaisun lähetysnäppäin designmodeen (näkyvä)			...
+					* Joudutaan kyllä ottamaan pois testin loppuessa		DONE
 				- Huoneiden lopettaminen ja aloittaminen
 					* Uusi gamephase: results
 			* Komponenttikäytön analysointi									...
@@ -208,7 +208,7 @@ Työtehtäviä
 				- Grading													...
 					* Käytetyn rahan vertaaminen tavoitteeseen				...
 					* Arvosanan piirtäminen
-			* Uusien tehtävien antaminen
+			* Uusien tehtävien antaminen									Hylätty
 		- Kahden näkymän piirtäminen testausmoodissa (ja muuten)			Hylätty
 			* Kameroiden implementointi
 			* Kameran koon ja sijainnin muuttaminen testausvaiheessa

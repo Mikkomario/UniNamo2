@@ -29,7 +29,7 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	private int actsSinceLastCollision;
 	private double defaultMomentMass, currentMomentMass;
 	private HashMap<Point2D.Double, Double> rotationAxisCandidates;
-	//private ArrayList<Point2D.Double> rotationAxisCandidates;
+	private boolean rotationAllowed;
 	
 	
 	// CONSTRUCTOR	----------------------------------------------------
@@ -68,6 +68,7 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		this.actsSinceLastCollision = 1000;
 		this.defaultMomentMass = 0;
 		this.currentMomentMass = 0;
+		this.rotationAllowed = true;
 	}
 	
 
@@ -88,6 +89,10 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	public void act(double steps)
 	{
 		super.act(steps);
+		
+		// If rotation is not allowed, doesn't bother to do the rest
+		if (!this.rotationAllowed)
+			return;
 		
 		// Also checks if the rotation axis should be set back to origin
 		if (this.actsSinceLastCollision < 6)
@@ -176,6 +181,24 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	// OTHER METHODS	-------------------------------------------------
 	
 	/**
+	 * Makes the object never rotate in collision situations. Can be used if 
+	 * the object only requires very simple physics
+	 */
+	protected void disableRotation()
+	{
+		this.rotationAllowed = false;
+	}
+	
+	/**
+	 * Makes the object rotate in collision situations (which is on by default). 
+	 * With this you get more realistic physics.
+	 */
+	protected void allowRotation()
+	{
+		this.rotationAllowed = true;
+	}
+	
+	/**
 	 * Sets up the statistics required to run the physics. This method should 
 	 * be called as soon as getOriginX(), getOriginY(), getWidth() and getHeight() 
 	 * methods work as they are supposed to.
@@ -203,6 +226,10 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	{
 		// Changes the object's velocity (a = F / m), (dv = a * dt) -> dv = F * dt / m
 		addMotion(force.getDirection(), force.getSpeed() * steps / getMass());
+		
+		// Only applies moments if it's allowed
+		if (!this.rotationAllowed)
+			return;
 		
 		// Calculates necessary stats
 		Point2D.Double absoluteRotationAxis = transform(this.currentRotationAxis);
@@ -242,18 +269,23 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	private void titaniumCollision(PhysicalCollidable p, double forceDirection, 
 			Point2D.Double collisionPoint, double frictionModifier, double steps)
 	{
-		// Changes the rotation axis
-		addCollisionPointAsRotationAxisCandidate(collisionPoint);
+		// Changes the rotation axis (if needed)
+		if (this.rotationAllowed)
+			addCollisionPointAsRotationAxisCandidate(collisionPoint);
 		
 		// Momentum directional to the normal force goes to 0
 		setDirectionalMomentumTo(null, forceDirection, 0, 0, frictionModifier, 
 				steps, collisionPoint);
 		
-		// Rotation momentum directional to the normal force goes to 0
-		// TODO: Return and debug
-		//setRotationMomentumTo(null, forceDirection, 0, 0, frictionModifier, 
-		//		steps, collisionPoint);
-		
+		// Only does the rotations if they are allowed
+		/*
+		if (this.rotationAllowed)
+		{
+			// Rotation momentum directional to the normal force goes to 0
+			// TODO: Return and debug
+			//setRotationMomentumTo(null, forceDirection, 0, 0, frictionModifier, 
+			//		steps, collisionPoint);
+		}*/
 		// Also forces the object away from the collided object
 		getRelativePointAwayFromObject(p, negateTransformations(collisionPoint), 
 				forceDirection, steps);
@@ -383,7 +415,8 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	{
 		// TODO: Test if this breaks stuff
 		// Changes rotation axis (maybe)
-		addCollisionPointAsRotationAxisCandidate(collisionPoint);
+		if (this.rotationAllowed)
+			addCollisionPointAsRotationAxisCandidate(collisionPoint);
 		
 		// Calculates the new momentums for the objects
 		double newMomentumThis = getDirectionalEndMomentumOnCollisionWith(p, 
@@ -398,16 +431,21 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 				energyLossModifier, frictionModifier, steps, collisionPoint);
 		
 		// Calculates the new rotation momentums
-		//double newRotationMomentumThis = getEndRotationMomentumOnCollisionWith(p);
-		//double newRotationMomentumOther = p.getEndRotationMomentumOnCollisionWith(this);
-		
-		// Changes the rotation momentums
-		// TODO: Return and debug
-		//setRotationMomentumTo(p, newRotationMomentumThis, energyLossModifier, 
-		//		frictionModifier, steps, collisionPoint);
-		//p.setRotationMomentumTo(this, newRotationMomentumOther, energyLossModifier, 
-		//		frictionModifier, steps, collisionPoint);
-		
+		/*
+		if (this.rotationAllowed)
+		{
+			//double newRotationMomentumThis = getEndRotationMomentumOnCollisionWith(p);
+			//double newRotationMomentumOther = p.getEndRotationMomentumOnCollisionWith(this);
+			
+			// Changes the rotation momentums
+			// TODO: Return and debug
+			//setRotationMomentumTo(p, newRotationMomentumThis, energyLossModifier, 
+			//		frictionModifier, steps, collisionPoint);
+			//p.setRotationMomentumTo(this, newRotationMomentumOther, energyLossModifier, 
+			//		frictionModifier, steps, collisionPoint);
+		}
+		*/
+			
 		// Forces the object out of the other
 		getRelativePointAwayFromObject(p, negateTransformations(collisionPoint), 
 				forceDirection, steps);
@@ -578,25 +616,42 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		Movement frictionForce = Movement.createMovement(normalForce.getDirection() + 90, 
 				normalForce.getSpeed() * frictionModifier);
 		
+		//System.out.println(frictionModifier);
+		//System.out.println(frictionForce.getSpeed());
+		
+		// Calculates the maximum effect the friction can have
+		Movement maximumEffect = null;
+		if (other == null)
+			maximumEffect = getMovement().getDirectionalMovement(
+					frictionForce.getDirection()).getOpposingMovement();
+		// If the collided object is moving, uses that as the target
+		else
+			maximumEffect = new Movement(other.getMovement().getHSpeed() - getMovement().getHSpeed(), 
+					other.getMovement().getVSpeed() - 
+					getMovement().getVSpeed()).getDirectionalMovement(frictionForce.getDirection());
+		
 		// Checks if the friction should affect the other direction
 		if (HelpMath.getAngleDifference180(frictionForce.getDirection(), 
-				getMovement().getDirection()) < 90)
+				maximumEffect.getDirection()) > 90)
 			frictionForce = frictionForce.getOpposingMovement();
 		
 		// If the acceleration caused by friction would be larger than the 
-		// object's current speed towards the other direction, modifies the 
+		// maximum effect's speed, modifies the 
 		// friction smaller (a = F / m), F = m * a
-		double movementSpeed = getMovement().getDirectionalSpeed(frictionForce.getDirection() + 180);
-		if (frictionForce.getSpeed() / getMass() > movementSpeed)
-			frictionForce.setSpeed(movementSpeed * getMass());
+		if (frictionForce.getSpeed() / getMass() > maximumEffect.getSpeed())
+			frictionForce.setSpeed(maximumEffect.getSpeed() * getMass());
 		
-		// Applies the force to the object
-		addImpulse(frictionForce, absoluteFrictionPosition, steps);
+		//System.out.println(frictionForce.getSpeed());
 		
 		// Applies force to the other object (if possible / necessary)
 		if (other != null)
+		{
 			other.addImpulse(frictionForce.getOpposingMovement(), 
 					absoluteFrictionPosition, steps);
+		}
+		
+		// Applies the force to the object
+		addImpulse(frictionForce, absoluteFrictionPosition, steps);
 	}
 	
 	/**

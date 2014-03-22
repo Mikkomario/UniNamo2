@@ -3,6 +3,8 @@ package uninamo_userinterface;
 import java.awt.geom.Point2D.Double;
 
 import uninamo_gameplaysupport.TestHandler;
+import uninamo_gameplaysupport.VictoryCondition;
+import uninamo_gameplaysupport.VictoryHandler;
 import uninamo_main.GameSettings;
 import utopia_handlers.DrawableHandler;
 import utopia_handlers.MouseListenerHandler;
@@ -18,7 +20,7 @@ import utopia_worlds.Room;
  * @author Mikko Hilpinen
  * @since 16.3.2014
  */
-public class DemoButton extends AbstractButton
+public class DemoButton extends AbstractButton implements VictoryCondition
 {
 	// ATTRIBUTES	-------------------------------------------------------
 	
@@ -39,10 +41,11 @@ public class DemoButton extends AbstractButton
 	 * @param room The room where the button is located at
 	 * @param testHandler The testHandler that will be informed about test 
 	 * (= demo) events
+	 * @param victoryHandler The victoryHandler that is affected by the condition
 	 */
 	public DemoButton(int x, int y, DrawableHandler drawer, 
 			MouseListenerHandler mousehandler, Room room, 
-			TestHandler testHandler)
+			TestHandler testHandler, VictoryHandler victoryHandler)
 	{
 		super(x, y, DepthConstants.HUD, 
 				MultiMediaHolder.getSpriteBank("gameplayinterface").getSprite("demo"), 
@@ -51,6 +54,10 @@ public class DemoButton extends AbstractButton
 		// Initializes attributes
 		this.testHandler = testHandler;
 		this.testing = false;
+		
+		// Adds the object to the handler
+		if (victoryHandler != null)
+			victoryHandler.addVictoryCondition(this);
 	}
 
 	
@@ -94,5 +101,12 @@ public class DemoButton extends AbstractButton
 			setScale(GameSettings.interfaceScaleFactor, GameSettings.interfaceScaleFactor);
 		else if (eventType == MousePositionEventType.EXIT)
 			setScale(1, 1);
+	}
+
+	@Override
+	public boolean isClear()
+	{
+		// The existence of demoButton makes winning the game impossible
+		return false;
 	}
 }

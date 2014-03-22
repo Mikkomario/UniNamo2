@@ -23,6 +23,7 @@ public class FinishButton extends AbstractButton implements TestListener
 	
 	// TODO: Add cost calculations
 	private AreaChanger areaChanger;
+	private boolean testing;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -45,6 +46,7 @@ public class FinishButton extends AbstractButton implements TestListener
 		
 		// Initializes attributes
 		this.areaChanger = areaChanger;
+		this.testing = false;
 		
 		inactivate();
 		setInvisible();
@@ -79,21 +81,38 @@ public class FinishButton extends AbstractButton implements TestListener
 		// Scaling
 		if (eventType == MousePositionEventType.ENTER)
 			setScale(GameSettings.interfaceScaleFactor, GameSettings.interfaceScaleFactor);
-		else
+		else if (eventType == MousePositionEventType.EXIT)
 			setScale(1, 1);
 	}
 
 	@Override
 	public void onTestStart()
 	{
-		// Does nothing
+		this.testing = true;
 	}
 
 	@Override
 	public void onTestEnd()
 	{
 		// (re)hides the button
+		this.testing = false;
 		setInvisible();
 		inactivate();
+	}
+	
+	@Override
+	public void activate()
+	{
+		// Can only be activated while testing
+		if (this.testing)
+			super.activate();
+	}
+	
+	@Override
+	public void setVisible()
+	{
+		// Can only be set visible while testing
+		if (this.testing)
+			super.setVisible();
 	}
 }

@@ -47,10 +47,7 @@ public class Box extends Obstacle implements Wall
 				"boxreal");
 		
 		setBoxCollisionPrecision(3, 0);
-		
-		//getMovement().setHSpeed(-5);
-		//setScale(1.5, 1.5);
-		//System.out.println(getMass());
+		disableRotation();
 	}
 	
 	
