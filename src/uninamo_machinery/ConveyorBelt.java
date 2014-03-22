@@ -63,18 +63,19 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener,
 	 * connectors
 	 * @param machineCounter The machineCounter that will count the created 
 	 * machine(s) (optional)
+	 * @param ID The unique ID of the machine. Use null if you wan't it generated automatically
 	 * @param isForTesting Is the machine created for simple demonstration purposes
 	 */
 	public ConveyorBelt(int x, int y, DrawableHandler drawer,
 			ActorHandler actorhandler, CollidableHandler collidableHandler, 
 			CollisionHandler collisionHandler, Area componentArea, Area designArea, 
 			TestHandler testHandler, ConnectorRelay connectorRelay, 
-			MachineCounter machineCounter, boolean isForTesting)
+			MachineCounter machineCounter, String ID, boolean isForTesting)
 	{
 		super(x, y, true, CollisionType.BOX, drawer, actorhandler,
 				collidableHandler, componentArea, 
 				designArea, testHandler, connectorRelay, machineCounter, "belt", 
-				"beltreal", "machinecomponent", null, 2, 0, isForTesting);
+				"beltreal", "machinecomponent", null, 2, 0, ID, isForTesting);
 		
 		// Initializes attributes
 		this.absolutePointsNeedUpdating = true;

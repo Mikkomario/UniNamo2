@@ -2,6 +2,8 @@ package uninamo_machinery;
 
 import java.util.HashMap;
 
+import uninamo_gameplaysupport.TotalCostAnalyzer;
+
 /**
  * MachineCounter keeps track of how many machines of each type have been 
  * created
@@ -14,16 +16,21 @@ public class MachineCounter
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private HashMap<MachineType, Integer> machineCounts;
+	private TotalCostAnalyzer costAnalyzer;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
 	
 	/**
 	 * Creates a new machineCounter
+	 * @param costAnalyzer The costAnalyzer that will be informed about increased 
+	 * machine costs
 	 */
-	public MachineCounter()
+	public MachineCounter(TotalCostAnalyzer costAnalyzer)
 	{
+		// Initializes attributes
 		this.machineCounts = new HashMap<MachineType, Integer>();
+		this.costAnalyzer = costAnalyzer;
 	}
 	
 	
@@ -42,6 +49,9 @@ public class MachineCounter
 			previousAmount = this.machineCounts.get(type);
 		
 		this.machineCounts.put(type, previousAmount + 1);
+		
+		// Also informs the cost analyzer
+		this.costAnalyzer.addMachineCost(type);
 	}
 	
 	/**

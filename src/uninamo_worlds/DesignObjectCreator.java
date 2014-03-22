@@ -4,6 +4,7 @@ import uninamo_components.ConnectorRelay;
 import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.InvisibleWall;
 import uninamo_gameplaysupport.TestHandler;
+import uninamo_gameplaysupport.TotalCostAnalyzer;
 import uninamo_gameplaysupport.VictoryHandler;
 import uninamo_machinery.MachineCounter;
 import uninamo_main.GameSettings;
@@ -27,6 +28,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 	private TestHandler testHandler;
 	private NormalComponentRelay componentRelay;
 	private ConnectorRelay connectorRelay;
+	private TotalCostAnalyzer costAnalyzer;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -42,10 +44,12 @@ public class DesignObjectCreator extends AreaObjectCreator
 	 * about created components
 	 * @param connectorRelay The connectorRelay that will keep track of the 
 	 * created connectors
+	 * @param costAnalyzer The costAnalyzer that will keep track of the machine 
+	 * costs
 	 */
 	public DesignObjectCreator(AreaChanger areaChanger, 
 			TestHandler testHandler, NormalComponentRelay componentRelay, 
-			ConnectorRelay connectorRelay)
+			ConnectorRelay connectorRelay, TotalCostAnalyzer costAnalyzer)
 	{
 		super(areaChanger.getArea("design"), "paper", "gameplaybackgrounds");
 		
@@ -54,6 +58,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 		this.componentRelay = componentRelay;
 		this.testHandler = testHandler;
 		this.connectorRelay = connectorRelay;
+		this.costAnalyzer = costAnalyzer;
 	}
 
 	
@@ -91,7 +96,7 @@ public class DesignObjectCreator extends AreaObjectCreator
 				demoButton, this.componentRelay);
 		
 		// Creates a new machine counter
-		MachineCounter machineCounter = new MachineCounter();
+		MachineCounter machineCounter = new MachineCounter(this.costAnalyzer);
 		
 		// Creates stage objects
 		new DesignInitializer(this.areaChanger, this.testHandler, 

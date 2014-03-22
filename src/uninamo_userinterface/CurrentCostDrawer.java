@@ -23,9 +23,6 @@ public class CurrentCostDrawer extends DrawnObject implements RoomListener
 	private double currentCosts;
 	private String currentCostString;
 	
-	// TODO: Add machine costs from future machineRelay class or something like 
-	// that
-	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
 	
@@ -80,7 +77,7 @@ public class CurrentCostDrawer extends DrawnObject implements RoomListener
 	public void drawSelfBasic(Graphics2D g2d)
 	{
 		// Draws the current total
-		g2d.drawString("Current Costs: " + this.currentCostString + " M €", 0, 0);
+		g2d.drawString("Component Costs: " + this.currentCostString + " M €", 0, 0);
 	}
 	
 	

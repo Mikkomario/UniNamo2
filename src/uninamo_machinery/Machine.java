@@ -80,6 +80,8 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	 * has (0 if no input component is used)
 	 * @param outputs How many output connectors the machine's output component 
 	 * has (0 if no output component is used)
+	 * @param ID The unique ID of the machine. Use null if you wan't it 
+	 * generated automatically
 	 * @param isForTesting Is the machine meant for testing / demonstration 
 	 * purposes (into the manual). The machine works a bit differently if so
 	 */
@@ -90,7 +92,7 @@ public abstract class Machine extends DimensionalDrawnObject implements
 			ConnectorRelay connectorRelay, MachineCounter machineCounter, 
 			String designSpriteName, String realSpriteName, 
 			String inputComponentSpriteName, String outputComponentSpriteName, 
-			int inputs, int outputs, boolean isForTesting)
+			int inputs, int outputs, String ID, boolean isForTesting)
 	{
 		super(x, y, DepthConstants.NORMAL + 5, isSolid, collisiontype, drawer, 
 				collidablehandler);
@@ -111,15 +113,21 @@ public abstract class Machine extends DimensionalDrawnObject implements
 			machineCounter.countNewMachine(getMachineType());
 		
 		// Creates the name
-		String typeName = getMachineType().toString();
-		// Shortens the name if it's too long
-		if (typeName.length() > 4)
-			typeName = typeName.substring(0, 4);
-		// Adds the number
-		if (machineCounter != null)
-			this.name = typeName + machineCounter.getMachineTypeAmount(getMachineType());
+		if (ID == null)
+		{
+			String typeName = getMachineType().toString();
+			// Shortens the name if it's too long
+			if (typeName.length() > 4)
+				typeName = typeName.substring(0, 4);
+			// Adds the number
+			if (machineCounter != null)
+				this.name = typeName + machineCounter.getMachineTypeAmount(getMachineType());
+			else
+				this.name = typeName;
+		}
+		// Or simply uses the given ID
 		else
-			this.name = typeName;
+			this.name = ID;
 		
 		// Creates components
 		if (inputComponentSpriteName != null && inputs > 0)

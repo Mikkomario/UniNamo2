@@ -7,8 +7,8 @@
 1) Get coding and check the manual#2) Move the boxes on the conveyor belt to the right.#3) Profit
 
 &machines
-conveyorbelt#400#600
-conveyorbelt#570#600
+conveyorbelt#400#600#CONV1
+conveyorbelt#570#600#CONV2
 
 &obstacles
 box#400#400

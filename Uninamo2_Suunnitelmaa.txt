@@ -193,8 +193,8 @@ Työtehtäviä
 			ratkaisee kentän kytkemällä komponentin itseensä 
 			(kenttää ei enää demossa pääse läpi)
 		- Voittoikkuna														...
-			* Voittoon siirtyminen
-				- Ratkaisun lähetysnäppäin designmodeen (näkyvä)			...
+			* Voittoon siirtyminen											...
+				- Ratkaisun lähetysnäppäin designmodeen (näkyvä)			DONE
 					* Joudutaan kyllä ottamaan pois testin loppuessa		DONE
 				- Huoneiden lopettaminen ja aloittaminen
 					* Uusi gamephase: results
@@ -205,6 +205,7 @@ Työtehtäviä
 					* SimpleComponentSpriteDrawer class piirtämiseen
 				- Käytetyn rahan laskeminen									...
 					* GetPrice tyyppienumeraatioon							DONE
+					* Myös koneiden laskeminen kuluihin
 				- Grading													...
 					* Käytetyn rahan vertaaminen tavoitteeseen				...
 					* Arvosanan piirtäminen
@@ -220,6 +221,12 @@ Työtehtäviä
 			* Tarvittavan "moden" aktivoiminen
 		- Tee designmodesta resoluutiosta riippumaton (tullaan 
 		tulevaisuudessa skaalaamaan eri tavalla kuin coding)
+			* Background skaalaa kuvan koon mukaan
+			* Erillinen kamera
+				- Kameran skaalaus niin että täyttää ruudun 
+				(ainakin melkein)
+				- Kamerassa piirretään interaktiviset objektit
+				- Käyttöliittymäelementtien ulos jättäminen
 		- Säädöt
 			* Säätövalikon "näppäimen" toteuttaminen
 			* Säätövalikon arkkitehtuuri

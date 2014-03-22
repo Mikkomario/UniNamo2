@@ -67,7 +67,7 @@ public class TotalCostAnalyzer
 	 * 
 	 * @param type The type of the new machine to be analyzed
 	 */
-	public void addComponentCost(MachineType type)
+	public void addMachineCost(MachineType type)
 	{
 		int lastAmount = 0;
 		

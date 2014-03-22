@@ -94,12 +94,15 @@ public class DesignInitializer extends ObjectInitializer
 			{
 				if (type.toString().equalsIgnoreCase(arguments[0]))
 				{
+					// Reads the position from arguments 1 and 2
 					int x = getArgumentAsInt(arguments[1]);
 					int y = getArgumentAsInt(arguments[2]);
 					
+					// Argument 3 is the ID of the machine
 					type.getNewMachine(x, y, this.designArea, 
 							this.codingArea, this.testHandler, 
-							this.connectorRelay, this.machineCounter);
+							this.connectorRelay, this.machineCounter, 
+							arguments[3]);
 					break;
 				}
 			}
