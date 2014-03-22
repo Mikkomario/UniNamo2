@@ -129,10 +129,70 @@ public class TotalCostAnalyzer implements RoomListener
 	 */
 	public void visualizeCosts()
 	{
+		double totalMachineCosts = 0;
+		double totalComponentCosts = 0;
+		int lineHeight = 32;
+		int y = 64;
 		// Creates the lines that visualize the costs
-		new TextLineDrawer(200, 200, "Demo costs: " + this.demoComponentCost, this.textDrawer);
 		
-		// TODO: Add lines
+		// Machine intro line
+		new TextLineDrawer(32, y, "MACHINE COSTS:", this.textDrawer);
+		y += lineHeight;
+		
+		// Machine lines
+		for (MachineType machineType : this.machineAmounts.keySet())
+		{
+			new TextLineDrawer(32, y, this.machineAmounts.get(machineType) + 
+					" x " + machineType.getName(), this.textDrawer);
+			double typeCosts = 
+					this.machineAmounts.get(machineType) * machineType.getPrice();
+			new TextLineDrawer(GameSettings.screenWidth - 96, y, 
+					typeCosts + " M €", this.textDrawer);
+			
+			totalMachineCosts += typeCosts;
+			y += lineHeight;
+		}
+		
+		// Component intro line
+		y += lineHeight;
+		new TextLineDrawer(32, y, "COMPONENT COSTS:", this.textDrawer);
+		y += lineHeight;
+		
+		// Component lines
+		for (ComponentType componentType : this.componentAmounts.keySet())
+		{
+			new TextLineDrawer(32, y, this.componentAmounts.get(componentType) + 
+					" x " + componentType.getName(), this.textDrawer);
+			double typeCosts = 
+					this.componentAmounts.get(componentType) * componentType.getPrice();
+			new TextLineDrawer(GameSettings.screenWidth - 96, y, 
+					typeCosts + " M €", this.textDrawer);
+			
+			totalComponentCosts += typeCosts;
+			y += lineHeight;
+		}
+		
+		// Total
+		y += lineHeight;
+		new TextLineDrawer(32, y, "TOTAL: ", this.textDrawer);
+		new TextLineDrawer(GameSettings.screenWidth - 96, y, 
+				totalMachineCosts + totalComponentCosts + " M €", this.textDrawer);
+	}
+	
+	/**
+	 * Resets the cost calculations for the components
+	 */
+	public void resetComponentStatus()
+	{
+		this.componentAmounts.clear();
+	}
+	
+	/**
+	 * Resets the cost calculations for the machines
+	 */
+	public void resetMachineStatus()
+	{
+		this.machineAmounts.clear();
 	}
 	
 	

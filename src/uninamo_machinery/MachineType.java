@@ -108,4 +108,19 @@ public enum MachineType
 				", please update the method");
 		return null;
 	}
+	
+	/**
+	 * @return How many euros producing a single machine of this type costs.
+	 */
+	public double getPrice()
+	{
+		switch (this)
+		{
+			case CONVEYORBELT: return 10;
+		}
+		
+		System.err.println("Can't get a price for machine type " + this + 
+				", please update the method");
+		return 0;
+	}
 }

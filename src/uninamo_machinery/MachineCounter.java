@@ -31,6 +31,7 @@ public class MachineCounter
 		// Initializes attributes
 		this.machineCounts = new HashMap<MachineType, Integer>();
 		this.costAnalyzer = costAnalyzer;
+		this.costAnalyzer.resetMachineStatus();
 	}
 	
 	

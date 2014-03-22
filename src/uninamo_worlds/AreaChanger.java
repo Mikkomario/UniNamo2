@@ -50,16 +50,16 @@ public class AreaChanger
 		// Results contains analysis of the costs of the previous mission
 		this.areas.put("results", new Area(phaseBank.getPhase("results"), 
 				mousehandler, actorhandler, drawer));
+		// Coding area contains the user interface for "coding"
+		this.areas.put("coding", new Area(phaseBank.getPhase("gameplay"), 
+				mousehandler, actorhandler, drawer));
 		
 		// Creates shared resources
 		TotalCostAnalyzer costAnalyzer = new TotalCostAnalyzer(this.areas.get("results"));
 		ConnectorRelay connectorRelay = new ConnectorRelay();
-		NormalComponentRelay componentRelay = new NormalComponentRelay(costAnalyzer);
+		NormalComponentRelay componentRelay = new NormalComponentRelay(costAnalyzer, this.areas.get("coding"));
 		TestHandler testHandler = new TestHandler(null);
 		
-		// Coding area contains the user interface for "coding"
-		this.areas.put("coding", new Area(phaseBank.getPhase("gameplay"), 
-				mousehandler, actorhandler, drawer));
 		TurnTimer turnTimer = new TurnTimer(testHandler, 
 				this.areas.get("coding"), actorhandler);
 		new CodingObjectCreator(this, connectorRelay, componentRelay, 
