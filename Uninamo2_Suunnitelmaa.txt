@@ -3,14 +3,14 @@ Uninamo2 Suunnitelmaa
 Työtehtäviä
 	* Alpha	----------------------------------------------------------------------
 		- Utopia Game Enginen debuggaus										...
-			* Originia ei aina ehditä laskea ennen ensimmäistä piirtoa 		Väistetty?
+			* Originia ei aina ehditä laskea ennen ensimmäistä piirtoa 
 			-> piirtyy aluksi väärään paikkaan
 			* Kun siirrytään koodauksesta designiin, voi muutosprosessi 	Väistetty?
 			mennä pieleen (puoliksi muuttuu)
 			* Törmäyssysteemi ei ota huomioon stepin pituutta				DONE
 				- Pitää korjata mahdollisimman pian							DONE
 			* Jos törmää hirveän lujaa niin menee toisen objektin sisälle	DONE
-			* EpicBOx tippuu lattian läpi!									Väistetty?
+			* EpicBOx tippuu lattian läpi!									DONE
 				- Tarvittavat numerot muuttuu mystisesti...
 			* ComponentBoxin luominen hidastaa ohjelman käynnistymistä 		Väistetty?
 			omituisen paljon
@@ -19,14 +19,14 @@ Työtehtäviä
 					* "Swapper" -algoritmi									Hylätty
 			* Vaihda MouseListenerHandlerin mousePositionjutut Point2D:stä 	DONE
 			Point2D.Doubleen
-			* Boxit vaan liukuu jos ne on päällekkäin 
+			* Boxit vaan liukuu jos ne on päällekkäin 						DONE
 			(laita liikuttaminen toisiin objekteihin)
-				- Vaihtoehtoisesti valmista toimiva kitkasysteemi 
+				- Vaihtoehtoisesti valmista toimiva kitkasysteemi 			DONE
 				sekä liikemäärän hallinta
 			* Ohjelma bugaa täydellisesti jos laittaa toisen beltin			DONE
-			* Boxit saattaa vieläkin työntyä liukuhihnan sisälle 
+			* Boxit saattaa vieläkin työntyä liukuhihnan sisälle 			Väistetty?
 			törmäystilanteissa
-				- Jos törmää toiseen boxiin (sivussa) samalla kun hihna 
+				- Jos törmää toiseen boxiin (sivussa) samalla kun hihna 	DONE
 				työntää
 			* Jos rämppää testiä koodimoodissa niin designmoodi piirtyy 
 			vaikka ei pitäisi
@@ -185,11 +185,11 @@ Työtehtäviä
 			* Järjestysnumeron tallentaminen alussa							DONE
 				- Number = counter.getCurrentAmount(this.type)				DONE
 				- Kannattaa tallentaa tekstinä (type + number)				DONE
-		- Kenttien demot													Testaamatta
+		- Kenttien demot													DONE
 			* Demonappula													DONE
 			* Koodiratkaisujen (tallentaminen ja) lukeminen					DONE
-				- Myös komponenttianalyysiä varten kustannusten lasku		Testaamatta
-			* Saa muuten varmaan bugattua koko roskan jos 					Jep jep
+				- Myös komponenttianalyysiä varten kustannusten lasku		DONE
+			* Saa muuten varmaan bugattua koko roskan jos 					Jep jep ja voi voi
 			ratkaisee kentän kytkemällä komponentin itseensä 
 			(kenttää ei enää demossa pääse läpi)
 		- Voittoikkuna														...
@@ -199,7 +199,7 @@ Työtehtäviä
 				- Huoneiden lopettaminen ja aloittaminen					DONE
 					* Uusi gamephase: results								DONE
 			* Komponenttikäytön analysointi									...
-				- Käytettyjen komponenttityyppien ja määrien piirtäminen	...
+				- Käytettyjen komponenttityyppien ja määrien piirtäminen	Hylätty
 					* ComponentCounter										DONE
 					* GetSprite tyyppienumeraatioon							Hylätty
 					* SimpleComponentSpriteDrawer class piirtämiseen		Hylätty
@@ -234,22 +234,24 @@ Työtehtäviä
 			* Säätövalikossa tarvittavat elementit
 			* Resoluution säätäminen
 			* Musiikin volyymin säätäminen
-			* Äänen volyymin säätäminen
+			* Äänen volyymin säätäminen										Hylätty
 			* Efektien volyymin säätäminen
 			* Fullscreenin säätö
-			* Pelin nopeuden säätäminen
+			* Pelin nopeuden säätäminen										Hylätty
 			* Asetusten tallentaminen
 			* Asetusten lataaminen pelin alussa
 		- Käyttäjän progression tallentaminen ja lukeminen
 			* Tarvittavat staattiset luokat
 			* Tietojen päivittäminen tiedostosta pelin alussa
+			* Tietojen tallentaminen tarvittaessa
 		- Tehtävien valitseminen
 			* Tehtävien valintaympäristön luominen
+			* StageHolder -systeemi, johon ladataan unlockatut staget
 			* Tehtävän lopettaminen
 			* Tehtävän aloittaminen
 			* Unlockattujen tehtävien lisääminen käyttäjätietoihin
 		- Research mode
-			* Käynnissä olevien tutkimusten tallentaminen 
+			* Käynnissä olevien / olevan tutkimusten tallentaminen 
 			käyttäjätietoihin
 			* Tutkimusalueen käyttöliittymä
 			* Tutkimuksen aloittaminen
@@ -257,7 +259,7 @@ Työtehtäviä
 				- Tuloksista ilmoittaminen
 			* Komponenttien unlockkaaminen
 			* Kenttien unlockkaaminen
-			* Alennusten toiminta sekä unlockkaaminen
+			* Alennusten toiminta sekä unlockkaaminen						Hylätty
 		- Parantelua														...
 			* Testausmoodin selkeä näyttäminen koodipuolella
 			* Kerättävän stuffin näyttäminen voittokerääjässä				...
@@ -269,8 +271,8 @@ Työtehtäviä
 			* Nuolen piirtäminen johdossa
 			* "Back to Coding":in vaihtaminen "Start Coding":iksi kentän 
 			alussa ja takaisin ekan klikkauksen jälkeen
-			* Fysiikkamoottorin paranteleminen
-				- Pyörimisen, kitkan sekä liikemäärän ottaminen mukaan
+			* Fysiikkamoottorin paranteleminen								...
+				- Pyörimisen, kitkan sekä liikemäärän ottaminen mukaan		...
 			* Muistinvapauttamisen varmentaminen heittämällä tarpeettomia 
 			attribuutteja nulliksi
 			* Refaktoroi mahdottomia parametrijoukkoja yhdistämällä niitä 
@@ -278,9 +280,10 @@ Työtehtäviä
 			yhistää areat ja areat kaikki perushandlerit)
 			* Lisää joku yksinkertainen "InterfaceScaler" -luokka, joka 
 			hoitaa yhdessä paikkaa scale, rescale -toiminnon
-			* Refaktoroi areasysteemit niin ettei tule jaettuja resursseja
-				- Jokaiseen initializerit jotka lataa vaan esim. komponentteja 
-				tai vaikka laitteita
+			* Refaktoroi areasysteemit niin ettei tule jaettuja resursseja	DONE
+				- Jokaiseen initializerit jotka lataa vaan esim. 			DONE
+				komponentteja tai vaikka laitteita
+			* Testausnappulan pois ottaminen koodipuolelta?
 	* Gold	---------------------------------------------------------------------
 		- Gold Graffat
 			* Komponentit
@@ -298,12 +301,15 @@ Työtehtäviä
 		- Erilaisten toimijoiden valmistus
 			* Tarvittavat resurssit
 			* Interaktioiden toteuttaminen
-		- Kenttäeditori
-			* Kenttien tallentaminen tekstitiedostoon
-				- Koneiden id:t pitää ehkä laittaa uusiks tallennusvaiheessa 
+		- Kenttäeditori													...
+			* Kenttien tallentaminen tekstitiedostoon					...
+				- Koneiden id:t pitää ehkä laittaa uusiks 				...
+				tallennusvaiheessa 
 				koska laskuri ei oo paras tapa nimetä tallennuksia 
-				(riippuu järjestyksestä ja menee sekaisin kun poistaa jotain)
-					* Ei välttämättä ongelma jos ID:t luodaan vasta tallennettaessa
+				(riippuu järjestyksestä ja menee sekaisin 
+				kun poistaa jotain)
+					* Ei välttämättä ongelma jos ID:t luodaan 
+					vasta tallennettaessa
 			* Kenttäeditorimoodiin siirtyminen
 				- Resurssiallokaatio?
 			* Resurssieditorin käyttöliittymä
@@ -312,6 +318,10 @@ Työtehtäviä
 				- Laitesuunnitelmien liikuttelu
 				- Sama toimijoille ja maaleille
 				- Seinien / lattian rakentaminen
+				- Toimijoiden, luojien ja kerääjien statsien muuttelu
+					* Pieni edit nappula
+					* Ympyrävalikko josta saa lisättyä toimintoja 
+					stackkiin
 			* Kentän validointi toteuttamalla
 				- Lopputuloksen testaaminen ja tallentaminen
 				- Editointiin palaaminen
@@ -322,6 +332,7 @@ Työtehtäviä
 			* Userinputkomponentit
 				- Näppäinkuuntelija
 				- Hiirikuuntelija
+			* Extrojen unlockkaaminen pelin aikana
 		- Mainokset uusien laitteiden kanssa
 			* Voi myös olla randomgeneroidut uutisotsikot
 				- "I just couldn't live without it!"
@@ -469,3 +480,11 @@ Huomioita / Ideoita
 								- Missä n lähestyy nollaa ajan kuluessa (* 1/kk tai jotain) ja riippuu myös 
 								satunnaismuuttujasta
 		- Jos rahaa on < 0, on pakko odottaa eikä voi tehdä mitään. Muuten voi mennä miinukselle jos haluaa
+	* Pelin tarinan vois kertoa pöydällä(= päävalikossa) olevien esineiden avulla
+		- Esim. kuva tyttöystävästä joka jossain vaiheessa kaatuu ja jossain vaiheessa Raamattu
+		- Ja koska itemit tulee hiljakseen pelin aikana niin ne ei pääse sekoittamaan käyttöliittymää 
+		pelaajan ollessa vielä kokematon
+		- Mutta mikä olis mielekäs teema / kysymys?
+			* Mikä on elämän tarkoitus?
+			* Vähän mä haluan siihen "uskonnollista propagandaa" koska sellanen mä nyt vaan oon
+				- Ja koska se on tärkeä aspekti mulle median kehittäjänä

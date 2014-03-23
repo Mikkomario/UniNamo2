@@ -177,6 +177,8 @@ public class TotalCostAnalyzer implements RoomListener
 		new TextLineDrawer(32, y, "TOTAL: ", this.textDrawer);
 		new TextLineDrawer(GameSettings.screenWidth - 96, y, 
 				totalMachineCosts + totalComponentCosts + " M €", this.textDrawer);
+		
+		// TODO: Add estimated benefit as well as rank
 	}
 	
 	/**
