@@ -130,7 +130,7 @@ public abstract class Obstacle extends AdvancedPhysicDrawnObject2 implements
 			if (collided instanceof AdvancedPhysicDrawnObject2)
 			{
 				collideWith((AdvancedPhysicDrawnObject2) collided, 
-						colpoints, 0.4, 0.1, steps);
+						colpoints, 0.2, 0.1, steps);
 			}
 			else
 			{
@@ -194,14 +194,14 @@ public abstract class Obstacle extends AdvancedPhysicDrawnObject2 implements
 
 	@Override
 	public void act(double steps)
-	{
+	{	
+		super.act(steps);
+		
 		// Adds gravity
 		// G = mg
 		addImpulse(Movement.createMovement(270, 2 * getMass()), 
 				getPosition(), steps);
 		//scale(1.01, 1.01);
-		
-		super.act(steps);
 	}
 	
 	@Override

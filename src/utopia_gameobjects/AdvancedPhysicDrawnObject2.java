@@ -90,6 +90,8 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	{
 		super.act(steps);
 		
+		//System.out.println(getMovement().getSpeed() + " towards " + getMovement().getDirection());
+		
 		// If rotation is not allowed, doesn't bother to do the rest
 		if (!this.rotationAllowed)
 			return;
@@ -262,33 +264,47 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		for (Point2D.Double effectPoint : data.getData().keySet())
 		{
 			titaniumCollision(p, data.getData().get(effectPoint), 
-					effectPoint, frictionModifier, steps);
+					effectPoint, frictionModifier, 0, steps);
 		}
 	}
 	
 	private void titaniumCollision(PhysicalCollidable p, double forceDirection, 
-			Point2D.Double collisionPoint, double frictionModifier, double steps)
+			Point2D.Double collisionPoint, double frictionModifier, double energyLossModifier, double steps)
 	{
+		//System.out.println("Speed before titanium: " + getMovement().getSpeed());
+		
 		// Changes the rotation axis (if needed)
 		if (this.rotationAllowed)
 			addCollisionPointAsRotationAxisCandidate(collisionPoint);
 		
+		// Calculates the new momentum
+		double newDirectionalMomentumThis = 
+				-getDirectionalMomentum(forceDirection) * energyLossModifier;
+		
 		// Momentum directional to the normal force goes to 0
-		setDirectionalMomentumTo(null, forceDirection, 0, 0, frictionModifier, 
+		setDirectionalMomentumTo(null, forceDirection, newDirectionalMomentumThis, 0, frictionModifier, 
 				steps, collisionPoint);
 		
 		// Only does the rotations if they are allowed
-		/*
+		
 		if (this.rotationAllowed)
 		{
 			// Rotation momentum directional to the normal force goes to 0
 			// TODO: Return and debug
-			//setRotationMomentumTo(null, forceDirection, 0, 0, frictionModifier, 
-			//		steps, collisionPoint);
-		}*/
+			double newRotationMomentumThis = 
+					-getRotationMomentum() * energyLossModifier;
+			
+			setRotationMomentumTo(null, forceDirection, newRotationMomentumThis, 0, frictionModifier, 
+					steps, collisionPoint);
+		}
 		// Also forces the object away from the collided object
 		getRelativePointAwayFromObject(p, negateTransformations(collisionPoint), 
 				forceDirection, steps);
+		
+		/*
+		System.out.println("Speed after titanium: " + getMovement().getSpeed());
+		System.out.println("**********");
+		*/
 	}
 	
 	private void addCollisionPointAsRotationAxisCandidate(Point2D.Double collisionPoint)
@@ -310,19 +326,23 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	{
 		double momentumStart = getDirectionalMomentum(direction);
 		// F = dp / dt
-		Movement normalForce = Movement.createMovement(direction, (newMomentum * 
-				(1 - energyLossModifier) - momentumStart) / steps);
+		double momentumDifference = newMomentum * (1 - energyLossModifier) - momentumStart;
+		Movement normalForce = Movement.createMovement(direction, momentumDifference / steps);
 		
 		// If the force would push the object into the wrong direction, stops
-		if (normalForce.getDirectionalSpeed(direction) > 0)
-		{
+		//double normalForceDirectionalSpeed = normalForce.getDirectionalSpeed(direction);
+		// TODO: Removing this causes problems when the other object's route is 
+		// blocked but needs to be removed otherwise
+		// TODO: So add a check for that
+		//if (normalForce.getDirectionalSpeed(direction) > 0)
+		//{
 			// Applies the force and adds friction as well
 			addImpulse(normalForce, absoluteEffectPoint, steps);
 			addCollisionFriction(other, normalForce, frictionModifier, 
 					absoluteEffectPoint, steps);
 			// Also adds compensation movement
-			//addCompensationMovement(normalForce);
-		}
+			//addPosition(Movement.getMultipliedMovement(normalForce, 1.0 / getMass()));
+		//}
 	}
 	
 	// Other can be left null
@@ -424,6 +444,14 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		double newMomentumOther = p.getDirectionalEndMomentumOnCollisionWith(
 				this, forceDirection);
 		
+		/*
+		System.out.println("*****************");
+		System.out.println("Momentum " + getX() + ": " + 
+				getDirectionalMomentum(forceDirection) + " -> " + newMomentumThis);
+		System.out.println("Momentum " + p.getX() + ": " + 
+				p.getDirectionalMomentum(forceDirection) + " -> " + newMomentumOther);
+		*/
+		
 		// Changes the momentums
 		setDirectionalMomentumTo(p, forceDirection, newMomentumThis, 
 				energyLossModifier, frictionModifier, steps, collisionPoint);
@@ -431,20 +459,20 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 				energyLossModifier, frictionModifier, steps, collisionPoint);
 		
 		// Calculates the new rotation momentums
-		/*
+		
 		if (this.rotationAllowed)
 		{
-			//double newRotationMomentumThis = getEndRotationMomentumOnCollisionWith(p);
-			//double newRotationMomentumOther = p.getEndRotationMomentumOnCollisionWith(this);
+			double newRotationMomentumThis = getEndRotationMomentumOnCollisionWith(p);
+			double newRotationMomentumOther = p.getEndRotationMomentumOnCollisionWith(this);
 			
 			// Changes the rotation momentums
 			// TODO: Return and debug
-			//setRotationMomentumTo(p, newRotationMomentumThis, energyLossModifier, 
-			//		frictionModifier, steps, collisionPoint);
-			//p.setRotationMomentumTo(this, newRotationMomentumOther, energyLossModifier, 
-			//		frictionModifier, steps, collisionPoint);
+			setRotationMomentumTo(p, forceDirection, newRotationMomentumThis, energyLossModifier, 
+					frictionModifier, steps, collisionPoint);
+			p.setRotationMomentumTo(this, forceDirection, newRotationMomentumOther, energyLossModifier, 
+					frictionModifier, steps, collisionPoint);
 		}
-		*/
+		
 			
 		// Forces the object out of the other
 		getRelativePointAwayFromObject(p, negateTransformations(collisionPoint), 
@@ -455,10 +483,11 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 			Point2D.Double relativeCollisionPoint, double escapeDirection, double steps)
 	{
 		int moves = 0;
-		while (p.pointCollides(transform(relativeCollisionPoint)) && moves < 10 * steps)
+		// TODO: This doesn't work too well
+		while (p.pointCollides(transform(relativeCollisionPoint)) && moves < 100)
 		{
 			moves ++;
-			addPosition(Movement.createMovement(escapeDirection, 1));
+			addPosition(Movement.createMovement(escapeDirection, 0.5 * steps));
 		}
 	}
 	
@@ -475,15 +504,34 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	private double getDirectionalEndMomentumOnCollisionWith(
 			AdvancedPhysicDrawnObject2 other, double direction)
 	{
-		return (2 * getMass() * other.getDirectionalMomentum(direction) + 
-				(getMass() - other.getMass() * 
-				getDirectionalMomentum(direction))) / (getMass() + other.getMass());
+		// P = m1 * (V1 * (m1 - m2) + 2 * p2) / (m1 + m2)
+		/*
+		return getMass() * (getMovement().getDirectionalSpeed(direction) * (getMass() - 
+				other.getMass()) + 2 * other.getDirectionalMomentum(direction)) / 
+				(getMass() + other.getMass());
+		*/
+		// -> P = (p1 * (m1 - m2) + 2 * p2) / (m1 + m2)
+		return (getDirectionalMomentum(direction) * (getMass() - 
+				other.getMass()) + 2 * getMass() * other.getDirectionalMomentum(direction)) / 
+				(getMass() + other.getMass());
+				
+		
+		//return (2 * getMass() * other.getDirectionalMomentum(direction) + 
+		//		(getMass() - other.getMass() * 
+		//		getDirectionalMomentum(direction))) / (getMass() + other.getMass());
 	}
 	
 	private double getEndRotationMomentumOnCollisionWith(AdvancedPhysicDrawnObject2 other)
 	{
+		// TODO: Remove this
+		/*
 		return (2 * getMass() * other.getRotationMomentum() + 
 				(getMass() - other.getMass() * getRotationMomentum())) / 
+				(getMass() + other.getMass());
+		*/
+		// -> P = (p1 * (m1 - m2) + 2 * p2) / (m1 + m2)
+		return (getRotationMomentum() * (getMass() - 
+				other.getMass()) + 2 * getMass() * other.getRotationMomentum()) / 
 				(getMass() + other.getMass());
 	}
 	

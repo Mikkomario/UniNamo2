@@ -44,3 +44,6 @@ signals#images/manual/signals.png#1#96#192
 &mission
 docket#images/ui/docket_v2_strip2.png#2#646#92
 description#images/ui/description.png#2#320#240
+
+&results
+grade#images/ui/grades_strip4.png#4#85#67

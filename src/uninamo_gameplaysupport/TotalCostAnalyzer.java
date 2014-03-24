@@ -9,9 +9,11 @@ import uninamo_machinery.MachineType;
 import uninamo_main.GameSettings;
 import uninamo_worlds.Area;
 import utopia_gameobjects.DrawnObject;
+import utopia_graphic.SingleSpriteDrawer;
 import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_listeners.RoomListener;
+import utopia_resourcebanks.MultiMediaHolder;
 import utopia_worlds.Room;
 
 /**
@@ -179,6 +181,14 @@ public class TotalCostAnalyzer implements RoomListener
 				totalMachineCosts + totalComponentCosts + " M €", this.textDrawer);
 		
 		// TODO: Add estimated benefit as well as rank
+		
+		// Calculates the rank
+		int costDifferencePercent = (int) (100 * (totalComponentCosts - 
+				this.demoComponentCost) / this.demoComponentCost);
+		Grade grade = Grade.getGradeFromCostDifference(costDifferencePercent);
+		// Draws the rank
+		new GradeDrawer(GameSettings.screenWidth - 96, 
+				GameSettings.screenHeight - 96, this.textDrawer, grade);
 	}
 	
 	/**
@@ -240,5 +250,54 @@ public class TotalCostAnalyzer implements RoomListener
 			g2d.setColor(Color.BLACK);
 			g2d.drawString(this.line, 0, 0);
 		}
+	}
+	
+	private class GradeDrawer extends DrawnObject
+	{
+		// ATTRIBUTES	-------------------------------------------------
+		
+		private SingleSpriteDrawer spriteDrawer;
+		
+		
+		// CONSTRUCTOR	-------------------------------------------------
+		
+		public GradeDrawer(int x, int y, DrawableHandler drawer, Grade grade)
+		{
+			super(x, y, DepthConstants.NORMAL, drawer);
+			
+			// Initializes attributes
+			this.spriteDrawer = new SingleSpriteDrawer(
+					MultiMediaHolder.getSpriteBank("results").getSprite("grade"), 
+					null, this);
+			this.spriteDrawer.setImageIndex(grade.getGradeSpriteIndex());
+		}
+		
+		
+		// IMPLEMENTED METHODS	----------------------------------------
+
+		@Override
+		public int getOriginX()
+		{
+			if (this.spriteDrawer == null)
+				return 0;
+			return this.spriteDrawer.getSprite().getOriginX();
+		}
+
+		@Override
+		public int getOriginY()
+		{
+			if (this.spriteDrawer == null)
+				return 0;
+			return this.spriteDrawer.getSprite().getOriginY();
+		}
+
+		@Override
+		public void drawSelfBasic(Graphics2D g2d)
+		{
+			if (this.spriteDrawer == null)
+				return;
+			
+			this.spriteDrawer.drawSprite(g2d, 0, 0);
+		}	
 	}
 }
