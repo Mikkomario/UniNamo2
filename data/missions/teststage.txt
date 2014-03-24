@@ -4,7 +4,7 @@
 *Welcome to Namotech. A lot depends on this so we expect high quality software development from you.#You can start coding ASAP, but remember to check the designs and test your creations. We understand that you're fresh from the university so we left an manual on your desk to help you out.#Now get working so we can start making revenue!
 
 &note1
-1) Get coding and check the manual#2) Move the boxes on the conveyor belt to the right.#3) Profit
+1) Check the demo;2) Start coding and check the manual;3) Move the boxes to the right;4) Profit
 
 &machines
 conveyorbelt#400#600#CONV1

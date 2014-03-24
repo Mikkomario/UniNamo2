@@ -173,7 +173,7 @@ public class TotalCostAnalyzer implements RoomListener
 		}
 		
 		// Total
-		y += lineHeight;
+		y += lineHeight * 2;
 		new TextLineDrawer(32, y, "TOTAL: ", this.textDrawer);
 		new TextLineDrawer(GameSettings.screenWidth - 96, y, 
 				totalMachineCosts + totalComponentCosts + " M €", this.textDrawer);

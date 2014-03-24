@@ -50,7 +50,7 @@ public class Note extends AbstractButton
 		// Initializes attributes
 		this.textDrawer = new MultiParagraphTextDrawer(GameSettings.basicFont, 
 				Color.BLACK, getWidth() - horizontalMargin * 2, 10, this);
-		this.textDrawer.addText(content, "#");
+		this.textDrawer.addText(content, ";");
 		this.verticalMargin = verticalMargin;
 		this.horizontalMargin = horizontalMargin;
 	}
