@@ -11,8 +11,8 @@ conveyorbelt#400#600#CONV1
 conveyorbelt#570#600#CONV2
 
 &obstacles
-box#400#400
-box#600#200
+box#400#-200
+box#400#200
 
 &collectors
 box#2#800#550#boxdesign#boxreal
