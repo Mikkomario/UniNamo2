@@ -48,7 +48,7 @@ public class Main
 				GameSettings.screenHeight);
 		GameWindow window = new GameWindow(GameSettings.screenWidth, 
 				GameSettings.screenHeight, "UniNamo2", !GameSettings.fullScreen, 
-				120, 10, false);
+				120, 10, true);
 		window.addGamePanel(gamepanel, BorderLayout.CENTER);
 		if (GameSettings.fullScreen)
 			window.setFullScreen(true);

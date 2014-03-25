@@ -47,7 +47,8 @@ public class Box extends Obstacle implements Wall
 				"boxreal");
 		
 		setBoxCollisionPrecision(3, 0);
-		disableRotation();
+		setAngle(30);
+		//disableRotation();
 	}
 	
 	

@@ -289,14 +289,21 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		
 		if (this.rotationAllowed)
 		{
+			System.out.println("Old Rotation momentum: " + getRotationMomentum());
+			
 			// Rotation momentum directional to the normal force goes to 0
 			// TODO: Return and debug
 			double newRotationMomentumThis = 
 					-getRotationMomentum() * energyLossModifier;
 			
+			System.out.println("New Rotation momentum: " + newRotationMomentumThis);
+			
 			setRotationMomentumTo(null, forceDirection, newRotationMomentumThis, 0, frictionModifier, 
 					steps, collisionPoint);
+			
+			System.out.println("Rotation momentum after collision: " + getRotationMomentum());
 		}
+		
 		// Also forces the object away from the collided object
 		getRelativePointAwayFromObject(p, negateTransformations(collisionPoint), 
 				forceDirection, steps);
@@ -352,13 +359,14 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 			Point2D.Double absoluteEffectPoint)
 	{
 		double rotationMomentumStart = getRotationMomentum();
+		Point2D.Double absoluteAxisPosition = transform(this.currentRotationAxis);
 		
 		//System.out.println("Start momentum: " + rotationMomentumStart);
 		
 		// Calculates the direction the effect point would have if it was 
 		// rotated by the object
-		double pointMovementDirection = HelpMath.pointDirection(getX(), getY(), 
-				absoluteEffectPoint.getX(), absoluteEffectPoint.getY()) + 90;
+		double pointMovementDirection = HelpMath.pointDirection(absoluteAxisPosition, 
+				absoluteEffectPoint) + 90;
 		if (getRotation() < 0)
 			pointMovementDirection -= 180;
 		
@@ -366,7 +374,7 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		// If the point is moving away from the force direction already, does nothing
 		if (HelpMath.getAngleDifference180(pointMovementDirection, forceDirection) < 90)
 		{
-			//System.out.println("Skips force");
+			System.out.println("Skips force");
 			return;
 		}
 		
@@ -378,16 +386,22 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		
 		// TODO: Testing the new method: F = dp / (r * dt) Where r is from the range from rotation axis
 		// Almost works... Or not
-		Point2D.Double absoluteAxisPosition = transform(this.currentRotationAxis);
-		double r = HelpMath.pointDistance(absoluteAxisPosition.getX(), 
-				absoluteAxisPosition.getY(), absoluteEffectPoint.getX(), 
-				absoluteEffectPoint.getY());
+		
+		double r = HelpMath.pointDistance(absoluteAxisPosition, absoluteEffectPoint);
+		
+		if (r < 1)
+			return;
+		
 		// TODO: Change direction
+		double normalForceAmount = (newRotationMomentum * energyLossModifier - rotationMomentumStart) / (r * steps);
 		Movement normalForce = Movement.createMovement(pointMovementDirection + 180, 
-				(newRotationMomentum * energyLossModifier - rotationMomentumStart) / (r * steps));
+				normalForceAmount);
 		normalForce = normalForce.getDirectionalMovement(forceDirection);
 		
-		System.out.println(normalForce.getSpeed());
+		System.out.println("R is " + r);
+		System.out.println("causes a force: " + normalForceAmount);
+		
+		//System.out.println(normalForce.getSpeed());
 		
 		//System.out.println("Normal force: " + normalForce.getSpeed());
 		//System.out.println("-----------------------");
@@ -530,9 +544,9 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 				(getMass() + other.getMass());
 		*/
 		// -> P = (p1 * (m1 - m2) + 2 * p2) / (m1 + m2)
-		return (getRotationMomentum() * (getMass() - 
-				other.getMass()) + 2 * getMass() * other.getRotationMomentum()) / 
-				(getMass() + other.getMass());
+		return (getRotationMomentum() * (this.currentMomentMass - 
+				other.currentMomentMass) + 2 * this.currentMomentMass * other.getRotationMomentum()) / 
+				(this.currentMomentMass + other.currentMomentMass);
 	}
 	
 	// Calculates the object's momentum on the given axis
@@ -824,4 +838,13 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 			return this.effectPointsAndDirections;
 		}
 	}
+	/*
+	private class TitaniumCollisionReminder
+	{
+		// ATTRIBUTES	--------------------------------------------------
+		
+		private int timeLeft;
+		private double directionToTitanium;
+	}
+	*/
 }
