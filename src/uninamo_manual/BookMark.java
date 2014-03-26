@@ -3,10 +3,10 @@ package uninamo_manual;
 import java.awt.geom.Point2D.Double;
 
 import uninamo_main.GameSettings;
-import uninamo_worlds.Area;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_interfaceElements.AbstractButton;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Area;
 
 /**
  * By clicking a bookMark, the user can go to a certain double page on the manual

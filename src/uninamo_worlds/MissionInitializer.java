@@ -2,6 +2,7 @@ package uninamo_worlds;
 
 import uninamo_main.GameSettings;
 import uninamo_userinterface.Note;
+import utopia_worlds.Area;
 
 /**
  * MissionInitializer creates the necessary stuff to start a mission

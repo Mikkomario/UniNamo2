@@ -8,11 +8,11 @@ import uninamo_machinery.MachineType;
 import uninamo_main.GameSettings;
 import uninamo_obstacles.ObstacleType;
 import uninamo_userinterface.ManualButton;
-import uninamo_worlds.Area;
 import uninamo_worlds.AreaChanger;
 import utopia_backgrounds.Tile;
 import utopia_gameobjects.GameObject;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Area;
 
 /**
  * ManualMaster handles the objects shown in the manual and takes care of 
@@ -144,7 +144,7 @@ public class ManualMaster extends GameObject
 		//System.out.println(this.manualButton.isVisible());
 		
 		// Deactivates the coding area
-		areaChanger.getArea("coding").disableOnlyMouse();
+		areaChanger.getArea("coding").getMouseHandler().inactivate();
 	}
 	
 	
@@ -167,7 +167,7 @@ public class ManualMaster extends GameObject
 		
 		//System.out.println("Ends manual, starts coding");
 		this.areaChanger.getArea("manual").end();
-		this.areaChanger.getArea("coding").returnNormal();
+		this.areaChanger.getArea("coding").getMouseHandler().activate();
 	}
 	
 	

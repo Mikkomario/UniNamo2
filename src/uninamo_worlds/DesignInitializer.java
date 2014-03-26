@@ -7,6 +7,7 @@ import uninamo_gameplaysupport.VictoryHandler;
 import uninamo_machinery.MachineCounter;
 import uninamo_machinery.MachineType;
 import uninamo_obstacles.ObstacleType;
+import utopia_worlds.Area;
 
 /**
  * DesignInitializer creates the machines, obstacles and obstacleCollectors 

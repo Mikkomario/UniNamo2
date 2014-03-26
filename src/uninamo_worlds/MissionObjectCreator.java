@@ -1,5 +1,8 @@
 package uninamo_worlds;
 
+import utopia_worlds.Area;
+import utopia_worlds.AreaObjectCreator;
+
 /**
  * MissionObjectCreator creates the necessary objects at the start of the 
  * mission brief
@@ -18,7 +21,7 @@ public class MissionObjectCreator extends AreaObjectCreator
 	 */
 	public MissionObjectCreator(Area area)
 	{
-		super(area, null, null);
+		super(area, null, null, 0, 0);
 	}
 	
 	

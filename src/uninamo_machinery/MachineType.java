@@ -2,11 +2,11 @@ package uninamo_machinery;
 
 import uninamo_components.ConnectorRelay;
 import uninamo_gameplaysupport.TestHandler;
-import uninamo_worlds.Area;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.CollidableHandler;
 import utopia_handlers.CollisionHandler;
 import utopia_handlers.DrawableHandler;
+import utopia_worlds.Area;
 
 /**
  * MachineTypes represent the different kinds of machines there are. Each 

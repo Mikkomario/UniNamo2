@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import uninamo_main.GameSettings;
-import uninamo_worlds.Area;
 import utopia_gameobjects.DrawnObject;
 import utopia_gameobjects.GameObject;
 import utopia_graphic.TextDrawer;
 import utopia_helpAndEnums.DepthConstants;
+import utopia_worlds.Area;
 
 /**
  * A descriptionPage contains a description of some object of the game and 

@@ -5,11 +5,11 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D.Double;
 
 import uninamo_main.GameSettings;
-import uninamo_worlds.Area;
 import utopia_graphic.MultiParagraphTextDrawer;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_interfaceElements.AbstractButton;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Area;
 
 /**
  * Notes present information about the current mission and can be clicked to get rid of

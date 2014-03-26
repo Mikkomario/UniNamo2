@@ -3,10 +3,10 @@ package uninamo_userinterface;
 import java.awt.geom.Point2D;
 
 import uninamo_main.GameSettings;
-import uninamo_worlds.Area;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_interfaceElements.AbstractButton;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Area;
 
 /**
  * CodeTransitionButton lets the user switch between the code phase and the 
@@ -56,8 +56,11 @@ public class CodeTransitionButton extends AbstractButton
 		
 		// Enables drawing and mouse of the new area but disables them from 
 		// the old one
-		this.oldArea.disableMouseAndDrawing();
-		this.newArea.returnNormal();
+		this.oldArea.getMouseHandler().inactivate();
+		this.oldArea.getDrawer().setInvisible();
+		
+		this.newArea.getMouseHandler().activate();
+		this.newArea.getDrawer().setVisible();
 	}
 
 	@Override

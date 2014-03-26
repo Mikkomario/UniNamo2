@@ -11,6 +11,8 @@ import uninamo_userinterface.CodeTransitionButton;
 import uninamo_userinterface.CurrentCostDrawer;
 import uninamo_userinterface.ManualButton;
 import uninamo_userinterface.TestingButton;
+import utopia_worlds.Area;
+import utopia_worlds.AreaObjectCreator;
 
 /**
  * This objectCreator creates the necessary elements used in the coding 
@@ -50,7 +52,7 @@ public class CodingObjectCreator extends AreaObjectCreator
 			ConnectorRelay connectorRelay, NormalComponentRelay componentRelay, 
 			TestHandler testHandler, TurnTimer timer)
 	{
-		super(areaChanger.getArea("coding"), null, null);
+		super(areaChanger.getArea("coding"), null, null, 0, 0);
 		
 		// Initializes attributes
 		this.areaChanger = areaChanger;

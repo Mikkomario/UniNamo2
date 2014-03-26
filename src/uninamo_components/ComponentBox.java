@@ -8,10 +8,10 @@ import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_main.GameSettings;
 import uninamo_userinterface.CurrentCostDrawer;
-import uninamo_worlds.Area;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_interfaceElements.AbstractButton;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Area;
 
 /**
  * ComponentBox is a box from which the user can drag components away from. 

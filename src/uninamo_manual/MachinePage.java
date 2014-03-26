@@ -2,8 +2,8 @@ package uninamo_manual;
 
 import uninamo_machinery.Machine;
 import uninamo_machinery.MachineType;
-import uninamo_worlds.Area;
 import utopia_gameobjects.GameObject;
+import utopia_worlds.Area;
 
 /**
  * MachinePage features a single machine and contains a short description as 

@@ -9,6 +9,7 @@ import uninamo_components.NormalComponentRelay;
 import uninamo_components.OutputCableConnector;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnHandler;
+import utopia_worlds.Area;
 
 /**
  * The codingInitializer reads the demo component solution from a file and 

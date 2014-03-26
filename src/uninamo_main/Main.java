@@ -63,14 +63,16 @@ public class Main
 		// Starts the gameplay area(s)
 		MultiMediaHolder.activateBank(ResourceType.GAMEPHASE, "default", true);
 		
-		AreaChanger areachanger = new AreaChanger(mainmousehandler, 
+		// TODO: Add key handler when needed
+		AreaChanger areachanger = new AreaChanger(mainmousehandler, null, 
 				mainactorhandler, maindrawer);
 		areachanger.getArea("design").start();
 		areachanger.getArea("coding").start();
 		areachanger.getArea("mission").start();
 		
 		// TODO: This causes occasional errors
-		areachanger.getArea("coding").disableMouseAndDrawing();
+		areachanger.getArea("coding").getMouseHandler().inactivate();
+		areachanger.getArea("coding").getDrawer().setInvisible();
 		
 		// Also activates FPS test
 		new FpsApsTest(mainactorhandler, maindrawer);

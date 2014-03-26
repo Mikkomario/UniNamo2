@@ -3,10 +3,10 @@ package uninamo_userinterface;
 import java.awt.Graphics2D;
 
 import uninamo_main.GameSettings;
-import uninamo_worlds.Area;
 import utopia_gameobjects.DrawnObject;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_listeners.RoomListener;
+import utopia_worlds.Area;
 import utopia_worlds.Room;
 
 /**

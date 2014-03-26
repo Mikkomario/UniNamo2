@@ -2,9 +2,9 @@ package uninamo_manual;
 
 import uninamo_gameplaysupport.SpriteDrawerObject;
 import uninamo_obstacles.ObstacleType;
-import uninamo_worlds.Area;
 import utopia_gameobjects.GameObject;
 import utopia_helpAndEnums.DepthConstants;
+import utopia_worlds.Area;
 
 /**
  * ObstaclePage shows information about a certain obstacle

@@ -12,6 +12,8 @@ import uninamo_userinterface.DemoButton;
 import uninamo_userinterface.FinishButton;
 import uninamo_userinterface.TestingButton;
 import uninamo_userinterface.ToCodeButton;
+import utopia_worlds.Area;
+import utopia_worlds.AreaObjectCreator;
 
 /**
  * DesignObjectCreator creates the objects needed in the design area. It also 
@@ -51,7 +53,8 @@ public class DesignObjectCreator extends AreaObjectCreator
 			TestHandler testHandler, NormalComponentRelay componentRelay, 
 			ConnectorRelay connectorRelay, TotalCostAnalyzer costAnalyzer)
 	{
-		super(areaChanger.getArea("design"), "paper", "gameplaybackgrounds");
+		super(areaChanger.getArea("design"), "paper", "gameplaybackgrounds", 
+				GameSettings.screenWidth, GameSettings.screenHeight);
 		
 		// Initializes attributes
 		this.areaChanger = areaChanger;

@@ -10,7 +10,6 @@ import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.Wall;
 import uninamo_main.GameSettings;
 import uninamo_obstacles.Obstacle;
-import uninamo_worlds.Area;
 import utopia_handleds.Collidable;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.CollidableHandler;
@@ -21,6 +20,7 @@ import utopia_helpAndEnums.HelpMath;
 import utopia_helpAndEnums.Movement;
 import utopia_listeners.CollisionListener;
 import utopia_listeners.TransformationListener;
+import utopia_worlds.Area;
 
 /**
  * ConveyorBelt is a machine that pushes actors either left or right or 

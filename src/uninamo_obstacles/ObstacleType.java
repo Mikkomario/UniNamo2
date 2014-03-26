@@ -1,13 +1,13 @@
 package uninamo_obstacles;
 
 import uninamo_gameplaysupport.TestHandler;
-import uninamo_worlds.Area;
 import utopia_graphic.Sprite;
 import utopia_handlers.ActorHandler;
 import utopia_handlers.CollidableHandler;
 import utopia_handlers.CollisionHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Area;
 
 /**
  * ObstacleTypes represents different types of obstacles that often have their 

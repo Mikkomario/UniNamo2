@@ -288,6 +288,10 @@ Työtehtäviä
 				komponentteja tai vaikka laitteita
 			* Testausnappulan pois ottaminen koodipuolelta?
 			* Tallennustiedostojen laittaminen read-onlyksi
+			* Laita kaikkiin utopia projekteihin lisenssit
+			* Tee areoista ja areachangerista yleinen ratkaisu moottoriin
+			* Refaktoroi kaikkiin gameObjeckteihin hirveän handlerlistan 
+			sijaan area konstruktoriparametriksi
 	* Gold	---------------------------------------------------------------------
 		- Gold Graffat
 			* Komponentit
