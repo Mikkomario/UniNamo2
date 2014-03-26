@@ -19,6 +19,8 @@ import utopia_helpAndEnums.Movement;
  * 
  * @author Mikko Hilpinen
  * @since 18.3.2014
+ * @deprecated This class is no longer updated since most of its functionality 
+ * was moved to AdvancedPhysicDrawnObject class
  */
 public abstract class RotatingBasicPhysicDrawnObject extends BouncingBasicPhysicDrawnObject
 {

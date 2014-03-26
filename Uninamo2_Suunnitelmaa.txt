@@ -258,7 +258,10 @@ Työtehtäviä
 			* Tutkimuksen lopettaminen
 				- Tuloksista ilmoittaminen
 			* Komponenttien unlockkaaminen
+				- Järjestyksen määrittäminen ja statuksen muistaminen
+			* Masiinoiden unlockkaaminen
 			* Kenttien unlockkaaminen
+				- Sama
 			* Alennusten toiminta sekä unlockkaaminen						Hylätty
 		- Parantelua														...
 			* Testausmoodin selkeä näyttäminen koodipuolella
@@ -284,6 +287,7 @@ Työtehtäviä
 				- Jokaiseen initializerit jotka lataa vaan esim. 			DONE
 				komponentteja tai vaikka laitteita
 			* Testausnappulan pois ottaminen koodipuolelta?
+			* Tallennustiedostojen laittaminen read-onlyksi
 	* Gold	---------------------------------------------------------------------
 		- Gold Graffat
 			* Komponentit
@@ -328,6 +332,7 @@ Työtehtäviä
 		- Hauskat extra laitteet ja obstaclet kenttäeditoriin
 			* Pongiin tarvittavat jutut
 			* Breakouttiin tarvittavat jutut
+			* Space Invadersiin tarvittavat jutut
 			* Suondplayerit ja visuaaliset efektit
 			* Userinputkomponentit
 				- Näppäinkuuntelija
@@ -350,6 +355,7 @@ Työtehtäviä
 			* "Hmmm..."
 			* Tämän käyttäminen palautteena?
 				- "Ahaa!"
+		- Tallennusikoni
 	
 Komponentteja
 	* Looginen

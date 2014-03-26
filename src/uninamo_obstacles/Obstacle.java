@@ -9,7 +9,7 @@ import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_gameplaysupport.Wall;
 
-import utopia_gameobjects.AdvancedPhysicDrawnObject2;
+import utopia_gameobjects.AdvancedPhysicDrawnObject;
 import utopia_graphic.MultiSpriteDrawer;
 import utopia_graphic.Sprite;
 import utopia_handleds.Collidable;
@@ -32,7 +32,7 @@ import utopia_worlds.Room;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public abstract class Obstacle extends AdvancedPhysicDrawnObject2 implements 
+public abstract class Obstacle extends AdvancedPhysicDrawnObject implements 
 	RoomListener, TestListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
@@ -127,9 +127,9 @@ public abstract class Obstacle extends AdvancedPhysicDrawnObject2 implements
 		{
 			// If the collided object also is an advancedPhysicDrawnObject, uses 
 			// a more "sophisticated" collision method
-			if (collided instanceof AdvancedPhysicDrawnObject2)
+			if (collided instanceof AdvancedPhysicDrawnObject)
 			{
-				collideWith((AdvancedPhysicDrawnObject2) collided, 
+				collideWith((AdvancedPhysicDrawnObject) collided, 
 						colpoints, 0.4, 0, steps);
 			}
 			else
