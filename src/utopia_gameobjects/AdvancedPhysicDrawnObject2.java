@@ -117,13 +117,13 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 			
 			// Uses the candidate wich had the largest point movement
 			Point2D.Double bestCandidate = null;
-			double bestMovement = -1;
+			double bestDistance = -1;
 			for (Point2D.Double candidate : this.rotationAxisCandidates.keySet())
 			{
-				if (this.rotationAxisCandidates.get(candidate) > bestMovement)
+				if (this.rotationAxisCandidates.get(candidate) > bestDistance)
 				{
 					bestCandidate = candidate;
-					//System.out.println(bestMovement);
+					bestDistance = this.rotationAxisCandidates.get(candidate);
 				}
 			}
 			
@@ -294,26 +294,25 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		
 		if (this.rotationAllowed)
 		{
-			System.out.println("Old Rotation momentum: " + getRotationMomentum());
+			//System.out.println("Old Rotation momentum: " + getRotationMomentum());
 			
 			// Rotation momentum directional to the normal force goes to 0
 			// TODO: Return and debug
 			double newRotationMomentumThis = 
 					-getRotationMomentum() * energyLossModifier;
 			
-			System.out.println("New Rotation momentum: " + newRotationMomentumThis);
+			//System.out.println("New Rotation momentum: " + newRotationMomentumThis);
 			
 			setRotationMomentumTo(null, forceDirection, newRotationMomentumThis, 0, frictionModifier, 
 					steps, collisionPoint);
 			
-			System.out.println("Rotation momentum after collision: " + getRotationMomentum());
+			//System.out.println("Rotation momentum after collision: " + getRotationMomentum());
 		}
 		
 		
 		// Also forces the object away from the collided object
 		getRelativePointAwayFromObject(p, negateTransformations(collisionPoint), 
 				forceDirection, steps);
-		
 		/*
 		System.out.println("Speed after titanium: " + getMovement().getSpeed());
 		System.out.println("**********");
@@ -326,9 +325,12 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		this.actsSinceLastCollision = 0;
 		// Calculates the point movement at the collision point and adds it as an axis candidate
 		Point2D.Double absoluteRotationAxis = transform(this.currentRotationAxis);
-		double pointMovement = HelpMath.pointDistance(
-				absoluteRotationAxis, collisionPoint) * Math.abs(getRotation());
-		this.rotationAxisCandidates.put(negateTransformations(collisionPoint), pointMovement);
+		//double pointMovement = HelpMath.pointDistance(
+		//		absoluteRotationAxis, collisionPoint) * Math.abs(getRotation());
+		double pointDistance = HelpMath.pointDistance(absoluteRotationAxis, collisionPoint);
+		
+		if (pointDistance > 10)
+			this.rotationAxisCandidates.put(negateTransformations(collisionPoint), pointDistance);
 	}
 	
 	// Note: other can be left null
@@ -421,11 +423,11 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		
 		// Applies the force and adds friction as well
 		//addImpulse(normalForce, absoluteEffectPoint, steps);
-		addMoment(normalForce, HelpMath.pointDirection(absoluteAxisPosition, 
-				absoluteEffectPoint), r, steps);
+		//addMoment(normalForce, HelpMath.pointDirection(absoluteAxisPosition, 
+		//		absoluteEffectPoint), r, steps);
 		addCollisionFriction(other, normalForce, frictionModifier, 
 				absoluteEffectPoint, steps);
-		addCollisionRotationFriction(other, normalForce, frictionModifier, absoluteEffectPoint, steps);
+		//addCollisionRotationFriction(other, normalForce, frictionModifier, absoluteEffectPoint, steps);
 		// Also adds compensation movement
 		//addCompensationMovement(normalForce);
 	}
@@ -597,7 +599,7 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		// Applies the rotation speed change
 		addRotation(deltaRotSpeed);
 		
-		if (deltaRotSpeed > 0.2)
+		if (deltaRotSpeed > 0.01)
 			System.out.println("Adds rotation " + deltaRotSpeed);
 		
 		// Adds compensation angle
@@ -606,12 +608,13 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	
 	private void changeRotationAxisTo(Point2D.Double newRelativeAxis)
 	{	
+		double oldRotation = getRotation();
 		// If the axis is that already, does nothing
 		//if (newRelativeAxis.equals(this.currentRotationAxis))
 		//	return;
-		if (Math.abs(newRelativeAxis.getX() - this.currentRotationAxis.getX()) 
-				< 5 && Math.abs(newRelativeAxis.getY() - this.currentRotationAxis.getY()) < 5)
-			return;
+		//if (Math.abs(newRelativeAxis.getX() - this.currentRotationAxis.getX()) 
+		//		< 7 && Math.abs(newRelativeAxis.getY() - this.currentRotationAxis.getY()) < 7)
+		//	return;
 		
 		//System.out.println(Math.abs(newRelativeAxis.getY() - this.currentRotationAxis.getY()));
 		
@@ -631,30 +634,33 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		this.currentMomentMass = this.defaultMomentMass + getMass() * r2;
 		
 		// Remembers the current / old rotation speed
-		double oldRotSpeed2 = Math.pow(getRotation(), 2);
+		//double oldRotSpeed2 = Math.pow(getRotation(), 2);
 		
 		// Calculates the object's new rotation speed around the new axis
-		// wa = sqrt(J1 * w1^2 / Ja)
-		double newSpeed = Math.sqrt(this.defaultMomentMass * oldRotSpeed2 / 
-				this.currentMomentMass);
+		// (wa = sqrt(J1 * w1^2 / Ja)) - OLD VERSION, NOT WORKING (with energy)
+		// (wa = J1 * w1 / Ja)
+		double newSpeed = this.defaultMomentMass * getRotation() / 
+				this.currentMomentMass;
 		
 		// Remembers the new axis
 		this.currentRotationAxis = newRelativeAxis;
 		
 		// Changes the rotation to the new amount
 		setRotation(newSpeed);
+		
+		System.out.println("Changed rotation axis");
+		
+		if (getRotation() < 0 && oldRotation > 0 || (getRotation() > 0 && oldRotation < 0))
+			System.out.println("Rotation swapped signs!!!!!!!!!!!!!!!!");
 	}
 	
 	private void resetRotationAxisToOrigin()
 	{
-		// wo = sqrt(Ja * wa^2 / J1)
-		
-		// Calculates the old rotation speed ^2 (wa^2)
-		double oldRotSpeed2 = Math.pow(getRotation(), 2);
+		// wo = Ja * wa / J1
 		
 		// Calculates the new speed
-		double newSpeed = Math.sqrt(this.currentMomentMass * oldRotSpeed2 / 
-				this.defaultMomentMass);
+		double newSpeed = this.currentMomentMass * getRotation() /
+				this.defaultMomentMass;
 		
 		// Changes back to normal rotation
 		this.currentRotationAxis = new Point2D.Double(getOriginX(), getOriginY());
