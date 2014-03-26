@@ -427,7 +427,7 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		//		absoluteEffectPoint), r, steps);
 		addCollisionFriction(other, normalForce, frictionModifier, 
 				absoluteEffectPoint, steps);
-		//addCollisionRotationFriction(other, normalForce, frictionModifier, absoluteEffectPoint, steps);
+		addCollisionRotationFriction(other, normalForce, frictionModifier, absoluteEffectPoint, steps);
 		// Also adds compensation movement
 		//addCompensationMovement(normalForce);
 	}
@@ -464,8 +464,10 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 	{
 		// TODO: Test if this breaks stuff
 		// Changes rotation axis (maybe)
+		
 		if (this.rotationAllowed)
 			addCollisionPointAsRotationAxisCandidate(collisionPoint);
+		
 		
 		// Calculates the new momentums for the objects
 		double newMomentumThis = getDirectionalEndMomentumOnCollisionWith(p, 
@@ -540,7 +542,7 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 				other.getMass()) + 2 * other.getDirectionalMomentum(direction)) / 
 				(getMass() + other.getMass());
 		*/
-		// -> P = (p1 * (m1 - m2) + 2 * p2) / (m1 + m2)
+		// -> P = (p1 * (m1 - m2) + 2 * p2 * m1) / (m1 + m2)
 		return (getDirectionalMomentum(direction) * (getMass() - 
 				other.getMass()) + 2 * getMass() * other.getDirectionalMomentum(direction)) / 
 				(getMass() + other.getMass());
@@ -559,7 +561,7 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 				(getMass() - other.getMass() * getRotationMomentum())) / 
 				(getMass() + other.getMass());
 		*/
-		// -> P = (p1 * (m1 - m2) + 2 * p2) / (m1 + m2)
+		// -> P = (p1 * (m1 - m2) + 2 * p2 * m1) / (m1 + m2)
 		return (getRotationMomentum() * (this.currentMomentMass - 
 				other.currentMomentMass) + 2 * this.currentMomentMass * other.getRotationMomentum()) / 
 				(this.currentMomentMass + other.currentMomentMass);
@@ -599,8 +601,11 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		// Applies the rotation speed change
 		addRotation(deltaRotSpeed);
 		
-		if (deltaRotSpeed > 0.01)
-			System.out.println("Adds rotation " + deltaRotSpeed);
+		if (deltaRotSpeed < 0.01)
+		{
+			// Skips very small forces
+			return;
+		}
 		
 		// Adds compensation angle
 		rotateAroundRelativePoint(deltaRotSpeed, this.currentRotationAxis);
@@ -716,6 +721,14 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 					other.getMovement().getVSpeed() - 
 					getMovement().getVSpeed()).getDirectionalMovement(frictionForce.getDirection());
 		
+		if (other != null)
+		{
+			System.out.println("Before friction: ------");
+			System.out.println(getY() + ": " + getMovement().getHSpeed());
+			System.out.println(other.getY() + ": " + other.getMovement().getHSpeed());
+			//System.out.println("-> " + getY() + "; " + maximumEffect.getSpeed() + "; " + maximumEffect.getDirection());
+		}
+		
 		// Checks if the friction should affect the other direction
 		if (HelpMath.getAngleDifference180(frictionForce.getDirection(), 
 				maximumEffect.getDirection()) > 90)
@@ -725,7 +738,14 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		// maximum effect's speed, modifies the 
 		// friction smaller (a = F / m), F = m * a
 		if (frictionForce.getSpeed() / getMass() > maximumEffect.getSpeed())
+		{
+			//System.out.println("friction before: " + frictionForce.getSpeed());
 			frictionForce.setSpeed(maximumEffect.getSpeed() * getMass());
+			//System.out.println("Adjusts friction smaller");
+			//System.out.println("friction after: " + frictionForce.getSpeed());
+		}
+		
+		//System.out.println(getY() + ": Friction: " + frictionForce.getSpeed() + ", dir: " + frictionForce.getDirection());
 		
 		//if (frictionForce.getSpeed() > 1)
 		//System.out.println("Causes friction " + frictionForce.getSpeed() + " to direction " + frictionForce.getDirection());
@@ -741,6 +761,14 @@ public abstract class AdvancedPhysicDrawnObject2 extends BasicPhysicDrawnObject
 		addImpulse(frictionForce, absoluteFrictionPosition, steps);
 		// TODO: Check
 		//addMotion(fircti.getDirection(), force.getSpeed() * steps / getMass());
+		
+		if (other != null)
+		{
+			System.out.println("After friction: ------");
+			System.out.println(getY() + ": " + getMovement().getHSpeed());
+			System.out.println(other.getY() + ": " + other.getMovement().getHSpeed());
+			//System.out.println("-> " + getY() + "; " + maximumEffect.getSpeed() + "; " + maximumEffect.getDirection());
+		}
 	}
 	
 	private void addCollisionRotationFriction(AdvancedPhysicDrawnObject2 other, 

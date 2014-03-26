@@ -130,7 +130,7 @@ public abstract class Obstacle extends AdvancedPhysicDrawnObject2 implements
 			if (collided instanceof AdvancedPhysicDrawnObject2)
 			{
 				collideWith((AdvancedPhysicDrawnObject2) collided, 
-						colpoints, 0.5, 0.1, steps);
+						colpoints, 0.4, 0, steps);
 			}
 			else
 			{
