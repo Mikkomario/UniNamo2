@@ -6,13 +6,9 @@ import java.util.ArrayList;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.Wall;
 import utopia_handleds.Collidable;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.CollidableHandler;
-import utopia_handlers.CollisionHandler;
-import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.CollisionType;
 import utopia_helpAndEnums.Material;
-import utopia_worlds.Room;
+import utopia_worlds.Area;
 
 /**
  * Box is a simple obstacle that does pretty much nothing but collides with walls
@@ -24,26 +20,15 @@ public class Box extends Obstacle implements Wall
 	/**
 	 * Creates a new box to the given position
 	 * 
+	 * @param area The area where the object will reside at
 	 * @param x The box's x-coordinate
 	 * @param y The box's y-coordinate
-	 * @param drawer The drawableHandler that will draw the box
-	 * @param collidablehandler The collidableHandler that will handle the 
-	 * box's collision checking
-	 * @param collisionhandler The collisionHandler that will inform the box 
-	 * about collision events
-	 * @param actorhandler The actorHandler that will inform the box about 
-	 * act events
-	 * @param room The room where the box resides at
 	 * @param testHandler The testHandler that will inform the object about 
 	 * test events
 	 */
-	public Box(int x, int y, DrawableHandler drawer, 
-			CollidableHandler collidablehandler, 
-			CollisionHandler collisionhandler, ActorHandler actorhandler, 
-			Room room, TestHandler testHandler)
+	public Box(Area area, int x, int y, TestHandler testHandler)
 	{
-		super(x, y, true, CollisionType.BOX, drawer, collidablehandler,
-				collisionhandler, actorhandler, room, testHandler, "boxdesign", 
+		super(area, x, y, true, CollisionType.BOX, testHandler, "boxdesign", 
 				"boxreal");
 		
 		setBoxCollisionPrecision(3, 0);

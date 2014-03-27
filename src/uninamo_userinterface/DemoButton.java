@@ -6,12 +6,10 @@ import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.VictoryCondition;
 import uninamo_gameplaysupport.VictoryHandler;
 import uninamo_main.GameSettings;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_interfaceElements.AbstractButton;
 import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Room;
+import utopia_worlds.Area;
 
 /**
  * DemoButton allows testing at the beginning of the stage but disappears as 
@@ -33,23 +31,19 @@ public class DemoButton extends AbstractButton implements VictoryCondition
 	/**
 	 * Creates a new demoButton to the given position
 	 * 
+	 * @param area The area where the object will reside at
 	 * @param x The x-coordinate of the button
 	 * @param y The y-coordinate of the button
-	 * @param drawer The drawableHandler that will draw the button
-	 * @param mousehandler The mouseHandler that will inform the object about 
-	 * mouse events
-	 * @param room The room where the button is located at
 	 * @param testHandler The testHandler that will be informed about test 
 	 * (= demo) events
 	 * @param victoryHandler The victoryHandler that is affected by the condition
 	 */
-	public DemoButton(int x, int y, DrawableHandler drawer, 
-			MouseListenerHandler mousehandler, Room room, 
+	public DemoButton(Area area, int x, int y, 
 			TestHandler testHandler, VictoryHandler victoryHandler)
 	{
 		super(x, y, DepthConstants.HUD, 
 				MultiMediaHolder.getSpriteBank("gameplayinterface").getSprite("demo"), 
-				drawer, mousehandler, room);
+				area);
 		
 		// Initializes attributes
 		this.testHandler = testHandler;

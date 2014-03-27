@@ -8,8 +8,6 @@ import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
 import utopia_gameobjects.DimensionalDrawnObject;
 import utopia_graphic.SingleSpriteDrawer;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.CollisionType;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_helpAndEnums.HelpMath;
@@ -17,6 +15,7 @@ import utopia_listeners.AdvancedMouseListener;
 import utopia_listeners.RoomListener;
 import utopia_listeners.TransformationListener;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Area;
 import utopia_worlds.Room;
 
 /**
@@ -51,10 +50,7 @@ public class Cable extends DimensionalDrawnObject implements
 	 * Creates a new cable that starts from the given connector. The cable will 
 	 * hover over the mouse until it has been connected to another connector.
 	 * 
-	 * @param drawer The drawableHandler that will draw the cable
-	 * @param mousehandler The mouseListenerHandler that will inform the 
-	 * cable about mouse events
-	 * @param room The room where the cable resides at
+	 * @param area The area where the cable will reside at
 	 * @param testHandler The testHandler that will inform the cable about test events
 	 * @param connectorRelay A connectorRelay that will inform the cable about 
 	 * connector positions
@@ -65,13 +61,11 @@ public class Cable extends DimensionalDrawnObject implements
 	 * clicking (provided it doesn't have an input that would dominate the 
 	 * signal type)
 	 */
-	public Cable(DrawableHandler drawer, MouseListenerHandler mousehandler, 
-			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
+	public Cable(Area area, TestHandler testHandler, ConnectorRelay connectorRelay, 
 			OutputCableConnector startConnector, InputCableConnector endConnector, 
 			boolean isForTesting)
 	{
-		super(0, 0, DepthConstants.NORMAL - 5, false, CollisionType.BOX, 
-				drawer, null);
+		super(0, 0, DepthConstants.NORMAL - 5, false, CollisionType.BOX, area);
 		
 		//System.out.println(startConnector);
 		//System.out.println(endConnector);
@@ -104,8 +98,8 @@ public class Cable extends DimensionalDrawnObject implements
 		this.end = endConnector;
 		this.testVersion = isForTesting;
 		this.lastMousePosition = new Point2D.Double(
-				mousehandler.getMousePosition().getX(), 
-				mousehandler.getMousePosition().getY());
+				area.getMouseHandler().getMousePosition().getX(), 
+				area.getMouseHandler().getMousePosition().getY());
 		this.lastSignalStatus = false;
 		this.connectorRelay = connectorRelay;
 		this.testing = false;
@@ -121,10 +115,8 @@ public class Cable extends DimensionalDrawnObject implements
 			this.end.connectCable(this);
 		
 		// Adds the object to the handler(s)
-		if (room != null)
-			room.addObject(this);
-		if (mousehandler != null)
-			mousehandler.addMouseListener(this);
+		if (area.getMouseHandler() != null)
+			area.getMouseHandler().addMouseListener(this);
 		if (startConnector != null)
 			startConnector.getTransformationListenerHandler().addListener(this);
 		if (endConnector != null)

@@ -6,8 +6,7 @@ import java.awt.geom.Point2D;
 import utopia_gameobjects.DrawnObject;
 import utopia_graphic.SingleSpriteDrawer;
 import utopia_graphic.Sprite;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
+import utopia_worlds.Area;
 
 /**
  * SpriteDrawerObject is a drawnObject that draws a single sprite. It can be 
@@ -15,6 +14,7 @@ import utopia_handlers.DrawableHandler;
  * transformations
  * 
  * @author Mikko Hilpinen
+ * @since ?.3.2014
  */
 public class SpriteDrawerObject extends DrawnObject
 {
@@ -29,20 +29,20 @@ public class SpriteDrawerObject extends DrawnObject
 	/**
 	 * Creates a new SpriteDrawerObject with the given sprite
 	 * 
+	 * @param area The area where the object will reside at
 	 * @param depth The used drawing depth
-	 * @param drawer The drawableHandler that will draw the sprite
-	 * @param animator The actorHandler that will animate the sprite (optional)
 	 * @param user The object that uses the drawer
 	 * @param sprite The sprite that will be drawn
 	 */
-	public SpriteDrawerObject(int depth, DrawableHandler drawer, 
-			ActorHandler animator, DrawnObject user, Sprite sprite)
+	public SpriteDrawerObject(Area area, int depth, DrawnObject user, 
+			Sprite sprite)
 	{
-		super((int) user.getX(), (int) user.getY(), depth, drawer);
+		super((int) user.getX(), (int) user.getY(), depth, area);
 		
 		// Initializes attributes
 		this.user = user;
-		this.spriteDrawer = new SingleSpriteDrawer(sprite, animator, this);
+		this.spriteDrawer = new SingleSpriteDrawer(sprite, 
+				area.getActorHandler(), this);
 	}
 	
 	

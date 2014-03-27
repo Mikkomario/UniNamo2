@@ -39,10 +39,10 @@ public abstract class DescriptionPage extends DrawnObject implements Page
 	 * @param description the description on the page
 	 * @param pagename The name shown at the top of the page 
 	 */
-	public DescriptionPage(int x, int y, Area area, 
-			String description, String pagename)
+	public DescriptionPage(int x, int y, Area area, String description, 
+			String pagename)
 	{
-		super(x, y, DepthConstants.NORMAL, area.getDrawer());
+		super(x, y, DepthConstants.NORMAL, area);
 		
 		// Initializes attributes
 		this.testObject = null;

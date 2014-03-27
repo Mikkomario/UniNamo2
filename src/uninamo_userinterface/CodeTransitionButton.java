@@ -35,8 +35,7 @@ public class CodeTransitionButton extends AbstractButton
 	{
 		super(GameSettings.screenWidth / 2, y, DepthConstants.FOREGROUND, 
 				MultiMediaHolder.getSpriteBank("gameplayinterface").getSprite(
-				"transition"), oldArea.getDrawer(), oldArea.getMouseHandler(), 
-				oldArea);
+				"transition"), oldArea);
 		
 		// Initializes attributes
 		this.oldArea = oldArea;

@@ -2,10 +2,7 @@ package uninamo_components;
 
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_userinterface.CurrentCostDrawer;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
-import utopia_worlds.Room;
+import utopia_worlds.Area;
 
 /**
  * PowerSourceComponent is a very simple component that simply sends true 
@@ -21,13 +18,9 @@ public class PowerSourceComponent extends NormalComponent
 	/**
 	 * Creates a new powerSource that immediately starts to send true signal
 	 * 
+	 * @param area The area where the object will reside at
 	 * @param x The x-coordinate of the component
 	 * @param y The y-coordinate of the component
-	 * @param drawer The drawableHandler that will draw the component
-	 * @param actorhandler The actorHandler that will animate the component
-	 * @param mousehandler The mouseListenerHandler that will inform the 
-	 * component about mouse events
-	 * @param room The room where the component resides at
 	 * @param testHandler The testHandler that will inform the object about 
 	 * test events
 	 * @param connectorRelay A connectorRelay that will keep track of the 
@@ -39,13 +32,12 @@ public class PowerSourceComponent extends NormalComponent
 	 * @param isForTesting If this is true, the component will go to test mode 
 	 * where it won't react to mouse but will create test cables to its connectors
 	 */
-	public PowerSourceComponent(int x, int y, DrawableHandler drawer,
-			ActorHandler actorhandler, MouseListenerHandler mousehandler, 
-			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
+	public PowerSourceComponent(Area area, int x, int y, 
+			TestHandler testHandler, ConnectorRelay connectorRelay, 
 			NormalComponentRelay componentRelay, CurrentCostDrawer costDrawer, 
 			boolean isForTesting)
 	{
-		super(x, y, drawer, actorhandler, mousehandler, room, testHandler, 
+		super(area, x, y, testHandler, 
 				connectorRelay, componentRelay, costDrawer, "test", 0, 1, true, 
 				isForTesting);
 		

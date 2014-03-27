@@ -6,12 +6,9 @@ import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
 import uninamo_userinterface.CurrentCostDrawer;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.HelpMath;
 import utopia_listeners.AdvancedMouseListener;
-import utopia_worlds.Room;
+import utopia_worlds.Area;
 
 /**
  * NormalComponents are components that aren't machineComponents. 
@@ -43,13 +40,9 @@ public abstract class NormalComponent extends Component implements
 	/**
 	 * Creates a new component to the given position.
 	 * 
+	 * @param area The area where the object will reside at
 	 * @param x The new x-coordinate of the component's origin (pixels)
 	 * @param y The new y-coordinate of the component's origin (pixels)
-	 * @param drawer The drawableHandler that will draw the component
-	 * @param actorhandler The actorHandler that will animate the component
-	 * @param mousehandler The mouseListenerHandler that will inform the 
-	 * object about mouse events
-	 * @param room The room where the component resides at
 	 * @param testHandler The testHandler that will inform the object about test 
 	 * events
 	 * @param connectorRelay A connectorRelay that will keep track of the 
@@ -66,14 +59,13 @@ public abstract class NormalComponent extends Component implements
 	 * @param isForTesting If this is true, the component will go to test mode 
 	 * where it won't react to mouse but will create test cables to its connectors
 	 */
-	public NormalComponent(int x, int y, DrawableHandler drawer,
-			ActorHandler actorhandler, MouseListenerHandler mousehandler,
-			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
+	public NormalComponent(Area area, int x, int y, TestHandler testHandler, 
+			ConnectorRelay connectorRelay, 
 			NormalComponentRelay componentRelay, CurrentCostDrawer costDrawer, 
 			String spritename, int inputs, int outputs, boolean fromBox, 
 			boolean isForTesting)
 	{
-		super(x, y, drawer, actorhandler, mousehandler, room, testHandler,
+		super(area, x, y, testHandler,
 				connectorRelay, spritename, inputs, outputs, fromBox,
 				isForTesting);
 		
@@ -101,8 +93,8 @@ public abstract class NormalComponent extends Component implements
 		// Adds the object to the handler(s)
 		if (componentRelay != null)
 			componentRelay.addComponent(this);
-		if (mousehandler != null)
-			mousehandler.addMouseListener(this);
+		if (area.getMouseHandler() != null)
+			area.getMouseHandler().addMouseListener(this);
 		if (testHandler != null)
 			testHandler.addTestable(this);
 	}

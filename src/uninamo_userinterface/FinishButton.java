@@ -40,8 +40,6 @@ public class FinishButton extends AbstractButton implements TestListener
 		super(GameSettings.screenWidth / 2, GameSettings.screenHeight / 2, 
 				DepthConstants.FOREGROUND, 
 				MultiMediaHolder.getSpriteBank("gameplayinterface").getSprite("finish"), 
-				areaChanger.getArea("design").getDrawer(), 
-				areaChanger.getArea("design").getMouseHandler(), 
 				areaChanger.getArea("design"));
 		
 		// Initializes attributes

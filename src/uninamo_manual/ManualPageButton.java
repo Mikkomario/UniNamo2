@@ -3,12 +3,10 @@ package uninamo_manual;
 import java.awt.geom.Point2D.Double;
 
 import uninamo_main.GameSettings;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_interfaceElements.AbstractButton;
 import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Room;
+import utopia_worlds.Area;
 
 /**
  * ManualPageButton lets the user move forwards and backwards in the manual
@@ -30,7 +28,7 @@ public class ManualPageButton extends AbstractButton
 	/**
 	 * Backwards is towards the beginning of the manual
 	 */
-	public static final int BACWARD = -1;
+	public static final int BACKWARDS = -1;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -39,21 +37,17 @@ public class ManualPageButton extends AbstractButton
 	 * 
 	 * @param direction The direction towards which the button will take the 
 	 * user. (either forwards or backwards)
-	 * @param drawer The drawableHandler that will draw the button
-	 * @param mousehandler The mouseListenerHandler that will inform the button 
-	 * about mouse events
-	 * @param room The room where the button is located at
 	 * @param master The manualMaster that handles the manual's pages
+	 * @param area The area where the object will reside at
 	 * 
 	 * @see #FORWARD
-	 * @see #BACWARD
+	 * @see #BACKWARDS
 	 */
-	public ManualPageButton(int direction, DrawableHandler drawer, 
-			MouseListenerHandler mousehandler, Room room, ManualMaster master)
+	public ManualPageButton(int direction, ManualMaster master, Area area)
 	{
 		super(0, 0, DepthConstants.FOREGROUND, 
 				MultiMediaHolder.getSpriteBank("manual").getSprite("arrow"), 
-				drawer, mousehandler, room);
+				area);
 		
 		// Initializes attributes
 		this.master = master;

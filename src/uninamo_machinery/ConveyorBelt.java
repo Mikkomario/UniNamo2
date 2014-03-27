@@ -11,10 +11,6 @@ import uninamo_gameplaysupport.Wall;
 import uninamo_main.GameSettings;
 import uninamo_obstacles.Obstacle;
 import utopia_handleds.Collidable;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.CollidableHandler;
-import utopia_handlers.CollisionHandler;
-import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.CollisionType;
 import utopia_helpAndEnums.HelpMath;
 import utopia_helpAndEnums.Movement;
@@ -47,16 +43,10 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener,
 	 * 
 	 * @param x The x-coordinate of the belt
 	 * @param y The y-coordinate of the belt
-	 * @param drawer The DrawableHandler that will draw the belt
-	 * @param actorhandler The ActorHandler that will inform the belt about 
-	 * step events
-	 * @param collidableHandler The collidableHandler that will handle the 
-	 * belt's collision checking
-	 * @param collisionHandler the CollisionHandler that will handle the belt's 
 	 * collision event informing
 	 * @param componentArea The area of the game where the components are 
 	 * created
-	 * @param designArea The area where the machine is located at
+	 * @param machineArea The area where the machine is located at
 	 * @param testHandler The testHandler that will inform the object about 
 	 * test events
 	 * @param connectorRelay The connectorRelay that will handle the belts 
@@ -66,15 +56,12 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener,
 	 * @param ID The unique ID of the machine. Use null if you wan't it generated automatically
 	 * @param isForTesting Is the machine created for simple demonstration purposes
 	 */
-	public ConveyorBelt(int x, int y, DrawableHandler drawer,
-			ActorHandler actorhandler, CollidableHandler collidableHandler, 
-			CollisionHandler collisionHandler, Area componentArea, Area designArea, 
+	public ConveyorBelt(int x, int y, Area componentArea, Area machineArea, 
 			TestHandler testHandler, ConnectorRelay connectorRelay, 
 			MachineCounter machineCounter, String ID, boolean isForTesting)
 	{
-		super(x, y, true, CollisionType.BOX, drawer, actorhandler,
-				collidableHandler, componentArea, 
-				designArea, testHandler, connectorRelay, machineCounter, "belt", 
+		super(x, y, true, CollisionType.BOX, componentArea, 
+				machineArea, testHandler, connectorRelay, machineCounter, "belt", 
 				"beltreal", "machinecomponent", null, 2, 0, ID, isForTesting);
 		
 		// Initializes attributes
@@ -99,8 +86,8 @@ public class ConveyorBelt extends Machine implements Wall, CollisionListener,
 		//collisionHandler.printHandledNumber();
 		
 		// Adds the object to the handler(s)
-		if (collisionHandler != null)
-			collisionHandler.addCollisionListener(this);
+		if (machineArea.getCollisionHandler() != null)
+			machineArea.getCollisionHandler().addCollisionListener(this);
 		
 		getTransformationListenerHandler().addListener(this);
 	}

@@ -3,12 +3,10 @@ package uninamo_manual;
 import java.awt.geom.Point2D.Double;
 
 import uninamo_main.GameSettings;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_interfaceElements.AbstractButton;
 import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Room;
+import utopia_worlds.Area;
 
 /**
  * ManualCloseButton closes the manual when clicked
@@ -30,18 +28,14 @@ public class ManualCloseButton extends AbstractButton
 	 * 
 	 * @param x The button's x-coordinate
 	 * @param y The button's y-coordinate
-	 * @param drawer The drawableHandler that will draw the button
-	 * @param mousehandler The mouseListenerHandler that will inform the button 
-	 * about mouse events
-	 * @param room The room where the button is located at
 	 * @param master The ManualMaster that will be closed when the button is pressed
+	 * @param area The area where the object will reside at
 	 */
-	public ManualCloseButton(int x, int y, DrawableHandler drawer, 
-			MouseListenerHandler mousehandler, Room room, ManualMaster master)
+	public ManualCloseButton(int x, int y, ManualMaster master, Area area)
 	{
 		super(x, y, DepthConstants.FOREGROUND, 
 				MultiMediaHolder.getSpriteBank("manual").getSprite("close"), 
-				drawer, mousehandler, room);
+				area);
 		
 		// Initializes attributes
 		this.master = master;

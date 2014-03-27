@@ -71,16 +71,9 @@ public class DesignObjectCreator extends AreaObjectCreator
 	protected void createObjects(Area area)
 	{
 		// Creates the invisible walls
-		new InvisibleWall(0, 1, 0, 
-				area.getCollisionHandler().getCollidableHandler(), area);
-		new InvisibleWall(0, -1, GameSettings.screenWidth, 
-				area.getCollisionHandler().getCollidableHandler(), area);
-		/*
-		new InvisibleWall(1, 0, 0, 
-				area.getCollisionHandler().getCollidableHandler(), area);
-		*/
-		new InvisibleWall(-1, 0, GameSettings.screenHeight - 80, 
-				area.getCollisionHandler().getCollidableHandler(), area);
+		new InvisibleWall(0, 1, 0, area);
+		new InvisibleWall(0, -1, GameSettings.screenWidth, area);
+		new InvisibleWall(-1, 0, GameSettings.screenHeight - 80, area);
 		
 		
 		FinishButton finishButton = new FinishButton(this.areaChanger, 
@@ -90,11 +83,10 @@ public class DesignObjectCreator extends AreaObjectCreator
 		VictoryHandler victoryHandler = new VictoryHandler(finishButton);
 		
 		// Creates interface elements
-		DemoButton demoButton = new DemoButton(600, 80, area.getDrawer(), 
-				area.getMouseHandler(), area, this.testHandler, victoryHandler);
-		TestingButton testButton = new TestingButton(GameSettings.screenWidth - 110, 
-				GameSettings.screenHeight - 45, area.getDrawer(), 
-				area.getMouseHandler(), area, this.testHandler);
+		DemoButton demoButton = new DemoButton(area, 600, 80, this.testHandler, 
+				victoryHandler);
+		TestingButton testButton = new TestingButton(area, GameSettings.screenWidth - 110, 
+				GameSettings.screenHeight - 45, this.testHandler);
 		new ToCodeButton(this.areaChanger, this.testHandler, testButton, 
 				demoButton, this.componentRelay);
 		

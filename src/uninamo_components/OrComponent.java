@@ -2,10 +2,7 @@ package uninamo_components;
 
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_userinterface.CurrentCostDrawer;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
-import utopia_worlds.Room;
+import utopia_worlds.Area;
 
 /**
  * OrComponent is a logical unit that sends true signal if either of its inputs 
@@ -26,14 +23,9 @@ public class OrComponent extends NormalComponent
 	/**
 	 * Creates a new OrComponent to the given position.
 	 * 
+	 * @param area The area where the object will reside at
 	 * @param x The x-coordinate of the component (pixels)
 	 * @param y The y-coordinate of the component (pixels)
-	 * @param drawer The drawableHandler that will draw the component
-	 * @param actorHandler The actorHandler that informs the object about 
-	 * act events
-	 * @param mousehandler The mouseListenerHandler that will inform the 
-	 * object about mouse events
-	 * @param room The room where the component resides at
 	 * @param testHandler The testHandler that will inform the object about test events
 	 * @param connectorRelay A connectorRelay that will keep track of the 
 	 * connectors
@@ -44,12 +36,11 @@ public class OrComponent extends NormalComponent
 	 * @param isForTesting If this is true, the component will go to test mode 
 	 * where it won't react to mouse but will create test cables to its connectors
 	 */
-	public OrComponent(int x, int y, DrawableHandler drawer, ActorHandler actorHandler, 
-			MouseListenerHandler mousehandler, Room room, TestHandler testHandler, 
+	public OrComponent(Area area, int x, int y, TestHandler testHandler, 
 			ConnectorRelay connectorRelay, NormalComponentRelay componentRelay, 
 			CurrentCostDrawer costDrawer, boolean isForTesting)
 	{
-		super(x, y, drawer, actorHandler, mousehandler, room, testHandler, 
+		super(area, x, y, testHandler, 
 				connectorRelay, componentRelay, costDrawer, "test", 2, 1, true, 
 				isForTesting);
 		

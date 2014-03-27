@@ -1,6 +1,7 @@
 package uninamo_manual;
 
 import utopia_gameobjects.GameObject;
+import utopia_worlds.Area;
 
 /**
  * An empty page is just filler. It doesn't contain anything.
@@ -10,6 +11,15 @@ import utopia_gameobjects.GameObject;
  */
 public class EmptyPage extends GameObject implements Page
 {
+	/**
+	 * Creates an empty page to the given area
+	 * @param area The area where the page will be created to
+	 */
+	public EmptyPage(Area area)
+	{
+		super(area);
+	}
+
 	@Override
 	public void open()
 	{

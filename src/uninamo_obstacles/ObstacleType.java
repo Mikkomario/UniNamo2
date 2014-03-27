@@ -2,10 +2,6 @@ package uninamo_obstacles;
 
 import uninamo_gameplaysupport.TestHandler;
 import utopia_graphic.Sprite;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.CollidableHandler;
-import utopia_handlers.CollisionHandler;
-import utopia_handlers.DrawableHandler;
 import utopia_resourcebanks.MultiMediaHolder;
 import utopia_worlds.Area;
 
@@ -90,16 +86,10 @@ public enum ObstacleType
 	 * @return A new obstacle of this type
 	 */
 	public Obstacle getNewObstacle(int x, int y, Area area, TestHandler testHandler)
-	{
-		DrawableHandler drawer = area.getDrawer();
-		CollisionHandler collisionHandler = area.getCollisionHandler();
-		CollidableHandler collidableHandler = collisionHandler.getCollidableHandler();
-		ActorHandler actorHandler = area.getActorHandler();
-		
+	{	
 		switch (this)
 		{
-			case BOX: return new Box(x, y, drawer, collidableHandler, 
-					collisionHandler, actorHandler, area, testHandler);
+			case BOX: return new Box(area, x, y, testHandler);
 		}
 		
 		System.err.println("Could not create an obstacle of type " + this + 

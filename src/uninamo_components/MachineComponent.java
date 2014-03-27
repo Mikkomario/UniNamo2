@@ -5,10 +5,7 @@ import java.awt.Graphics2D;
 
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_main.GameSettings;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
-import utopia_worlds.Room;
+import utopia_worlds.Area;
 
 /**
  * MachineComponents are components that are tied into a single machine. 
@@ -30,14 +27,9 @@ public abstract class MachineComponent extends Component
 	/**
 	 * Creates a new machineComponent with the given stats
 	 * 
+	 * @param area The area where the object will reside at
 	 * @param x The x-coordinate of the component
 	 * @param y The y-coordinate of the component
-	 * @param drawer The drawableHandler that will draw the component
-	 * @param actorhandler The actorHandler that will animate the component 
-	 * (optional)
-	 * @param mousehandler The mouseHandler that will inform the component about 
-	 * mouse events
-	 * @param room The room where the component will reside at
 	 * @param testHandler The testHandler that will inform the component about 
 	 * test events
 	 * @param connectorRelay The connectorRelay that will handle the component's 
@@ -49,15 +41,13 @@ public abstract class MachineComponent extends Component
 	 * (= for the manual)
 	 * @param componentName The name of this component
 	 */
-	public MachineComponent(int x, int y, DrawableHandler drawer,
-			ActorHandler actorhandler, MouseListenerHandler mousehandler,
-			Room room, TestHandler testHandler, ConnectorRelay connectorRelay,
+	public MachineComponent(Area area, int x, int y, TestHandler testHandler, 
+			ConnectorRelay connectorRelay,
 			String spritename, int inputs, int outputs, boolean isForTesting, 
 			String componentName)
 	{
-		super(x, y, drawer, actorhandler, mousehandler, room, testHandler,
-				connectorRelay, spritename, inputs, outputs, false,
-				isForTesting);
+		super(area, x, y, testHandler,connectorRelay, spritename, inputs, 
+				outputs, false, isForTesting);
 		
 		// Initializes attributes
 		this.name = componentName;

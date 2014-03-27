@@ -8,13 +8,12 @@ import uninamo_main.GameSettings;
 import utopia_gameobjects.DimensionalDrawnObject;
 import utopia_graphic.MultiSpriteDrawer;
 import utopia_graphic.Sprite;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.CollisionType;
 import utopia_listeners.AdvancedMouseListener;
 import utopia_listeners.RoomListener;
 import utopia_listeners.TransformationListener;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Area;
 import utopia_worlds.Room;
 
 /**
@@ -44,25 +43,20 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	/**
 	 * Creates a new cableConnector that is tied to the given component.
 	 * 
+	 * @param area The area where the object will reside at
 	 * @param relativex The x-coordinate of the object in relation to the 
 	 * component's top-left corner (pixels)
 	 * @param relativey The y-coordinate of the object in relation to the 
 	 * component's top-left corner (pixels)
-	 * @param drawer The drawableHandler that will draw the connector
-	 * @param mousehandler The mouseListenerHandler that will inform the object 
-	 * about mouse events
-	 * @param room The room where the connector resides at
 	 * @param relay The ConnectorRelay that will keep track of the connector
 	 * @param host The component to which the connector is tied to
 	 * @param isForTesting If this is true, the connector won't react to mouse 
 	 * at all.
 	 */
-	public CableConnector(int relativex, int relativey, DrawableHandler drawer, 
-			MouseListenerHandler mousehandler, Room room, 
+	public CableConnector(Area area, int relativex, int relativey, 
 			ConnectorRelay relay, Component host, boolean isForTesting)
 	{
-		super(0, 0, host.getDepth() - 1, false, CollisionType.CIRCLE, drawer, 
-				null);
+		super(0, 0, host.getDepth() - 1, false, CollisionType.CIRCLE, area);
 		
 		// Initializes attributes
 		this.relativePoint = new Point2D.Double(relativex, relativey);
@@ -87,10 +81,8 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 		getSpriteDrawer().setImageSpeed(0);
 		
 		// Adds the object to the handler(s)
-		if (room != null)
-			room.addObject(this);
-		if (mousehandler != null)
-			mousehandler.addMouseListener(this);
+		if (area.getMouseHandler() != null)
+			area.getMouseHandler().addMouseListener(this);
 		if (relay != null)
 			relay.addConnector(this);
 	
@@ -201,7 +193,8 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	public boolean isVisible()
 	{
 		// Is considered invisible if the component is invisible
-		return (this.host.isVisible() && super.isVisible());
+		// TODO: Throws a nullPointException
+		return (this.host != null && this.host.isVisible() && super.isVisible());
 	}
 	
 	@Override

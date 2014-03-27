@@ -4,8 +4,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
 import utopia_gameobjects.GameObject;
-import utopia_handlers.CollidableHandler;
 import utopia_listeners.RoomListener;
+import utopia_worlds.Area;
 import utopia_worlds.Room;
 
 /**
@@ -38,13 +38,13 @@ public class InvisibleWall extends GameObject implements Wall, RoomListener
 	 * applied.
 	 * @param position the wall's position on either y- or x-axis depending on 
 	 * the applied force's axis (y if vertical, x if horizontal)
-	 * @param collidableHandler The CollidableHandler that handles the object's 
-	 * collision detection
-	 * @param room The room where the wall will reside at
+	 * @param area The area where the object will reside at
 	 */
 	public InvisibleWall(int verticalForce, int horizontalForce, int position, 
-			CollidableHandler collidableHandler, Room room)
+			Area area)
 	{
+		super(area);
+		
 		// Initializes attributes
 		this.yForceModifier = verticalForce;
 		this.xForceModifier = horizontalForce;
@@ -63,10 +63,7 @@ public class InvisibleWall extends GameObject implements Wall, RoomListener
 			this.xForceModifier = 0;
 		
 		// Adds the object to the handler(s)
-		if (collidableHandler != null)
-			collidableHandler.addCollidable(this);
-		if (room != null)
-			room.addObject(this);
+		area.getCollisionHandler().getCollidableHandler().addCollidable(this);
 	}
 	
 	

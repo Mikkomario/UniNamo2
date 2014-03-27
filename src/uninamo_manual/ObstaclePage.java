@@ -38,8 +38,8 @@ public class ObstaclePage extends DescriptionPage
 				featuredType.getName());
 		
 		// Initializes attributes
-		this.imageDrawer = new SpriteDrawerObject(DepthConstants.FOREGROUND, 
-				area.getDrawer(), area.getActorHandler(), this, featuredType.getSprite());
+		this.imageDrawer = new SpriteDrawerObject(area, DepthConstants.FOREGROUND, 
+				this, featuredType.getSprite());
 		double scale = 150.0 / this.imageDrawer.getSpriteDrawer().getSprite().getHeight();
 		this.imageDrawer.setScale(scale, scale);
 		this.imageDrawer.setPosition(getX(), getY() - 100);

@@ -5,12 +5,10 @@ import java.awt.geom.Point2D;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_interfaceElements.AbstractButton;
 import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Room;
+import utopia_worlds.Area;
 
 /**
  * The user uses the testingButton to move between the testing phase and 
@@ -33,23 +31,17 @@ public class TestingButton extends AbstractButton implements TestListener
 	/**
 	 * Creates a new testingButton to the given position
 	 * 
+	 * @param area The area where the object will reside at
 	 * @param x The x-coordinate of the button
 	 * @param y The y-coordinate of the button
-	 * @param drawer The drawableHandler that will draw the button
-	 * @param mousehandler The mouseListenerHandler that will inform the 
-	 * button about mouse events
-	 * @param room The room where the button resides at
 	 * @param testHandler The testHandler that is used to inform objects about 
 	 * produced test events
 	 */
-	public TestingButton(int x, int y, DrawableHandler drawer, 
-			MouseListenerHandler mousehandler, Room room, 
-			TestHandler testHandler)
+	public TestingButton(Area area, int x, int y, TestHandler testHandler)
 	{
 		super(x, y, DepthConstants.FOREGROUND, 
 				MultiMediaHolder.getSpriteBank(
-				"gameplayinterface").getSprite("testing"), drawer, 
-				mousehandler, room);
+				"gameplayinterface").getSprite("testing"), area);
 		
 		// Initializes attributes
 		this.testing = false;

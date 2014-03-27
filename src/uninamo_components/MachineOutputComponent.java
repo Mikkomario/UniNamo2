@@ -1,10 +1,7 @@
 package uninamo_components;
 
 import uninamo_gameplaysupport.TestHandler;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
-import utopia_worlds.Room;
+import utopia_worlds.Area;
 
 /**
  * MachineOutputComponents take signals from machines and inform other 
@@ -21,14 +18,9 @@ public class MachineOutputComponent extends MachineComponent
 	 * Creates a new machineOutputComponent that will be ready to send new 
 	 * signals.
 	 * 
+	 * @param area The area where the object will reside at
 	 * @param x The x-coordinate of the component
 	 * @param y The y-coordinate of the component
-	 * @param drawer The drawableHandler that will draw the component
-	 * @param actorhandler The actorHandler that will inform the component 
-	 * about step events (= animate the component)
-	 * @param mousehandler The mouseHandler that will inform the component 
-	 * about mouse events 
-	 * @param room The room where the component resides
 	 * @param testHandler The testHandler that will inform the object about 
 	 * test events
 	 * @param connectorRelay The connectorRelay that keeps track of the 
@@ -39,15 +31,13 @@ public class MachineOutputComponent extends MachineComponent
 	 * demonstration purposes
 	 * @param hostName The name of the machine that created this component
 	 */
-	public MachineOutputComponent(int x, int y, DrawableHandler drawer,
-			ActorHandler actorhandler, MouseListenerHandler mousehandler,
-			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
+	public MachineOutputComponent(Area area, int x, int y, TestHandler testHandler, 
+			ConnectorRelay connectorRelay, 
 			String spritename, int outputs, boolean isForTesting, 
 			String hostName)
 	{
-		super(x, y, drawer, actorhandler, mousehandler, room, testHandler, 
-				connectorRelay, spritename, 0, outputs, isForTesting, 
-				hostName + "O");
+		super(area, x, y, testHandler, connectorRelay, spritename, 0, outputs, 
+				isForTesting, hostName + "O");
 	}
 	
 	

@@ -42,7 +42,7 @@ public class BookMark extends AbstractButton
 				GameSettings.screenHeight / 2 - ManualMaster.MANUALHEIGHT / 2, 
 				DepthConstants.BOTTOM, 
 				MultiMediaHolder.getSpriteBank("manual").getSprite("bookmark"), 
-				area.getDrawer(), area.getMouseHandler(), area);
+				area);
 		
 		// Initializes attributes
 		this.pageIndex = pageIndex;

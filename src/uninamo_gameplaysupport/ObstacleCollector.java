@@ -11,13 +11,12 @@ import utopia_gameobjects.DrawnObject;
 import utopia_graphic.MultiSpriteDrawer;
 import utopia_graphic.Sprite;
 import utopia_handleds.Collidable;
-import utopia_handlers.CollisionHandler;
-import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_listeners.CollisionListener;
 import utopia_listeners.RoomListener;
 import utopia_listeners.TransformationListener;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Area;
 import utopia_worlds.Room;
 
 /**
@@ -49,12 +48,9 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 	 * type. The collector needs to collect neededAmount obstacles before it 
 	 * is filled.
 	 * 
+	 * @param area The area where the object will reside at
 	 * @param x The x-coordinate of the collector
 	 * @param y The y-coordinate of the collector
-	 * @param drawer The drawableHandler that will draw the collector
-	 * @param collisionHandler The collisionHandler that will inform the object 
-	 * about collision events
-	 * @param room The room where the collector resides
 	 * @param testHandler The testHandler that will inform the object about test 
 	 * events
 	 * @param victoryHandler The victoryHandler that will check if the stage has been beaten
@@ -63,12 +59,11 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 	 * @param designSpriteName The name of the sprite used to draw the object in design mode
 	 * @param realSpriteName The name of the sprite used to draw the object in test mode
 	 */
-	public ObstacleCollector(int x, int y, DrawableHandler drawer, 
-			CollisionHandler collisionHandler, Room room, TestHandler testHandler, 
+	public ObstacleCollector(Area area, int x, int y, TestHandler testHandler, 
 			VictoryHandler victoryHandler, ObstacleType collectedType, 
 			int neededAmount, String designSpriteName, String realSpriteName)
 	{
-		super(x, y, DepthConstants.BACK, drawer);
+		super(x, y, DepthConstants.BACK, area);
 		
 		// Initializes attributes
 		this.collectedType = collectedType;
@@ -86,28 +81,27 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 		this.relativeColPoints[0] = new Point2D.Double(getOriginX(), getOriginY());
 		this.colPointsNeedUpdating = true;
 		
-		this.numberDrawer = new SpriteDrawerObject(DepthConstants.BACK - 1, 
-				drawer, null, this, 
-				MultiMediaHolder.getSpriteBank(
+		this.numberDrawer = new SpriteDrawerObject(area, DepthConstants.BACK - 1, 
+				this, MultiMediaHolder.getSpriteBank(
 				"gameplayinterface").getSprite("numbers"));
+		this.numberDrawer.getSpriteDrawer().setImageSpeed(0);
+		
 		int width = this.spriteDrawer.getSprite().getWidth();
 		int height = this.spriteDrawer.getSprite().getHeight();
 		this.numberDrawer.setSize(width / 2 - 10, height - 10);
 		this.numberDrawer.getSpriteDrawer().setImageIndex(this.neededAmount);
 		this.numberDrawer.addPosition(- width / 4, 0);
 		
-		this.collectableDrawer = new SpriteDrawerObject(DepthConstants.BACK - 1, 
-				drawer, null, this, this.collectedType.getSprite());
+		this.collectableDrawer = new SpriteDrawerObject(area, 
+				DepthConstants.BACK - 1, this, this.collectedType.getSprite());
 		this.collectableDrawer.setSize(width / 2 - 10, height - 10);
 		this.collectableDrawer.addPosition(width / 4, 0);
 		
 		// Adds the object to the handler(s)
-		if (collisionHandler != null)
-			collisionHandler.addCollisionListener(this);
+		if (area.getCollisionHandler() != null)
+			area.getCollisionHandler().addCollisionListener(this);
 		if (testHandler != null)
 			testHandler.addTestable(this);
-		if (room != null)
-			room.addObject(this);
 		
 		forceTransformationUpdate();
 	}

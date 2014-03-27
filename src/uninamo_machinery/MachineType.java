@@ -3,8 +3,6 @@ package uninamo_machinery;
 import uninamo_components.ConnectorRelay;
 import uninamo_gameplaysupport.TestHandler;
 import utopia_handlers.ActorHandler;
-import utopia_handlers.CollidableHandler;
-import utopia_handlers.CollisionHandler;
 import utopia_handlers.DrawableHandler;
 import utopia_worlds.Area;
 
@@ -45,9 +43,8 @@ public enum MachineType
 		
 		switch (this)
 		{		
-			case CONVEYORBELT: return new ConveyorBelt(x, y, drawer, 
-					actorhandler, null, null, area, area, null, null, null, 
-					null, true);
+			case CONVEYORBELT: return new ConveyorBelt(x, y, area, area, null, 
+					null, null, null, true);
 		}
 		
 		System.err.println("Can't create a machine of type " + this + 
@@ -75,16 +72,10 @@ public enum MachineType
 			Area componentArea, TestHandler testHandler, 
 			ConnectorRelay connectorRelay, MachineCounter machineCounter, 
 			String ID)
-	{
-		DrawableHandler drawer = machineArea.getDrawer();
-		ActorHandler actorHandler = machineArea.getActorHandler();
-		CollisionHandler collisionHandler = machineArea.getCollisionHandler();
-		CollidableHandler collidableHandler = collisionHandler.getCollidableHandler();
-		
+	{	
 		switch (this)
 		{
-			case CONVEYORBELT: return new ConveyorBelt(x, y, drawer, 
-					actorHandler, collidableHandler, collisionHandler, 
+			case CONVEYORBELT: return new ConveyorBelt(x, y, 
 					componentArea, machineArea, testHandler, connectorRelay, 
 					machineCounter, ID, false);
 		}

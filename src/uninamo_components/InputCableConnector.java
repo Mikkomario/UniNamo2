@@ -3,9 +3,7 @@ package uninamo_components;
 import java.awt.geom.Point2D;
 
 import uninamo_gameplaysupport.TestHandler;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
-import utopia_worlds.Room;
+import utopia_worlds.Area;
 
 /**
  * InputCableConnector is a cableConnector that handles signals coming into 
@@ -18,11 +16,9 @@ public class InputCableConnector extends CableConnector
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
+	private Area area;
 	private boolean lastSignalStatus;
-	private DrawableHandler drawer;
-	private MouseListenerHandler mousehandler;
 	private ConnectorRelay relay;
-	private Room room;
 	private TestHandler testHandler;
 	private String hostConnectInfo;
 	
@@ -34,14 +30,11 @@ public class InputCableConnector extends CableConnector
 	/**
 	 * Creates a new InputCableConnector connected to the given component
 	 * 
+	 * @param area The area where the object will reside at
 	 * @param relativex The connector's x-coordinate relative to the component's 
 	 * top-left corner (pixels)
 	 * @param relativey The connector's y-coordinate relative to the component's 
 	 * top-left corner (pixels)
-	 * @param drawer The drawableHandler that will draw the connector
-	 * @param mousehandler The mouseListenerHandler that will inform the 
-	 * connector about mouse events
-	 * @param room The room where the connector resides at
 	 * @param testHandler The testHandler that will inform the cables about 
 	 * test events
 	 * @param relay The connectorRelay that will keep track of the connectors
@@ -51,29 +44,22 @@ public class InputCableConnector extends CableConnector
 	 * and not react to mouse. It will, however, create a test cable connected 
 	 * to it
 	 */
-	public InputCableConnector(int relativex, int relativey,
-			DrawableHandler drawer, MouseListenerHandler mousehandler, 
-			Room room, TestHandler testHandler, ConnectorRelay relay, 
+	public InputCableConnector(Area area, int relativex, int relativey,
+			TestHandler testHandler, ConnectorRelay relay, 
 			Component host, int inputIndex, boolean isForTesting)
 	{
-		super(relativex, relativey, drawer, mousehandler, room, relay, host, 
-				isForTesting);
+		super(area, relativex, relativey, relay, host, isForTesting);
 		
 		// Initializes attributes
-		this.drawer = drawer;
-		this.mousehandler = mousehandler;
+		this.area = area;
 		this.relay = relay;
-		this.room = room;
 		this.testHandler = testHandler;
 		this.lastSignalStatus = false;
 		this.hostConnectInfo = "I" + inputIndex;
 		
 		// If is on test mode, creates a test cable
 		if (isForTesting)
-		{
-			connectCable(new Cable(drawer, mousehandler, room, testHandler, 
-					relay, null, this, true));
-		}
+			connectCable(new Cable(area, testHandler, relay, null, this, true));
 	}
 	
 	
@@ -88,10 +74,8 @@ public class InputCableConnector extends CableConnector
 		// a new cable
 		if (button == MouseButton.LEFT && eventType == 
 				MouseButtonEventType.PRESSED && !Cable.cableIsBeingDragged)
-		{
-			new Cable(this.drawer, this.mousehandler, this.room, 
+			new Cable(this.area, 
 					this.testHandler, this.relay, null, this, false);
-		}
 	}
 
 	@Override

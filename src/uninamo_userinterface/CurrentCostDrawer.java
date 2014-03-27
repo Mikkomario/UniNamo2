@@ -34,7 +34,7 @@ public class CurrentCostDrawer extends DrawnObject implements RoomListener
 	public CurrentCostDrawer(Area area)
 	{
 		super(GameSettings.screenWidth - 250, GameSettings.screenHeight - 16, 
-				DepthConstants.HUD, area.getDrawer());
+				DepthConstants.HUD, area);
 		
 		// Initializes attributes
 		this.currentCosts = 0;

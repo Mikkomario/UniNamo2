@@ -14,9 +14,6 @@ import uninamo_obstacles.Obstacle;
 import utopia_gameobjects.DimensionalDrawnObject;
 import utopia_graphic.MultiSpriteDrawer;
 import utopia_graphic.Sprite;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.CollidableHandler;
-import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.CollisionType;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_listeners.RoomListener;
@@ -57,12 +54,9 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	 * @param y The new y-coordinate of the machine (pixels)
 	 * @param isSolid Will the machine collide with objects
 	 * @param collisiontype What kind of shape does the machine have
-	 * @param drawer The drawer that will draw the machine
-	 * @param actorhandler The actorHandler that will animate the object
-	 * @param collidablehandler The collidableHandler that will handle the 
 	 * machine's collision checking
 	 * @param componentArea The coding area where the machine components will be created
-	 * @param designArea The area where the machine is located at
+	 * @param machineArea The area where the machine is located at
 	 * @param testHandler The testHandler that will inform the object about test events
 	 * @param connectorRelay The connectorRelay that will handle the machine's 
 	 * components' connectors
@@ -86,16 +80,14 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	 * purposes (into the manual). The machine works a bit differently if so
 	 */
 	public Machine(int x, int y, boolean isSolid,
-			CollisionType collisiontype, DrawableHandler drawer, 
-			ActorHandler actorhandler, CollidableHandler collidablehandler, 
-			Area componentArea, Area designArea, TestHandler testHandler, 
+			CollisionType collisiontype, 
+			Area componentArea, Area machineArea, TestHandler testHandler, 
 			ConnectorRelay connectorRelay, MachineCounter machineCounter, 
 			String designSpriteName, String realSpriteName, 
 			String inputComponentSpriteName, String outputComponentSpriteName, 
 			int inputs, int outputs, String ID, boolean isForTesting)
 	{
-		super(x, y, DepthConstants.NORMAL + 5, isSolid, collisiontype, drawer, 
-				collidablehandler);
+		super(x, y, DepthConstants.NORMAL + 5, isSolid, collisiontype, machineArea);
 		
 		//System.out.println("Machine connector handler " + connectorRelay);
 		
@@ -103,7 +95,7 @@ public abstract class Machine extends DimensionalDrawnObject implements
 		Sprite[] sprites = new Sprite[2];
 		sprites[0] = MultiMediaHolder.getSpriteBank("machines").getSprite(designSpriteName);
 		sprites[1] = MultiMediaHolder.getSpriteBank("machines").getSprite(realSpriteName);
-		this.spritedrawer = new MultiSpriteDrawer(sprites, actorhandler, this);
+		this.spritedrawer = new MultiSpriteDrawer(sprites, machineArea.getActorHandler(), this);
 		this.output = null;
 		this.input = null;
 		this.testing = false;
@@ -141,10 +133,9 @@ public abstract class Machine extends DimensionalDrawnObject implements
 			//System.out.println(position);
 			//System.out.println(componentArea);
 			
-			this.input = new MachineInputComponent((int) position.getX(), 
-					(int) position.getY(), componentArea.getDrawer(), 
-					componentArea.getActorHandler(), componentArea.getMouseHandler(), 
-					componentArea, testHandler, connectorRelay, 
+			this.input = new MachineInputComponent(componentArea, 
+					(int) position.getX(), 
+					(int) position.getY(), testHandler, connectorRelay, 
 					inputComponentSpriteName, inputs, this, isForTesting, 
 					toString());
 			inputComponentsCreated ++;
@@ -158,10 +149,8 @@ public abstract class Machine extends DimensionalDrawnObject implements
 			if (isForTesting)
 				position = new Point2D.Double(getX() + 50, getY() + 75);
 			
-			this.output = new MachineOutputComponent((int) position.getX(), 
-					(int) position.getY(), componentArea.getDrawer(), 
-					componentArea.getActorHandler(), componentArea.getMouseHandler(), 
-					componentArea, testHandler, connectorRelay, 
+			this.output = new MachineOutputComponent(componentArea, (int) position.getX(), 
+					(int) position.getY(), testHandler, connectorRelay, 
 					outputComponentSpriteName, outputs, isForTesting, 
 					toString());
 			outputComponentsCreated ++;
@@ -172,8 +161,6 @@ public abstract class Machine extends DimensionalDrawnObject implements
 			getSpriteDrawer().setSpriteIndex(1, false);
 		
 		// Adds the object to the handler(s)
-		if (designArea != null)
-			designArea.addObject(this);
 		if (testHandler != null)
 			testHandler.addTestable(this);
 		

@@ -70,8 +70,7 @@ public class CodingObjectCreator extends AreaObjectCreator
 	{
 		// Creates the interface elements
 		new CodeTransitionButton(0, area, this.areaChanger.getArea("design"));
-		new TestingButton(GameSettings.screenWidth - 110, 45, area.getDrawer(), 
-				area.getMouseHandler(), area, this.testHandler);
+		new TestingButton(area, GameSettings.screenWidth - 110, 45, this.testHandler);
 		
 		CurrentCostDrawer costDrawer = new CurrentCostDrawer(area);
 		
@@ -83,7 +82,6 @@ public class CodingObjectCreator extends AreaObjectCreator
 				this.timer, ComponentType.POWER);
 		
 		new ManualButton(GameSettings.screenWidth / 3, GameSettings.screenHeight, 
-				area.getDrawer(), area.getMouseHandler(), area, 
 				this.areaChanger, this.timer);
 		
 		// Creates the demo components

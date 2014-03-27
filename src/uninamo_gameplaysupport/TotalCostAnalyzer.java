@@ -9,7 +9,6 @@ import uninamo_machinery.MachineType;
 import uninamo_main.GameSettings;
 import utopia_gameobjects.DrawnObject;
 import utopia_graphic.SingleSpriteDrawer;
-import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_listeners.RoomListener;
 import utopia_resourcebanks.MultiMediaHolder;
@@ -30,7 +29,7 @@ public class TotalCostAnalyzer implements RoomListener
 	private double demoComponentCost;
 	private HashMap<ComponentType, Integer> componentAmounts;
 	private HashMap<MachineType, Integer> machineAmounts;
-	private DrawableHandler textDrawer;
+	private Area area;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -45,8 +44,9 @@ public class TotalCostAnalyzer implements RoomListener
 		this.demoComponentCost = 0;
 		this.componentAmounts = new HashMap<ComponentType, Integer>();
 		this.machineAmounts = new HashMap<MachineType, Integer>();
-		this.textDrawer = new DrawableHandler(false, false, 
-				DepthConstants.NORMAL, 0, area.getDrawer());
+		this.area = area;
+		//this.textDrawer = new DrawableHandler(false, false, 
+		//		DepthConstants.NORMAL, 0, area.getDrawer());
 		
 		// Adds the object to the handler(s)
 		if (area != null)
@@ -81,6 +81,8 @@ public class TotalCostAnalyzer implements RoomListener
 	{
 		// Ends the visualization
 		// TODO: End visualization
+		// TODO: Find a way to kill all the objects. make them roomListeners or 
+		// use a separate handler?
 	}
 	
 	
@@ -138,18 +140,18 @@ public class TotalCostAnalyzer implements RoomListener
 		// Creates the lines that visualize the costs
 		
 		// Machine intro line
-		new TextLineDrawer(32, y, "MACHINE COSTS:", this.textDrawer);
+		new TextLineDrawer(32, y, "MACHINE COSTS:", this.area);
 		y += lineHeight;
 		
 		// Machine lines
 		for (MachineType machineType : this.machineAmounts.keySet())
 		{
 			new TextLineDrawer(32, y, this.machineAmounts.get(machineType) + 
-					" x " + machineType.getName(), this.textDrawer);
+					" x " + machineType.getName(), this.area);
 			double typeCosts = 
 					this.machineAmounts.get(machineType) * machineType.getPrice();
 			new TextLineDrawer(GameSettings.screenWidth - 96, y, 
-					typeCosts + " M €", this.textDrawer);
+					typeCosts + " M €", this.area);
 			
 			totalMachineCosts += typeCosts;
 			y += lineHeight;
@@ -157,18 +159,18 @@ public class TotalCostAnalyzer implements RoomListener
 		
 		// Component intro line
 		y += lineHeight;
-		new TextLineDrawer(32, y, "COMPONENT COSTS:", this.textDrawer);
+		new TextLineDrawer(32, y, "COMPONENT COSTS:", this.area);
 		y += lineHeight;
 		
 		// Component lines
 		for (ComponentType componentType : this.componentAmounts.keySet())
 		{
 			new TextLineDrawer(32, y, this.componentAmounts.get(componentType) + 
-					" x " + componentType.getName(), this.textDrawer);
+					" x " + componentType.getName(), this.area);
 			double typeCosts = 
 					this.componentAmounts.get(componentType) * componentType.getPrice();
 			new TextLineDrawer(GameSettings.screenWidth - 96, y, 
-					typeCosts + " M €", this.textDrawer);
+					typeCosts + " M €", this.area);
 			
 			totalComponentCosts += typeCosts;
 			y += lineHeight;
@@ -176,9 +178,9 @@ public class TotalCostAnalyzer implements RoomListener
 		
 		// Total
 		y += lineHeight * 2;
-		new TextLineDrawer(32, y, "TOTAL: ", this.textDrawer);
+		new TextLineDrawer(32, y, "TOTAL: ", this.area);
 		new TextLineDrawer(GameSettings.screenWidth - 96, y, 
-				totalMachineCosts + totalComponentCosts + " M €", this.textDrawer);
+				totalMachineCosts + totalComponentCosts + " M €", this.area);
 		
 		// TODO: Add estimated benefit as well as rank
 		
@@ -188,7 +190,7 @@ public class TotalCostAnalyzer implements RoomListener
 		Grade grade = Grade.getGradeFromCostDifference(costDifferencePercent);
 		// Draws the rank
 		new GradeDrawer(GameSettings.screenWidth - 96, 
-				GameSettings.screenHeight - 96, this.textDrawer, grade);
+				GameSettings.screenHeight - 96, grade, this.area);
 	}
 	
 	/**
@@ -219,9 +221,9 @@ public class TotalCostAnalyzer implements RoomListener
 		
 		// CONSTRUCTOR	------------------------------------------------
 		
-		public TextLineDrawer(int x, int y, String line, DrawableHandler drawer)
+		public TextLineDrawer(int x, int y, String line, Area area)
 		{
-			super(x, y, DepthConstants.NORMAL, drawer);
+			super(x, y, DepthConstants.NORMAL, area);
 			
 			// Initializes attributes
 			this.line = line;
@@ -261,9 +263,9 @@ public class TotalCostAnalyzer implements RoomListener
 		
 		// CONSTRUCTOR	-------------------------------------------------
 		
-		public GradeDrawer(int x, int y, DrawableHandler drawer, Grade grade)
+		public GradeDrawer(int x, int y, Grade grade, Area area)
 		{
-			super(x, y, DepthConstants.NORMAL, drawer);
+			super(x, y, DepthConstants.NORMAL, area);
 			
 			// Initializes attributes
 			this.spriteDrawer = new SingleSpriteDrawer(

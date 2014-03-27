@@ -8,20 +8,16 @@ import java.util.ArrayList;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_gameplaysupport.Wall;
-
 import utopia_gameobjects.AdvancedPhysicDrawnObject;
 import utopia_graphic.MultiSpriteDrawer;
 import utopia_graphic.Sprite;
 import utopia_handleds.Collidable;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.CollidableHandler;
-import utopia_handlers.CollisionHandler;
-import utopia_handlers.DrawableHandler;
 import utopia_helpAndEnums.CollisionType;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_helpAndEnums.Movement;
 import utopia_listeners.RoomListener;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Area;
 import utopia_worlds.Room;
 
 /**
@@ -49,33 +45,22 @@ public abstract class Obstacle extends AdvancedPhysicDrawnObject implements
 	 *  Creates a new obstacle to the given position. Remember to set up 
 	 *  the collision points after creating the object.
 	 *  
+	 * @param area The area where the object will reside at
 	 * @param x The x-coordinate of the obstacle (pixels)
 	 * @param y The y-coordinate of the obstacle (pixels)
 	 * @param isSolid Can the obstacle be collided with
 	 * @param collisiontype What is the shape of the obstacle
-	 * @param drawer The drawableHandler that will draw the obstacle
-	 * @param collidablehandler The collidableHandler that will handle the 
-	 * obstacle's collision checking
-	 * @param collisionhandler The collisionHandler that will inform the 
-	 * object about collision events (optional)
-	 * @param actorhandler The actorHandler that will inform the object about 
-	 * step events
-	 * @param room The room where the obstacle resides at
 	 * @param testHandler The testHandler that will inform the obstacle about test events
 	 * @param designSpriteName The name of the sprite used to draw the object 
 	 * in the design mode
 	 * @param realSpriteName The name of the sprite used to draw the object 
 	 * during the test mode 
 	 */
-	public Obstacle(int x, int y, boolean isSolid,
-			CollisionType collisiontype, DrawableHandler drawer,
-			CollidableHandler collidablehandler,
-			CollisionHandler collisionhandler, ActorHandler actorhandler, 
-			Room room, TestHandler testHandler, String designSpriteName, 
-			String realSpriteName)
+	public Obstacle(Area area, int x, int y, boolean isSolid,
+			CollisionType collisiontype, TestHandler testHandler, 
+			String designSpriteName, String realSpriteName)
 	{
-		super(x, y, DepthConstants.NORMAL, isSolid, collisiontype, drawer, 
-				collidablehandler, collisionhandler, actorhandler);
+		super(x, y, DepthConstants.NORMAL, isSolid, collisiontype, area);
 		
 		// Initializes attributes
 		Sprite[] sprites = new Sprite[2];
@@ -83,15 +68,13 @@ public abstract class Obstacle extends AdvancedPhysicDrawnObject implements
 				designSpriteName);
 		sprites[1] = MultiMediaHolder.getSpriteBank("obstacles").getSprite(
 				realSpriteName);
-		this.spritedrawer = new MultiSpriteDrawer(sprites, actorhandler, this);
+		this.spritedrawer = new MultiSpriteDrawer(sprites, area.getActorHandler(), this);
 		this.started = false;
 		this.startPosition = new Point2D.Double(x, y);
 		
 		setupRotationOrigin();
 		
 		// Adds the object to the handler(s)
-		if (room != null)
-			room.addObject(this);
 		if (testHandler != null)
 			testHandler.addTestable(this);
 	}

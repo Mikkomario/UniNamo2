@@ -6,13 +6,11 @@ import java.util.Random;
 import uninamo_gameplaysupport.TestHandler;
 import utopia_gameobjects.DimensionalDrawnObject;
 import utopia_graphic.SingleSpriteDrawer;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.CollisionType;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_listeners.RoomListener;
 import utopia_resourcebanks.MultiMediaHolder;
+import utopia_worlds.Area;
 import utopia_worlds.Room;
 
 /**
@@ -42,13 +40,9 @@ public abstract class Component extends DimensionalDrawnObject implements
 	/**
 	 * Creates a new component to the given position.
 	 * 
+	 * @param area The area where the object will reside at
 	 * @param x The new x-coordinate of the component's origin (pixels)
 	 * @param y The new y-coordinate of the component's origin (pixels)
-	 * @param drawer The drawableHandler that will draw the component
-	 * @param actorhandler The actorHandler that will animate the component
-	 * @param mousehandler The mouseListenerHandler that will inform the 
-	 * object about mouse events
-	 * @param room The room where the component resides at
 	 * @param testHandler The testHandler that will inform the object about test 
 	 * events
 	 * @param connectorRelay A connectorRelay that will keep track of the 
@@ -61,19 +55,17 @@ public abstract class Component extends DimensionalDrawnObject implements
 	 * @param isForTesting If this is true, the component will go to test mode 
 	 * where it won't react to mouse but will create test cables to its connectors
 	 */
-	public Component(int x, int y, DrawableHandler drawer, 
-			ActorHandler actorhandler, MouseListenerHandler mousehandler, 
-			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
+	public Component(Area area, int x, int y, TestHandler testHandler, 
+			ConnectorRelay connectorRelay, 
 			String spritename, int inputs, int outputs, boolean fromBox, 
 			boolean isForTesting)
 	{
-		super(x, y, DepthConstants.NORMAL, false, CollisionType.BOX, drawer, 
-				null);
+		super(x, y, DepthConstants.NORMAL, false, CollisionType.BOX, area);
 		
 		// Initializes attributes
 		this.spritedrawer = new SingleSpriteDrawer(
 				MultiMediaHolder.getSpriteBank("components").getSprite(
-				spritename), actorhandler, this);
+				spritename), area.getActorHandler(), this);
 		this.inputs = new InputCableConnector[inputs];
 		this.outputs = new OutputCableConnector[outputs];
 		
@@ -87,21 +79,15 @@ public abstract class Component extends DimensionalDrawnObject implements
 		for (int i = 0; i < inputs; i++)
 		{
 			int relativey = (int) ((i + 1) * (getHeight() / (inputs + 1.0)));
-			this.inputs[i] = new InputCableConnector(0, relativey, drawer, 
-					mousehandler, room, testHandler, connectorRelay, this, i, 
-					isForTesting);
+			this.inputs[i] = new InputCableConnector(area, 0, relativey, 
+					testHandler, connectorRelay, this, i, isForTesting);
 		}
 		for (int i = 0; i < outputs; i++)
 		{
 			int relativey = (int) ((i + 1) * (getHeight() / (outputs + 1.0)));
-			this.outputs[i] = new OutputCableConnector(getWidth() - 0, 
-					relativey, drawer, mousehandler, room, testHandler, 
-					connectorRelay, this, i, isForTesting);
+			this.outputs[i] = new OutputCableConnector(area, getWidth() - 0, 
+					relativey, testHandler, connectorRelay, this, i, isForTesting);
 		}
-		
-		// Adds the object to the handler(s)
-		if (room != null)
-			room.addObject(this);
 		
 		// Resets the transform status
 		forceTransformationUpdate();

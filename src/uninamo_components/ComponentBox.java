@@ -60,8 +60,7 @@ public class ComponentBox extends AbstractButton
 			ComponentType componentType)
 	{
 		super(x, y, DepthConstants.BACK - 20, MultiMediaHolder.getSpriteBank(
-				"gameplayinterface").getSprite("componentbox"), area.getDrawer(), 
-				area.getMouseHandler(), area);
+				"gameplayinterface").getSprite("componentbox"), area);
 		
 		// Initializes attributes
 		this.area = area;
@@ -86,10 +85,8 @@ public class ComponentBox extends AbstractButton
 	{
 		// On left click, creates a new component
 		if (button == MouseButton.LEFT && eventType == MouseButtonEventType.PRESSED)
-			this.componentType.getNewComponent((int) mousePosition.getX(), 
-					(int) mousePosition.getY(), this.area.getDrawer(), 
-					this.area.getActorHandler(), this.area.getMouseHandler(), 
-					this.area, this.testHandler, this.connectorRelay, 
+			this.componentType.getNewComponent(this.area, (int) mousePosition.getX(), 
+					(int) mousePosition.getY(), this.testHandler, this.connectorRelay, 
 					this.componentRelay, this.costDrawer, this.turnHandler, false);
 	}
 

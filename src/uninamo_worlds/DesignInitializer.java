@@ -128,8 +128,7 @@ public class DesignInitializer extends ObjectInitializer
 			int x = getArgumentAsInt(arguments[2]);
 			int y = getArgumentAsInt(arguments[3]);
 			
-			new ObstacleCollector(x, y, this.designArea.getDrawer(), 
-					this.designArea.getCollisionHandler(), this.designArea, 
+			new ObstacleCollector(this.designArea, x, y, 
 					this.testHandler, this.victoryHandler, collectedType, 
 					amount, arguments[4], arguments[5]);
 		}

@@ -4,10 +4,7 @@ import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnBased;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_userinterface.CurrentCostDrawer;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
-import utopia_worlds.Room;
+import utopia_worlds.Area;
 
 /**
  * Pulse generator sends true and false signal in pulses, starting from false.
@@ -26,14 +23,9 @@ public class PulseGeneratorComponent extends NormalComponent implements TurnBase
 	/**
 	 * Creates a new pulseGenerator to the given position
 	 * 
+	 * @param area The area where the object will reside at
 	 * @param x The generator's x-coordinate (pixels)
 	 * @param y The generator's y-coordinate (pixels)
-	 * @param drawer The drawableHandler that will draw the generator
-	 * @param actorhandler The ActorHandler that will inform the object 
-	 * about step events
-	 * @param mousehandler The mouseListenerHandler that informs the object 
-	 * about mouse events
-	 * @param room The room where the generator resides
 	 * @param testHandler The testHandler that informs the object about 
 	 * test events
 	 * @param connectorRelay The connectorRelay that keeps track of all the 
@@ -47,13 +39,12 @@ public class PulseGeneratorComponent extends NormalComponent implements TurnBase
 	 * @param isForTesting If this is true, the component will go to test mode 
 	 * where it won't react to mouse but will create test cables to its connectors
 	 */
-	public PulseGeneratorComponent(int x, int y, DrawableHandler drawer,
-			ActorHandler actorhandler, MouseListenerHandler mousehandler,
-			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
+	public PulseGeneratorComponent(Area area, int x, int y, 
+			TestHandler testHandler, ConnectorRelay connectorRelay, 
 			NormalComponentRelay componentRelay, CurrentCostDrawer costDrawer, 
 			TurnHandler turnHandler, boolean isForTesting)
 	{
-		super(x, y, drawer, actorhandler, mousehandler, room, testHandler,
+		super(area, x, y, testHandler,
 				connectorRelay, componentRelay, costDrawer, "test", 0, 1, true, 
 				isForTesting);
 		

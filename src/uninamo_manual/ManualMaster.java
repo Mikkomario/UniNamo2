@@ -58,7 +58,7 @@ public class ManualMaster extends GameObject
 	public ManualMaster(AreaChanger areaChanger, TurnHandler turnHandler, 
 			ManualButton manualButton)
 	{
-		super();
+		super(areaChanger.getArea("manual"));
 		
 		// Starts the manual area
 		Area manualArea = areaChanger.getArea("manual");
@@ -69,23 +69,19 @@ public class ManualMaster extends GameObject
 		this.areaChanger = areaChanger;
 		this.currentPageIndex = 0;
 		this.manualBack = new Tile(GameSettings.screenWidth / 2, 
-				GameSettings.screenHeight / 2, manualArea.getDrawer(), 
-				manualArea.getActorHandler(), 
+				GameSettings.screenHeight / 2, 
 				MultiMediaHolder.getSpriteBank("manual").getSprite("manualback"), 
-				MANUALWIDTH, MANUALHEIGHT);
+				MANUALWIDTH, MANUALHEIGHT, manualArea);
 		this.pages = new ArrayList<DoublePage>();
 		
 		// Creates buttons
 		new ManualCloseButton(GameSettings.screenWidth / 2 + MANUALWIDTH / 2 - 20, 
 				GameSettings.screenHeight / 2 - MANUALHEIGHT / 2 + 20, 
-				manualArea.getDrawer(), manualArea.getMouseHandler(), 
-				manualArea, this);
-		this.leftPageButton = new ManualPageButton(ManualPageButton.BACWARD, 
-				manualArea.getDrawer(), manualArea.getMouseHandler(), 
-				manualArea, this);
+				this, manualArea);
+		this.leftPageButton = new ManualPageButton(ManualPageButton.BACKWARDS, 
+				this, manualArea);
 		this.rightPageButton = new ManualPageButton(ManualPageButton.FORWARD, 
-				manualArea.getDrawer(), manualArea.getMouseHandler(), 
-				manualArea, this);
+				this, manualArea);
 		
 		// Creates the page content
 		int leftPageX = GameSettings.screenWidth / 2 - MANUALWIDTH / 4;
@@ -93,31 +89,31 @@ public class ManualMaster extends GameObject
 		int pageY = GameSettings.screenHeight / 2;
 		
 		// Creates the turorial pages
-		this.pages.add(new DoublePage(new EmptyPage(), 
+		this.pages.add(new DoublePage(new EmptyPage(manualArea), 
 				new SimplePage(rightPageX, pageY, 
 				MultiMediaHolder.getSpriteBank("manual").getSprite(
-				"contentstext"), manualArea.getDrawer())));
+				"contentstext"), manualArea)));
 		this.pages.add(new DoublePage(new SimplePage(leftPageX, pageY, 
 				MultiMediaHolder.getSpriteBank("manual").getSprite("cables"), 
-				manualArea.getDrawer()), new SimplePage(rightPageX, pageY, 
+				manualArea), new SimplePage(rightPageX, pageY, 
 				MultiMediaHolder.getSpriteBank("manual").getSprite("signals"), 
-				manualArea.getDrawer())));
+				manualArea)));
 		
 		// Creates a component page for testing
 		ComponentInfoHolder componentData = new ComponentInfoHolder();
-		this.pages.add(new DoublePage(new EmptyPage(), 
+		this.pages.add(new DoublePage(new EmptyPage(manualArea), 
 				new ComponentPage(rightPageX, pageY, manualArea, turnHandler, 
 				ComponentType.OR, componentData)));
 		
 		// Creates a machine page for testing
 		MachineInfoHolder machineData = new MachineInfoHolder();
-		this.pages.add(new DoublePage(new EmptyPage(), 
+		this.pages.add(new DoublePage(new EmptyPage(manualArea), 
 				new MachinePage(rightPageX, pageY, 
 				manualArea, MachineType.CONVEYORBELT, machineData)));
 		
 		// Creates an obstacle page for testing
 		ObstacleInfoHolder obstacleData = new ObstacleInfoHolder();
-		this.pages.add(new DoublePage(new EmptyPage(), new ObstaclePage(
+		this.pages.add(new DoublePage(new EmptyPage(manualArea), new ObstaclePage(
 				rightPageX, pageY, manualArea, ObstacleType.BOX, obstacleData)));
 		
 		// Creates the bookmarks

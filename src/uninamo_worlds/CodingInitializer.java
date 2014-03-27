@@ -95,11 +95,9 @@ public class CodingInitializer extends ObjectInitializer
 			int y = getArgumentAsInt(arguments[3]);
 			
 			// Creates the component
-			NormalComponent newComponent = currentType.getNewComponent(x, y, 
-					this.area.getDrawer(), this.area.getActorHandler(), 
-					this.area.getMouseHandler(), this.area, this.testHandler, 
-					this.connectorRelay, this.componentRelay, null, 
-					this.turnHandler, false);
+			NormalComponent newComponent = currentType.getNewComponent(
+					this.area, x, y, this.testHandler, this.connectorRelay, 
+					this.componentRelay, null, this.turnHandler, false);
 			
 			// Modifies it a bit
 			newComponent.setID(arguments[0]);
@@ -112,12 +110,13 @@ public class CodingInitializer extends ObjectInitializer
 			//System.out.println("Cable ends to: "+ arguments[1]);
 			
 			// Finds the start and end components
-			OutputCableConnector start = (OutputCableConnector) this.connectorRelay.getConnectorWithID(arguments[0]);
-			InputCableConnector end = (InputCableConnector) this.connectorRelay.getConnectorWithID(arguments[1]);
+			OutputCableConnector start = 
+					(OutputCableConnector) this.connectorRelay.getConnectorWithID(arguments[0]);
+			InputCableConnector end = 
+					(InputCableConnector) this.connectorRelay.getConnectorWithID(arguments[1]);
 			
 			// Creates the cable
-			new Cable(this.area.getDrawer(), this.area.getMouseHandler(), 
-					this.area, this.testHandler, this.connectorRelay, start, 
+			new Cable(this.area, this.testHandler, this.connectorRelay, start, 
 					end, false);
 		}
 	}

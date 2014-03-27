@@ -3,7 +3,7 @@ package uninamo_manual;
 import utopia_backgrounds.Tile;
 import utopia_gameobjects.GameObject;
 import utopia_graphic.Sprite;
-import utopia_handlers.DrawableHandler;
+import utopia_worlds.Area;
 
 /**
  * Simple page is a page that contains a single image about the basics of the 
@@ -26,14 +26,15 @@ public class SimplePage extends GameObject implements Page
 	 * @param x The x-coordinate of the center of the page
 	 * @param y The y-coordinate of the center of the page
 	 * @param tutorialSprite The sprite that contains the turorial info
-	 * @param drawer The drawableHandler that will draw the page's contents
+	 * @param area The area where the object will reside at
 	 */
-	public SimplePage(int x, int y, Sprite tutorialSprite, 
-			DrawableHandler drawer)
+	public SimplePage(int x, int y, Sprite tutorialSprite, Area area)
 	{
+		super(area);
+		
 		// Initializes attributes
-		this.image = new Tile(x, y, drawer, null, tutorialSprite, 
-				ManualMaster.MANUALWIDTH / 2, ManualMaster.MANUALHEIGHT);
+		this.image = new Tile(x, y, tutorialSprite, 
+				ManualMaster.MANUALWIDTH / 2, ManualMaster.MANUALHEIGHT, area);
 		
 		// Hides the image
 		close();

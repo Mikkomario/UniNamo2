@@ -3,10 +3,7 @@ package uninamo_components;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_userinterface.CurrentCostDrawer;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
-import utopia_worlds.Room;
+import utopia_worlds.Area;
 
 /**
  * There's a componentType for each different type of component out there. 
@@ -37,14 +34,9 @@ public enum ComponentType
 	/**
 	 * Creates a new component of this type
 	 * 
+	 * @param area The area where the component will reside at
 	 * @param x The component's new x-coordinate
 	 * @param y The component's new y-coordinate
-	 * @param drawer The drawableHandler that will draw the component
-	 * @param actorHandler The actorHandler that will inform the object about 
-	 * step events and animate it (optional)
-	 * @param mouseHandler The mouseListenerHandler that will inform the 
-	 * component about mouse events
-	 * @param room The room where the object will be placed to
 	 * @param testHandler The testHandler that will inform the object about 
 	 * test events (optional)
 	 * @param connectorRelay The connectorRelay that will handle the connectors 
@@ -59,23 +51,19 @@ public enum ComponentType
 	 * purposes. If so, it doesn't react to mouse but will use test cables
 	 * @return A component of this componentType
 	 */
-	public NormalComponent getNewComponent(int x, int y, DrawableHandler drawer, 
-			ActorHandler actorHandler, MouseListenerHandler mouseHandler, 
-			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
+	public NormalComponent getNewComponent(Area area, int x, int y, 
+			TestHandler testHandler, ConnectorRelay connectorRelay, 
 			NormalComponentRelay componentRelay, CurrentCostDrawer costDrawer, 
 			TurnHandler turnHandler, boolean isTestComponent)
 	{
 		switch (this)
 		{
-			case OR: return new OrComponent(x, y, drawer, actorHandler, 
-					mouseHandler, room, testHandler, connectorRelay, 
+			case OR: return new OrComponent(area, x, y, testHandler, connectorRelay, 
 					componentRelay, costDrawer, isTestComponent);
-			case PULSE: return new PulseGeneratorComponent(x, y, drawer, 
-					actorHandler, mouseHandler, room, testHandler, 
+			case PULSE: return new PulseGeneratorComponent(area, x, y, testHandler, 
 					connectorRelay, componentRelay, costDrawer, turnHandler, 
 					isTestComponent);
-			case POWER: return new PowerSourceComponent(x, y, drawer, 
-					actorHandler, mouseHandler, room, testHandler, 
+			case POWER: return new PowerSourceComponent(area, x, y, testHandler, 
 					connectorRelay, componentRelay, costDrawer, isTestComponent);
 			default: System.err.println("Couldn't create the component. "
 					+ "Please update ComponentType.getNewComponent method"); 

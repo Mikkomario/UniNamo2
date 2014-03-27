@@ -65,9 +65,8 @@ public class ComponentPage extends DescriptionPage implements Page
 	@Override
 	protected GameObject createTestObject(Area area)
 	{
-		return this.featuredComponentType.getNewComponent((int) getX(), 
-				(int) getY() - 50, area.getDrawer(), area.getActorHandler(), 
-				area.getMouseHandler(), area, null, null, null, null, 
+		return this.featuredComponentType.getNewComponent(area, (int) getX(), 
+				(int) getY() - 50, null, null, null, null, 
 				this.turnHandler, true);
 	}
 }

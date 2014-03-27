@@ -7,12 +7,9 @@ import uninamo_gameplaysupport.TurnHandler;
 import uninamo_main.GameSettings;
 import uninamo_manual.ManualMaster;
 import uninamo_worlds.AreaChanger;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
 import utopia_helpAndEnums.DepthConstants;
 import utopia_interfaceElements.AbstractButton;
 import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Room;
 
 /**
  * ManualButton takes the user to coding manual when clicked.
@@ -35,21 +32,16 @@ public class ManualButton extends AbstractButton implements TestListener
 	 * 
 	 * @param x The x-coordinate of the manual button
 	 * @param y The y-coordinate of the manual button
-	 * @param drawer The drawableHandler that will draw the button
-	 * @param mousehandler The mouseListenerHandler that will inform the button 
-	 * about mouse events
-	 * @param room The room where the button will be staying
 	 * @param areaChanger The areaChanger that handles the transitions between areas
 	 * @param turnHandler The turnHandler that will inform the manual's objects 
 	 * about turn events
 	 */
-	public ManualButton(int x, int y, DrawableHandler drawer, 
-			MouseListenerHandler mousehandler, Room room, 
+	public ManualButton(int x, int y, 
 			AreaChanger areaChanger, TurnHandler turnHandler)
 	{
 		super(x, y, DepthConstants.FOREGROUND, 
 				MultiMediaHolder.getSpriteBank("gameplayinterface").getSprite(
-				"manual"), drawer, mousehandler, room);
+				"manual"), areaChanger.getArea("coding"));
 		
 		// Initializes attributes
 		this.areaChanger = areaChanger;

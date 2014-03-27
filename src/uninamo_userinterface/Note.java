@@ -45,7 +45,7 @@ public class Note extends AbstractButton
 	{
 		super(x, y, DepthConstants.FOREGROUND, 
 				MultiMediaHolder.getSpriteBank("mission").getSprite(spriteName), 
-				area.getDrawer(), area.getMouseHandler(), area);
+				area);
 		
 		// Initializes attributes
 		this.textDrawer = new MultiParagraphTextDrawer(GameSettings.basicFont, 

@@ -4,10 +4,7 @@ import java.util.HashMap;
 
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_machinery.Machine;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
-import utopia_worlds.Room;
+import utopia_worlds.Area;
 
 /**
  * MachineInputComponents relay signals to specific machines which then can 
@@ -30,13 +27,9 @@ public class MachineInputComponent extends MachineComponent
 	 * Creates a new machineInputComponent to the given position with the 
 	 * given sprite and host machine.
 	 * 
+	 * @param area The area where the object will reside at
 	 * @param x The component's x-coordinate
 	 * @param y The component's y-coordinate
-	 * @param drawer The drawableHandler that will draw the component
-	 * @param actorhandler The actorHandler that will animate the component
-	 * @param mousehandler The mouseListenerHandler that will inform the 
-	 * component about mouse events
-	 * @param room The room where the component resides
 	 * @param testHandler The testHandler that will inform the object about 
 	 * test events
 	 * @param connectorRelay The connectorRelay that keeps track of all the 
@@ -48,14 +41,13 @@ public class MachineInputComponent extends MachineComponent
 	 * demonstration purposes
 	 * @param hostName The name of the machine that created this component
 	 */
-	public MachineInputComponent(int x, int y, DrawableHandler drawer,
-			ActorHandler actorhandler, MouseListenerHandler mousehandler,
-			Room room, TestHandler testHandler, ConnectorRelay connectorRelay, 
+	public MachineInputComponent(Area area, int x, int y, TestHandler testHandler, 
+			ConnectorRelay connectorRelay, 
 			String spritename, int inputs, Machine host, boolean isForTesting, 
 			String hostName)
 	{
-		super(x, y, drawer, actorhandler, mousehandler, room, testHandler, 
-				connectorRelay, spritename, inputs, 0, isForTesting, hostName + "I");
+		super(area, x, y, testHandler, connectorRelay, spritename, inputs, 0, 
+				isForTesting, hostName + "I");
 		
 		// Initializes attributes
 		this.host = host;
