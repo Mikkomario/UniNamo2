@@ -4,10 +4,6 @@ import java.awt.BorderLayout;
 
 import tests.FpsApsTest;
 import uninamo_worlds.AreaChanger;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.MouseListenerHandler;
-import utopia_helpAndEnums.DepthConstants;
 import utopia_resourceHandling.ResourceType;
 import utopia_resourcebanks.MultiMediaHolder;
 import utopia_video.GamePanel;
@@ -29,19 +25,13 @@ public class Main
 	 */
 	public Main()
 	{
+		// TODO: Make using gameWindow less cryptic and easier
+		
 		// Initializes resources
 		MultiMediaHolder.initializeResourceDatabase(ResourceType.SPRITE, 
 				"configure/spriteload.txt");
 		MultiMediaHolder.initializeResourceDatabase(ResourceType.GAMEPHASE, 
 				"configure/gamephaseload.txt");
-		
-		// Initializes handlers
-		ActorHandler mainactorhandler = new ActorHandler(false, null);
-		DrawableHandler maindrawer = new DrawableHandler(false, true, 
-				DepthConstants.NORMAL, 5, null);
-		//KeyListenerHandler mainkeyhandler = new KeyListenerHandler(false, null);
-		MouseListenerHandler mainmousehandler = 
-				new MouseListenerHandler(false, null, null);
 		
 		// Creates the main window
 		GamePanel gamepanel = new GamePanel(GameSettings.screenWidth, 
@@ -53,19 +43,12 @@ public class Main
 		if (GameSettings.fullScreen)
 			window.setFullScreen(true);
 		
-		// Adds the handlers to the window
-		window.addActor(mainactorhandler);
-		gamepanel.getDrawer().addDrawable(maindrawer);
-		//window.addKeyListener(mainkeyhandler);
-		window.addActor(mainmousehandler);
-		window.addMouseListener(mainmousehandler);
-		
 		// Starts the gameplay area(s)
 		MultiMediaHolder.activateBank(ResourceType.GAMEPHASE, "default", true);
 		
 		// TODO: Add key handler when needed
-		AreaChanger areachanger = new AreaChanger(mainmousehandler, null, 
-				mainactorhandler, maindrawer);
+		AreaChanger areachanger = new AreaChanger(window.getMouseListenerHandler(), null, 
+				window.getStepHandler(), gamepanel.getDrawer());
 		areachanger.getArea("design").start();
 		areachanger.getArea("coding").start();
 		areachanger.getArea("mission").start();
@@ -75,7 +58,7 @@ public class Main
 		areachanger.getArea("coding").getDrawer().setInvisible();
 		
 		// Also activates FPS test
-		new FpsApsTest(mainactorhandler, maindrawer);
+		new FpsApsTest(window.getStepHandler(), gamepanel.getDrawer());
 	}
 	
 	
