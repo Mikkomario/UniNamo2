@@ -1,0 +1,26 @@
+- Maton lähettämät komennot / tiedot:
+			* &testbutton\n
+			* &newsetup\n
+			* blockType#xIndex#yIndex#inputnumber:Cablenumber,inputnumber:Cablenumber,...#outputnumber:cablenumber,...\n
+				- Esim: and#2#0#0:1,1:3#0:0\n
+					* "and":in ja muut monimutkaiset tyypit voi myös korvata ihan vaan indeksillä ja tulkita koneen puolella
+			* &thatisall\n
+		- Kokeen lähettämät viestit matolle
+			* &send
+			* &test
+				- HUOM: Tämä annetaan myös niissä tapauksissa kun testi on maton inputin takia
+			* &testend
+			* &activate
+				- Mahdollistaa maton tiedon lähetyksen
+			* &deactivate
+				- Matto ei lähettää tietoa
+			* &error
+				- Virhetilanteessa
+		- Huomioita:
+			* Tulkitessa tulee yhdistää vierekkäiset komponentit toisiinsa vaikka johtoa ei olis
+				- Vasemmalla olevan komponentin output 0 yhdistetään oikean input 0:aan
+			* &Testissä vois mennä matossa ledi päälle ja &endtestissä se sit sammuu
+			* Maton lähetettyä &newsetup, tulee koneen lähettää &send, ennen kuin matto voi lähettää datan
+			
+Komponenttinimet:
+and
