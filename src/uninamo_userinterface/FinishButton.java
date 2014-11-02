@@ -1,14 +1,15 @@
 package uninamo_userinterface;
 
+import gateway_interface.AbstractButton;
+import genesis_graphic.DepthConstants;
+
 import java.awt.geom.Point2D.Double;
 
+import omega_graphic.OpenSpriteBank;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
 import uninamo_worlds.AreaChanger;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_interfaceElements.AbstractButton;
-import utopia_resourcebanks.MultiMediaHolder;
 
 /**
  * FinishButton is used for finishing the current stage and moving to the results 
@@ -39,7 +40,7 @@ public class FinishButton extends AbstractButton implements TestListener
 	{
 		super(GameSettings.screenWidth / 2, GameSettings.screenHeight / 2, 
 				DepthConstants.FOREGROUND, 
-				MultiMediaHolder.getSpriteBank("gameplayinterface").getSprite("finish"), 
+				OpenSpriteBank.getSpriteBank("gameplayinterface").getSprite("finish"), 
 				areaChanger.getArea("design"));
 		
 		// Initializes attributes

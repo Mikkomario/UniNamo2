@@ -1,8 +1,8 @@
 package uninamo_components;
 
+import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_userinterface.CurrentCostDrawer;
-import utopia_worlds.Area;
 
 /**
  * PowerSourceComponent is a very simple component that simply sends true 

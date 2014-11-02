@@ -1,9 +1,19 @@
 package uninamo_machinery;
 
+import genesis_graphic.DepthConstants;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
+import omega_gameplay.CollisionType;
+import omega_graphic.DimensionalDrawnObject;
+import omega_graphic.MultiSpriteDrawer;
+import omega_graphic.OpenSpriteBank;
+import omega_graphic.Sprite;
+import omega_world.Area;
+import omega_world.Room;
+import omega_world.RoomListener;
 import uninamo_components.ConnectorRelay;
 import uninamo_components.MachineInputComponent;
 import uninamo_components.MachineOutputComponent;
@@ -11,15 +21,6 @@ import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
 import uninamo_obstacles.Obstacle;
-import utopia_gameobjects.DimensionalDrawnObject;
-import utopia_graphic.MultiSpriteDrawer;
-import utopia_graphic.Sprite;
-import utopia_helpAndEnums.CollisionType;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_listeners.RoomListener;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
-import utopia_worlds.Room;
 
 /**
  * Machines interact with actors as well as components. Machines have different 
@@ -93,8 +94,8 @@ public abstract class Machine extends DimensionalDrawnObject implements
 		
 		// Initializes attributes
 		Sprite[] sprites = new Sprite[2];
-		sprites[0] = MultiMediaHolder.getSpriteBank("machines").getSprite(designSpriteName);
-		sprites[1] = MultiMediaHolder.getSpriteBank("machines").getSprite(realSpriteName);
+		sprites[0] = OpenSpriteBank.getSpriteBank("machines").getSprite(designSpriteName);
+		sprites[1] = OpenSpriteBank.getSpriteBank("machines").getSprite(realSpriteName);
 		this.spritedrawer = new MultiSpriteDrawer(sprites, machineArea.getActorHandler(), this);
 		this.output = null;
 		this.input = null;

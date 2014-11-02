@@ -1,6 +1,6 @@
 package uninamo_gameplaysupport;
 
-import utopia_handleds.Handled;
+import genesis_logic.Handled;
 
 /**
  * TestListener function differently in test mode and creation mode and 

@@ -1,15 +1,16 @@
 package uninamo_userinterface;
 
+import gateway_interface.AbstractButton;
+import gateway_interface.MultiParagraphDrawer;
+import genesis_graphic.DepthConstants;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D.Double;
 
+import omega_graphic.OpenSpriteBank;
+import omega_world.Area;
 import uninamo_main.GameSettings;
-import utopia_graphic.MultiParagraphTextDrawer;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_interfaceElements.AbstractButton;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
 
 /**
  * Notes present information about the current mission and can be clicked to get rid of
@@ -21,7 +22,7 @@ public class Note extends AbstractButton
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
-	private MultiParagraphTextDrawer textDrawer;
+	private MultiParagraphDrawer textDrawer;
 	private int verticalMargin;
 	private int horizontalMargin;
 	
@@ -44,11 +45,11 @@ public class Note extends AbstractButton
 			String spriteName, String content, Area area)
 	{
 		super(x, y, DepthConstants.FOREGROUND, 
-				MultiMediaHolder.getSpriteBank("mission").getSprite(spriteName), 
+				OpenSpriteBank.getSpriteBank("mission").getSprite(spriteName), 
 				area);
 		
 		// Initializes attributes
-		this.textDrawer = new MultiParagraphTextDrawer(GameSettings.basicFont, 
+		this.textDrawer = new MultiParagraphDrawer(GameSettings.basicFont, 
 				Color.BLACK, getWidth() - horizontalMargin * 2, 10, this);
 		this.textDrawer.addText(content, ";");
 		this.verticalMargin = verticalMargin;

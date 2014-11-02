@@ -1,14 +1,15 @@
 package uninamo_manual;
 
+import gateway_interface.ParagraphDrawer;
+import genesis_graphic.DepthConstants;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import omega_graphic.DrawnObject;
+import omega_world.Area;
+import omega_world.GameObject;
 import uninamo_main.GameSettings;
-import utopia_gameobjects.DrawnObject;
-import utopia_gameobjects.GameObject;
-import utopia_graphic.TextDrawer;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_worlds.Area;
 
 /**
  * A descriptionPage contains a description of some object of the game and 
@@ -22,7 +23,7 @@ public abstract class DescriptionPage extends DrawnObject implements Page
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private GameObject testObject;
-	private TextDrawer textDrawer;
+	private ParagraphDrawer textDrawer;
 	private Area area;
 	private String pagename;
 	
@@ -46,7 +47,7 @@ public abstract class DescriptionPage extends DrawnObject implements Page
 		
 		// Initializes attributes
 		this.testObject = null;
-		this.textDrawer = new TextDrawer(description, GameSettings.basicFont, 
+		this.textDrawer = new ParagraphDrawer(description, GameSettings.basicFont, 
 				Color.BLACK, ManualMaster.MANUALWIDTH / 2 - 50, this);
 		this.area = area;
 		this.pagename = pagename;

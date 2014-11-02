@@ -1,6 +1,6 @@
 package uninamo_manual;
 
-import utopia_handleds.Handled;
+import genesis_logic.Handled;
 
 /**
  * Pages can be opened and closed. They may or may not contain information

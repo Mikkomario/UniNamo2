@@ -1,12 +1,12 @@
 package tests;
 
-import java.awt.Graphics2D;
+import genesis_graphic.DepthConstants;
+import genesis_graphic.Drawable;
+import genesis_graphic.DrawableHandler;
+import genesis_logic.Actor;
+import genesis_logic.ActorHandler;
 
-import utopia_handleds.Actor;
-import utopia_handleds.Drawable;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
-import utopia_helpAndEnums.DepthConstants;
+import java.awt.Graphics2D;
 
 /**
  * FpsAps tester draws the current FPS (frames per second) and APS 

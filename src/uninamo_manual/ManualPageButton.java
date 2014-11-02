@@ -1,12 +1,13 @@
 package uninamo_manual;
 
+import gateway_interface.AbstractButton;
+import genesis_graphic.DepthConstants;
+
 import java.awt.geom.Point2D.Double;
 
+import omega_graphic.OpenSpriteBank;
+import omega_world.Area;
 import uninamo_main.GameSettings;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_interfaceElements.AbstractButton;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
 
 /**
  * ManualPageButton lets the user move forwards and backwards in the manual
@@ -46,7 +47,7 @@ public class ManualPageButton extends AbstractButton
 	public ManualPageButton(int direction, ManualMaster master, Area area)
 	{
 		super(0, 0, DepthConstants.FOREGROUND, 
-				MultiMediaHolder.getSpriteBank("manual").getSprite("arrow"), 
+				OpenSpriteBank.getSpriteBank("manual").getSprite("arrow"), 
 				area);
 		
 		// Initializes attributes

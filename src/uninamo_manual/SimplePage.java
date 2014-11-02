@@ -1,9 +1,9 @@
 package uninamo_manual;
 
-import utopia_backgrounds.Tile;
-import utopia_gameobjects.GameObject;
-import utopia_graphic.Sprite;
-import utopia_worlds.Area;
+import omega_graphic.Sprite;
+import omega_graphic.Tile;
+import omega_world.Area;
+import omega_world.GameObject;
 
 /**
  * Simple page is a page that contains a single image about the basics of the 

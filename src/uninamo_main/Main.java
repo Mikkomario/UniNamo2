@@ -1,13 +1,16 @@
 package uninamo_main;
 
+import genesis_graphic.GamePanel;
+import genesis_graphic.GameWindow;
+
 import java.awt.BorderLayout;
 
+import omega_graphic.OpenSpriteBankHolder;
+import arc_bank.MultiMediaHolder;
+import arc_bank.OpenGamePhaseBankHolder;
+import arc_resource.MetaResource;
 import tests.FpsApsTest;
 import uninamo_worlds.AreaChanger;
-import utopia_resourceHandling.ResourceType;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_video.GamePanel;
-import utopia_video.GameWindow;
 
 /**
  * This is the main class of UniNamo2. The class initializes the necessary 
@@ -28,10 +31,16 @@ public class Main
 		// TODO: Make using gameWindow less cryptic and easier
 		
 		// Initializes resources
+		/*
 		MultiMediaHolder.initializeResourceDatabase(ResourceType.SPRITE, 
 				"configure/spriteload.txt");
 		MultiMediaHolder.initializeResourceDatabase(ResourceType.GAMEPHASE, 
 				"configure/gamephaseload.txt");
+		*/
+		MultiMediaHolder.initializeResourceDatabase(
+				new OpenSpriteBankHolder("configure/spriteload.txt"));
+		MultiMediaHolder.initializeResourceDatabase(
+				new OpenGamePhaseBankHolder("configure/gamephaseload.txt"));
 		
 		// Creates the main window
 		GamePanel gamepanel = new GamePanel(GameSettings.screenWidth, 
@@ -44,11 +53,10 @@ public class Main
 			window.setFullScreen(true);
 		
 		// Starts the gameplay area(s)
-		MultiMediaHolder.activateBank(ResourceType.GAMEPHASE, "default", true);
+		MultiMediaHolder.activateBank(MetaResource.GAMEPHASE, "default", true);
 		
 		// TODO: Add key handler when needed
-		AreaChanger areachanger = new AreaChanger(window.getMouseListenerHandler(), null, 
-				window.getStepHandler(), gamepanel.getDrawer());
+		AreaChanger areachanger = new AreaChanger(window, gamepanel);
 		areachanger.getArea("design").start();
 		areachanger.getArea("coding").start();
 		areachanger.getArea("mission").start();

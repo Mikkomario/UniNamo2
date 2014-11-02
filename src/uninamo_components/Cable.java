@@ -1,22 +1,23 @@
 package uninamo_components;
 
+import genesis_graphic.DepthConstants;
+import genesis_logic.AdvancedMouseListener;
+
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
+import omega_gameplay.CollisionType;
+import omega_gameplay.HelpMath;
+import omega_graphic.DimensionalDrawnObject;
+import omega_graphic.OpenSpriteBank;
+import omega_graphic.SingleSpriteDrawer;
+import omega_graphic.TransformationListener;
+import omega_world.Area;
+import omega_world.Room;
+import omega_world.RoomListener;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
-import utopia_gameobjects.DimensionalDrawnObject;
-import utopia_graphic.SingleSpriteDrawer;
-import utopia_helpAndEnums.CollisionType;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_helpAndEnums.HelpMath;
-import utopia_listeners.AdvancedMouseListener;
-import utopia_listeners.RoomListener;
-import utopia_listeners.TransformationListener;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
-import utopia_worlds.Room;
 
 /**
  * Cables are elements that connect components together and that deliver 
@@ -91,7 +92,7 @@ public class Cable extends DimensionalDrawnObject implements
 		
 		// Initializes attributes
 		this.spritedrawer = new SingleSpriteDrawer(
-				MultiMediaHolder.getSpriteBank("components").getSprite(
+				OpenSpriteBank.getSpriteBank("components").getSprite(
 				"cable"), null, this);
 		this.active = true;
 		this.start = startConnector;

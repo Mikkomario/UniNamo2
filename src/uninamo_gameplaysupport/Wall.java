@@ -1,6 +1,6 @@
 package uninamo_gameplaysupport;
 
-import utopia_handleds.PhysicalCollidable;
+import omega_gameplay.PhysicalCollidable;
 
 /**
  * Objects that implement this interface imply that they should not be moved 

@@ -1,19 +1,20 @@
 package uninamo_gameplaysupport;
 
+import genesis_graphic.DepthConstants;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.HashMap;
 
+import omega_graphic.DrawnObject;
+import omega_graphic.OpenSpriteBank;
+import omega_graphic.SingleSpriteDrawer;
+import omega_world.Area;
+import omega_world.Room;
+import omega_world.RoomListener;
 import uninamo_components.ComponentType;
 import uninamo_machinery.MachineType;
 import uninamo_main.GameSettings;
-import utopia_gameobjects.DrawnObject;
-import utopia_graphic.SingleSpriteDrawer;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_listeners.RoomListener;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
-import utopia_worlds.Room;
 
 /**
  * TotalCostAnalyzer can calculate the final costs of the creation, analyze 
@@ -269,7 +270,7 @@ public class TotalCostAnalyzer implements RoomListener
 			
 			// Initializes attributes
 			this.spriteDrawer = new SingleSpriteDrawer(
-					MultiMediaHolder.getSpriteBank("results").getSprite("grade"), 
+					OpenSpriteBank.getSpriteBank("results").getSprite("grade"), 
 					null, this);
 			this.spriteDrawer.setImageIndex(grade.getGradeSpriteIndex());
 		}

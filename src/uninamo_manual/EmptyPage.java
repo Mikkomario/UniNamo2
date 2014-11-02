@@ -1,7 +1,7 @@
 package uninamo_manual;
 
-import utopia_gameobjects.GameObject;
-import utopia_worlds.Area;
+import omega_world.Area;
+import omega_world.GameObject;
 
 /**
  * An empty page is just filler. It doesn't contain anything.

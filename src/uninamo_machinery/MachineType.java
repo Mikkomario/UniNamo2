@@ -1,10 +1,10 @@
 package uninamo_machinery;
 
+import omega_world.Area;
+import genesis_graphic.DrawableHandler;
+import genesis_logic.ActorHandler;
 import uninamo_components.ConnectorRelay;
 import uninamo_gameplaysupport.TestHandler;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
-import utopia_worlds.Area;
 
 /**
  * MachineTypes represent the different kinds of machines there are. Each 

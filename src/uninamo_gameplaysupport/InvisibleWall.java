@@ -3,10 +3,10 @@ package uninamo_gameplaysupport;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 
-import utopia_gameobjects.GameObject;
-import utopia_listeners.RoomListener;
-import utopia_worlds.Area;
-import utopia_worlds.Room;
+import omega_world.Area;
+import omega_world.GameObject;
+import omega_world.Room;
+import omega_world.RoomListener;
 
 /**
  * Invisible walls are walls that are not drawn but can be collided with. 

@@ -1,14 +1,15 @@
 package uninamo_userinterface;
 
+import gateway_interface.AbstractButton;
+import genesis_graphic.DepthConstants;
+
 import java.awt.geom.Point2D;
 
+import omega_graphic.OpenSpriteBank;
+import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_interfaceElements.AbstractButton;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
 
 /**
  * The user uses the testingButton to move between the testing phase and 
@@ -40,7 +41,7 @@ public class TestingButton extends AbstractButton implements TestListener
 	public TestingButton(Area area, int x, int y, TestHandler testHandler)
 	{
 		super(x, y, DepthConstants.FOREGROUND, 
-				MultiMediaHolder.getSpriteBank(
+				OpenSpriteBank.getSpriteBank(
 				"gameplayinterface").getSprite("testing"), area);
 		
 		// Initializes attributes

@@ -1,15 +1,16 @@
 package uninamo_userinterface;
 
+import gateway_interface.AbstractButton;
+import genesis_graphic.DepthConstants;
+
 import java.awt.geom.Point2D.Double;
 
+import omega_graphic.OpenSpriteBank;
+import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.VictoryCondition;
 import uninamo_gameplaysupport.VictoryHandler;
 import uninamo_main.GameSettings;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_interfaceElements.AbstractButton;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
 
 /**
  * DemoButton allows testing at the beginning of the stage but disappears as 
@@ -42,7 +43,7 @@ public class DemoButton extends AbstractButton implements VictoryCondition
 			TestHandler testHandler, VictoryHandler victoryHandler)
 	{
 		super(x, y, DepthConstants.HUD, 
-				MultiMediaHolder.getSpriteBank("gameplayinterface").getSprite("demo"), 
+				OpenSpriteBank.getSpriteBank("gameplayinterface").getSprite("demo"), 
 				area);
 		
 		// Initializes attributes

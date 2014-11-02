@@ -1,12 +1,13 @@
 package uninamo_userinterface;
 
+import gateway_interface.AbstractButton;
+import genesis_graphic.DepthConstants;
+
 import java.awt.geom.Point2D;
 
+import omega_graphic.OpenSpriteBank;
+import omega_world.Area;
 import uninamo_main.GameSettings;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_interfaceElements.AbstractButton;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
 
 /**
  * CodeTransitionButton lets the user switch between the code phase and the 
@@ -34,7 +35,7 @@ public class CodeTransitionButton extends AbstractButton
 	public CodeTransitionButton(int y, Area oldArea, Area newArea)
 	{
 		super(GameSettings.screenWidth / 2, y, DepthConstants.FOREGROUND, 
-				MultiMediaHolder.getSpriteBank("gameplayinterface").getSprite(
+				OpenSpriteBank.getSpriteBank("gameplayinterface").getSprite(
 				"transition"), oldArea);
 		
 		// Initializes attributes

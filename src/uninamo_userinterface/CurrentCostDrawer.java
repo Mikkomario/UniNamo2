@@ -1,13 +1,14 @@
 package uninamo_userinterface;
 
+import genesis_graphic.DepthConstants;
+
 import java.awt.Graphics2D;
 
+import omega_graphic.DrawnObject;
+import omega_world.Area;
+import omega_world.Room;
+import omega_world.RoomListener;
 import uninamo_main.GameSettings;
-import utopia_gameobjects.DrawnObject;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_listeners.RoomListener;
-import utopia_worlds.Area;
-import utopia_worlds.Room;
 
 /**
  * CurrentCostDrawer draws the current total costs of used components as well 

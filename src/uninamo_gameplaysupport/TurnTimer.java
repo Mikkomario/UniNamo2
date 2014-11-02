@@ -1,11 +1,11 @@
 package uninamo_gameplaysupport;
 
+import genesis_logic.ActorHandler;
+import omega_world.Room;
+import omega_world.RoomListener;
+import timers.ContinuousTimer;
+import timers.TimerEventListener;
 import uninamo_main.GameSettings;
-import utopia_handlers.ActorHandler;
-import utopia_listeners.RoomListener;
-import utopia_listeners.TimerEventListener;
-import utopia_timers.ContinuousTimer;
-import utopia_worlds.Room;
 
 /**
  * The turnTimer informs multiple objects about the pass of turns. The timer 

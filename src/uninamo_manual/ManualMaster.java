@@ -2,6 +2,10 @@ package uninamo_manual;
 
 import java.util.ArrayList;
 
+import omega_graphic.OpenSpriteBank;
+import omega_graphic.Tile;
+import omega_world.Area;
+import omega_world.GameObject;
 import uninamo_components.ComponentType;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_machinery.MachineType;
@@ -9,10 +13,6 @@ import uninamo_main.GameSettings;
 import uninamo_obstacles.ObstacleType;
 import uninamo_userinterface.ManualButton;
 import uninamo_worlds.AreaChanger;
-import utopia_backgrounds.Tile;
-import utopia_gameobjects.GameObject;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
 
 /**
  * ManualMaster handles the objects shown in the manual and takes care of 
@@ -70,7 +70,7 @@ public class ManualMaster extends GameObject
 		this.currentPageIndex = 0;
 		this.manualBack = new Tile(GameSettings.screenWidth / 2, 
 				GameSettings.screenHeight / 2, 
-				MultiMediaHolder.getSpriteBank("manual").getSprite("manualback"), 
+				OpenSpriteBank.getSpriteBank("manual").getSprite("manualback"), 
 				MANUALWIDTH, MANUALHEIGHT, manualArea);
 		this.pages = new ArrayList<DoublePage>();
 		
@@ -91,12 +91,12 @@ public class ManualMaster extends GameObject
 		// Creates the turorial pages
 		this.pages.add(new DoublePage(new EmptyPage(manualArea), 
 				new SimplePage(rightPageX, pageY, 
-				MultiMediaHolder.getSpriteBank("manual").getSprite(
+				OpenSpriteBank.getSpriteBank("manual").getSprite(
 				"contentstext"), manualArea)));
 		this.pages.add(new DoublePage(new SimplePage(leftPageX, pageY, 
-				MultiMediaHolder.getSpriteBank("manual").getSprite("cables"), 
+				OpenSpriteBank.getSpriteBank("manual").getSprite("cables"), 
 				manualArea), new SimplePage(rightPageX, pageY, 
-				MultiMediaHolder.getSpriteBank("manual").getSprite("signals"), 
+				OpenSpriteBank.getSpriteBank("manual").getSprite("signals"), 
 				manualArea)));
 		
 		// Creates a component page for testing

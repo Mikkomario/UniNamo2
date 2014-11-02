@@ -2,8 +2,8 @@ package uninamo_components;
 
 import java.awt.geom.Point2D;
 
+import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
-import utopia_worlds.Area;
 
 /**
  * OutputCableConnectors take signal events from components and relays them to 

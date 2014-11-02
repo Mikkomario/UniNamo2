@@ -1,18 +1,15 @@
 package uninamo_worlds;
 
+import arc_bank.GamePhaseBank;
+import arc_bank.OpenGamePhaseBank;
+import genesis_graphic.GamePanel;
+import genesis_graphic.GameWindow;
+import omega_world.AreaRelay;
 import uninamo_components.ConnectorRelay;
 import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TotalCostAnalyzer;
 import uninamo_gameplaysupport.TurnTimer;
-import utopia_handlers.ActorHandler;
-import utopia_handlers.DrawableHandler;
-import utopia_handlers.KeyListenerHandler;
-import utopia_handlers.MouseListenerHandler;
-import utopia_resourcebanks.GamePhaseBank;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
-import utopia_worlds.AreaRelay;
 
 /**
  * AreaChanger makes the game transition between different states like coding 
@@ -27,28 +24,20 @@ public class AreaChanger extends AreaRelay
 	
 	/**
 	 * Creates the areaChanger as well as all the areas in the game
-	 * 
-	 * @param mousehandler MouseListenerHandler that will inform the areas 
-	 * about mouse events
-	 * @param keyHandler The keyListenerHandler that will inform the areas 
-	 * about key events
-	 * @param actorhandler ActorHandler that will inform areas about step 
-	 * events
-	 * @param drawer DrawableHandler that will draw the areas
+	 * @param window The window that hosts the game
+	 * @param panel The panel in which the areas will be drawn
 	 */
-	public AreaChanger(MouseListenerHandler mousehandler, 
-			KeyListenerHandler keyHandler, ActorHandler actorhandler, 
-			DrawableHandler drawer)
+	public AreaChanger(GameWindow window, GamePanel panel)
 	{
+		super(window, panel);
+		
 		// Creates areas
-		GamePhaseBank phaseBank = MultiMediaHolder.getGamePhaseBank("default");
+		GamePhaseBank phaseBank = OpenGamePhaseBank.getGamePhaseBank("default");
 		
 		// Results contains analysis of the costs of the previous mission
-		addArea("results", new Area(phaseBank.getPhase("results"), 
-				mousehandler, actorhandler, drawer, keyHandler));
+		addArea("results", phaseBank.getPhase("results"));
 		// Coding area contains the user interface for "coding"
-		addArea("coding", new Area(phaseBank.getPhase("gameplay"), 
-				mousehandler, actorhandler, drawer, keyHandler));
+		addArea("coding", phaseBank.getPhase("gameplay"));
 		
 		// Creates shared resources
 		TotalCostAnalyzer costAnalyzer = new TotalCostAnalyzer(getArea("results"));
@@ -58,23 +47,20 @@ public class AreaChanger extends AreaRelay
 		TestHandler testHandler = new TestHandler(null);
 		
 		TurnTimer turnTimer = new TurnTimer(testHandler, 
-				getArea("coding"), actorhandler);
+				getArea("coding"), getArea("coding").getActorHandler());
 		new CodingObjectCreator(this, connectorRelay, componentRelay, 
 				testHandler, turnTimer);
 		
 		// The design area contains the context and the mission stuff
-		addArea("design", new Area(phaseBank.getPhase("gameplay"), 
-				mousehandler, actorhandler, drawer, keyHandler));
+		addArea("design", phaseBank.getPhase("gameplay"));
 		new DesignObjectCreator(this, testHandler, componentRelay, 
 				connectorRelay, costAnalyzer);
 		
 		// Manual contains useful information
-		addArea("manual", new Area(phaseBank.getPhase("gameplay"), 
-				mousehandler, actorhandler, drawer, keyHandler));
+		addArea("manual", phaseBank.getPhase("gameplay"));
 		
 		// Mission contains the short mission briefing shown at the start of a stage
-		addArea("mission", new Area(phaseBank.getPhase("gameplay"), 
-				mousehandler, actorhandler, drawer, keyHandler));
+		addArea("mission", phaseBank.getPhase("gameplay"));
 		new MissionObjectCreator(getArea("mission"));
 	}
 }

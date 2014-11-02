@@ -1,23 +1,24 @@
 package uninamo_gameplaysupport;
 
+import genesis_graphic.DepthConstants;
+
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
+import omega_gameplay.Collidable;
+import omega_gameplay.CollisionListener;
+import omega_graphic.DrawnObject;
+import omega_graphic.MultiSpriteDrawer;
+import omega_graphic.OpenSpriteBank;
+import omega_graphic.Sprite;
+import omega_graphic.TransformationListener;
+import omega_world.Area;
+import omega_world.Room;
+import omega_world.RoomListener;
 import uninamo_obstacles.Obstacle;
 import uninamo_obstacles.ObstacleType;
-import utopia_gameobjects.DrawnObject;
-import utopia_graphic.MultiSpriteDrawer;
-import utopia_graphic.Sprite;
-import utopia_handleds.Collidable;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_listeners.CollisionListener;
-import utopia_listeners.RoomListener;
-import utopia_listeners.TransformationListener;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
-import utopia_worlds.Room;
 
 /**
  * ObstacleCollectors require a certain number of a certain object to fill up. 
@@ -72,8 +73,8 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 		this.collectsLeft = this.neededAmount;
 		
 		Sprite[] sprites = new Sprite[2];
-		sprites[0] = MultiMediaHolder.getSpriteBank("goals").getSprite(designSpriteName);
-		sprites[1] = MultiMediaHolder.getSpriteBank("goals").getSprite(realSpriteName);
+		sprites[0] = OpenSpriteBank.getSpriteBank("goals").getSprite(designSpriteName);
+		sprites[1] = OpenSpriteBank.getSpriteBank("goals").getSprite(realSpriteName);
 		// TODO: Need animation later?
 		this.spriteDrawer = new MultiSpriteDrawer(sprites, null, this);
 		
@@ -82,7 +83,7 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 		this.colPointsNeedUpdating = true;
 		
 		this.numberDrawer = new SpriteDrawerObject(area, DepthConstants.BACK - 1, 
-				this, MultiMediaHolder.getSpriteBank(
+				this, OpenSpriteBank.getSpriteBank(
 				"gameplayinterface").getSprite("numbers"));
 		this.numberDrawer.getSpriteDrawer().setImageSpeed(0);
 		

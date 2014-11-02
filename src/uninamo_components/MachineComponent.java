@@ -3,9 +3,9 @@ package uninamo_components;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_main.GameSettings;
-import utopia_worlds.Area;
 
 /**
  * MachineComponents are components that are tied into a single machine. 

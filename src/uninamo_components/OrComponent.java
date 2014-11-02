@@ -1,8 +1,8 @@
 package uninamo_components;
 
+import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_userinterface.CurrentCostDrawer;
-import utopia_worlds.Area;
 
 /**
  * OrComponent is a logical unit that sends true signal if either of its inputs 

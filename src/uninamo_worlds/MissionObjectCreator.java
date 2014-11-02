@@ -1,7 +1,7 @@
 package uninamo_worlds;
 
-import utopia_worlds.Area;
-import utopia_worlds.AreaObjectCreator;
+import omega_world.Area;
+import omega_world.AreaObjectCreator;
 
 /**
  * MissionObjectCreator creates the necessary objects at the start of the 

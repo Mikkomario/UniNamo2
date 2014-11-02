@@ -1,12 +1,13 @@
 package uninamo_manual;
 
+import gateway_interface.AbstractButton;
+import genesis_graphic.DepthConstants;
+
 import java.awt.geom.Point2D.Double;
 
+import omega_graphic.OpenSpriteBank;
+import omega_world.Area;
 import uninamo_main.GameSettings;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_interfaceElements.AbstractButton;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
 
 /**
  * ManualCloseButton closes the manual when clicked
@@ -34,7 +35,7 @@ public class ManualCloseButton extends AbstractButton
 	public ManualCloseButton(int x, int y, ManualMaster master, Area area)
 	{
 		super(x, y, DepthConstants.FOREGROUND, 
-				MultiMediaHolder.getSpriteBank("manual").getSprite("close"), 
+				OpenSpriteBank.getSpriteBank("manual").getSprite("close"), 
 				area);
 		
 		// Initializes attributes

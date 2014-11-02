@@ -1,9 +1,9 @@
 package uninamo_obstacles;
 
+import omega_graphic.OpenSpriteBank;
+import omega_graphic.Sprite;
+import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
-import utopia_graphic.Sprite;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
 
 /**
  * ObstacleTypes represents different types of obstacles that often have their 
@@ -36,7 +36,7 @@ public enum ObstacleType
 		}
 		
 		if (spritename != null)
-			return MultiMediaHolder.getSpriteBank("obstacles").getSprite(spritename);
+			return OpenSpriteBank.getSpriteBank("obstacles").getSprite(spritename);
 		else
 		{
 			System.out.println("Couldn't find the sprite for " + this + 

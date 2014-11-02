@@ -3,12 +3,12 @@ package uninamo_obstacles;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
+import omega_gameplay.Collidable;
+import omega_gameplay.CollisionType;
+import omega_gameplay.Material;
+import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.Wall;
-import utopia_handleds.Collidable;
-import utopia_helpAndEnums.CollisionType;
-import utopia_helpAndEnums.Material;
-import utopia_worlds.Area;
 
 /**
  * Box is a simple obstacle that does pretty much nothing but collides with walls

@@ -1,20 +1,21 @@
 package uninamo_components;
 
+import genesis_logic.AdvancedMouseListener;
+
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import omega_gameplay.CollisionType;
+import omega_graphic.DimensionalDrawnObject;
+import omega_graphic.MultiSpriteDrawer;
+import omega_graphic.OpenSpriteBank;
+import omega_graphic.Sprite;
+import omega_graphic.TransformationListener;
+import omega_world.Area;
+import omega_world.Room;
+import omega_world.RoomListener;
 import uninamo_main.GameSettings;
-import utopia_gameobjects.DimensionalDrawnObject;
-import utopia_graphic.MultiSpriteDrawer;
-import utopia_graphic.Sprite;
-import utopia_helpAndEnums.CollisionType;
-import utopia_listeners.AdvancedMouseListener;
-import utopia_listeners.RoomListener;
-import utopia_listeners.TransformationListener;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
-import utopia_worlds.Room;
 
 /**
  * CableConnectors are attached to certain components. They handle the signal 
@@ -64,9 +65,9 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 		this.testVersion = isForTesting;
 		
 		Sprite[] sprites = new Sprite[2];
-		sprites[0] = MultiMediaHolder.getSpriteBank(
+		sprites[0] = OpenSpriteBank.getSpriteBank(
 				"components").getSprite("inputconnector");
-		sprites[1] = MultiMediaHolder.getSpriteBank(
+		sprites[1] = OpenSpriteBank.getSpriteBank(
 				"components").getSprite("outputconnector");
 		
 		this.spritedrawer = new MultiSpriteDrawer(sprites, null, this);

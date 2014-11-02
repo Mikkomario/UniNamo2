@@ -1,5 +1,7 @@
 package uninamo_worlds;
 
+import omega_world.Area;
+import omega_world.AreaObjectCreator;
 import uninamo_components.ConnectorRelay;
 import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.InvisibleWall;
@@ -12,8 +14,6 @@ import uninamo_userinterface.DemoButton;
 import uninamo_userinterface.FinishButton;
 import uninamo_userinterface.TestingButton;
 import uninamo_userinterface.ToCodeButton;
-import utopia_worlds.Area;
-import utopia_worlds.AreaObjectCreator;
 
 /**
  * DesignObjectCreator creates the objects needed in the design area. It also 

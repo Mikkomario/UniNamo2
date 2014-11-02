@@ -1,12 +1,13 @@
 package uninamo_manual;
 
+import gateway_interface.AbstractButton;
+import genesis_graphic.DepthConstants;
+
 import java.awt.geom.Point2D.Double;
 
+import omega_graphic.OpenSpriteBank;
+import omega_world.Area;
 import uninamo_main.GameSettings;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_interfaceElements.AbstractButton;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
 
 /**
  * By clicking a bookMark, the user can go to a certain double page on the manual
@@ -41,7 +42,7 @@ public class BookMark extends AbstractButton
 		super(GameSettings.screenWidth / 2 + x, 
 				GameSettings.screenHeight / 2 - ManualMaster.MANUALHEIGHT / 2, 
 				DepthConstants.BOTTOM, 
-				MultiMediaHolder.getSpriteBank("manual").getSprite("bookmark"), 
+				OpenSpriteBank.getSpriteBank("manual").getSprite("bookmark"), 
 				area);
 		
 		// Initializes attributes

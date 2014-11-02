@@ -3,10 +3,10 @@ package uninamo_gameplaysupport;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
-import utopia_gameobjects.DrawnObject;
-import utopia_graphic.SingleSpriteDrawer;
-import utopia_graphic.Sprite;
-import utopia_worlds.Area;
+import omega_graphic.DrawnObject;
+import omega_graphic.SingleSpriteDrawer;
+import omega_graphic.Sprite;
+import omega_world.Area;
 
 /**
  * SpriteDrawerObject is a drawnObject that draws a single sprite. It can be 

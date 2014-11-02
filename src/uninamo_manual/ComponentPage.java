@@ -2,10 +2,10 @@ package uninamo_manual;
 
 import java.awt.Graphics2D;
 
+import omega_world.Area;
+import omega_world.GameObject;
 import uninamo_components.ComponentType;
 import uninamo_gameplaysupport.TurnHandler;
-import utopia_gameobjects.GameObject;
-import utopia_worlds.Area;
 
 /**
  * ComponentPage features a short description of a component as well as a 

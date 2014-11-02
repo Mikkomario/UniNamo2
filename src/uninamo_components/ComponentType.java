@@ -1,9 +1,9 @@
 package uninamo_components;
 
+import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_userinterface.CurrentCostDrawer;
-import utopia_worlds.Area;
 
 /**
  * There's a componentType for each different type of component out there. 

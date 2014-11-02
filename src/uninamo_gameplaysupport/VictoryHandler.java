@@ -1,8 +1,8 @@
 package uninamo_gameplaysupport;
 
+import genesis_logic.Handled;
+import genesis_logic.Handler;
 import uninamo_userinterface.FinishButton;
-import utopia_handleds.Handled;
-import utopia_handlers.Handler;
 
 /**
  * VictoryHandler keeps track of all the victoryConditions in a stage and 

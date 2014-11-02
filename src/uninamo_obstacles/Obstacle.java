@@ -1,24 +1,25 @@
 package uninamo_obstacles;
 
+import genesis_graphic.DepthConstants;
+
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
+import omega_gameplay.AdvancedPhysicDrawnObject;
+import omega_gameplay.Collidable;
+import omega_gameplay.CollisionType;
+import omega_gameplay.Movement;
+import omega_graphic.MultiSpriteDrawer;
+import omega_graphic.OpenSpriteBank;
+import omega_graphic.Sprite;
+import omega_world.Area;
+import omega_world.Room;
+import omega_world.RoomListener;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_gameplaysupport.Wall;
-import utopia_gameobjects.AdvancedPhysicDrawnObject;
-import utopia_graphic.MultiSpriteDrawer;
-import utopia_graphic.Sprite;
-import utopia_handleds.Collidable;
-import utopia_helpAndEnums.CollisionType;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_helpAndEnums.Movement;
-import utopia_listeners.RoomListener;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
-import utopia_worlds.Room;
 
 /**
  * obstacles are the main 'objects' in the game in a sense that the user is 
@@ -64,9 +65,9 @@ public abstract class Obstacle extends AdvancedPhysicDrawnObject implements
 		
 		// Initializes attributes
 		Sprite[] sprites = new Sprite[2];
-		sprites[0] = MultiMediaHolder.getSpriteBank("obstacles").getSprite(
+		sprites[0] = OpenSpriteBank.getSpriteBank("obstacles").getSprite(
 				designSpriteName);
-		sprites[1] = MultiMediaHolder.getSpriteBank("obstacles").getSprite(
+		sprites[1] = OpenSpriteBank.getSpriteBank("obstacles").getSprite(
 				realSpriteName);
 		this.spritedrawer = new MultiSpriteDrawer(sprites, area.getActorHandler(), this);
 		this.started = false;

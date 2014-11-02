@@ -1,9 +1,9 @@
 package uninamo_components;
 
-import java.awt.geom.Point2D;
+import genesis_logic.Handled;
+import genesis_logic.Handler;
 
-import utopia_handleds.Handled;
-import utopia_handlers.Handler;
+import java.awt.geom.Point2D;
 
 /**
  * ConnectorRelay keeps track of all the connectors used in the game and 

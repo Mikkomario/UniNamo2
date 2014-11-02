@@ -1,12 +1,12 @@
 package uninamo_worlds;
 
+import flow_fileIO.FileReader;
 import uninamo_components.Cable;
 import uninamo_components.NormalComponent;
 import uninamo_gameplaysupport.ObstacleCollector;
 import uninamo_machinery.Machine;
 import uninamo_obstacles.Obstacle;
 import uninamo_userinterface.Note;
-import utopia_fileio.FileReader;
 
 /**
  * ObjectInitializers create different objects when created by reading their 

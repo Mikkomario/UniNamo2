@@ -1,6 +1,6 @@
 package uninamo_gameplaysupport;
 
-import utopia_handleds.Handled;
+import genesis_logic.Handled;
 
 /**
  * VictoryCondition objects must be satisfied before a stage can be cleared

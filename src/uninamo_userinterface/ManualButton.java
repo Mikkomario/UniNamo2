@@ -1,15 +1,16 @@
 package uninamo_userinterface;
 
+import gateway_interface.AbstractButton;
+import genesis_graphic.DepthConstants;
+
 import java.awt.geom.Point2D.Double;
 
+import omega_graphic.OpenSpriteBank;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_main.GameSettings;
 import uninamo_manual.ManualMaster;
 import uninamo_worlds.AreaChanger;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_interfaceElements.AbstractButton;
-import utopia_resourcebanks.MultiMediaHolder;
 
 /**
  * ManualButton takes the user to coding manual when clicked.
@@ -40,7 +41,7 @@ public class ManualButton extends AbstractButton implements TestListener
 			AreaChanger areaChanger, TurnHandler turnHandler)
 	{
 		super(x, y, DepthConstants.FOREGROUND, 
-				MultiMediaHolder.getSpriteBank("gameplayinterface").getSprite(
+				OpenSpriteBank.getSpriteBank("gameplayinterface").getSprite(
 				"manual"), areaChanger.getArea("coding"));
 		
 		// Initializes attributes

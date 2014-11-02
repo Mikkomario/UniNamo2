@@ -1,5 +1,7 @@
 package uninamo_worlds;
 
+import omega_world.Area;
+import omega_world.AreaObjectCreator;
 import uninamo_components.ComponentBox;
 import uninamo_components.ComponentType;
 import uninamo_components.ConnectorRelay;
@@ -11,8 +13,6 @@ import uninamo_userinterface.CodeTransitionButton;
 import uninamo_userinterface.CurrentCostDrawer;
 import uninamo_userinterface.ManualButton;
 import uninamo_userinterface.TestingButton;
-import utopia_worlds.Area;
-import utopia_worlds.AreaObjectCreator;
 
 /**
  * This objectCreator creates the necessary elements used in the coding 

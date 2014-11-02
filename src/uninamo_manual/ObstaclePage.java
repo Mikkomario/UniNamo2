@@ -1,10 +1,10 @@
 package uninamo_manual;
 
+import genesis_graphic.DepthConstants;
+import omega_world.Area;
+import omega_world.GameObject;
 import uninamo_gameplaysupport.SpriteDrawerObject;
 import uninamo_obstacles.ObstacleType;
-import utopia_gameobjects.GameObject;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_worlds.Area;
 
 /**
  * ObstaclePage shows information about a certain obstacle

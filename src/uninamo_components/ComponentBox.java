@@ -1,17 +1,18 @@
 package uninamo_components;
 
+import gateway_interface.AbstractButton;
+import genesis_graphic.DepthConstants;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
+import omega_graphic.OpenSpriteBank;
+import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_main.GameSettings;
 import uninamo_userinterface.CurrentCostDrawer;
-import utopia_helpAndEnums.DepthConstants;
-import utopia_interfaceElements.AbstractButton;
-import utopia_resourcebanks.MultiMediaHolder;
-import utopia_worlds.Area;
 
 /**
  * ComponentBox is a box from which the user can drag components away from. 
@@ -59,7 +60,7 @@ public class ComponentBox extends AbstractButton
 			CurrentCostDrawer costDrawer, TurnHandler turnHandler, 
 			ComponentType componentType)
 	{
-		super(x, y, DepthConstants.BACK - 20, MultiMediaHolder.getSpriteBank(
+		super(x, y, DepthConstants.BACK - 20, OpenSpriteBank.getSpriteBank(
 				"gameplayinterface").getSprite("componentbox"), area);
 		
 		// Initializes attributes

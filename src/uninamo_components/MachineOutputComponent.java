@@ -1,7 +1,7 @@
 package uninamo_components;
 
+import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
-import utopia_worlds.Area;
 
 /**
  * MachineOutputComponents take signals from machines and inform other 

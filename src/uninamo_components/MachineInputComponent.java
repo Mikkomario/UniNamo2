@@ -2,9 +2,9 @@ package uninamo_components;
 
 import java.util.HashMap;
 
+import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_machinery.Machine;
-import utopia_worlds.Area;
 
 /**
  * MachineInputComponents relay signals to specific machines which then can 

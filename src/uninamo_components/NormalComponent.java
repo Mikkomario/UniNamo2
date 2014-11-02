@@ -1,14 +1,15 @@
 package uninamo_components;
 
+import genesis_logic.AdvancedMouseListener;
+
 import java.awt.geom.Point2D;
 
+import omega_gameplay.HelpMath;
+import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
 import uninamo_userinterface.CurrentCostDrawer;
-import utopia_helpAndEnums.HelpMath;
-import utopia_listeners.AdvancedMouseListener;
-import utopia_worlds.Area;
 
 /**
  * NormalComponents are components that aren't machineComponents. 

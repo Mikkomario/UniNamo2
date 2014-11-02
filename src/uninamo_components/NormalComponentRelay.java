@@ -1,10 +1,10 @@
 package uninamo_components;
 
+import omega_world.Room;
+import omega_world.RoomListener;
+import genesis_logic.Handled;
+import genesis_logic.Handler;
 import uninamo_gameplaysupport.TotalCostAnalyzer;
-import utopia_handleds.Handled;
-import utopia_handlers.Handler;
-import utopia_listeners.RoomListener;
-import utopia_worlds.Room;
 
 /**
  * ComponentRelay keeps track of all the created components 

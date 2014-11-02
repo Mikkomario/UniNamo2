@@ -1,6 +1,6 @@
 package uninamo_gameplaysupport;
 
-import utopia_handleds.Handled;
+import genesis_logic.Handled;
 
 /**
  * Turn based instances react to time events that are produced at 

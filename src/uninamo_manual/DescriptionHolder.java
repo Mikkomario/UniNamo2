@@ -2,7 +2,7 @@ package uninamo_manual;
 
 import java.util.HashMap;
 
-import utopia_fileio.FileReader;
+import flow_fileIO.FileReader;
 
 /**
  * DescriptionHolder reads and holds descriptions of different things

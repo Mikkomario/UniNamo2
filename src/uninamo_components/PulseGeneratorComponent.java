@@ -1,10 +1,10 @@
 package uninamo_components;
 
+import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnBased;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_userinterface.CurrentCostDrawer;
-import utopia_worlds.Area;
 
 /**
  * Pulse generator sends true and false signal in pulses, starting from false.
