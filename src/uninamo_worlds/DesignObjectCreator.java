@@ -10,6 +10,7 @@ import uninamo_gameplaysupport.TotalCostAnalyzer;
 import uninamo_gameplaysupport.VictoryHandler;
 import uninamo_machinery.MachineCounter;
 import uninamo_main.GameSettings;
+import uninamo_previous.AreaChanger;
 import uninamo_userinterface.DemoButton;
 import uninamo_userinterface.FinishButton;
 import uninamo_userinterface.TestingButton;

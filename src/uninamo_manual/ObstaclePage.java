@@ -3,8 +3,8 @@ package uninamo_manual;
 import genesis_graphic.DepthConstants;
 import omega_world.Area;
 import omega_world.GameObject;
-import uninamo_gameplaysupport.SpriteDrawerObject;
 import uninamo_obstacles.ObstacleType;
+import uninamo_previous.SpriteDrawerObject;
 
 /**
  * ObstaclePage shows information about a certain obstacle

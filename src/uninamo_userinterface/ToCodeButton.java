@@ -6,7 +6,7 @@ import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
-import uninamo_worlds.AreaChanger;
+import uninamo_previous.AreaChanger;
 
 /**
  * ToCodeButton is a codeTransitionButton which also handles some additional 

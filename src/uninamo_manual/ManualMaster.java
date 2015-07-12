@@ -11,8 +11,8 @@ import uninamo_gameplaysupport.TurnHandler;
 import uninamo_machinery.MachineType;
 import uninamo_main.GameSettings;
 import uninamo_obstacles.ObstacleType;
+import uninamo_previous.AreaChanger;
 import uninamo_userinterface.ManualButton;
-import uninamo_worlds.AreaChanger;
 
 /**
  * ManualMaster handles the objects shown in the manual and takes care of 

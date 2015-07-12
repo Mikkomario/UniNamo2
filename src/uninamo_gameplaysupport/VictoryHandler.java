@@ -1,7 +1,7 @@
 package uninamo_gameplaysupport;
 
-import genesis_logic.Handled;
-import genesis_logic.Handler;
+import genesis_event.Handler;
+import genesis_event.HandlerType;
 import uninamo_userinterface.FinishButton;
 
 /**
@@ -11,7 +11,7 @@ import uninamo_userinterface.FinishButton;
  * @author Mikko Hilpinen
  * @since 11.3.2014
  */
-public class VictoryHandler extends Handler implements VictoryCondition
+public class VictoryHandler extends Handler<VictoryCondition> implements VictoryCondition
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
@@ -27,7 +27,7 @@ public class VictoryHandler extends Handler implements VictoryCondition
 	 */
 	public VictoryHandler(FinishButton finishButton)
 	{
-		super(false, null);
+		super(false);
 		
 		// Initializes attributes
 		this.finishButton = finishButton;
@@ -46,17 +46,17 @@ public class VictoryHandler extends Handler implements VictoryCondition
 		
 		return this.lastClearStatus;
 	}
-
+	
 	@Override
-	protected Class<?> getSupportedClass()
+	public HandlerType getHandlerType()
 	{
-		return VictoryCondition.class;
+		return UninamoHandlerType.VICTORY;
 	}
 
 	@Override
-	protected boolean handleObject(Handled h)
+	protected boolean handleObject(VictoryCondition h)
 	{
-		if (!((VictoryCondition) h).isClear())
+		if (!h.isClear())
 		{
 			this.lastClearStatus = false;
 			return false;
@@ -67,15 +67,6 @@ public class VictoryHandler extends Handler implements VictoryCondition
 	
 	
 	// OTHER METHODS	--------------------------------------------------
-	
-	/**
-	 * Adds a new victoryCondition to the list of required victory conditions
-	 * @param v The victoryCondition to be considered in the future
-	 */
-	public void addVictoryCondition(VictoryCondition v)
-	{
-		addHandled(v);
-	}
 	
 	/**
 	 * Prompts the handler to check its victory status and react accordingly

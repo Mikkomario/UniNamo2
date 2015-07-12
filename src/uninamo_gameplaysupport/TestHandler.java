@@ -1,7 +1,9 @@
 package uninamo_gameplaysupport;
 
-import genesis_logic.Handled;
-import genesis_logic.Handler;
+import genesis_event.EventSelector;
+import genesis_event.Handler;
+import genesis_event.HandlerType;
+import genesis_event.StrictEventSelector;
 
 /**
  * TestHandler informs multiple objects that a test should begin or end.
@@ -9,13 +11,12 @@ import genesis_logic.Handler;
  * @author Mikko Hilpinen
  * @since 10.3.2014
  */
-public class TestHandler extends Handler implements TestListener
+public class TestHandler extends Handler<TestListener> implements TestListener
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
-	private int lastEvent;
-	
-	private static final int START = 1, END = 2;
+	private TestEvent lastEvent;
+	private EventSelector<TestEvent> selector;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -27,57 +28,45 @@ public class TestHandler extends Handler implements TestListener
 	 */
 	public TestHandler(TestHandler superhandler)
 	{
-		super(false, superhandler);
+		super(false);
 		
 		// Initializes attributes
-		this.lastEvent = 0;
+		this.selector = new StrictEventSelector<>();
+		this.lastEvent = null;
+		
+		if (superhandler != null)
+			superhandler.add(this);
 	}
 	
 	
 	// IMPLEMENTED METHODS	---------------------------------------------
 
 	@Override
-	public void onTestStart()
+	public void onTestEvent(TestEvent event)
 	{
-		// Informs the objects
-		this.lastEvent = START;
+		this.lastEvent = event;
 		handleObjects();
 	}
 
 	@Override
-	public void onTestEnd()
+	public EventSelector<TestEvent> getTestEventSelector()
 	{
-		this.lastEvent = END;
-		handleObjects();
+		return this.selector;
 	}
 
 	@Override
-	protected Class<?> getSupportedClass()
+	public HandlerType getHandlerType()
 	{
-		return TestListener.class;
+		return UninamoHandlerType.TEST;
 	}
 
 	@Override
-	protected boolean handleObject(Handled h)
+	protected boolean handleObject(TestListener h)
 	{
-		// Informs the object about an event
-		if (this.lastEvent == START)
-			((TestListener) h).onTestStart();
-		else
-			((TestListener) h).onTestEnd();
+		// Informs the object about an event, if necessary
+		if (h.getTestEventSelector().selects(this.lastEvent))
+			h.onTestEvent(this.lastEvent);
 		
 		return true;
-	}
-	
-	
-	// OTHER METHODS	--------------------------------------------------
-	
-	/**
-	 * Adds the testable into the list of informed testables
-	 * @param t The testable to be informed
-	 */
-	public void addTestable(TestListener t)
-	{
-		addHandled(t);
 	}
 }

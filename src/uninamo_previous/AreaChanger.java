@@ -1,4 +1,4 @@
-package uninamo_worlds;
+package uninamo_previous;
 
 import arc_bank.GamePhaseBank;
 import arc_bank.OpenGamePhaseBank;
@@ -10,6 +10,9 @@ import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TotalCostAnalyzer;
 import uninamo_gameplaysupport.TurnTimer;
+import uninamo_worlds.CodingObjectCreator;
+import uninamo_worlds.DesignObjectCreator;
+import uninamo_worlds.MissionObjectCreator;
 
 /**
  * AreaChanger makes the game transition between different states like coding 
@@ -17,6 +20,7 @@ import uninamo_gameplaysupport.TurnTimer;
  * 
  * @author Mikko Hilpinen
  * @since 9.3.2014
+ * @deprecated This will be replaced with a static method
  */
 public class AreaChanger extends AreaRelay
 {

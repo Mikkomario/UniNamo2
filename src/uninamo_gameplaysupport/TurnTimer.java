@@ -1,10 +1,13 @@
 package uninamo_gameplaysupport;
 
-import genesis_logic.ActorHandler;
-import omega_world.Room;
-import omega_world.RoomListener;
-import timers.ContinuousTimer;
-import timers.TimerEventListener;
+import omega_util.SimpleGameObject;
+import exodus_world.Area;
+import exodus_world.AreaListener;
+import flash_timers.ContinuousTimer;
+import flash_timers.TimerEventListener;
+import genesis_event.EventSelector;
+import genesis_event.HandlerRelay;
+import uninamo_gameplaysupport.TestEvent.TestEventType;
 import uninamo_main.GameSettings;
 
 /**
@@ -14,102 +17,79 @@ import uninamo_main.GameSettings;
  * @author Mikko Hilpinen
  * @since 10.3.2014
  */
-public class TurnTimer extends TurnHandler implements RoomListener, TestListener, 
+public class TurnTimer extends SimpleGameObject implements AreaListener, TestListener, 
 		TimerEventListener
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
 	private ContinuousTimer timer;
-	private boolean active;
+	private TurnHandler listenerHandler;
+	private EventSelector<TestEvent> selector;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
 	
 	/**
 	 * Creates a new turnTimer that will instantly start to produce turn events
-	 * 
-	 * @param testHandler The testHandler that will inform the timer about 
-	 * test events
-	 * @param room The room where the timer resides
-	 * @param actorHandler The ActorHandler that informs the object about 
-	 * step events
+	 * @param handlers The handlers that will handle the timer and its components (
+	 * actorHandler, areaListenerHandler, TestHandler)
 	 */
-	public TurnTimer(TestHandler testHandler, Room room, 
-			ActorHandler actorHandler)
+	public TurnTimer(HandlerRelay handlers)
 	{
-		super(null);
+		super(handlers);
 		
 		// Initializes attributes
-		this.active = true;
-		this.timer = new ContinuousTimer(this, GameSettings.turnDuration, 0, 
-				actorHandler);
+		this.listenerHandler = new TurnHandler(null);
+		this.selector = TestEvent.createTestEventSelector(TestEventType.START);
+		this.timer = new ContinuousTimer(GameSettings.turnDuration, 0, handlers);
 		
-		// Adds the object to the handler(s)
-		if (testHandler != null)
-			testHandler.addTestable(this);
-		if (room != null)
-			room.addRoomListener(this);
+		this.timer.setIsActiveStateOperator(getIsActiveStateOperator());
+		this.timer.setIsDeadStateOperator(getIsDeadStateOperator());
+		
+		this.timer.getListenerHandler().add(this);
 	}
 	
 	
 	// IMPLEMENTED METHODS	----------------------------------------------
 
 	@Override
-	public void onRoomStart(Room room)
+	public void onTimerEvent(int timerid)
 	{
-		// Does nothing
+		// Informs the objects about a turn
+		this.listenerHandler.onTurnEvent();
 	}
-
+	
 	@Override
-	public void onRoomEnd(Room room)
+	public void onTestEvent(TestEvent event)
 	{
-		// Dies
-		killWithoutKillingHandleds();
-	}
-
-	@Override
-	public void onTestStart()
-	{
-		// Resets the timer
+		// Resets the timer on test start
 		this.timer.reset();
 	}
 
 	@Override
-	public void onTestEnd()
+	public EventSelector<TestEvent> getTestEventSelector()
 	{
-		// Does nothing
+		return this.selector;
 	}
 
 	@Override
-	public boolean isActive()
+	public void onAreaStateChange(Area area)
 	{
-		return this.active;
-	}
-
-	@Override
-	public void activate()
-	{
-		this.active = true;
-	}
-
-	@Override
-	public void inactivate()
-	{
-		this.active = false;
-	}
-
-	@Override
-	public void onTimerEvent(int timerid)
-	{
-		// Informs the objects about a turn
-		onTurnEvent();
+		// TODO: Maybe this is not necessary?
+		
+		// Dies on room end
+		if (!area.getIsActiveStateOperator().getState())
+			getIsDeadStateOperator().setState(true);
 	}
 	
-	@Override
-	public void killWithoutKillingHandleds()
+	
+	// GETTERS & SETTERS	---------------------
+	
+	/**
+	 * @return The turnHandler that informs the objects about turn events
+	 */
+	public TurnHandler getListenerHandler()
 	{
-		// Also kills the timer
-		this.timer.kill();
-		super.killWithoutKillingHandleds();
+		return this.listenerHandler;
 	}
 }

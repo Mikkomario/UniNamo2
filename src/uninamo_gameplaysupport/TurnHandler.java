@@ -1,17 +1,22 @@
 package uninamo_gameplaysupport;
 
-import genesis_logic.Handled;
-import genesis_logic.Handler;
+import genesis_event.Handler;
+import genesis_event.HandlerType;
+import genesis_util.StateOperator;
 
 /**
- * TurnHandlers inform multiple objects about turn events. They also work as 
- * TestHandlers if need be
+ * TurnHandlers inform multiple objects about turn events.
  * 
  * @author Mikko Hilpinen
  * @since 10.3.2014
  */
-public class TurnHandler extends Handler implements TurnBased
+public class TurnHandler extends Handler<TurnBased> implements TurnBased
 {
+	// ATTRIBUTES	--------------------
+	
+	private StateOperator listensToEventsOperator;
+	
+	
 	// CONSTRUCTOR	-----------------------------------------------------
 	
 	/**
@@ -22,7 +27,12 @@ public class TurnHandler extends Handler implements TurnBased
 	 */
 	public TurnHandler(TurnHandler superHandler)
 	{
-		super(false, superHandler);
+		super(false);
+		
+		this.listensToEventsOperator = new AnyListenToTurnEventsOperator();
+		
+		if (superHandler != null)
+			superHandler.add(this);
 	}
 	
 	
@@ -34,32 +44,47 @@ public class TurnHandler extends Handler implements TurnBased
 		// Informs the objects
 		handleObjects();
 	}
-
+	
 	@Override
-	protected Class<?> getSupportedClass()
+	public StateOperator getListensToTurnEventsOperator()
 	{
-		return TurnBased.class;
+		return this.listensToEventsOperator;
 	}
 
 	@Override
-	protected boolean handleObject(Handled h)
+	public HandlerType getHandlerType()
 	{
-		// Informs the object about an turn event
-		((TurnBased) h).onTurnEvent();
+		return UninamoHandlerType.TURN;
+	}
+
+	@Override
+	protected boolean handleObject(TurnBased h)
+	{
+		if (h.getListensToTurnEventsOperator().getState())
+			h.onTurnEvent();
 		
 		return true;
 	}
 	
 	
-	// OTHER METHODS	-------------------------------------------------
+	// SUBCLASSES	------------------
 	
-	/**
-	 * Adds a turn based instance to the list of informed objects
-	 * 
-	 * @param t The object to be informed in the future
-	 */
-	public void addTurnListener(TurnBased t)
+	private class AnyListenToTurnEventsOperator extends ForAnyHandledsOperator
 	{
-		addHandled(t);
+		// CONSTRUCTOR	--------------
+		
+		public AnyListenToTurnEventsOperator()
+		{
+			super(true);
+		}
+		
+		
+		// IMPLEMENTED METHODS	-------
+
+		@Override
+		protected StateOperator getHandledStateOperator(TurnBased h)
+		{
+			return h.getListensToTurnEventsOperator();
+		}
 	}
 }

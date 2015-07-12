@@ -20,6 +20,8 @@ import uninamo_gameplaysupport.TurnHandler;
  */
 public class CodingInitializer extends ObjectInitializer
 {
+	// TODO: Extend object constructor instead
+	
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private Area area;

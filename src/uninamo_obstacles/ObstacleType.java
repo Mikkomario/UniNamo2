@@ -1,9 +1,7 @@
 package uninamo_obstacles;
 
-import omega_graphic.OpenSpriteBank;
-import omega_graphic.Sprite;
-import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
+import vision_sprite.Sprite;
 
 /**
  * ObstacleTypes represents different types of obstacles that often have their 

@@ -17,6 +17,8 @@ import uninamo_userinterface.Note;
  */
 public abstract class ObjectInitializer extends FileReader
 {
+	// TODO: This will be replaced with object constructor from flow
+	
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private CreationMode currentMode;
@@ -116,6 +118,8 @@ public abstract class ObjectInitializer extends FileReader
 	
 	// ENUMERATIONS
 
+	// TODO: Make this a separate enum
+	
 	/**
 	 * CreationModes represent different object categories that can be read 
 	 * from a file

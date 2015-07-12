@@ -1,6 +1,7 @@
 package uninamo_gameplaysupport;
 
-import genesis_logic.Handled;
+import genesis_event.EventSelector;
+import genesis_event.Handled;
 
 /**
  * TestListener function differently in test mode and creation mode and 
@@ -12,11 +13,13 @@ import genesis_logic.Handled;
 public interface TestListener extends Handled
 {
 	/**
-	 * The object should go into test mode in a reseted state
+	 * This method is called when a test event occurs
+	 * @param event The event that just occurred
 	 */
-	public void onTestStart();
+	public void onTestEvent(TestEvent event);
+	
 	/**
-	 * The object should return from the test mode
+	 * @return The eventSelector that tells which events the listener is interested in
 	 */
-	public void onTestEnd();
+	public EventSelector<TestEvent> getTestEventSelector();
 }

@@ -9,6 +9,7 @@ import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TurnTimer;
 import uninamo_main.GameSettings;
+import uninamo_previous.AreaChanger;
 import uninamo_userinterface.CodeTransitionButton;
 import uninamo_userinterface.CurrentCostDrawer;
 import uninamo_userinterface.ManualButton;

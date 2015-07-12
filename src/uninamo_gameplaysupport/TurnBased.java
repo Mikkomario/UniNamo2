@@ -1,6 +1,7 @@
 package uninamo_gameplaysupport;
 
-import genesis_logic.Handled;
+import genesis_event.Handled;
+import genesis_util.StateOperator;
 
 /**
  * Turn based instances react to time events that are produced at 
@@ -15,4 +16,10 @@ public interface TurnBased extends Handled
 	 * This method is called each time a new turn starts
 	 */
 	public void onTurnEvent();
+	
+	/**
+	 * @return The stateOperator that defines whether the object should be informed about the 
+	 * turn events
+	 */
+	public StateOperator getListensToTurnEventsOperator();
 }

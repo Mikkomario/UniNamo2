@@ -1,4 +1,4 @@
-package uninamo_gameplaysupport;
+package uninamo_previous;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
@@ -15,6 +15,7 @@ import omega_world.Area;
  * 
  * @author Mikko Hilpinen
  * @since ?.3.2014
+ * @deprecated Replaced with a similar object from vision
  */
 public class SpriteDrawerObject extends DrawnObject
 {

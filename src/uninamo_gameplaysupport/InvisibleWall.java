@@ -1,28 +1,29 @@
 package uninamo_gameplaysupport;
 
-import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
-
-import omega_world.Area;
-import omega_world.GameObject;
-import omega_world.Room;
-import omega_world.RoomListener;
+import genesis_event.HandlerRelay;
+import genesis_util.StateOperator;
+import genesis_util.Vector3D;
+import conflict_collision.CollisionInformation;
+import conflict_util.Polygon;
+import exodus_world.Area;
+import exodus_world.AreaListener;
+import omega_util.SimpleGameObject;
+import omega_util.Transformation;
 
 /**
- * Invisible walls are walls that are not drawn but can be collided with. 
- * They span the whole length of the screen either horizontally or vertically. 
- * The wall dies when the room ends
+ * Invisible walls are walls that are not drawn but can be collided with. They are simple 
+ * rectangles.
  * 
  * @author Mikko Hilpinen
  * @since 10.3.2014
  */
-public class InvisibleWall extends GameObject implements Wall, RoomListener
+public class InvisibleWall extends SimpleGameObject implements Wall, AreaListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
-	private int yForceModifier, xForceModifier;
-	private int position;
-	private boolean solid;
+	private Transformation transformation;
+	private CollisionInformation collisionInfo;
+	private StateOperator collisionOperator;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -30,117 +31,52 @@ public class InvisibleWall extends GameObject implements Wall, RoomListener
 	/**
 	 * Creates a new invisibleWall to the given position with the given form.
 	 * 
-	 * @param verticalForce Will the wall apply vertical force and to which 
-	 * direction (0 = no vertical force, 1 = forces down, -1 = forces up)
-	 * @param horizontalForce Will the wall apply horizontal force and to which 
-	 * direction (0 = no horizontal force, 1 = forces right, -1 = forces left). 
-	 * HorizontalForce will be forced to 0 if there's already vertical force 
-	 * applied.
-	 * @param position the wall's position on either y- or x-axis depending on 
-	 * the applied force's axis (y if vertical, x if horizontal)
-	 * @param area The area where the object will reside at
+	 * @param topLeft The position of the wall's top left corner
+	 * @param dimensions The size of the wall
+	 * @param handlers The handlers that will handle the wall
 	 */
-	public InvisibleWall(int verticalForce, int horizontalForce, int position, 
-			Area area)
+	public InvisibleWall(Vector3D topLeft, Vector3D dimensions, HandlerRelay handlers)
 	{
-		super(area);
+		super(handlers);
 		
-		// Initializes attributes
-		this.yForceModifier = verticalForce;
-		this.xForceModifier = horizontalForce;
-		this.position = position;
-		this.solid = true;
-		
-		// Checks the arguments
-		if (this.yForceModifier == 0 && this.xForceModifier == 0)
-		{
-			System.err.println("The wall has no proportions or force and will "
-					+ "be killed");
-			kill();
-			return;
-		}
-		if (this.yForceModifier != 0 && this.xForceModifier != 0)
-			this.xForceModifier = 0;
-		
-		// Adds the object to the handler(s)
-		area.getCollisionHandler().getCollidableHandler().addCollidable(this);
+		this.transformation = new Transformation(topLeft);
+		this.collisionInfo = new CollisionInformation(Polygon.getRectangleVertices(
+				Vector3D.zeroVector(), dimensions));
+		this.collisionOperator = new StateOperator(true, true);
 	}
 	
 	
 	// IMPLEMENTED METHODS	----------------------------------------------
-	
+
 	@Override
-	public double getCollisionForceDirection(Double collisionpoint)
+	public StateOperator getCanBeCollidedWithStateOperator()
 	{
-		if (this.xForceModifier == 0)
-		{
-			if (this.yForceModifier > 0)
-				return 270;
-			else
-				return 90;
-		}
-		else
-		{
-			if (this.xForceModifier > 0)
-				return 0;
-			else
-				return 180;
-		}
+		return this.collisionOperator;
 	}
 
 	@Override
-	public boolean pointCollides(Point2D absolutepoint)
+	public CollisionInformation getCollisionInformation()
 	{
-		if (this.xForceModifier == 0)
-		{
-			if (this.yForceModifier > 0)
-				return (absolutepoint.getY() < this.position);
-			else
-				return (absolutepoint.getY() > this.position);
-		}
-		else
-		{
-			if (this.xForceModifier > 0)
-				return (absolutepoint.getX() < this.position);
-			else
-				return (absolutepoint.getX() > this.position);
-		}
+		return this.collisionInfo;
 	}
 
 	@Override
-	public boolean isSolid()
+	public Transformation getTransformation()
 	{
-		return this.solid;
+		return this.transformation;
 	}
 
 	@Override
-	public void makeSolid()
+	public void setTrasformation(Transformation t)
 	{
-		this.solid = true;
+		this.transformation = t;
 	}
 
 	@Override
-	public void makeUnsolid()
+	public void onAreaStateChange(Area area)
 	{
-		this.solid = false;
-	}
-
-	@Override
-	public Class<?>[] getSupportedListenerClasses()
-	{
-		return null;
-	}
-
-	@Override
-	public void onRoomStart(Room room)
-	{
-		// Does nothing
-	}
-
-	@Override
-	public void onRoomEnd(Room room)
-	{
-		// Dies
-		kill();
+		// Dies when the area ends
+		if (!area.getIsActiveStateOperator().getState())
+			getIsDeadStateOperator().setState(true);
 	}
 }

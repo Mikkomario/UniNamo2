@@ -12,6 +12,8 @@ import uninamo_userinterface.Note;
  */
 public class MissionInitializer extends ObjectInitializer
 {
+	// TODO: Replace with objectconstructor
+	
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private Area missionArea;

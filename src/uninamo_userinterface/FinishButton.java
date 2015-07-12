@@ -9,7 +9,7 @@ import omega_graphic.OpenSpriteBank;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
-import uninamo_worlds.AreaChanger;
+import uninamo_previous.AreaChanger;
 
 /**
  * FinishButton is used for finishing the current stage and moving to the results 

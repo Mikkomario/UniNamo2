@@ -10,7 +10,7 @@ import uninamo_gameplaysupport.TestListener;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_main.GameSettings;
 import uninamo_manual.ManualMaster;
-import uninamo_worlds.AreaChanger;
+import uninamo_previous.AreaChanger;
 
 /**
  * ManualButton takes the user to coding manual when clicked.

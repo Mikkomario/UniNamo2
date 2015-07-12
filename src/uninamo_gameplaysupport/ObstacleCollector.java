@@ -1,24 +1,31 @@
 package uninamo_gameplaysupport;
 
-import genesis_graphic.DepthConstants;
-
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
-import java.util.ArrayList;
+import java.awt.geom.AffineTransform;
 
-import omega_gameplay.Collidable;
-import omega_gameplay.CollisionListener;
-import omega_graphic.DrawnObject;
-import omega_graphic.MultiSpriteDrawer;
-import omega_graphic.OpenSpriteBank;
-import omega_graphic.Sprite;
-import omega_graphic.TransformationListener;
-import omega_world.Area;
-import omega_world.Room;
-import omega_world.RoomListener;
-import uninamo_obstacles.Obstacle;
+import arc_bank.Bank;
+import conflict_collision.CollisionChecker;
+import conflict_collision.CollisionEvent;
+import conflict_collision.CollisionInformation;
+import conflict_collision.CollisionListener;
+import exodus_world.Area;
+import exodus_world.AreaListener;
+import genesis_event.Drawable;
+import genesis_event.EventSelector;
+import genesis_event.HandlerRelay;
+import genesis_event.StrictEventSelector;
+import genesis_util.DepthConstants;
+import genesis_util.StateOperator;
+import genesis_util.Vector3D;
+import omega_util.SimpleGameObject;
+import omega_util.Transformation;
+import uninamo_gameplaysupport.TestEvent.TestEventType;
+import uninamo_main.Utility;
 import uninamo_obstacles.ObstacleType;
+import vision_drawing.SimpleSingleSpriteDrawerObject;
+import vision_sprite.MultiSpriteDrawer;
+import vision_sprite.Sprite;
+import vision_sprite.SpriteBank;
 
 /**
  * ObstacleCollectors require a certain number of a certain object to fill up. 
@@ -27,19 +34,20 @@ import uninamo_obstacles.ObstacleType;
  * @author Mikko Hilpinen
  * @since 11.3.2014
  */
-public class ObstacleCollector extends DrawnObject implements CollisionListener, 
-	TestListener, TransformationListener, RoomListener
+public class ObstacleCollector extends SimpleGameObject implements CollisionListener, 
+	TestListener, AreaListener, Drawable
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
-	private ObstacleType collectedType;
 	private int neededAmount, collectsLeft;
 	private MultiSpriteDrawer spriteDrawer;
-	private Point2D.Double[] relativeColPoints, absoluteColPoints;
-	private boolean colPointsNeedUpdating, active;
 	private VictoryHandler victoryHandler;
-	private SpriteDrawerObject numberDrawer;
-	private SpriteDrawerObject collectableDrawer;
+	private SimpleSingleSpriteDrawerObject numberDrawer, collectableDrawer;
+	private Transformation transformation;
+	private CollisionInformation collisionInfo;
+	private CollisionChecker collisionChecker;
+	private EventSelector<TestEvent> selector;
+	private StateOperator isVisibleOperator;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -48,194 +56,190 @@ public class ObstacleCollector extends DrawnObject implements CollisionListener,
 	 * Creates a new obstacleCollector that collects obstacles of the given 
 	 * type. The collector needs to collect neededAmount obstacles before it 
 	 * is filled.
-	 * 
-	 * @param area The area where the object will reside at
-	 * @param x The x-coordinate of the collector
-	 * @param y The y-coordinate of the collector
-	 * @param testHandler The testHandler that will inform the object about test 
-	 * events
+	 * @param handlers The handlers that will handle the collector
+	 * @param position The position of the collector's origin
 	 * @param victoryHandler The victoryHandler that will check if the stage has been beaten
 	 * @param collectedType The type of obstacle the collector collects
 	 * @param neededAmount How many obstacles are collected before the collector is filled
 	 * @param designSpriteName The name of the sprite used to draw the object in design mode
 	 * @param realSpriteName The name of the sprite used to draw the object in test mode
 	 */
-	public ObstacleCollector(Area area, int x, int y, TestHandler testHandler, 
+	public ObstacleCollector(HandlerRelay handlers, Vector3D position,  
 			VictoryHandler victoryHandler, ObstacleType collectedType, 
 			int neededAmount, String designSpriteName, String realSpriteName)
 	{
-		super(x, y, DepthConstants.BACK, area);
+		super(handlers);
 		
 		// Initializes attributes
-		this.collectedType = collectedType;
 		this.neededAmount = neededAmount;
 		this.victoryHandler = victoryHandler;
 		this.collectsLeft = this.neededAmount;
+		this.transformation = new Transformation(position);
+		this.isVisibleOperator = new StateOperator(true, true);
+		this.collisionInfo = new CollisionInformation(Utility.getSpriteVertices(
+				this.spriteDrawer.getSprite()));
+		this.collisionChecker = new CollisionChecker(this, false, false);
+		Class<?>[] collided = {collectedType.getObstacleClass()};
+		this.collisionChecker.limitCheckedClassesTo(collided);
+		this.selector = new StrictEventSelector<>();
 		
-		Sprite[] sprites = new Sprite[2];
-		sprites[0] = OpenSpriteBank.getSpriteBank("goals").getSprite(designSpriteName);
-		sprites[1] = OpenSpriteBank.getSpriteBank("goals").getSprite(realSpriteName);
+		Bank<Sprite> spriteBank = SpriteBank.getSpriteBank("goals");
+		Sprite[] sprites = {spriteBank.get(designSpriteName), spriteBank.get(realSpriteName)};
 		// TODO: Need animation later?
-		this.spriteDrawer = new MultiSpriteDrawer(sprites, null, this);
+		this.spriteDrawer = new MultiSpriteDrawer(sprites, this, handlers);
 		
-		this.relativeColPoints = new Point2D.Double[1];
-		this.relativeColPoints[0] = new Point2D.Double(getOriginX(), getOriginY());
-		this.colPointsNeedUpdating = true;
+		this.numberDrawer = new SimpleSingleSpriteDrawerObject(getDepth() - 2, 
+				SpriteBank.getSprite("gameplayinterface", "numbers"), handlers);
+		this.numberDrawer.getDrawer().getSpriteDrawer().setImageSpeed(0);
+		this.numberDrawer.getDrawer().getSpriteDrawer().setImageIndex(this.neededAmount);
+		this.numberDrawer.getDrawer().setIsVisibleOperator(getIsVisibleStateOperator());
+		this.numberDrawer.setIsActiveStateOperator(getIsActiveStateOperator());
+		this.numberDrawer.setIsDeadStateOperator(getIsDeadStateOperator());
 		
-		this.numberDrawer = new SpriteDrawerObject(area, DepthConstants.BACK - 1, 
-				this, OpenSpriteBank.getSpriteBank(
-				"gameplayinterface").getSprite("numbers"));
-		this.numberDrawer.getSpriteDrawer().setImageSpeed(0);
+		this.collectableDrawer = new SimpleSingleSpriteDrawerObject(getDepth() - 1, 
+				collectedType.getSprite(), handlers);
+		this.collectableDrawer.getDrawer().setIsVisibleOperator(getIsVisibleStateOperator());
+		this.collectableDrawer.setIsActiveStateOperator(getIsActiveStateOperator());
+		this.collectableDrawer.setIsDeadStateOperator(getIsDeadStateOperator());
+		updateDrawerTransformations();
 		
-		int width = this.spriteDrawer.getSprite().getWidth();
-		int height = this.spriteDrawer.getSprite().getHeight();
-		this.numberDrawer.setSize(width / 2 - 10, height - 10);
-		this.numberDrawer.getSpriteDrawer().setImageIndex(this.neededAmount);
-		this.numberDrawer.addPosition(- width / 4, 0);
-		
-		this.collectableDrawer = new SpriteDrawerObject(area, 
-				DepthConstants.BACK - 1, this, this.collectedType.getSprite());
-		this.collectableDrawer.setSize(width / 2 - 10, height - 10);
-		this.collectableDrawer.addPosition(width / 4, 0);
-		
-		// Adds the object to the handler(s)
-		if (area.getCollisionHandler() != null)
-			area.getCollisionHandler().addCollisionListener(this);
-		if (testHandler != null)
-			testHandler.addTestable(this);
-		
-		forceTransformationUpdate();
+		getIsActiveStateOperator().setState(false);
 	}
 	
 	
 	// IMPLEMENTED METHODS	---------------------------------------------
 
 	@Override
-	public boolean isActive()
+	public StateOperator getCanBeCollidedWithStateOperator()
 	{
-		return this.active;
+		return getIsActiveStateOperator();
 	}
 
 	@Override
-	public void activate()
+	public CollisionInformation getCollisionInformation()
 	{
-		this.active = true;
+		return this.collisionInfo;
 	}
 
 	@Override
-	public void inactivate()
+	public Transformation getTransformation()
 	{
-		this.active = false;
+		return this.transformation;
 	}
 
 	@Override
-	public Double[] getCollisionPoints()
+	public void setTrasformation(Transformation t)
 	{
-		// Updates the collision points if needed
-		if (this.relativeColPoints == null)
-			return new Point2D.Double[0];
-		
-		if (this.colPointsNeedUpdating)
-			this.absoluteColPoints = 
-					transformMultipleRelativePoints(this.relativeColPoints);
-		
-		return this.absoluteColPoints;
+		this.transformation = t;
+		updateDrawerTransformations();
 	}
 
 	@Override
-	public void onCollision(ArrayList<Double> colpoints, Collidable collided,
-			double steps)
+	public void onAreaStateChange(Area area)
 	{
-		if (this.collectedType.getObstacleClass().isInstance(collided))
+		// Dies at the end of the room
+		if (!area.getIsActiveStateOperator().getState())
+			getIsDeadStateOperator().setState(true);
+	}
+
+	@Override
+	public void onTestEvent(TestEvent event)
+	{
+		// Changes image & activates
+		if (event.getType() == TestEventType.START)
 		{
-			// Collects the collided object
-			Obstacle o = (Obstacle) collided;
-			
-			o.makeUnsolid();
-			o.inactivate();
-			o.setInvisible();
-			
-			this.collectsLeft --;
-			this.numberDrawer.getSpriteDrawer().setImageIndex(this.collectsLeft);
-			
-			if (this.collectsLeft == 0)
-			{
-				inactivate();
-				this.spriteDrawer.setImageIndex(1);
-				// Informs the victoryHandler of the new status
-				this.victoryHandler.recheck();
-			}
+			this.spriteDrawer.setSpriteIndex(1, true);
+			this.collectsLeft = this.neededAmount;
+			getIsActiveStateOperator().setState(true);
+		}
+		else
+		{		
+			this.spriteDrawer.setSpriteIndex(0, true);
+			this.numberDrawer.getDrawer().getSpriteDrawer().setImageIndex(this.neededAmount);
+			getIsActiveStateOperator().setState(false);
 		}
 	}
 
 	@Override
-	public int getOriginX()
+	public EventSelector<TestEvent> getTestEventSelector()
 	{
-		if (this.spriteDrawer == null)
-			return 0;
-		else
-			return this.spriteDrawer.getSprite().getOriginX();
+		return this.selector;
 	}
 
 	@Override
-	public int getOriginY()
+	public CollisionChecker getCollisionChecker()
 	{
-		if (this.spriteDrawer == null)
-			return 0;
-		else
-			return this.spriteDrawer.getSprite().getOriginY();
+		return this.collisionChecker;
 	}
 
 	@Override
-	public void drawSelfBasic(Graphics2D g2d)
+	public StateOperator getListensForCollisionStateOperator()
 	{
-		if (this.spriteDrawer == null)
-			return;
+		return getIsActiveStateOperator();
+	}
+
+	@Override
+	public void onCollisionEvent(CollisionEvent event)
+	{
+		// Collects the collided object
+		// TODO: Disable the obstacle
+		/*
+		Obstacle o = (Obstacle) collided;
 		
-		this.spriteDrawer.drawSprite(g2d, 0, 0);
+		o.makeUnsolid();
+		o.inactivate();
+		o.setInvisible();
+		*/
 		
-		drawRelativePoints(g2d, this.relativeColPoints);
-	}
-
-	@Override
-	public void onTestStart()
-	{
-		// Changes image & activates
-		this.spriteDrawer.setSpriteIndex(1, true);
-		this.collectsLeft = this.neededAmount;
-		activate();
-	}
-
-	@Override
-	public void onTestEnd()
-	{
-		this.spriteDrawer.setSpriteIndex(0, true);
-		this.numberDrawer.getSpriteDrawer().setImageIndex(this.neededAmount);
-		inactivate();
-	}
-
-	@Override
-	public void onTransformationEvent(TransformationEvent e)
-	{
-		// Updates the collision points
-		this.colPointsNeedUpdating = true;
+		this.collectsLeft --;
+		this.numberDrawer.getDrawer().getSpriteDrawer().setImageIndex(this.collectsLeft);
 		
-		int width = this.spriteDrawer.getSprite().getWidth();
+		if (this.collectsLeft == 0)
+		{
+			getIsActiveStateOperator().setState(false);
+			this.spriteDrawer.setImageIndex(1);
+			// Informs the victoryHandler of the new status
+			this.victoryHandler.recheck();
+		}
+	}
+
+	@Override
+	public void drawSelf(Graphics2D g2d)
+	{
+		// Draws the sprite
+		AffineTransform lastTransform = getTransformation().transform(g2d);
+		this.spriteDrawer.drawSprite(g2d);
+		g2d.setTransform(lastTransform);
+	}
+
+	@Override
+	public int getDepth()
+	{
+		return DepthConstants.BACK;
+	}
+
+	@Override
+	public StateOperator getIsVisibleStateOperator()
+	{
+		return this.isVisibleOperator;
+	}
+	
+	
+	// OTHER METHODS	----------------
+	
+	private void updateDrawerTransformations()
+	{
+		Vector3D dimensions = this.spriteDrawer.getSprite().getDimensions().times(
+				getTransformation().getScaling());
+		Vector3D drawerDimensions = dimensions.dividedBy(new Vector3D(2, 1));
+		Vector3D topLeft = getTransformation().getPosition().minus(
+				this.spriteDrawer.getOrigin().times(getTransformation().getScaling()));
 		
-		this.numberDrawer.setPosition(getX() - width / 4, getY());
-		this.collectableDrawer.setPosition(getX() + width / 4, getY());
-	}
-
-	@Override
-	public void onRoomStart(Room room)
-	{
-		// Does nothing
-	}
-
-	@Override
-	public void onRoomEnd(Room room)
-	{
-		// Dies at the end of the room
-		kill();
+		this.numberDrawer.setTrasformation(getTransformation().withPosition(topLeft));
+		this.collectableDrawer.setTrasformation(getTransformation().withPosition(
+				topLeft.plus(new Vector3D(drawerDimensions.getFirst(), 0))));
+		
+		this.numberDrawer.getDrawer().scaleToSize(drawerDimensions);
+		this.collectableDrawer.getDrawer().scaleToSize(drawerDimensions);
 	}
 }

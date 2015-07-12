@@ -1,20 +1,20 @@
 package uninamo_gameplaysupport;
 
-import genesis_graphic.DepthConstants;
-
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.HashMap;
+import java.util.Map;
 
-import omega_graphic.DrawnObject;
-import omega_graphic.OpenSpriteBank;
-import omega_graphic.SingleSpriteDrawer;
-import omega_world.Area;
-import omega_world.Room;
-import omega_world.RoomListener;
+import exodus_world.Area;
+import exodus_world.AreaListener;
+import gateway_ui.TextDrawer;
+import genesis_util.DepthConstants;
+import genesis_util.StateOperator;
+import genesis_util.Vector3D;
 import uninamo_components.ComponentType;
 import uninamo_machinery.MachineType;
 import uninamo_main.GameSettings;
+import vision_drawing.SimpleSingleSpriteDrawerObject;
+import vision_sprite.SpriteBank;
 
 /**
  * TotalCostAnalyzer can calculate the final costs of the creation, analyze 
@@ -23,14 +23,16 @@ import uninamo_main.GameSettings;
  * @author Mikko Hilpinen
  * @since 17.3.2014
  */
-public class TotalCostAnalyzer implements RoomListener
+// TODO: Make this a gameObject?
+public class TotalCostAnalyzer implements AreaListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private double demoComponentCost;
-	private HashMap<ComponentType, Integer> componentAmounts;
-	private HashMap<MachineType, Integer> machineAmounts;
+	private Map<ComponentType, Integer> componentAmounts;
+	private Map<MachineType, Integer> machineAmounts;
 	private Area area;
+	private StateOperator isDeadOperator;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -42,44 +44,35 @@ public class TotalCostAnalyzer implements RoomListener
 	public TotalCostAnalyzer(Area area)
 	{
 		// Initializes attributes
+		this.isDeadOperator = new StateOperator(false, false);
 		this.demoComponentCost = 0;
-		this.componentAmounts = new HashMap<ComponentType, Integer>();
-		this.machineAmounts = new HashMap<MachineType, Integer>();
+		this.componentAmounts = new HashMap<>();
+		this.machineAmounts = new HashMap<>();
 		this.area = area;
 		//this.textDrawer = new DrawableHandler(false, false, 
 		//		DepthConstants.NORMAL, 0, area.getDrawer());
 		
 		// Adds the object to the handler(s)
 		if (area != null)
-			area.addRoomListener(this);
+			area.getListenerHandler().add(this);
 	}
 	
 	
 	// IMPLEMENTED METHODS	---------------------------------------------
 	
 	@Override
-	public boolean isDead()
+	public StateOperator getIsDeadStateOperator()
 	{
-		// Can't be killed
-		return false;
+		return this.isDeadOperator;
 	}
 
 	@Override
-	public void kill()
-	{
-		// Can't be killed
-	}
-
-	@Override
-	public void onRoomStart(Room room)
+	public void onAreaStateChange(Area area)
 	{
 		// Visualizes the data
-		visualizeCosts();
-	}
-	
-	@Override
-	public void onRoomEnd(Room room)
-	{
+		if (area.getIsActiveStateOperator().getState())
+			visualizeCosts();
+		
 		// Ends the visualization
 		// TODO: End visualization
 		// TODO: Find a way to kill all the objects. make them roomListeners or 
@@ -141,18 +134,17 @@ public class TotalCostAnalyzer implements RoomListener
 		// Creates the lines that visualize the costs
 		
 		// Machine intro line
-		new TextLineDrawer(32, y, "MACHINE COSTS:", this.area);
+		createLineDrawer(new Vector3D(32, y), "MACHINE COSTS:");
 		y += lineHeight;
 		
 		// Machine lines
 		for (MachineType machineType : this.machineAmounts.keySet())
 		{
-			new TextLineDrawer(32, y, this.machineAmounts.get(machineType) + 
-					" x " + machineType.getName(), this.area);
+			createLineDrawer(new Vector3D(32, y), this.machineAmounts.get(machineType) + 
+					" x " + machineType.getName());
 			double typeCosts = 
 					this.machineAmounts.get(machineType) * machineType.getPrice();
-			new TextLineDrawer(GameSettings.screenWidth - 96, y, 
-					typeCosts + " M €", this.area);
+			createLineDrawer(new Vector3D(GameSettings.screenWidth - 96, y), typeCosts + " M €");
 			
 			totalMachineCosts += typeCosts;
 			y += lineHeight;
@@ -160,18 +152,17 @@ public class TotalCostAnalyzer implements RoomListener
 		
 		// Component intro line
 		y += lineHeight;
-		new TextLineDrawer(32, y, "COMPONENT COSTS:", this.area);
+		createLineDrawer(new Vector3D(32, y), "COMPONENT COSTS:");
 		y += lineHeight;
 		
 		// Component lines
 		for (ComponentType componentType : this.componentAmounts.keySet())
 		{
-			new TextLineDrawer(32, y, this.componentAmounts.get(componentType) + 
-					" x " + componentType.getName(), this.area);
+			createLineDrawer(new Vector3D(32, y), this.componentAmounts.get(componentType) + 
+					" x " + componentType.getName());
 			double typeCosts = 
 					this.componentAmounts.get(componentType) * componentType.getPrice();
-			new TextLineDrawer(GameSettings.screenWidth - 96, y, 
-					typeCosts + " M €", this.area);
+			createLineDrawer(new Vector3D(GameSettings.screenWidth - 96, y), typeCosts + " M €");
 			
 			totalComponentCosts += typeCosts;
 			y += lineHeight;
@@ -179,9 +170,9 @@ public class TotalCostAnalyzer implements RoomListener
 		
 		// Total
 		y += lineHeight * 2;
-		new TextLineDrawer(32, y, "TOTAL: ", this.area);
-		new TextLineDrawer(GameSettings.screenWidth - 96, y, 
-				totalMachineCosts + totalComponentCosts + " M €", this.area);
+		createLineDrawer(new Vector3D(32, y), "TOTAL: ");
+		createLineDrawer(new Vector3D(GameSettings.screenWidth - 96, y), totalMachineCosts + 
+				totalComponentCosts + " M €");
 		
 		// TODO: Add estimated benefit as well as rank
 		
@@ -190,8 +181,8 @@ public class TotalCostAnalyzer implements RoomListener
 				this.demoComponentCost) / this.demoComponentCost);
 		Grade grade = Grade.getGradeFromCostDifference(costDifferencePercent);
 		// Draws the rank
-		new GradeDrawer(GameSettings.screenWidth - 96, 
-				GameSettings.screenHeight - 96, grade, this.area);
+		createGradeDrawer(grade, new Vector3D(GameSettings.screenWidth - 96, 
+				GameSettings.screenHeight - 96));
 	}
 	
 	/**
@@ -210,97 +201,28 @@ public class TotalCostAnalyzer implements RoomListener
 		this.machineAmounts.clear();
 	}
 	
-	
-	// SUBCLASSES	----------------------------------------------------
-	
-	private class TextLineDrawer extends DrawnObject
+	private void createLineDrawer(Vector3D position, String line)
 	{
-		// ATTRIBUTES	-----------------------------------------------
-		
-		private String line;
-		
-		
-		// CONSTRUCTOR	------------------------------------------------
-		
-		public TextLineDrawer(int x, int y, String line, Area area)
-		{
-			super(x, y, DepthConstants.NORMAL, area);
-			
-			// Initializes attributes
-			this.line = line;
-		}
-		
-		
-		// IMPLEMENTED METHODS	----------------------------------------
-
-		@Override
-		public int getOriginX()
-		{
-			return 0;
-		}
-
-		@Override
-		public int getOriginY()
-		{
-			return 0;
-		}
-
-		@Override
-		public void drawSelfBasic(Graphics2D g2d)
-		{
-			// Draws the text
-			g2d.setFont(GameSettings.basicFont);
-			g2d.setColor(Color.BLACK);
-			g2d.drawString(this.line, 0, 0);
-		}
+		new TextDrawer(position, line, null, GameSettings.basicFont, Color.BLACK, 
+				new Vector3D(800, 32), Vector3D.zeroVector(), DepthConstants.NORMAL, 
+				this.area.getHandlers());
 	}
 	
-	private class GradeDrawer extends DrawnObject
+	private void createGradeDrawer(Grade grade, Vector3D position)
 	{
-		// ATTRIBUTES	-------------------------------------------------
+		SimpleSingleSpriteDrawerObject drawer = new SimpleSingleSpriteDrawerObject(
+				DepthConstants.NORMAL, SpriteBank.getSprite("results", "grade"), 
+				this.area.getHandlers());
+		drawer.getDrawer().getSpriteDrawer().setImageSpeed(0);
+		drawer.getDrawer().getSpriteDrawer().setImageIndex(grade.getGradeSpriteIndex());
 		
-		private SingleSpriteDrawer spriteDrawer;
-		
-		
-		// CONSTRUCTOR	-------------------------------------------------
-		
-		public GradeDrawer(int x, int y, Grade grade, Area area)
-		{
-			super(x, y, DepthConstants.NORMAL, area);
-			
-			// Initializes attributes
-			this.spriteDrawer = new SingleSpriteDrawer(
+		drawer.setTrasformation(drawer.getTransformation().withPosition(position));
+	}
+	
+	/*
+	 * this.spriteDrawer = new SingleSpriteDrawer(
 					OpenSpriteBank.getSpriteBank("results").getSprite("grade"), 
 					null, this);
 			this.spriteDrawer.setImageIndex(grade.getGradeSpriteIndex());
-		}
-		
-		
-		// IMPLEMENTED METHODS	----------------------------------------
-
-		@Override
-		public int getOriginX()
-		{
-			if (this.spriteDrawer == null)
-				return 0;
-			return this.spriteDrawer.getSprite().getOriginX();
-		}
-
-		@Override
-		public int getOriginY()
-		{
-			if (this.spriteDrawer == null)
-				return 0;
-			return this.spriteDrawer.getSprite().getOriginY();
-		}
-
-		@Override
-		public void drawSelfBasic(Graphics2D g2d)
-		{
-			if (this.spriteDrawer == null)
-				return;
-			
-			this.spriteDrawer.drawSprite(g2d, 0, 0);
-		}	
-	}
+	 */
 }

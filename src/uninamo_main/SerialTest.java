@@ -34,6 +34,7 @@ public class SerialTest implements SerialPortEventListener
 	 */
 	private BufferedReader input;
 	/** The output stream to the port */
+	@SuppressWarnings("unused")
 	private OutputStream output;
 	/** Milliseconds to block while waiting for port open */
 	private static final int TIME_OUT = 2000;

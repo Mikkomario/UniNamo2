@@ -8,6 +8,7 @@ import uninamo_gameplaysupport.VictoryHandler;
 import uninamo_machinery.MachineCounter;
 import uninamo_machinery.MachineType;
 import uninamo_obstacles.ObstacleType;
+import uninamo_previous.AreaChanger;
 
 /**
  * DesignInitializer creates the machines, obstacles and obstacleCollectors 
@@ -18,6 +19,8 @@ import uninamo_obstacles.ObstacleType;
  */
 public class DesignInitializer extends ObjectInitializer
 {
+	// TODO: Replace with object construction system
+	
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private Area designArea, codingArea;

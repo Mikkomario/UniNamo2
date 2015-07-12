@@ -1,6 +1,6 @@
 package uninamo_gameplaysupport;
 
-import omega_gameplay.PhysicalCollidable;
+import conflict_collision.Collidable;
 
 /**
  * Objects that implement this interface imply that they should not be moved 
@@ -9,7 +9,7 @@ import omega_gameplay.PhysicalCollidable;
  * @author Mikko Hilpinen
  * @since 10.3.2014
  */
-public interface Wall extends PhysicalCollidable
+public interface Wall extends Collidable
 {
 	// Wall doesn't force any methods
 }
