@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import genesis_event.Event;
-import genesis_event.StrictEventSelector;
 
 /**
  * Test events are generated when a test starts or ends
@@ -51,20 +50,12 @@ public class TestEvent implements Event
 		return this.type;
 	}
 	
-	
-	// OTHER METHODS	-------------------
-	
 	/**
-	 * Creates an eventSelector that only accepts events of the given type
-	 * @param eventType The type of the event the selector accepts
-	 * @return An eventSelector that only accepts the events of the given type
+	 * @return if the test is currently running
 	 */
-	public static StrictEventSelector<TestEvent, Feature> 
-			createTestEventSelector(TestEventType eventType)
+	public boolean testRunning()
 	{
-		StrictEventSelector<TestEvent, Feature> selector = new StrictEventSelector<>();
-		selector.addRequiredFeature(eventType);
-		return selector;
+		return this.type == TestEventType.START;
 	}
 	
 	

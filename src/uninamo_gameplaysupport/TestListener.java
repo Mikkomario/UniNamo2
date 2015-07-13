@@ -1,6 +1,5 @@
 package uninamo_gameplaysupport;
 
-import genesis_event.EventSelector;
 import genesis_event.Handled;
 
 /**
@@ -17,9 +16,4 @@ public interface TestListener extends Handled
 	 * @param event The event that just occurred
 	 */
 	public void onTestEvent(TestEvent event);
-	
-	/**
-	 * @return The eventSelector that tells which events the listener is interested in
-	 */
-	public EventSelector<TestEvent> getTestEventSelector();
 }

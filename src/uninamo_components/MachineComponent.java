@@ -1,9 +1,11 @@
 package uninamo_components;
 
+import genesis_event.HandlerRelay;
+import genesis_util.Vector3D;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import omega_world.Area;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_main.GameSettings;
 
@@ -26,12 +28,8 @@ public abstract class MachineComponent extends Component
 	
 	/**
 	 * Creates a new machineComponent with the given stats
-	 * 
-	 * @param area The area where the object will reside at
-	 * @param x The x-coordinate of the component
-	 * @param y The y-coordinate of the component
-	 * @param testHandler The testHandler that will inform the component about 
-	 * test events
+	 * @param handlers The handlers that will handle the component
+	 * @param position The component's position
 	 * @param connectorRelay The connectorRelay that will handle the component's 
 	 * connectors
 	 * @param spritename The name of the sprite used to draw the component
@@ -41,13 +39,13 @@ public abstract class MachineComponent extends Component
 	 * (= for the manual)
 	 * @param componentName The name of this component
 	 */
-	public MachineComponent(Area area, int x, int y, TestHandler testHandler, 
+	public MachineComponent(HandlerRelay handlers, Vector3D position, 
 			ConnectorRelay connectorRelay,
 			String spritename, int inputs, int outputs, boolean isForTesting, 
 			String componentName)
 	{
-		super(area, x, y, testHandler,connectorRelay, spritename, inputs, 
-				outputs, false, isForTesting);
+		super(handlers, position, connectorRelay, spritename, inputs, outputs, false, 
+				isForTesting);
 		
 		// Initializes attributes
 		this.name = componentName;

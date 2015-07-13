@@ -5,7 +5,6 @@ import exodus_world.Area;
 import exodus_world.AreaListener;
 import flash_timers.ContinuousTimer;
 import flash_timers.TimerEventListener;
-import genesis_event.EventSelector;
 import genesis_event.HandlerRelay;
 import uninamo_gameplaysupport.TestEvent.TestEventType;
 import uninamo_main.GameSettings;
@@ -24,7 +23,6 @@ public class TurnTimer extends SimpleGameObject implements AreaListener, TestLis
 	
 	private ContinuousTimer timer;
 	private TurnHandler listenerHandler;
-	private EventSelector<TestEvent> selector;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -40,7 +38,6 @@ public class TurnTimer extends SimpleGameObject implements AreaListener, TestLis
 		
 		// Initializes attributes
 		this.listenerHandler = new TurnHandler(null);
-		this.selector = TestEvent.createTestEventSelector(TestEventType.START);
 		this.timer = new ContinuousTimer(GameSettings.turnDuration, 0, handlers);
 		
 		this.timer.setIsActiveStateOperator(getIsActiveStateOperator());
@@ -63,13 +60,8 @@ public class TurnTimer extends SimpleGameObject implements AreaListener, TestLis
 	public void onTestEvent(TestEvent event)
 	{
 		// Resets the timer on test start
-		this.timer.reset();
-	}
-
-	@Override
-	public EventSelector<TestEvent> getTestEventSelector()
-	{
-		return this.selector;
+		if (event.getType() == TestEventType.START)
+			this.timer.reset();
 	}
 
 	@Override

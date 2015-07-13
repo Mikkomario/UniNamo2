@@ -15,6 +15,8 @@ import uninamo_userinterface.CurrentCostDrawer;
  */
 public enum ComponentType
 {
+	// TODO: The sprite name, number of inputs & outputs, etc. should be listed here
+	
 	/**
 	 * Or component sends TRUE when either of its inputs receive TRUE
 	 */

@@ -27,7 +27,6 @@ import omega_util.Transformable;
 import omega_util.Transformation;
 import uninamo_gameplaysupport.TestEvent;
 import uninamo_gameplaysupport.TestListener;
-import uninamo_gameplaysupport.TestEvent.TestEventType;
 import uninamo_main.GameSettings;
 import vision_sprite.MultiSpriteDrawer;
 import vision_sprite.Sprite;
@@ -57,7 +56,6 @@ public abstract class CableConnector extends DependentGameObject<Component> impl
 	private Transformation transformation;
 	private EventSelector<MouseEvent> selector;
 	private HandlerRelay handlers;
-	private EventSelector<TestEvent> testSelector;
 	private String id;
 	private double scaling;
 	private ConnectorRelay connectorRelay;
@@ -87,7 +85,6 @@ public abstract class CableConnector extends DependentGameObject<Component> impl
 		this.transformation = new Transformation();
 		this.handlers = handlers;
 		this.scaling = 1;
-		this.testSelector = new StrictEventSelector<>();
 		if (isForTesting)
 			this.selector = new MultiEventSelector<>();
 		else
@@ -218,16 +215,7 @@ public abstract class CableConnector extends DependentGameObject<Component> impl
 	@Override
 	public void onTestEvent(TestEvent event)
 	{
-		if (event.getType() == TestEventType.START)
-			this.testing = true;
-		else
-			this.testing = false;
-	}
-
-	@Override
-	public EventSelector<TestEvent> getTestEventSelector()
-	{
-		return this.testSelector;
+		this.testing = event.testRunning();
 	}
 	
 	

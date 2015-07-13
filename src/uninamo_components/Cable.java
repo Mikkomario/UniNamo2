@@ -24,7 +24,6 @@ import omega_util.Transformable;
 import omega_util.Transformation;
 import uninamo_gameplaysupport.TestEvent;
 import uninamo_gameplaysupport.TestListener;
-import uninamo_gameplaysupport.TestEvent.TestEventType;
 import uninamo_main.GameSettings;
 import vision_sprite.SingleSpriteDrawer;
 import vision_sprite.SpriteBank;
@@ -50,7 +49,6 @@ public class Cable extends SimpleGameObject implements MouseListener, Transforma
 	private Vector3D lastMousePosition;
 	private ConnectorRelay connectorRelay;
 	private StateOperator isVisibleOperator;
-	private EventSelector<TestEvent> testEventSelector;
 	private EventSelector<MouseEvent> mouseEventSelector;
 	private Transformation transformation;
 	
@@ -106,7 +104,6 @@ public class Cable extends SimpleGameObject implements MouseListener, Transforma
 		this.connectorRelay = connectorRelay;
 		this.testing = false;
 		this.isVisibleOperator = new StateOperator(true, true);
-		this.testEventSelector = new StrictEventSelector<>();
 		this.transformation = new Transformation();
 		
 		updateTransformations();
@@ -119,18 +116,10 @@ public class Cable extends SimpleGameObject implements MouseListener, Transforma
 		if (this.end != null)
 			this.end.connectCable(this);
 		
-		/*
-		 * 	// Listens to enter and exit events if is not being dragged 
-		// (enter / exit is also disabled on test mode for output cables)
-		return !isBeingDragged() && !(this.testVersion && this.end == null);
-		
-		if (!isBeingDragged())
-			return MouseButtonEventScale.LOCAL;
-		else
-			return MouseButtonEventScale.GLOBAL;
-		 */
+		// Listens to movement events as well as local presses & global releases
 		MultiEventSelector<MouseEvent> selector = new MultiEventSelector<>();
 		selector.addOption(MouseEvent.createEnterExitSelector());
+		selector.addOption(MouseEvent.createMouseMoveSelector());
 		StrictEventSelector<MouseEvent, MouseEvent.Feature> localLeft = 
 				MouseEvent.createMouseButtonSelector(MouseButton.LEFT);
 		localLeft.addRequiredFeature(MouseButtonEventScale.LOCAL);
@@ -197,18 +186,9 @@ public class Cable extends SimpleGameObject implements MouseListener, Transforma
 	@Override
 	public void onTestEvent(TestEvent event)
 	{
-		if (event.getType() == TestEventType.START)
-			this.testing = true;
-		else
-			this.testing = false;
+		this.testing = event.testRunning();
 	}
-
-	@Override
-	public EventSelector<TestEvent> getTestEventSelector()
-	{
-		return this.testEventSelector;
-	}
-
+	
 	@Override
 	public Transformation getTransformation()
 	{

@@ -11,9 +11,7 @@ import conflict_collision.CollisionListener;
 import exodus_world.Area;
 import exodus_world.AreaListener;
 import genesis_event.Drawable;
-import genesis_event.EventSelector;
 import genesis_event.HandlerRelay;
-import genesis_event.StrictEventSelector;
 import genesis_util.DepthConstants;
 import genesis_util.StateOperator;
 import genesis_util.Vector3D;
@@ -46,7 +44,6 @@ public class ObstacleCollector extends SimpleGameObject implements CollisionList
 	private Transformation transformation;
 	private CollisionInformation collisionInfo;
 	private CollisionChecker collisionChecker;
-	private EventSelector<TestEvent> selector;
 	private StateOperator isVisibleOperator;
 	
 	
@@ -81,7 +78,6 @@ public class ObstacleCollector extends SimpleGameObject implements CollisionList
 		this.collisionChecker = new CollisionChecker(this, false, false);
 		Class<?>[] collided = {collectedType.getObstacleClass()};
 		this.collisionChecker.limitCheckedClassesTo(collided);
-		this.selector = new StrictEventSelector<>();
 		
 		Bank<Sprite> spriteBank = SpriteBank.getSpriteBank("goals");
 		Sprite[] sprites = {spriteBank.get(designSpriteName), spriteBank.get(realSpriteName)};
@@ -158,12 +154,6 @@ public class ObstacleCollector extends SimpleGameObject implements CollisionList
 			this.numberDrawer.getDrawer().getSpriteDrawer().setImageIndex(this.neededAmount);
 			getIsActiveStateOperator().setState(false);
 		}
-	}
-
-	@Override
-	public EventSelector<TestEvent> getTestEventSelector()
-	{
-		return this.selector;
 	}
 
 	@Override

@@ -160,6 +160,14 @@ public abstract class Component extends SimpleGameObject implements
 		return this.id;
 	}
 	
+	/**
+	 * @return The spriteDrawer the component uses
+	 */
+	protected SingleSpriteDrawer getSpriteDrawer()
+	{
+		return this.spriteDrawer;
+	}
+	
 	
 	// OTHER METHODS	-------------------------------------------------
 	

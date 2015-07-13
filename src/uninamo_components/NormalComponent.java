@@ -1,12 +1,20 @@
 package uninamo_components;
 
-import genesis_logic.AdvancedMouseListener;
-
-import java.awt.geom.Point2D;
-
-import omega_gameplay.HelpMath;
-import omega_world.Area;
-import uninamo_gameplaysupport.TestHandler;
+import genesis_event.EventSelector;
+import genesis_event.HandlerRelay;
+import genesis_event.MouseEvent;
+import genesis_event.MouseEvent.MouseMovementEventType;
+import genesis_event.MouseListener;
+import genesis_event.MultiEventSelector;
+import genesis_event.StrictEventSelector;
+import genesis_event.MouseEvent.MouseButton;
+import genesis_event.MouseEvent.MouseButtonEventScale;
+import genesis_event.MouseEvent.MouseButtonEventType;
+import genesis_util.HelpMath;
+import genesis_util.StateOperator;
+import genesis_util.StateOperatorListener;
+import genesis_util.Vector3D;
+import uninamo_gameplaysupport.TestEvent;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
 import uninamo_userinterface.CurrentCostDrawer;
@@ -21,17 +29,18 @@ import uninamo_userinterface.CurrentCostDrawer;
  * @since 15.3.2014
  */
 public abstract class NormalComponent extends Component implements 
-		AdvancedMouseListener, TestListener
+		MouseListener, TestListener, StateOperatorListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private String id;
 	private CurrentCostDrawer costDrawer;
-	private boolean dragged, diesWhenDropped, active, testing, testVersion;
+	private boolean dragged, diesWhenDropped, testing;
 	// Notice that this is relative to the origin, not top-left corner 
 	// (in other words is a relative absolute point)
-	private Point2D.Double lastRelativeMouseGrabPosition;
+	private Vector3D lastRelativeMouseGrabPosition;
 	private ConnectorRelay relay;
+	private EventSelector<MouseEvent> selector;
 	
 	private static boolean componentDragged = false;
 	
@@ -41,18 +50,13 @@ public abstract class NormalComponent extends Component implements
 	/**
 	 * Creates a new component to the given position.
 	 * 
-	 * @param area The area where the object will reside at
-	 * @param x The new x-coordinate of the component's origin (pixels)
-	 * @param y The new y-coordinate of the component's origin (pixels)
-	 * @param testHandler The testHandler that will inform the object about test 
-	 * events
+	 * @param handlers The handlers that will handle the component
+	 * @param position The component's position
 	 * @param connectorRelay A connectorRelay that will keep track of the 
 	 * connectors
-	 * @param componentRelay The NormalComponentRelay that will keep track of 
-	 * the component (optional)
 	 * @param costDrawer The costDrawer that will be affected by the component 
 	 * (optional)
-	 * @param spritename The name of the component sprite used to draw the 
+	 * @param spriteName The name of the component sprite used to draw the 
 	 * component
 	 * @param inputs How many input connectors the component has
 	 * @param outputs How many output connectors the component has
@@ -60,14 +64,12 @@ public abstract class NormalComponent extends Component implements
 	 * @param isForTesting If this is true, the component will go to test mode 
 	 * where it won't react to mouse but will create test cables to its connectors
 	 */
-	public NormalComponent(Area area, int x, int y, TestHandler testHandler, 
-			ConnectorRelay connectorRelay, 
-			NormalComponentRelay componentRelay, CurrentCostDrawer costDrawer, 
-			String spritename, int inputs, int outputs, boolean fromBox, 
+	public NormalComponent(HandlerRelay handlers, Vector3D position, 
+			ConnectorRelay connectorRelay, CurrentCostDrawer costDrawer, 
+			String spriteName, int inputs, int outputs, boolean fromBox, 
 			boolean isForTesting)
 	{
-		super(area, x, y, testHandler,
-				connectorRelay, spritename, inputs, outputs, fromBox,
+		super(handlers, position, connectorRelay, spriteName, inputs, outputs, fromBox, 
 				isForTesting);
 		
 		// Initializes attributes
@@ -79,25 +81,38 @@ public abstract class NormalComponent extends Component implements
 		
 		this.dragged = fromBox && !isForTesting;
 		this.diesWhenDropped = fromBox && !isForTesting;
-		this.lastRelativeMouseGrabPosition = new Point2D.Double();
+		this.lastRelativeMouseGrabPosition = Vector3D.zeroVector();
 		if (fromBox && !isForTesting)
 			componentDragged = true;
-		this.active = true;
 		this.testing = false;
 		this.relay = connectorRelay;
-		this.testVersion = isForTesting;
+		
+		// Listens to mouse movement, mouse clicks (local) and releases (global)
+		if (isForTesting)
+			this.selector = new MultiEventSelector<>();
+		else
+		{
+			MultiEventSelector<MouseEvent> selector = new MultiEventSelector<>();
+			selector.addOption(MouseEvent.createEnterExitSelector());
+			selector.addOption(MouseEvent.createMouseMoveSelector());
+			StrictEventSelector<MouseEvent, MouseEvent.Feature> localLeft = 
+					MouseEvent.createMouseButtonSelector(MouseButton.LEFT);
+			localLeft.addRequiredFeature(MouseButtonEventScale.LOCAL);
+			localLeft.addRequiredFeature(MouseButtonEventType.PRESSED);
+			selector.addOption(localLeft);
+			StrictEventSelector<MouseEvent, MouseEvent.Feature> globalLeftRelease = 
+					MouseEvent.createMouseButtonSelector(MouseButton.LEFT);
+			globalLeftRelease.addRequiredFeature(MouseButtonEventType.RELEASED);
+			selector.addOption(globalLeftRelease);
+			this.selector = selector;
+		}
 		
 		// Informs the costDrawer about increased component costs
 		if (this.costDrawer != null)
+		{
 			costDrawer.addCosts(getType().getPrice());
-		
-		// Adds the object to the handler(s)
-		if (componentRelay != null)
-			componentRelay.addComponent(this);
-		if (area.getMouseHandler() != null)
-			area.getMouseHandler().addMouseListener(this);
-		if (testHandler != null)
-			testHandler.addTestable(this);
+			getIsDeadStateOperator().getListenerHandler().add(this);
+		}
 	}
 	
 	
@@ -116,102 +131,56 @@ public abstract class NormalComponent extends Component implements
 	{
 		return this.id;
 	}
-	
+
 	@Override
-	public boolean isActive()
+	public void onTestEvent(TestEvent event)
 	{
-		return this.active && !this.testing && !this.testVersion;
+		this.testing = event.testRunning();
 	}
 
 	@Override
-	public void activate()
+	public StateOperator getListensToMouseEventsOperator()
 	{
-		this.active = true;
+		return getIsActiveStateOperator();
 	}
 
 	@Override
-	public void inactivate()
+	public EventSelector<MouseEvent> getMouseEventSelector()
 	{
-		this.active = false;
-	}
-	
-	@Override
-	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Point2D.Double mousePosition,
-			double eventStepTime)
-	{
-		// If the component (and not one of its connectors) is clicked, it 
-		// is considered a grab
-		if (button == MouseButton.LEFT && 
-				eventType == MouseButtonEventType.PRESSED && !componentDragged &&
-				this.relay.getConnectorAtPoint(mousePosition, null) == null)
-		{
-			this.dragged = true;
-			componentDragged = true;
-			this.lastRelativeMouseGrabPosition = new Point2D.Double(getX() - 
-					mousePosition.getX(), getY() - mousePosition.getY());
-		}
-		// If the button is released, also releases the grab
-		else if (button == MouseButton.LEFT && 
-				eventType == MouseButtonEventType.RELEASED && this.dragged)
-		{
-			this.dragged = false;
-			componentDragged = false;
-			
-			// If the component was supposed to die upon drop, dies
-			if (this.diesWhenDropped)
-				kill();
-		}
-	}
-	
-	@Override
-	public boolean listensPosition(Point2D.Double testedPosition)
-	{
-		return pointCollides(testedPosition);
+		return this.selector;
 	}
 
 	@Override
-	public boolean listensMouseEnterExit()
+	public boolean isInAreaOfInterest(Vector3D position)
 	{
-		// Doesn't listen to mouse if is just a test version
-		return true;
+		Vector3D relativePosition = getTransformation().inverseTransform(position).plus(
+				getSpriteDrawer().getSprite().getOrigin());
+		return HelpMath.pointIsInRange(relativePosition, Vector3D.zeroVector(), 
+				getSpriteDrawer().getSprite().getDimensions());
 	}
-	
+
 	@Override
-	public void onMousePositionEvent(MousePositionEventType eventType,
-			Point2D.Double mousePosition, double eventStepTime)
+	public void onMouseEvent(MouseEvent event)
 	{
-		if (this.dragged)
+		// If testing, doesn't react to mouse
+		if (this.testing)
 			return;
-		
-		if (eventType == MousePositionEventType.ENTER)
-			setScale(GameSettings.interfaceScaleFactor, 
-					GameSettings.interfaceScaleFactor);
-		else if (eventType == MousePositionEventType.EXIT)
-			setScale(1, 1);
-	}
-	
-	@Override
-	public void onMouseMove(Point2D.Double newMousePosition)
-	{
-		// If being dragged, jumps into the mouse's position
-		if (this.dragged)
+			
+		if (event.getMovementEventType() == MouseMovementEventType.MOVE && this.dragged)
 		{
-			setPosition(newMousePosition.getX() + 
-					this.lastRelativeMouseGrabPosition.getX(), 
-					newMousePosition.getY() + 
-					this.lastRelativeMouseGrabPosition.getY());
+			// If being dragged, jumps into the mouse's position
+			setTrasformation(getTransformation().withPosition(event.getPosition().minus(
+					this.lastRelativeMouseGrabPosition)));
 			// If the position is near an edge of the screen, prepares to die, 
 			// may also return from this state
-			if (HelpMath.pointIsInRange(getPosition(), 64, 
+			if (HelpMath.pointIsInRange(event.getPosition(), 64, 
 					GameSettings.screenWidth - 64, 64, 
 					GameSettings.screenHeight - 64))
 			{
 				if (this.diesWhenDropped)
 				{
 					this.diesWhenDropped = false;
-					setScale(GameSettings.interfaceScaleFactor, 
-							GameSettings.interfaceScaleFactor);
+					setScale(GameSettings.interfaceScaleFactor);
 				}
 			}
 			else
@@ -219,41 +188,44 @@ public abstract class NormalComponent extends Component implements
 				if (!this.diesWhenDropped)
 				{
 					this.diesWhenDropped = true;
-					setScale(0.5, 0.5);
+					setScale(0.5);
 				}
 			}
 		}
-	}
-	
-	@Override
-	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
-	{
-		if (this.dragged)
-			return MouseButtonEventScale.GLOBAL;
-		
-		return MouseButtonEventScale.LOCAL;
-	}
-	
-	@Override
-	public void onTestStart()
-	{
-		this.testing = true;
+		else if (event.getMovementEventType() == MouseMovementEventType.ENTER && !this.dragged)
+			setScale(GameSettings.interfaceScaleFactor);
+		else if (event.getMovementEventType() == MouseMovementEventType.EXIT && !this.dragged)
+			setScale(1);
+		// If the component (and not one of its connectors) is clicked, it 
+		// is considered a grab
+		else if (event.getButtonEventType() == MouseButtonEventType.PRESSED)
+		{
+			if (!componentDragged && this.relay.getConnectorAtPoint(event.getPosition(), 
+					null) == null)
+			{
+				this.dragged = true;
+				componentDragged = true;
+				this.lastRelativeMouseGrabPosition = event.getPosition().minus(
+						getTransformation().getPosition());
+			}
+		}
+		else if (event.getButtonEventType() == MouseButtonEventType.RELEASED && this.dragged)
+		{
+				// If the button is released, also releases the grab
+				this.dragged = false;
+				componentDragged = false;
+				
+				// If the component was supposed to die upon drop, dies
+				if (this.diesWhenDropped)
+					getIsDeadStateOperator().setState(true);
+		}	
 	}
 
 	@Override
-	public void onTestEnd()
+	public void onStateChange(StateOperator source, boolean newState)
 	{
-		this.testing = false;
-	}
-	
-	@Override
-	public void kill()
-	{
-		// Also informs the costDrawer about decreased component costs
-		if (this.costDrawer != null)
+		if (source.equals(getIsDeadStateOperator()) && newState)
 			this.costDrawer.addCosts(-getType().getPrice());
-		
-		super.kill();
 	}
 
 	
@@ -267,7 +239,8 @@ public abstract class NormalComponent extends Component implements
 	public String getSaveData()
 	{
 		return getID() + "#" + getType().toString().toLowerCase() + "#" + 
-				(int) getX() + "#" + (int) getY();
+				getTransformation().getPosition().getFirstInt() + "#" + 
+				getTransformation().getPosition().getSecondInt();
 	}
 	
 	/**
@@ -287,5 +260,10 @@ public abstract class NormalComponent extends Component implements
 	{
 		this.dragged = false;
 		componentDragged = false;
+	}
+	
+	private void setScale(double scale)
+	{
+		setTrasformation(getTransformation().withScaling(new Vector3D(scale, scale)));
 	}
 }
