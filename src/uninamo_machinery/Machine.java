@@ -1,26 +1,33 @@
 package uninamo_machinery;
 
-import genesis_graphic.DepthConstants;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
+import java.awt.geom.AffineTransform;
 
-import omega_gameplay.CollisionType;
-import omega_graphic.DimensionalDrawnObject;
-import omega_graphic.MultiSpriteDrawer;
-import omega_graphic.OpenSpriteBank;
-import omega_graphic.Sprite;
-import omega_world.Area;
-import omega_world.Room;
-import omega_world.RoomListener;
+import arc_bank.Bank;
+import conflict_collision.Collidable;
+import conflict_collision.CollisionInformation;
+import exodus_world.Area;
+import exodus_world.AreaListener;
+import genesis_event.Drawable;
+import genesis_event.HandlerRelay;
+import genesis_util.DepthConstants;
+import genesis_util.StateOperator;
+import genesis_util.StateOperatorListener;
+import genesis_util.Vector3D;
+import omega_util.SimpleGameObject;
+import omega_util.Transformation;
 import uninamo_components.ConnectorRelay;
 import uninamo_components.MachineInputComponent;
 import uninamo_components.MachineOutputComponent;
-import uninamo_gameplaysupport.TestHandler;
+import uninamo_gameplaysupport.TestEvent;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
+import uninamo_main.Utility;
 import uninamo_obstacles.Obstacle;
+import vision_sprite.MultiSpriteDrawer;
+import vision_sprite.Sprite;
+import vision_sprite.SpriteBank;
 
 /**
  * Machines interact with actors as well as components. Machines have different 
@@ -29,8 +36,8 @@ import uninamo_obstacles.Obstacle;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public abstract class Machine extends DimensionalDrawnObject implements 
-		RoomListener, TestListener
+public abstract class Machine extends SimpleGameObject implements 
+		AreaListener, TestListener, Drawable, Collidable, StateOperatorListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
@@ -39,6 +46,9 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	private MultiSpriteDrawer spritedrawer;
 	private String name;
 	private boolean testing;
+	private Transformation transformation;
+	private StateOperator isSolidOperator, isVisibleOperator;
+	private CollisionInformation collisionInfo;
 	
 	private static int inputComponentsCreated = 0;
 	private static int outputComponentsCreated = 0;
@@ -50,15 +60,9 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	
 	/**
 	 * Creates a new machine to the given position
-	 * 
-	 * @param x The new x-coordinate of the machine (pixels)
-	 * @param y The new y-coordinate of the machine (pixels)
-	 * @param isSolid Will the machine collide with objects
-	 * @param collisiontype What kind of shape does the machine have
-	 * machine's collision checking
-	 * @param componentArea The coding area where the machine components will be created
-	 * @param machineArea The area where the machine is located at
-	 * @param testHandler The testHandler that will inform the object about test events
+	 * @param position The machine's position
+	 * @param componentHandlers The handlers that will handle the components
+	 * @param machineHandlers The handlers that will handle the machine
 	 * @param connectorRelay The connectorRelay that will handle the machine's 
 	 * components' connectors
 	 * @param machineCounter The machineCounter that counts the created machines 
@@ -80,26 +84,25 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	 * @param isForTesting Is the machine meant for testing / demonstration 
 	 * purposes (into the manual). The machine works a bit differently if so
 	 */
-	public Machine(int x, int y, boolean isSolid,
-			CollisionType collisiontype, 
-			Area componentArea, Area machineArea, TestHandler testHandler, 
-			ConnectorRelay connectorRelay, MachineCounter machineCounter, 
-			String designSpriteName, String realSpriteName, 
+	public Machine(Vector3D position, HandlerRelay componentHandlers, 
+			HandlerRelay machineHandlers, ConnectorRelay connectorRelay, 
+			MachineCounter machineCounter, String designSpriteName, String realSpriteName, 
 			String inputComponentSpriteName, String outputComponentSpriteName, 
 			int inputs, int outputs, String ID, boolean isForTesting)
 	{
-		super(x, y, DepthConstants.NORMAL + 5, isSolid, collisiontype, machineArea);
-		
-		//System.out.println("Machine connector handler " + connectorRelay);
+		super(machineHandlers);
 		
 		// Initializes attributes
-		Sprite[] sprites = new Sprite[2];
-		sprites[0] = OpenSpriteBank.getSpriteBank("machines").getSprite(designSpriteName);
-		sprites[1] = OpenSpriteBank.getSpriteBank("machines").getSprite(realSpriteName);
-		this.spritedrawer = new MultiSpriteDrawer(sprites, machineArea.getActorHandler(), this);
+		Bank<Sprite> spriteBank = SpriteBank.getSpriteBank("machines");
+		Sprite[] sprites = {spriteBank.get(designSpriteName), spriteBank.get(realSpriteName)};
+		this.spritedrawer = new MultiSpriteDrawer(sprites, this, machineHandlers);
 		this.output = null;
 		this.input = null;
 		this.testing = false;
+		this.isSolidOperator = new StateOperator(true, true);
+		this.isVisibleOperator = new StateOperator(true, true);
+		this.collisionInfo = new CollisionInformation(Utility.getSpriteVertices(sprites[0]));
+		this.collisionInfo.limitSupportedListenersTo(COLLIDEDCLASSES);
 		
 		// Increases the counter (if possible)
 		if (machineCounter != null)
@@ -123,36 +126,33 @@ public abstract class Machine extends DimensionalDrawnObject implements
 			this.name = ID;
 		
 		// Creates components
+		// TODO: WET WET
 		if (inputComponentSpriteName != null && inputs > 0)
 		{
-			Point2D.Double position = getNewComponentPosition(true);
+			Vector3D componentPosition = getNewComponentPosition(true);
 			
 			// If is in testing mode, simply puts the component near the machine
 			if (isForTesting)
-				position = new Point2D.Double(getX() - 50, getY() + 75);
+				componentPosition = getTransformation().getPosition().plus(new Vector3D(-50, 
+						75));
 			
-			//System.out.println(position);
-			//System.out.println(componentArea);
-			
-			this.input = new MachineInputComponent(componentArea, 
-					(int) position.getX(), 
-					(int) position.getY(), testHandler, connectorRelay, 
-					inputComponentSpriteName, inputs, this, isForTesting, 
+			this.input = new MachineInputComponent(componentHandlers, componentPosition, 
+					connectorRelay, inputComponentSpriteName, inputs, this, isForTesting, 
 					toString());
 			inputComponentsCreated ++;
 		}
 		
 		if (outputComponentSpriteName != null && outputs > 0)
 		{
-			Point2D.Double position = getNewComponentPosition(false);
+			Vector3D componentPosition = getNewComponentPosition(false);
 			
 			// If is in testing mode, simply puts the component near the machine
 			if (isForTesting)
-				position = new Point2D.Double(getX() + 50, getY() + 75);
+				componentPosition = getTransformation().getPosition().plus(new Vector3D(-50, 
+						75));
 			
-			this.output = new MachineOutputComponent(componentArea, (int) position.getX(), 
-					(int) position.getY(), testHandler, connectorRelay, 
-					outputComponentSpriteName, outputs, isForTesting, 
+			this.output = new MachineOutputComponent(componentHandlers, componentPosition, 
+					connectorRelay, outputComponentSpriteName, outputs, isForTesting, 
 					toString());
 			outputComponentsCreated ++;
 		}
@@ -160,13 +160,6 @@ public abstract class Machine extends DimensionalDrawnObject implements
 		// If is a test version, goes straight to "real" sprite
 		if (isForTesting)
 			getSpriteDrawer().setSpriteIndex(1, false);
-		
-		// Adds the object to the handler(s)
-		if (testHandler != null)
-			testHandler.addTestable(this);
-		
-		// Forces transformation update
-		forceTransformationUpdate();
 	}
 
 	
@@ -189,65 +182,44 @@ public abstract class Machine extends DimensionalDrawnObject implements
 	// IMPLEMENTED METHODS	---------------------------------------------
 	
 	@Override
-	public Class<?>[] getSupportedListenerClasses()
+	public String toString()
 	{
-		// Only obstacles interact with the machines in a physical way
-		return COLLIDEDCLASSES;
+		return this.name;
 	}
-
+	
 	@Override
-	public void onRoomStart(Room room)
+	public Transformation getTransformation()
 	{
-		// Does nothing
+		return this.transformation;
 	}
 
 	@Override
-	public void onRoomEnd(Room room)
-	{	
-		// Dies
-		kill();
-	}
-
-	@Override
-	public int getWidth()
+	public void setTrasformation(Transformation t)
 	{
-		if (this.spritedrawer == null)
-			return 0;
-		return this.spritedrawer.getSprite().getWidth();
+		this.transformation = t;
 	}
 
 	@Override
-	public int getHeight()
+	public StateOperator getCanBeCollidedWithStateOperator()
 	{
-		if (this.spritedrawer == null)
-			return 0;
-		return this.spritedrawer.getSprite().getHeight();
+		return this.isSolidOperator;
 	}
 
 	@Override
-	public int getOriginX()
+	public CollisionInformation getCollisionInformation()
 	{
-		if (this.spritedrawer == null)
-			return 0;
-		return this.spritedrawer.getSprite().getOriginX();
+		return this.collisionInfo;
 	}
 
 	@Override
-	public int getOriginY()
-	{
-		if (this.spritedrawer == null)
-			return 0;
-		return this.spritedrawer.getSprite().getOriginY();
-	}
-
-	@Override
-	public void drawSelfBasic(Graphics2D g2d)
+	public void drawSelf(Graphics2D g2d)
 	{
 		// Draws the sprite
 		if (this.spritedrawer == null)
 			return;
 		
-		this.spritedrawer.drawSprite(g2d, 0, 0);
+		AffineTransform lastTransform = getTransformation().transform(g2d);
+		getSpriteDrawer().drawSprite(g2d);
 		
 		// And the name of the machine (if on design mode)
 		if (!this.testing)
@@ -257,61 +229,61 @@ public abstract class Machine extends DimensionalDrawnObject implements
 			g2d.drawString(toString(), 0, 0);
 		}
 		
-		drawCollisionArea(g2d);
-	}
-	
-	@Override
-	public void kill()
-	{
-		//System.out.println("Machine killed");
-		//System.out.println(this.input);
-		//System.out.println(this.output);
-		
-		// Also kills the components (which also affects the counters)
-		if (this.input != null)
-		{
-			//System.out.println("Machineinput killed");
-			
-			this.input.kill();
-			this.input = null;
-			inputComponentsCreated --;
-		}
-		if (this.output != null)
-		{
-			//System.out.println("Machineoutput killed");
-			
-			this.output.kill();
-			this.output = null;
-			outputComponentsCreated --;
-		}
-		
-		super.kill();
-	}
-	
-	@Override
-	public void onTestStart()
-	{
-		// Changes the sprite
-		getSpriteDrawer().setSpriteIndex(1, false);
-		this.testing = true;
+		g2d.setTransform(lastTransform);
 	}
 
 	@Override
-	public void onTestEnd()
+	public int getDepth()
 	{
-		// Changes the sprite
-		getSpriteDrawer().setSpriteIndex(0, false);
-		this.testing = false;
+		return DepthConstants.BACK - 20;
+	}
+
+	@Override
+	public StateOperator getIsVisibleStateOperator()
+	{
+		return this.isVisibleOperator;
+	}
+
+	@Override
+	public void onTestEvent(TestEvent event)
+	{
+		this.testing = event.testRunning();
+		if (this.testing)
+			getSpriteDrawer().setSpriteIndex(1, false);
+		else
+			getSpriteDrawer().setSpriteIndex(0, false);
+	}
+
+	@Override
+	public void onAreaStateChange(Area area)
+	{
+		if (!area.getIsActiveStateOperator().getState())
+			getIsDeadStateOperator().setState(false);
+	}
+
+	@Override
+	public void onStateChange(StateOperator source, boolean newState)
+	{
+		if (source.equals(getIsDeadStateOperator()) && newState)
+		{
+			// Also kills the components (which also affects the counters)
+			if (this.input != null)
+			{
+				this.input.getIsDeadStateOperator().setState(newState);
+				this.input = null;
+				inputComponentsCreated --;
+			}
+			if (this.output != null)
+			{
+				this.output.getIsDeadStateOperator().setState(newState);
+				this.output = null;
+				outputComponentsCreated --;
+			}
+		}
 	}
 	
 	
 	// OTHER METHODS	-------------------------------------------------
-	
-	@Override
-	public String toString()
-	{
-		return this.name;
-	}
 	
 	/**
 	 * @return The spritedrawer that draws the machine's sprites
@@ -336,7 +308,7 @@ public abstract class Machine extends DimensionalDrawnObject implements
 			this.output.sendSignal(signal, outputIndex);
 	}
 	
-	private static Point2D.Double getNewComponentPosition(boolean isInput)
+	private static Vector3D getNewComponentPosition(boolean isInput)
 	{	
 		int x = GameSettings.screenWidth - 200;
 		int y = COMPONENTDISTANCE / 2 + 160;
@@ -365,6 +337,6 @@ public abstract class Machine extends DimensionalDrawnObject implements
 			i++;
 		}
 		
-		return new Point2D.Double(x, y);
+		return new Vector3D(x, y);
 	}
 }

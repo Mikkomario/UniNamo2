@@ -1,9 +1,11 @@
 package uninamo_components;
 
-import omega_world.Area;
-import uninamo_gameplaysupport.TestHandler;
+import genesis_event.HandlerRelay;
+import genesis_util.StateOperator;
+import genesis_util.Vector3D;
+import uninamo_gameplaysupport.TestEvent;
 import uninamo_gameplaysupport.TurnBased;
-import uninamo_gameplaysupport.TurnHandler;
+import uninamo_gameplaysupport.TestEvent.TestEventType;
 import uninamo_userinterface.CurrentCostDrawer;
 
 /**
@@ -22,38 +24,23 @@ public class PulseGeneratorComponent extends NormalComponent implements TurnBase
 	
 	/**
 	 * Creates a new pulseGenerator to the given position
-	 * 
-	 * @param area The area where the object will reside at
-	 * @param x The generator's x-coordinate (pixels)
-	 * @param y The generator's y-coordinate (pixels)
-	 * @param testHandler The testHandler that informs the object about 
-	 * test events
+	 * @param handlers The handlers that will handle the component
+	 * @param position The component's position
 	 * @param connectorRelay The connectorRelay that keeps track of all the 
 	 * connectors
-	 * @param componentRelay The componentRelay that will keep track of the 
-	 * component
 	 * @param costDrawer The costDrawer that will be affected by the component 
 	 * (optional)
-	 * @param turnHandler The turnHandler that informs the object about 
-	 * turn events
 	 * @param isForTesting If this is true, the component will go to test mode 
 	 * where it won't react to mouse but will create test cables to its connectors
 	 */
-	public PulseGeneratorComponent(Area area, int x, int y, 
-			TestHandler testHandler, ConnectorRelay connectorRelay, 
-			NormalComponentRelay componentRelay, CurrentCostDrawer costDrawer, 
-			TurnHandler turnHandler, boolean isForTesting)
+	public PulseGeneratorComponent(HandlerRelay handlers, Vector3D position, 
+			ConnectorRelay connectorRelay, CurrentCostDrawer costDrawer, boolean isForTesting)
 	{
-		super(area, x, y, testHandler,
-				connectorRelay, componentRelay, costDrawer, "test", 0, 1, true, 
+		super(handlers, position, connectorRelay, costDrawer, "test", 0, 1, true, 
 				isForTesting);
 		
 		// Initializes attributes
 		this.lastSignalType = false;
-		
-		// Adds the object to the handler(s)
-		if (turnHandler != null)
-			turnHandler.addTurnListener(this);
 	}
 	
 	
@@ -80,18 +67,27 @@ public class PulseGeneratorComponent extends NormalComponent implements TurnBase
 	}
 	
 	@Override
-	public void onTestStart()
+	public void onTestEvent(TestEvent event)
 	{
-		super.onTestStart();
+		super.onTestEvent(event);;
 		
 		// Resets the signal on test start
-		this.lastSignalType = false;
-		sendSignalToOutput(0, this.lastSignalType);
+		if (event.getType() == TestEventType.START)
+		{
+			this.lastSignalType = false;
+			sendSignalToOutput(0, this.lastSignalType);
+		}
 	}
 
 	@Override
 	public ComponentType getType()
 	{
 		return ComponentType.PULSE;
+	}
+
+	@Override
+	public StateOperator getListensToTurnEventsOperator()
+	{
+		return getIsActiveStateOperator();
 	}
 }

@@ -1,10 +1,8 @@
 package uninamo_machinery;
 
-import omega_world.Area;
-import genesis_graphic.DrawableHandler;
-import genesis_logic.ActorHandler;
+import genesis_event.HandlerRelay;
+import genesis_util.Vector3D;
 import uninamo_components.ConnectorRelay;
-import uninamo_gameplaysupport.TestHandler;
 
 /**
  * MachineTypes represent the different kinds of machines there are. Each 
@@ -15,6 +13,8 @@ import uninamo_gameplaysupport.TestHandler;
  */
 public enum MachineType
 {
+	// TODO: As with componentType, connect the necessary info here
+	
 	/**
 	 * Conveyor belts slide objects left or right
 	 */
@@ -27,24 +27,16 @@ public enum MachineType
 	/**
 	 * Creates a new test machine of this type to the given position. 
 	 * The test version doesn't function quite like the normal one
-	 * 
-	 * @param x The x-coordinate of the machine
-	 * @param y The y-coordinate of the machine
-	 * @param drawer The DrawableHandler that will draw the machine
-	 * @param actorhandler The ActorHandler that will inform the machine about 
-	 * step events
-	 * @param area The area where the machine and its components are located at
+	 * @param position The position of the machine
+	 * @param handlers The handlers that will handle the machine and the test component
 	 * @return A test machine of this type
 	 */
-	public Machine getTestMachine(int x, int y, DrawableHandler drawer,
-			ActorHandler actorhandler, Area area)
-	{
-		//System.out.println(area);
-		
+	public Machine getTestMachine(Vector3D position, HandlerRelay handlers)
+	{	
 		switch (this)
 		{		
-			case CONVEYORBELT: return new ConveyorBelt(x, y, area, area, null, 
-					null, null, null, true);
+			case CONVEYORBELT: return new ConveyorBelt(position, handlers, handlers, null, 
+					null, null, true);
 		}
 		
 		System.err.println("Can't create a machine of type " + this + 
@@ -54,12 +46,9 @@ public enum MachineType
 	
 	/**
 	 * Creates a new machine of this type
-	 * 
-	 * @param x The x-coordinate of the created machine
-	 * @param y The y-coordinate of the created machine
-	 * @param machineArea The Area where the machine will be
-	 * @param componentArea The area where the machine's component(s) will be
-	 * @param testHandler The testHandler that informs the machine about test events
+	 * @param position The machine's position
+	 * @param machineHandlers The handlers that will handle the machine
+	 * @param componentHandlers The handlers that will handle the components
 	 * @param connectorRelay The connectorRelay that will handle the machine's 
 	 * connectors
 	 * @param machineCounter The machineCounter that will count the created 
@@ -68,15 +57,15 @@ public enum MachineType
 	 * generated automatically
 	 * @return A new machine of this type
 	 */
-	public Machine getNewMachine(int x, int y, Area machineArea, 
-			Area componentArea, TestHandler testHandler, 
+	public Machine getNewMachine(Vector3D position, HandlerRelay machineHandlers, 
+			HandlerRelay componentHandlers, 
 			ConnectorRelay connectorRelay, MachineCounter machineCounter, 
 			String ID)
 	{	
 		switch (this)
 		{
-			case CONVEYORBELT: return new ConveyorBelt(x, y, 
-					componentArea, machineArea, testHandler, connectorRelay, 
+			case CONVEYORBELT: return new ConveyorBelt(position, 
+					componentHandlers, machineHandlers, connectorRelay, 
 					machineCounter, ID, false);
 		}
 		

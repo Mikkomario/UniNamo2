@@ -1,10 +1,11 @@
 package uninamo_components;
 
-import omega_world.Room;
-import omega_world.RoomListener;
-import genesis_logic.Handled;
-import genesis_logic.Handler;
+import exodus_world.Area;
+import exodus_world.AreaListener;
+import genesis_event.Handler;
+import genesis_event.HandlerType;
 import uninamo_gameplaysupport.TotalCostAnalyzer;
+import uninamo_gameplaysupport.UninamoHandlerType;
 
 /**
  * ComponentRelay keeps track of all the created components 
@@ -14,7 +15,7 @@ import uninamo_gameplaysupport.TotalCostAnalyzer;
  * @author Mikko Hilpinen
  * @since 16.3.2014
  */
-public class NormalComponentRelay extends Handler implements RoomListener
+public class NormalComponentRelay extends Handler<NormalComponent> implements AreaListener
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
@@ -27,35 +28,39 @@ public class NormalComponentRelay extends Handler implements RoomListener
 	 * Creates a new empty componentRelay
 	 * @param costAnalyzer The costAnalyzer that analyzes the data from the 
 	 * component relay when necessary
-	 * @param componentArea The area where the components are located at
 	 */
-	public NormalComponentRelay(TotalCostAnalyzer costAnalyzer, Room componentArea)
+	public NormalComponentRelay(TotalCostAnalyzer costAnalyzer)
 	{
-		super(false, null);
+		super(false);
 		
 		// Initializes attributes
 		this.costAnalyzer = costAnalyzer;
-		
-		// Adds the object to the handler(s)
-		if (componentArea != null)
-			componentArea.addRoomListener(this);
 	}
 
 	
 	// IMPLEMENTED METHODS	---------------------------------------------
-	
+
 	@Override
-	protected Class<?> getSupportedClass()
+	protected boolean handleObject(NormalComponent h)
 	{
-		return NormalComponent.class;
+		// Kills the component (part of the killComponents functionality)
+		h.getIsDeadStateOperator().setState(true);
+		return true;
 	}
 
 	@Override
-	protected boolean handleObject(Handled h)
+	public void onAreaStateChange(Area area)
 	{
-		// Kills the component (part of the killComponents functionality)
-		h.kill();
-		return true;
+		if (area.getIsActiveStateOperator().getState())
+			this.costAnalyzer.resetComponentStatus();
+		else
+			handleObjects(new CostAnalyzerInformerOperator());
+	}
+
+	@Override
+	public HandlerType getHandlerType()
+	{
+		return UninamoHandlerType.NORMALCOMPONENT;
 	}
 	
 	
@@ -67,15 +72,6 @@ public class NormalComponentRelay extends Handler implements RoomListener
 	public void killAllComponents()
 	{
 		handleObjects();
-	}
-	
-	/**
-	 * Adds a new component to the relay
-	 * @param c The component to be added to the relay
-	 */
-	public void addComponent(NormalComponent c)
-	{
-		addHandled(c);
 	}
 	
 	/**
@@ -114,11 +110,10 @@ public class NormalComponentRelay extends Handler implements RoomListener
 		// IMPLEMENTED METHODS	-----------------------------------------
 		
 		@Override
-		protected boolean handleObject(Handled h)
+		protected boolean handleObject(NormalComponent h)
 		{
 			// Adds the component's costs to the total costs
-			NormalComponent c = (NormalComponent) h;
-			this.currentCosts += c.getType().getPrice();
+			this.currentCosts += h.getType().getPrice();
 			
 			return true;
 		}
@@ -137,27 +132,12 @@ public class NormalComponentRelay extends Handler implements RoomListener
 		// IMPLEMENTED METHODS	----------------------------------------
 		
 		@Override
-		protected boolean handleObject(Handled h)
+		protected boolean handleObject(NormalComponent h)
 		{
 			// Informs the costs analyzer about the handled type
-			NormalComponentRelay.this.costAnalyzer.addComponentCost(
-					((NormalComponent) h).getType());
+			NormalComponentRelay.this.costAnalyzer.addComponentCost(h.getType());
 			
 			return true;
 		}
-	}
-
-	@Override
-	public void onRoomStart(Room room)
-	{
-		// Resets the cost calculator
-		this.costAnalyzer.resetComponentStatus();
-	}
-
-	@Override
-	public void onRoomEnd(Room room)
-	{
-		// Informs the costAnalyzer about component status
-		handleObjects(new CostAnalyzerInformerOperator());
 	}
 }

@@ -6,7 +6,6 @@ import genesis_util.Vector3D;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import uninamo_gameplaysupport.TestHandler;
 import uninamo_main.GameSettings;
 
 /**
@@ -55,9 +54,9 @@ public abstract class MachineComponent extends Component
 	// IMPLEMENTED METHODS	----------------------------------------------
 	
 	@Override
-	public void drawSelfBasic(Graphics2D g2d)
+	public void drawSelf(Graphics2D g2d)
 	{
-		super.drawSelfBasic(g2d);
+		super.drawSelf(g2d);
 		
 		if (this.name == null)
 			return;
@@ -65,7 +64,8 @@ public abstract class MachineComponent extends Component
 		// Also draws the name of the component
 		g2d.setColor(Color.BLACK);
 		g2d.setFont(GameSettings.basicFont);
-		g2d.drawString(this.name, 0, 0);
+		g2d.drawString(this.name, getTransformation().getPosition().getFirstInt(), 
+				getTransformation().getPosition().getSecondInt());
 	}
 	
 	@Override

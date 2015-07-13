@@ -1,8 +1,7 @@
 package uninamo_components;
 
-import omega_world.Area;
-import uninamo_gameplaysupport.TestHandler;
-import uninamo_gameplaysupport.TurnHandler;
+import genesis_event.HandlerRelay;
+import genesis_util.Vector3D;
 import uninamo_userinterface.CurrentCostDrawer;
 
 /**
@@ -35,38 +34,28 @@ public enum ComponentType
 	
 	/**
 	 * Creates a new component of this type
-	 * 
-	 * @param area The area where the component will reside at
-	 * @param x The component's new x-coordinate
-	 * @param y The component's new y-coordinate
-	 * @param testHandler The testHandler that will inform the object about 
-	 * test events (optional)
+	 * @param handlers The handlers that will handle the component
+	 * @param position The component's new position
 	 * @param connectorRelay The connectorRelay that will handle the connectors 
 	 * of the component
-	 * @param componentRelay The componentRelay that will keep track of the 
-	 * component
 	 * @param costDrawer The costDrawer that will be affected by the component 
 	 * (optional)
-	 * @param turnHandler The turnHandler that will inform the component about 
-	 * turn events (if applicable)
 	 * @param isTestComponent Will the component be used only for testing 
 	 * purposes. If so, it doesn't react to mouse but will use test cables
 	 * @return A component of this componentType
 	 */
-	public NormalComponent getNewComponent(Area area, int x, int y, 
-			TestHandler testHandler, ConnectorRelay connectorRelay, 
-			NormalComponentRelay componentRelay, CurrentCostDrawer costDrawer, 
-			TurnHandler turnHandler, boolean isTestComponent)
+	public NormalComponent getNewComponent(HandlerRelay handlers, Vector3D position, 
+			ConnectorRelay connectorRelay, CurrentCostDrawer costDrawer, 
+			boolean isTestComponent)
 	{
 		switch (this)
 		{
-			case OR: return new OrComponent(area, x, y, testHandler, connectorRelay, 
-					componentRelay, costDrawer, isTestComponent);
-			case PULSE: return new PulseGeneratorComponent(area, x, y, testHandler, 
-					connectorRelay, componentRelay, costDrawer, turnHandler, 
-					isTestComponent);
-			case POWER: return new PowerSourceComponent(area, x, y, testHandler, 
-					connectorRelay, componentRelay, costDrawer, isTestComponent);
+			case OR: return new OrComponent(handlers, position, connectorRelay, 
+					costDrawer, isTestComponent);
+			case PULSE: return new PulseGeneratorComponent(handlers, position, connectorRelay, 
+					costDrawer, isTestComponent);
+			case POWER: return new PowerSourceComponent(handlers, position, connectorRelay, 
+					costDrawer, isTestComponent);
 			default: System.err.println("Couldn't create the component. "
 					+ "Please update ComponentType.getNewComponent method"); 
 				break;

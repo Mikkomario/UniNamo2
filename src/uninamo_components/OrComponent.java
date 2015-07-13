@@ -1,7 +1,7 @@
 package uninamo_components;
 
-import omega_world.Area;
-import uninamo_gameplaysupport.TestHandler;
+import genesis_event.HandlerRelay;
+import genesis_util.Vector3D;
 import uninamo_userinterface.CurrentCostDrawer;
 
 /**
@@ -23,25 +23,19 @@ public class OrComponent extends NormalComponent
 	/**
 	 * Creates a new OrComponent to the given position.
 	 * 
-	 * @param area The area where the object will reside at
-	 * @param x The x-coordinate of the component (pixels)
-	 * @param y The y-coordinate of the component (pixels)
-	 * @param testHandler The testHandler that will inform the object about test events
+	 * @param handlers The handlers that will handle the component
+	 * @param position The component's position
 	 * @param connectorRelay A connectorRelay that will keep track of the 
 	 * connectors
-	 * @param componentRelay The componentRelay that will keep track of the 
-	 * component (optional)
 	 * @param costDrawer The currentCostDrawer that will be affected by the 
 	 * component (optional)
 	 * @param isForTesting If this is true, the component will go to test mode 
 	 * where it won't react to mouse but will create test cables to its connectors
 	 */
-	public OrComponent(Area area, int x, int y, TestHandler testHandler, 
-			ConnectorRelay connectorRelay, NormalComponentRelay componentRelay, 
+	public OrComponent(HandlerRelay handlers, Vector3D position, ConnectorRelay connectorRelay, 
 			CurrentCostDrawer costDrawer, boolean isForTesting)
 	{
-		super(area, x, y, testHandler, 
-				connectorRelay, componentRelay, costDrawer, "test", 2, 1, true, 
+		super(handlers, position, connectorRelay, costDrawer, "test", 2, 1, true, 
 				isForTesting);
 		
 		// Initializes attributes

@@ -1,25 +1,24 @@
 package uninamo_obstacles;
 
-import genesis_graphic.DepthConstants;
-
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 
-import omega_gameplay.AdvancedPhysicDrawnObject;
-import omega_gameplay.Collidable;
-import omega_gameplay.CollisionType;
-import omega_gameplay.Movement;
-import omega_graphic.MultiSpriteDrawer;
-import omega_graphic.OpenSpriteBank;
-import omega_graphic.Sprite;
-import omega_world.Area;
-import omega_world.Room;
-import omega_world.RoomListener;
+import exodus_world.Area;
+import exodus_world.AreaListener;
+import genesis_event.Drawable;
+import genesis_event.HandlerRelay;
+import genesis_util.StateOperator;
+import genesis_util.Vector3D;
+import omega_util.SimpleGameObject;
+import omega_util.Transformable;
+import omega_util.Transformation;
+import uninamo_gameplaysupport.TestEvent;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_gameplaysupport.Wall;
+import vision_sprite.MultiSpriteDrawer;
 
 /**
  * obstacles are the main 'objects' in the game in a sense that the user is 
@@ -29,14 +28,16 @@ import uninamo_gameplaysupport.Wall;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public abstract class Obstacle extends AdvancedPhysicDrawnObject implements 
-	RoomListener, TestListener
+public abstract class Obstacle extends SimpleGameObject implements 
+	AreaListener, TestListener, Drawable, Transformable
 {
+	// TODO: Any collision systems, as well as any physics have been (temporarily) removed
+	
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private MultiSpriteDrawer spritedrawer;
 	private boolean started;
-	private Point2D.Double startPosition;
+	private Vector3D startPosition;
 	//private static final Class<?> COLLIDEDCLASSES[] = {Machine.class, Obstacle.class};
 	
 	
@@ -45,20 +46,12 @@ public abstract class Obstacle extends AdvancedPhysicDrawnObject implements
 	/**
 	 *  Creates a new obstacle to the given position. Remember to set up 
 	 *  the collision points after creating the object.
-	 *  
-	 * @param area The area where the object will reside at
-	 * @param x The x-coordinate of the obstacle (pixels)
-	 * @param y The y-coordinate of the obstacle (pixels)
-	 * @param isSolid Can the obstacle be collided with
-	 * @param collisiontype What is the shape of the obstacle
-	 * @param testHandler The testHandler that will inform the obstacle about test events
 	 * @param designSpriteName The name of the sprite used to draw the object 
 	 * in the design mode
 	 * @param realSpriteName The name of the sprite used to draw the object 
 	 * during the test mode 
 	 */
-	public Obstacle(Area area, int x, int y, boolean isSolid,
-			CollisionType collisiontype, TestHandler testHandler, 
+	public Obstacle(HandlerRelay handlers, Vector3D position, 
 			String designSpriteName, String realSpriteName)
 	{
 		super(x, y, DepthConstants.NORMAL, isSolid, collisiontype, area);
@@ -252,5 +245,61 @@ public abstract class Obstacle extends AdvancedPhysicDrawnObject implements
 	protected MultiSpriteDrawer getSpriteDrawer()
 	{
 		return this.spritedrawer;
+	}
+
+
+	@Override
+	public void onTestEvent(TestEvent event)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onAreaStateChange(Area area)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public Transformation getTransformation()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setTrasformation(Transformation arg0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void drawSelf(Graphics2D g2d)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public int getDepth()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public StateOperator getIsVisibleStateOperator()
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

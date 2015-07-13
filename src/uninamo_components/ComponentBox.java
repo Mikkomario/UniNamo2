@@ -1,18 +1,22 @@
 package uninamo_components;
 
-import gateway_interface.AbstractButton;
-import genesis_graphic.DepthConstants;
+import gateway_event.ButtonEvent;
+import gateway_event.ButtonEventListener;
+import gateway_event.ButtonEvent.ButtonEventType;
+import gateway_ui.SingleSpriteButton;
+import genesis_event.Drawable;
+import genesis_event.EventSelector;
+import genesis_event.HandlerRelay;
+import genesis_util.DepthConstants;
+import genesis_util.StateOperator;
+import genesis_util.Vector3D;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
-
-import omega_graphic.OpenSpriteBank;
-import omega_world.Area;
-import uninamo_gameplaysupport.TestHandler;
-import uninamo_gameplaysupport.TurnHandler;
+import java.awt.geom.AffineTransform;
 import uninamo_main.GameSettings;
 import uninamo_userinterface.CurrentCostDrawer;
+import vision_sprite.SpriteBank;
 
 /**
  * ComponentBox is a box from which the user can drag components away from. 
@@ -21,17 +25,18 @@ import uninamo_userinterface.CurrentCostDrawer;
  * @author Mikko Hilpinen
  * @since 10.3.2014
  */
-public class ComponentBox extends AbstractButton
+public class ComponentBox extends SingleSpriteButton implements ButtonEventListener, Drawable
 {
+	// TODO: There's no real need to extend the button. Just handle the button's from a 
+	// controller class
+	
 	// ATTRIBUTES	------------------------------------------------------
 	
-	private Area area;
-	private TestHandler testHandler;
+	private HandlerRelay handlers;
 	private ConnectorRelay connectorRelay;
-	private TurnHandler turnHandler;
 	private ComponentType componentType;
-	private NormalComponentRelay componentRelay;
 	private CurrentCostDrawer costDrawer;
+	private EventSelector<ButtonEvent> selector;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -39,38 +44,27 @@ public class ComponentBox extends AbstractButton
 	/**
 	 * Creates a new ComponentBox with the given component type and position
 	 * 
-	 * @param x The x-coordinate of the box
-	 * @param y The y-coordinate of the box
-	 * about mouse events
-	 * @param area The area where the box is located
-	 * @param testHandler The testHandler that will inform objects about test 
-	 * events
+	 * @param position The boxes position
+	 * @param handlers The handlers that will handle the box
 	 * @param connectorRelay The connectorRelay that will handle the created 
-	 * connectors 
-	 * @param componentRelay The componentRelay that will keep track of the 
-	 * created components
+	 * connectors
 	 * @param costDrawer The costDrawer that will be affected by the created 
 	 * components
-	 * @param turnHandler The turnHandler that will inform the objects about 
-	 * turn events 
 	 * @param componentType The type of component that will be dragged from the box
 	 */
-	public ComponentBox(int x, int y, Area area, TestHandler testHandler, 
-			ConnectorRelay connectorRelay, NormalComponentRelay componentRelay, 
-			CurrentCostDrawer costDrawer, TurnHandler turnHandler, 
+	public ComponentBox(Vector3D position, HandlerRelay handlers, 
+			ConnectorRelay connectorRelay, CurrentCostDrawer costDrawer, 
 			ComponentType componentType)
 	{
-		super(x, y, DepthConstants.BACK - 20, OpenSpriteBank.getSpriteBank(
-				"gameplayinterface").getSprite("componentbox"), area);
+		super(position, DepthConstants.BACK - 20, SpriteBank.getSprite("gameplayinterface", 
+				"componentbox"), handlers);
 		
 		// Initializes attributes
-		this.area = area;
-		this.testHandler = testHandler;
 		this.connectorRelay = connectorRelay;
-		this.turnHandler = turnHandler;
 		this.componentType = componentType;
-		this.componentRelay = componentRelay;
 		this.costDrawer = costDrawer;
+		this.handlers = handlers;
+		this.selector = ButtonEvent.createButtonEventSelector(ButtonEventType.PRESSED);
 		
 		getSpriteDrawer().setImageSpeed(0);
 		getSpriteDrawer().setImageIndex(0);
@@ -80,51 +74,34 @@ public class ComponentBox extends AbstractButton
 	// IMPLEMENTED METHODS	----------------------------------------------
 
 	@Override
-	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Point2D.Double mousePosition,
-			double eventStepTime)
+	public void drawSelf(Graphics2D g2d)
 	{
-		// On left click, creates a new component
-		if (button == MouseButton.LEFT && eventType == MouseButtonEventType.PRESSED)
-			this.componentType.getNewComponent(this.area, (int) mousePosition.getX(), 
-					(int) mousePosition.getY(), this.testHandler, this.connectorRelay, 
-					this.componentRelay, this.costDrawer, this.turnHandler, false);
-	}
-
-	@Override
-	public boolean listensMouseEnterExit()
-	{
-		return true;
-	}
-
-	@Override
-	public void onMousePositionEvent(MousePositionEventType eventType,
-			Point2D.Double mousePosition, double eventStepTime)
-	{
-		// On enter, scales a bit and opens the box
-		if (eventType == MousePositionEventType.ENTER)
-		{
-			//setScale(GameSettings.interfaceScaleFactor, 
-			//		GameSettings.interfaceScaleFactor);
-			getSpriteDrawer().setImageIndex(1);
-		}
-		// On exit, rescales and closes the box
-		else if (eventType == MousePositionEventType.EXIT)
-		{
-			//setScale(1, 1);
-			getSpriteDrawer().setImageIndex(0);
-		}
-	}
-
-	@Override
-	public void drawSelfBasic(Graphics2D g2d)
-	{
-		super.drawSelfBasic(g2d);
-		
+		AffineTransform lastTransform = getTransformation().transform(g2d);
 		// Also draws the text
 		g2d.setFont(GameSettings.basicFont);
 		g2d.setColor(Color.WHITE);
 		g2d.drawString(this.componentType.toString(), 5, 28);
+		g2d.setTransform(lastTransform);
+	}
+
+	@Override
+	public EventSelector<ButtonEvent> getButtonEventSelector()
+	{
+		return this.selector;
+	}
+
+	@Override
+	public StateOperator getListensToButtonEventsOperator()
+	{
+		return getIsActiveStateOperator();
+	}
+
+	@Override
+	public void onButtonEvent(ButtonEvent e)
+	{
+		// On left click, creates a new component
+		this.componentType.getNewComponent(this.handlers, getTransformation().getPosition(), 
+				this.connectorRelay, this.costDrawer, false);
 	}
 	
 	

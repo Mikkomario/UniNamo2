@@ -1,7 +1,7 @@
 package uninamo_components;
 
-import omega_world.Area;
-import uninamo_gameplaysupport.TestHandler;
+import genesis_event.HandlerRelay;
+import genesis_util.Vector3D;
 
 /**
  * MachineOutputComponents take signals from machines and inform other 
@@ -17,12 +17,8 @@ public class MachineOutputComponent extends MachineComponent
 	/**
 	 * Creates a new machineOutputComponent that will be ready to send new 
 	 * signals.
-	 * 
-	 * @param area The area where the object will reside at
-	 * @param x The x-coordinate of the component
-	 * @param y The y-coordinate of the component
-	 * @param testHandler The testHandler that will inform the object about 
-	 * test events
+	 * @param handlers The handlers that will handle the component
+	 * @param position The component's position
 	 * @param connectorRelay The connectorRelay that keeps track of the 
 	 * connectors
 	 * @param spritename The name of the sprite the component uses
@@ -31,13 +27,13 @@ public class MachineOutputComponent extends MachineComponent
 	 * demonstration purposes
 	 * @param hostName The name of the machine that created this component
 	 */
-	public MachineOutputComponent(Area area, int x, int y, TestHandler testHandler, 
+	public MachineOutputComponent(HandlerRelay handlers,Vector3D position,  
 			ConnectorRelay connectorRelay, 
 			String spritename, int outputs, boolean isForTesting, 
 			String hostName)
 	{
-		super(area, x, y, testHandler, connectorRelay, spritename, 0, outputs, 
-				isForTesting, hostName + "O");
+		super(handlers, position, connectorRelay, spritename, 0, outputs, isForTesting, 
+				hostName + "O");
 	}
 	
 	

@@ -1,9 +1,11 @@
 package uninamo_components;
 
-import java.util.HashMap;
+import genesis_event.HandlerRelay;
+import genesis_util.Vector3D;
 
-import omega_world.Area;
-import uninamo_gameplaysupport.TestHandler;
+import java.util.HashMap;
+import java.util.Map;
+
 import uninamo_machinery.Machine;
 
 /**
@@ -18,7 +20,7 @@ public class MachineInputComponent extends MachineComponent
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private Machine host;
-	private HashMap<Integer, Boolean> signaldata;
+	private Map<Integer, Boolean> signaldata;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -27,11 +29,8 @@ public class MachineInputComponent extends MachineComponent
 	 * Creates a new machineInputComponent to the given position with the 
 	 * given sprite and host machine.
 	 * 
-	 * @param area The area where the object will reside at
-	 * @param x The component's x-coordinate
-	 * @param y The component's y-coordinate
-	 * @param testHandler The testHandler that will inform the object about 
-	 * test events
+	 * @param handlers The handlers that will handle the component
+	 * @param position The component's position
 	 * @param connectorRelay The connectorRelay that keeps track of all the 
 	 * connectors
 	 * @param spritename The name of the sprite the component uses
@@ -41,17 +40,16 @@ public class MachineInputComponent extends MachineComponent
 	 * demonstration purposes
 	 * @param hostName The name of the machine that created this component
 	 */
-	public MachineInputComponent(Area area, int x, int y, TestHandler testHandler, 
-			ConnectorRelay connectorRelay, 
-			String spritename, int inputs, Machine host, boolean isForTesting, 
-			String hostName)
+	public MachineInputComponent(HandlerRelay handlers, Vector3D position,  
+			ConnectorRelay connectorRelay, String spritename, int inputs, Machine host, 
+			boolean isForTesting, String hostName)
 	{
-		super(area, x, y, testHandler, connectorRelay, spritename, inputs, 0, 
+		super(handlers, position, connectorRelay, spritename, inputs, 0, 
 				isForTesting, hostName + "I");
 		
 		// Initializes attributes
 		this.host = host;
-		this.signaldata = new HashMap<Integer, Boolean>();
+		this.signaldata = new HashMap<>();
 		
 		for (int i = 0; i < inputs; i++)
 		{
