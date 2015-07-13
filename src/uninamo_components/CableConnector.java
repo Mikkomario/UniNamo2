@@ -1,21 +1,37 @@
 package uninamo_components;
 
-import genesis_logic.AdvancedMouseListener;
+import genesis_event.Drawable;
+import genesis_event.EventSelector;
+import genesis_event.HandlerRelay;
+import genesis_event.MouseEvent;
+import genesis_event.MouseEvent.MouseButton;
+import genesis_event.MouseEvent.MouseButtonEventScale;
+import genesis_event.MouseEvent.MouseButtonEventType;
+import genesis_event.MouseEvent.MouseEventType;
+import genesis_event.MouseEvent.MouseMovementEventType;
+import genesis_event.MouseListener;
+import genesis_event.MultiEventSelector;
+import genesis_event.StrictEventSelector;
+import genesis_util.StateOperator;
+import genesis_util.StateOperatorListener;
+import genesis_util.Vector3D;
 
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+import java.util.List;
 
-import omega_gameplay.CollisionType;
-import omega_graphic.DimensionalDrawnObject;
-import omega_graphic.MultiSpriteDrawer;
-import omega_graphic.OpenSpriteBank;
-import omega_graphic.Sprite;
-import omega_graphic.TransformationListener;
-import omega_world.Area;
-import omega_world.Room;
-import omega_world.RoomListener;
+import arc_bank.Bank;
+import omega_util.DependentGameObject;
+import omega_util.Transformable;
+import omega_util.Transformation;
+import uninamo_gameplaysupport.TestEvent;
+import uninamo_gameplaysupport.TestListener;
+import uninamo_gameplaysupport.TestEvent.TestEventType;
 import uninamo_main.GameSettings;
+import vision_sprite.MultiSpriteDrawer;
+import vision_sprite.Sprite;
+import vision_sprite.SpriteBank;
 
 /**
  * CableConnectors are attached to certain components. They handle the signal 
@@ -26,240 +42,214 @@ import uninamo_main.GameSettings;
  * @since 8.3.2014
  * @see Component
  */
-public abstract class CableConnector extends DimensionalDrawnObject implements
-		AdvancedMouseListener, TransformationListener, SignalSender, 
-		SignalReceiver, RoomListener
+public abstract class CableConnector extends DependentGameObject<Component> implements
+		MouseListener, SignalSender, SignalReceiver, Drawable, StateOperatorListener, 
+		Transformable, TestListener
 {
+	// TODO: Reove the separate classes?
+	
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private MultiSpriteDrawer spritedrawer;
-	private Component host;
-	private Point2D.Double relativePoint;
-	private ArrayList<Cable> connectedCables;
-	private boolean testing, testVersion;
+	private Vector3D relativePosition;
+	private List<Cable> connectedCables;
+	private boolean testing;
+	private Transformation transformation;
+	private EventSelector<MouseEvent> selector;
+	private HandlerRelay handlers;
+	private EventSelector<TestEvent> testSelector;
+	private String id;
+	private double scaling;
+	private ConnectorRelay connectorRelay;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
 	
 	/**
 	 * Creates a new cableConnector that is tied to the given component.
-	 * 
-	 * @param area The area where the object will reside at
-	 * @param relativex The x-coordinate of the object in relation to the 
-	 * component's top-left corner (pixels)
-	 * @param relativey The y-coordinate of the object in relation to the 
-	 * component's top-left corner (pixels)
-	 * @param relay The ConnectorRelay that will keep track of the connector
+	 * @param handlers The handlers that will handle the connector
+	 * @param relativePosition The connectors position relative to the component
 	 * @param host The component to which the connector is tied to
 	 * @param isForTesting If this is true, the connector won't react to mouse 
 	 * at all.
+	 * @param id The identifier of the connector
+	 * @param relay The connector relay that keeps track of the connectors
 	 */
-	public CableConnector(Area area, int relativex, int relativey, 
-			ConnectorRelay relay, Component host, boolean isForTesting)
+	public CableConnector(HandlerRelay handlers, Vector3D relativePosition, Component host, 
+			boolean isForTesting, String id, ConnectorRelay relay)
 	{
-		super(0, 0, host.getDepth() - 1, false, CollisionType.CIRCLE, area);
+		super(host, handlers);
 		
 		// Initializes attributes
-		this.relativePoint = new Point2D.Double(relativex, relativey);
-		this.host = host;
-		this.testVersion = isForTesting;
+		this.id = id;
+		this.connectorRelay = relay;
+		this.relativePosition = relativePosition;
+		this.transformation = new Transformation();
+		this.handlers = handlers;
+		this.scaling = 1;
+		this.testSelector = new StrictEventSelector<>();
+		if (isForTesting)
+			this.selector = new MultiEventSelector<>();
+		else
+		{
+			MultiEventSelector<MouseEvent> selector = new MultiEventSelector<>();
+			selector.addOption(MouseEvent.createEnterExitSelector());
+			StrictEventSelector<MouseEvent, MouseEvent.Feature> clickSelector = 
+					MouseEvent.createMouseButtonSelector(MouseButton.LEFT);
+			clickSelector.addRequiredFeature(MouseButtonEventScale.LOCAL);
+			clickSelector.addRequiredFeature(MouseButtonEventType.PRESSED);
+			selector.addOption(clickSelector);
+			
+			this.selector = selector;
+		}
 		
-		Sprite[] sprites = new Sprite[2];
-		sprites[0] = OpenSpriteBank.getSpriteBank(
-				"components").getSprite("inputconnector");
-		sprites[1] = OpenSpriteBank.getSpriteBank(
-				"components").getSprite("outputconnector");
-		
-		this.spritedrawer = new MultiSpriteDrawer(sprites, null, this);
-		this.connectedCables = new ArrayList<Cable>();
-		
-		// Updates radius
-		setRadius(2 * this.spritedrawer.getSprite().getWidth() / 3);
-		
-		// Updates the position
-		updateAbsolutePosition();
+		Bank<Sprite> spriteBank = SpriteBank.getSpriteBank("components");
+		Sprite[] sprites = {spriteBank.get("inputconnector"), 
+				spriteBank.get("outputconnector")};
+		this.spritedrawer = new MultiSpriteDrawer(sprites, this, handlers);
+		this.connectedCables = new ArrayList<>();
 		
 		getSpriteDrawer().setImageSpeed(0);
-		
-		// Adds the object to the handler(s)
-		if (area.getMouseHandler() != null)
-			area.getMouseHandler().addMouseListener(this);
-		if (relay != null)
-			relay.addConnector(this);
-	
-		host.getTransformationListenerHandler().addListener(this);
 	}
 	
 	
 	// ABSTRACT METHODS	-------------------------------------------------
 	
 	/**
-	 * @return The unique identifier of the connector
+	 * This method creates a cable starting from this connector
+	 * @param handlers The handlers that will handle the cable
+	 * @param relay The connectorRelay that keeps track of the connectors
+	 * @param mousePosition The current mouse position
 	 */
-	public abstract String getID();
+	protected abstract void createCable(HandlerRelay handlers, ConnectorRelay relay, 
+			Vector3D mousePosition);
 	
 	
 	// IMPLEMENTED METHODS	---------------------------------------------
-
+	
 	@Override
-	public boolean isActive()
+	public StateOperator getListensToMouseEventsOperator()
 	{
-		return !this.testing;
+		return getIsActiveStateOperator();
 	}
 
 	@Override
-	public void activate()
+	public EventSelector<MouseEvent> getMouseEventSelector()
 	{
-		// Cannot be activated separately
+		return this.selector;
 	}
 
 	@Override
-	public void inactivate()
+	public boolean isInAreaOfInterest(Vector3D position)
 	{
-		// Cannot be inactivated separately
+		return getTransformation().inverseTransform(position).getLength() < getRadius();
 	}
 
 	@Override
-	public Class<?>[] getSupportedListenerClasses()
+	public void onMouseEvent(MouseEvent event)
 	{
-		// Doesn't limit listeners
-		return null;
-	}
-
-	@Override
-	public void onTransformationEvent(TransformationEvent e)
-	{
-		// Updates the position
-		updateAbsolutePosition();
-		
-		// May scale the object as well
-		if (e.getType() == TransformationType.SCAlING && getXScale() 
-				<= GameSettings.interfaceScaleFactor)
-			setScale(this.host.getXScale(), this.host.getYScale());
-	}
-
-	@Override
-	public boolean listensPosition(Point2D.Double testedPosition)
-	{
-		return pointCollides(testedPosition);
-	}
-
-	@Override
-	public void onMouseMove(Point2D.Double newMousePosition)
-	{
-		// Doesn't react to mouse movement
-	}
-
-	@Override
-	public int getWidth()
-	{
-		if (this.spritedrawer == null)
-			return 0;
-		return this.spritedrawer.getSprite().getWidth();
-	}
-
-	@Override
-	public int getHeight()
-	{
-		if (this.spritedrawer == null)
-			return 0;
-		return this.spritedrawer.getSprite().getHeight();
-	}
-
-	@Override
-	public int getOriginX()
-	{
-		if (this.spritedrawer == null)
-			return 0;
-		return this.spritedrawer.getSprite().getOriginX();
-	}
-
-	@Override
-	public int getOriginY()
-	{
-		if (this.spritedrawer == null)
-			return 0;
-		return this.spritedrawer.getSprite().getOriginY();
-	}
-
-	@Override
-	public void drawSelfBasic(Graphics2D g2d)
-	{
-		if (this.spritedrawer == null)
+		// Doesn't react to mouse when testing
+		if (this.testing)
 			return;
-		this.spritedrawer.drawSprite(g2d, 0, 0);
-	}
-	
-	@Override
-	public boolean isVisible()
-	{
-		// Is considered invisible if the component is invisible
-		// TODO: Throws a nullPointException
-		return (this.host != null && this.host.isVisible() && super.isVisible());
-	}
-	
-	@Override
-	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
-	{
-		// Functions differently if is just a test version
-		if (this.testVersion)
-			return MouseButtonEventScale.NONE;
 		
-		return MouseButtonEventScale.LOCAL;
-	}
-	
-	@Override
-	public void onMousePositionEvent(MousePositionEventType eventType,
-			Point2D.Double mousePosition, double eventStepTime)
-	{
 		// Scales the object on enter, rescales on exit
-		if (eventType == MousePositionEventType.ENTER)
-			largen();
-		else if (eventType == MousePositionEventType.EXIT)
-			rescale();
-	}
-	
-	@Override
-	public boolean listensMouseEnterExit()
-	{
-		// Listens to mouse enter & exit except if is just a test version
-		return !this.testVersion;
-	}
-	
-	@Override
-	public void onRoomStart(Room room)
-	{
-		// Does nothing
+		if (event.getType() == MouseEventType.MOVEMENT)
+		{
+			if (event.getMovementEventType() == MouseMovementEventType.ENTER)
+				largen();
+			else
+				rescale();
+		}
+		// On click, creates a new cable
+		else
+			createCable(this.handlers, this.connectorRelay, event.getPosition());
 	}
 
 	@Override
-	public void onRoomEnd(Room room)
+	public void drawSelf(Graphics2D g2d)
 	{
-		// Dies
-		kill();
+		AffineTransform lastTransform = getTransformation().transform(g2d);
+		getSpriteDrawer().drawSprite(g2d);
+		g2d.setTransform(lastTransform);
 	}
-	
+
 	@Override
-	public void kill()
+	public int getDepth()
 	{
-		super.kill();
-		
+		return getMaster().getDepth() - 2;
+	}
+
+	@Override
+	public StateOperator getIsVisibleStateOperator()
+	{
+		return getMaster().getIsVisibleStateOperator();
+	}
+
+	@Override
+	public void onStateChange(StateOperator source, boolean newState)
+	{
 		// Also kills the connected cables
-		for (Cable cable : this.connectedCables)
+		if (source.equals(getIsDeadStateOperator()) && newState)
 		{
-			cable.kill();
+			for (Cable cable : this.connectedCables)
+			{
+				cable.getIsDeadStateOperator().setState(true);
+			}
 		}
 	}
 
+	@Override
+	public Transformation getTransformation()
+	{
+		return this.transformation;
+	}
+
+	@Override
+	public void setTrasformation(Transformation t)
+	{
+		this.transformation = t;
+		
+		for (Cable cable : this.connectedCables)
+		{
+			cable.updateTransformations();
+		}
+	}
+	
+	@Override
+	public void onTestEvent(TestEvent event)
+	{
+		if (event.getType() == TestEventType.START)
+			this.testing = true;
+		else
+			this.testing = false;
+	}
+
+	@Override
+	public EventSelector<TestEvent> getTestEventSelector()
+	{
+		return this.testSelector;
+	}
+	
 	
 	// OTHER METHODS	--------------------------------------------------
 	
 	/**
-	 * @return The component the connector is connected to
+	 * Updates the connector's transformations. This should be called when the comonent's 
+	 * transformations are updated
 	 */
-	protected Component getHost()
+	public void updateTransformations()
 	{
-		return this.host;
+		Vector3D position = getMaster().getTransformation().transform(this.relativePosition);
+		setTrasformation(getMaster().getTransformation().withPosition(position).plus(
+				Transformation.scalingTransformation(this.scaling)));
+	}
+	
+	/**
+	 * @return The identifier of the connector
+	 */
+	public String getID()
+	{
+		return this.id;
 	}
 	
 	/**
@@ -303,7 +293,7 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	{
 		// If the component is dead, it is probably already removing the 
 		// cables
-		if (!isDead() && this.connectedCables.contains(c))
+		if (!getIsDeadStateOperator().getState() && this.connectedCables.contains(c))
 			this.connectedCables.remove(c);
 	}
 	
@@ -320,8 +310,8 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	 */
 	private void largen()
 	{
-		double newscale = Math.pow(GameSettings.interfaceScaleFactor, 2);
-		setScale(newscale, newscale);
+		this.scaling = Math.pow(GameSettings.interfaceScaleFactor, 2);
+		updateTransformations();
 	}
 	
 	/**
@@ -329,13 +319,13 @@ public abstract class CableConnector extends DimensionalDrawnObject implements
 	 */
 	private void rescale()
 	{
-		setScale(this.host.getXScale(), this.host.getYScale());
+		// TODO: WET WET
+		this.scaling = 1;
+		updateTransformations();
 	}
 	
-	// Updates the object's absolute position
-	private void updateAbsolutePosition()
+	private double getRadius()
 	{
-		Point2D.Double newPosition = this.host.transform(this.relativePoint);
-		setPosition(newPosition.getX(), newPosition.getY());
+		return getSpriteDrawer().getSprite().getDimensions().getFirst() / 2;
 	}
 }

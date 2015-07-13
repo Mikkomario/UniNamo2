@@ -1,9 +1,7 @@
 package uninamo_components;
 
-import java.awt.geom.Point2D;
-
-import omega_world.Area;
-import uninamo_gameplaysupport.TestHandler;
+import genesis_event.HandlerRelay;
+import genesis_util.Vector3D;
 
 /**
  * OutputCableConnectors take signal events from components and relays them to 
@@ -16,11 +14,7 @@ public class OutputCableConnector extends CableConnector
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
-	private Area area;
 	private boolean lastSignalStatus;
-	private ConnectorRelay relay;
-	private TestHandler testHandler;
-	private String hostConnectInfo;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -28,57 +22,34 @@ public class OutputCableConnector extends CableConnector
 	/**
 	 * Creates a new outputCableConnector connected to the given component
 	 * 
-	 * @param area The area where the object will reside at
-	 * @param relativex The connector's x-coordinate in relation to the 
-	 * component's top-left corner (pixels)
-	 * @param relativey The connector's x-coordinate in relation to the 
-	 * component's top-left corner (pixels)
-	 * @param testHandler The testHandler that will inform the connector 
-	 * about test events
-	 * @param relay The connectorRelay that will keep track of the connectors
-	 * @param host The component the connector is tied to
+	 * @param handlers The handlers that will handle the connector
+	 * @param relativePosition The connector's position relative to the component
+	 * @param host The component this connector is tied to
 	 * @param outputIndex Which of the host's output connectors this one is
 	 * @param isForTesting If this is true, the connector will go to test mode 
 	 * and not react to mouse. It will, however create a test cable connected 
 	 * to it
+	 * @param relay The connector relay that keeps track of the connectors
 	 */
-	public OutputCableConnector(Area area, int relativex, int relativey,
-			TestHandler testHandler, ConnectorRelay relay, 
-			Component host, int outputIndex, boolean isForTesting)
+	public OutputCableConnector(HandlerRelay handlers, Vector3D relativePosition,
+			Component host, int outputIndex, boolean isForTesting, ConnectorRelay relay)
 	{
-		super(area, relativex, relativey, relay, host, isForTesting);
+		super(handlers, relativePosition, host, isForTesting, host.getID() +  "O" + 
+				outputIndex, relay);
 		
 		// Initializes attributes
 		this.lastSignalStatus = false;
-		this.area = area;
-		this.relay = relay;
-		this.testHandler = testHandler;
-		this.hostConnectInfo = "O" + outputIndex;
 		
 		// Changes the look of the connector
 		getSpriteDrawer().setSpriteIndex(1, false);
 		
 		// If is on test mode, creates a test cable
 		if (isForTesting)
-		{
-			connectCable(new Cable(area, testHandler, relay, this, null, true));
-		}
+			connectCable(new Cable(handlers, relay, this, null, true, Vector3D.zeroVector()));
 	}
 	
 	
 	// IMPLEMENTED METHODS	----------------------------------------------
-
-	@Override
-	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Point2D.Double mousePosition,
-			double eventStepTime)
-	{
-		// If the connector is clicked with a left mouse button it will create 
-		// a new cable
-		if (button == MouseButton.LEFT && eventType == 
-				MouseButtonEventType.PRESSED && !Cable.cableIsBeingDragged)
-			new Cable(this.area, this.testHandler, this.relay, this, null, false);
-	}
 
 	@Override
 	public boolean getSignalStatus()
@@ -126,8 +97,9 @@ public class OutputCableConnector extends CableConnector
 	}
 
 	@Override
-	public String getID()
+	protected void createCable(HandlerRelay handlers, ConnectorRelay relay,
+			Vector3D mousePosition)
 	{
-		return getHost().getID() + this.hostConnectInfo;
+		new Cable(handlers, relay, this, null, false, mousePosition);
 	}
 }

@@ -1,5 +1,6 @@
 package uninamo_gameplaysupport;
 
+import uninamo_components.CableConnector;
 import genesis_event.HandlerType;
 
 /**
@@ -20,7 +21,11 @@ public enum UninamoHandlerType implements HandlerType
 	/**
 	 * The turn handler informs objects about turn events
 	 */
-	TURN;
+	TURN,
+	/**
+	 * The connector relay keeps track of all the connectors
+	 */
+	CONNECTOR;
 	
 	
 	// IMPLEMENTED METHODS	------------------------
@@ -33,6 +38,7 @@ public enum UninamoHandlerType implements HandlerType
 			case VICTORY: return VictoryCondition.class;
 			case TEST: return TestListener.class;
 			case TURN: return TurnBased.class;
+			case CONNECTOR: return CableConnector.class;
 		}
 		
 		return null;

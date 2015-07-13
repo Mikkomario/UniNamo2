@@ -1,9 +1,9 @@
 package uninamo_components;
 
-import genesis_logic.Handled;
-import genesis_logic.Handler;
-
-import java.awt.geom.Point2D;
+import uninamo_gameplaysupport.UninamoHandlerType;
+import genesis_event.Handler;
+import genesis_event.HandlerType;
+import genesis_util.Vector3D;
 
 /**
  * ConnectorRelay keeps track of all the connectors used in the game and 
@@ -12,13 +12,14 @@ import java.awt.geom.Point2D;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public class ConnectorRelay extends Handler
+public class ConnectorRelay extends Handler<CableConnector>
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private CableConnector lastFoundConnector;
-	private Class<?> lastConnectorFilter;
-	private Point2D.Double lastCheckPosition;
+	private Class<?> lastConnectorFilter; // TODO: Replace with enum or something 
+	// (plus, make the connectors a single class or something)
+	private Vector3D lastCheckPosition;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -28,7 +29,7 @@ public class ConnectorRelay extends Handler
 	 */
 	public ConnectorRelay()
 	{
-		super(false, null);
+		super(false);
 		
 		// Initializes attributes
 		this.lastConnectorFilter = CableConnector.class;
@@ -37,26 +38,24 @@ public class ConnectorRelay extends Handler
 	
 	
 	// IMPLEMENTED METHODS	----------------------------------------------
-
+	
 	@Override
-	protected Class<?> getSupportedClass()
+	public HandlerType getHandlerType()
 	{
-		return CableConnector.class;
+		return UninamoHandlerType.CONNECTOR;
 	}
 
 	@Override
-	protected boolean handleObject(Handled h)
+	protected boolean handleObject(CableConnector h)
 	{
 		// Checks if the connector collides with the checkposition and if so, 
 		// remembers it and quits
 		if (!this.lastConnectorFilter.isInstance(h))
 			return true;
 		
-		CableConnector c = (CableConnector) h;
-		
-		if (c.pointCollides(this.lastCheckPosition))
+		if (h.isInAreaOfInterest(this.lastCheckPosition))
 		{
-			this.lastFoundConnector = c;
+			this.lastFoundConnector = h;
 			return false;
 		}
 		
@@ -65,15 +64,6 @@ public class ConnectorRelay extends Handler
 	
 	
 	// OTHER METHODS	--------------------------------------------------
-	
-	/**
-	 * Adds a new connector to the relay
-	 * @param c The new CableConnector to be added
-	 */
-	public void addConnector(CableConnector c)
-	{
-		addHandled(c);
-	}
 	
 	/**
 	 * Goes through the connectors in the relay and tries to find one that 
@@ -86,7 +76,7 @@ public class ConnectorRelay extends Handler
 	 * @return A connector at the given position or null if no suitable 
 	 * connector was found.
 	 */
-	public CableConnector getConnectorAtPoint(Point2D.Double testPoint, 
+	public CableConnector getConnectorAtPoint(Vector3D testPoint, 
 			Class<?> connectorClassLimit)
 	{
 		// Sets up the attributes
@@ -94,7 +84,7 @@ public class ConnectorRelay extends Handler
 		this.lastCheckPosition = testPoint;
 		
 		if (connectorClassLimit == null)
-			this.lastConnectorFilter = getSupportedClass();
+			this.lastConnectorFilter = getHandlerType().getSupportedHandledClass();
 		else
 			this.lastConnectorFilter = connectorClassLimit;
 		
@@ -113,8 +103,6 @@ public class ConnectorRelay extends Handler
 	 */
 	public CableConnector getConnectorWithID(String ID)
 	{
-		//System.out.println(this);
-		
 		// Creates a handling operator and starts the search
 		IDFindOperator operator = new IDFindOperator(ID);
 		handleObjects(operator);
@@ -147,15 +135,11 @@ public class ConnectorRelay extends Handler
 		// IMPLEMENTED METHODS	-----------------------------------------
 		
 		@Override
-		protected boolean handleObject(Handled h)
+		protected boolean handleObject(CableConnector h)
 		{
-			CableConnector c = (CableConnector) h;
-			
-			//System.out.println("Searching... CurrentID: " + c.getID());
-			
-			if (c.getID().equals(this.idToBeFound))
+			if (h.getID().equals(this.idToBeFound))
 			{
-				this.foundConnector = c;
+				this.foundConnector = h;
 				return false;
 			}
 			

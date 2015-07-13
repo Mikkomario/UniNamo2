@@ -1,9 +1,7 @@
 package uninamo_components;
 
-import java.awt.geom.Point2D;
-
-import omega_world.Area;
-import uninamo_gameplaysupport.TestHandler;
+import genesis_event.HandlerRelay;
+import genesis_util.Vector3D;
 
 /**
  * InputCableConnector is a cableConnector that handles signals coming into 
@@ -16,13 +14,7 @@ public class InputCableConnector extends CableConnector
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
-	private Area area;
 	private boolean lastSignalStatus;
-	private ConnectorRelay relay;
-	private TestHandler testHandler;
-	private String hostConnectInfo;
-	
-	// TODO: These should be moved to the superclass
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -30,53 +22,31 @@ public class InputCableConnector extends CableConnector
 	/**
 	 * Creates a new InputCableConnector connected to the given component
 	 * 
-	 * @param area The area where the object will reside at
-	 * @param relativex The connector's x-coordinate relative to the component's 
-	 * top-left corner (pixels)
-	 * @param relativey The connector's y-coordinate relative to the component's 
-	 * top-left corner (pixels)
-	 * @param testHandler The testHandler that will inform the cables about 
-	 * test events
-	 * @param relay The connectorRelay that will keep track of the connectors
+	 * @param handlers The handlers that will handle the connector
+	 * @param relativePosition The connector's position relative to the component
 	 * @param host The host component the connector is tied to
 	 * @param inputIndex Which if the host's inputs this connector is
 	 * @param isForTesting If this is true, the connector will go to test mode 
 	 * and not react to mouse. It will, however, create a test cable connected 
 	 * to it
+	 * @param relay The connector relay that keeps track of the connectors
 	 */
-	public InputCableConnector(Area area, int relativex, int relativey,
-			TestHandler testHandler, ConnectorRelay relay, 
-			Component host, int inputIndex, boolean isForTesting)
+	public InputCableConnector(HandlerRelay handlers, Vector3D relativePosition,
+			Component host, int inputIndex, boolean isForTesting, ConnectorRelay relay)
 	{
-		super(area, relativex, relativey, relay, host, isForTesting);
+		super(handlers, relativePosition, host, isForTesting, host.getID() + "I" + inputIndex, 
+				relay);
 		
 		// Initializes attributes
-		this.area = area;
-		this.relay = relay;
-		this.testHandler = testHandler;
 		this.lastSignalStatus = false;
-		this.hostConnectInfo = "I" + inputIndex;
 		
 		// If is on test mode, creates a test cable
 		if (isForTesting)
-			connectCable(new Cable(area, testHandler, relay, null, this, true));
+			connectCable(new Cable(handlers, relay, null, this, true, Vector3D.zeroVector()));
 	}
 	
 	
 	// IMPLEMENTED METHODS	----------------------------------------------
-
-	@Override
-	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Point2D.Double mousePosition,
-			double eventStepTime)
-	{
-		// If the connector is clicked with a left mouse button it will create 
-		// a new cable
-		if (button == MouseButton.LEFT && eventType == 
-				MouseButtonEventType.PRESSED && !Cable.cableIsBeingDragged)
-			new Cable(this.area, 
-					this.testHandler, this.relay, null, this, false);
-	}
 
 	@Override
 	public boolean getSignalStatus()
@@ -98,13 +68,20 @@ public class InputCableConnector extends CableConnector
 		{
 			this.lastSignalStatus = newStatus;
 			// Informs the component as well
-			getHost().onSignalChange(getSignalStatus(), this);
+			getMaster().onSignalChange(getSignalStatus(), this);
 			
 			if (this.lastSignalStatus)
 				getSpriteDrawer().setImageIndex(1);
 			else
 				getSpriteDrawer().setImageIndex(0);
 		}	
+	}
+	
+	@Override
+	protected void createCable(HandlerRelay handlers, ConnectorRelay relay,
+			Vector3D mousePosition)
+	{
+		new Cable(handlers, relay, null, this, false, mousePosition);
 	}
 	
 	@Override
@@ -123,12 +100,6 @@ public class InputCableConnector extends CableConnector
 		
 		// In addition to removal, recalculates the signal status
 		onSignalChange(false, c);
-	}
-	
-	@Override
-	public String getID()
-	{
-		return getHost().getID() + this.hostConnectInfo;
 	}
 	
 	

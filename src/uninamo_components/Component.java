@@ -1,18 +1,21 @@
 package uninamo_components;
 
-import genesis_graphic.DepthConstants;
-
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.util.Random;
 
-import omega_gameplay.CollisionType;
-import omega_graphic.DimensionalDrawnObject;
-import omega_graphic.OpenSpriteBank;
-import omega_graphic.SingleSpriteDrawer;
-import omega_world.Area;
-import omega_world.Room;
-import omega_world.RoomListener;
-import uninamo_gameplaysupport.TestHandler;
+import exodus_world.Area;
+import exodus_world.AreaListener;
+import genesis_event.Drawable;
+import genesis_event.HandlerRelay;
+import genesis_util.DepthConstants;
+import genesis_util.StateOperator;
+import genesis_util.Vector3D;
+import omega_util.SimpleGameObject;
+import omega_util.Transformable;
+import omega_util.Transformation;
+import vision_sprite.SingleSpriteDrawer;
+import vision_sprite.SpriteBank;
 
 /**
  * Components are key elements in the game. Components can be placed on the 
@@ -23,15 +26,19 @@ import uninamo_gameplaysupport.TestHandler;
  * @author Mikko Hilpinen
  * @since 8.3.2014
  */
-public abstract class Component extends DimensionalDrawnObject implements
-		SignalReceiver, SignalSender, RoomListener
+public abstract class Component extends SimpleGameObject implements
+		SignalReceiver, SignalSender, AreaListener, Transformable, Drawable
 {
+	// TODO: Make this implement constructable & writable
+	
 	// ATTRIBUTES	------------------------------------------------------
 	
 	private String id;
-	private SingleSpriteDrawer spritedrawer;
+	private SingleSpriteDrawer spriteDrawer;
 	private InputCableConnector[] inputs;
 	private OutputCableConnector[] outputs;
+	private Transformation transformation;
+	private StateOperator isVisibleOperator;
 	
 	private static int componentsCreated = 0;
 	
@@ -40,15 +47,11 @@ public abstract class Component extends DimensionalDrawnObject implements
 	
 	/**
 	 * Creates a new component to the given position.
-	 * 
-	 * @param area The area where the object will reside at
-	 * @param x The new x-coordinate of the component's origin (pixels)
-	 * @param y The new y-coordinate of the component's origin (pixels)
-	 * @param testHandler The testHandler that will inform the object about test 
-	 * events
+	 * @param handlers The handlers that will handle the component
+	 * @param position The component's position
 	 * @param connectorRelay A connectorRelay that will keep track of the 
 	 * connectors
-	 * @param spritename The name of the component sprite used to draw the 
+	 * @param spriteName The name of the component sprite used to draw the 
 	 * component
 	 * @param inputs How many input connectors the component has
 	 * @param outputs How many output connectors the component has
@@ -56,17 +59,17 @@ public abstract class Component extends DimensionalDrawnObject implements
 	 * @param isForTesting If this is true, the component will go to test mode 
 	 * where it won't react to mouse but will create test cables to its connectors
 	 */
-	public Component(Area area, int x, int y, TestHandler testHandler, 
-			ConnectorRelay connectorRelay, 
-			String spritename, int inputs, int outputs, boolean fromBox, 
-			boolean isForTesting)
+	public Component(HandlerRelay handlers, Vector3D position, 
+			ConnectorRelay connectorRelay, String spriteName, int inputs, int outputs, 
+			boolean fromBox, boolean isForTesting)
 	{
-		super(x, y, DepthConstants.NORMAL, false, CollisionType.BOX, area);
+		super(handlers);
 		
 		// Initializes attributes
-		this.spritedrawer = new SingleSpriteDrawer(
-				OpenSpriteBank.getSpriteBank("components").getSprite(
-				spritename), area.getActorHandler(), this);
+		this.transformation = new Transformation(position);
+		this.isVisibleOperator = new StateOperator(true, true);
+		this.spriteDrawer = new SingleSpriteDrawer(SpriteBank.getSprite("components", 
+				spriteName), this, handlers);
 		this.inputs = new InputCableConnector[inputs];
 		this.outputs = new OutputCableConnector[outputs];
 		
@@ -79,101 +82,70 @@ public abstract class Component extends DimensionalDrawnObject implements
 		// Creates the connectors
 		for (int i = 0; i < inputs; i++)
 		{
-			int relativey = (int) ((i + 1) * (getHeight() / (inputs + 1.0)));
-			this.inputs[i] = new InputCableConnector(area, 0, relativey, 
-					testHandler, connectorRelay, this, i, isForTesting);
+			// TODO: WET WET
+			Vector3D relativePosition = new Vector3D(0, (i + 1) * 
+					(this.spriteDrawer.getSprite().getDimensions().getSecond() / 
+					(inputs + 1.0)));
+			this.inputs[i] = new InputCableConnector(handlers, relativePosition, this, i, 
+					isForTesting, connectorRelay);
 		}
 		for (int i = 0; i < outputs; i++)
 		{
-			int relativey = (int) ((i + 1) * (getHeight() / (outputs + 1.0)));
-			this.outputs[i] = new OutputCableConnector(area, getWidth() - 0, 
-					relativey, testHandler, connectorRelay, this, i, isForTesting);
+			Vector3D relativePosition = new Vector3D(
+					this.spriteDrawer.getSprite().getDimensions().getFirst(), (i + 1) * 
+					(this.spriteDrawer.getSprite().getDimensions().getSecond() / 
+					(outputs + 1.0)));
+			this.outputs[i] = new OutputCableConnector(handlers, relativePosition, this, i, 
+					isForTesting, connectorRelay);
 		}
 		
-		// Resets the transform status
-		forceTransformationUpdate();
+		updateConnectorTransformations();
 	}
 	
 	
 	// IMPLEMENTED METHODS	----------------------------------------------
-
-	@Override
-	public Class<?>[] getSupportedListenerClasses()
-	{
-		// Doesn't limit collisionListeners
-		return null;
-	}
-
-	@Override
-	public int getWidth()
-	{
-		if (this.spritedrawer == null)
-			return 0;
-		return this.spritedrawer.getSprite().getWidth();
-	}
-
-	@Override
-	public int getHeight()
-	{
-		if (this.spritedrawer == null)
-			return 0;
-		return this.spritedrawer.getSprite().getHeight();
-	}
-
-	@Override
-	public int getOriginX()
-	{
-		if (this.spritedrawer == null)
-			return 0;
-		return this.spritedrawer.getSprite().getOriginX();
-	}
-
-	@Override
-	public int getOriginY()
-	{
-		if (this.spritedrawer == null)
-			return 0;
-		return this.spritedrawer.getSprite().getOriginY();
-	}
-
-	@Override
-	public void drawSelfBasic(Graphics2D g2d)
-	{
-		// Draws the sprite
-		if (this.spritedrawer == null)
-			return;
-		this.spritedrawer.drawSprite(g2d, 0, 0);
-	}
 	
 	@Override
-	public void onRoomStart(Room room)
+	public void drawSelf(Graphics2D g2d)
 	{
-		// Does nothing
-	}
-
-	@Override
-	public void onRoomEnd(Room room)
-	{
-		// Dies
-		kill();
-	}
-	
-	@Override
-	public void kill()
-	{
-		// Also kills the connectors
-		for (CableConnector connector : this.inputs)
-		{
-			//System.out.println("Kills an input");
-			connector.kill();
-		}
-		for (CableConnector connector : this.outputs)
-		{
-			//System.out.println("Kills an output");
-			connector.kill();
-		}
+		AffineTransform lastTransform = getTransformation().transform(g2d);
 		
-		super.kill();
+		this.spriteDrawer.drawSprite(g2d);
+		
+		g2d.setTransform(lastTransform);
+	}
+
+	@Override
+	public int getDepth()
+	{
+		return DepthConstants.NORMAL;
+	}
+
+	@Override
+	public StateOperator getIsVisibleStateOperator()
+	{
+		return this.isVisibleOperator;
+	}
+
+	@Override
+	public Transformation getTransformation()
+	{
+		return this.transformation;
+	}
+
+	@Override
+	public void setTrasformation(Transformation t)
+	{
+		this.transformation = t;
+		updateConnectorTransformations();
+	}
+
+	@Override
+	public void onAreaStateChange(Area area)
+	{
+		// At the end of the area, dies
+		if (!area.getIsActiveStateOperator().getState())
+			getIsDeadStateOperator().setState(true);
 	}
 	
 	
@@ -257,5 +229,18 @@ public abstract class Component extends DimensionalDrawnObject implements
 		}
 		
 		return this.inputs[index].getSignalStatus();
+	}
+	
+	private void updateConnectorTransformations()
+	{
+		// TODO: WET WET
+		for (int i = 0; i < this.inputs.length; i++)
+		{
+			this.inputs[i].updateTransformations();
+		}
+		for (int i = 0; i < this.outputs.length; i++)
+		{
+			this.outputs[i].updateTransformations();
+		}
 	}
 }

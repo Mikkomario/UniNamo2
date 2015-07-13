@@ -1,23 +1,33 @@
 package uninamo_components;
 
-import genesis_graphic.DepthConstants;
-import genesis_logic.AdvancedMouseListener;
-
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
+import java.awt.geom.AffineTransform;
 
-import omega_gameplay.CollisionType;
-import omega_gameplay.HelpMath;
-import omega_graphic.DimensionalDrawnObject;
-import omega_graphic.OpenSpriteBank;
-import omega_graphic.SingleSpriteDrawer;
-import omega_graphic.TransformationListener;
-import omega_world.Area;
-import omega_world.Room;
-import omega_world.RoomListener;
-import uninamo_gameplaysupport.TestHandler;
+import genesis_event.Drawable;
+import genesis_event.EventSelector;
+import genesis_event.HandlerRelay;
+import genesis_event.MouseEvent;
+import genesis_event.MouseEvent.MouseButton;
+import genesis_event.MouseEvent.MouseButtonEventScale;
+import genesis_event.MouseEvent.MouseButtonEventType;
+import genesis_event.MouseEvent.MouseMovementEventType;
+import genesis_event.MouseListener;
+import genesis_event.MultiEventSelector;
+import genesis_event.StrictEventSelector;
+import genesis_util.DepthConstants;
+import genesis_util.HelpMath;
+import genesis_util.StateOperator;
+import genesis_util.StateOperatorListener;
+import genesis_util.Vector3D;
+import omega_util.SimpleGameObject;
+import omega_util.Transformable;
+import omega_util.Transformation;
+import uninamo_gameplaysupport.TestEvent;
 import uninamo_gameplaysupport.TestListener;
+import uninamo_gameplaysupport.TestEvent.TestEventType;
 import uninamo_main.GameSettings;
+import vision_sprite.SingleSpriteDrawer;
+import vision_sprite.SpriteBank;
 
 /**
  * Cables are elements that connect components together and that deliver 
@@ -26,18 +36,23 @@ import uninamo_main.GameSettings;
  * @author Mikko Hilpinen
  * @since 8.3.2014
  */
-public class Cable extends DimensionalDrawnObject implements
-		AdvancedMouseListener, TransformationListener, SignalSender, 
-		SignalReceiver, RoomListener, TestListener
+public class Cable extends SimpleGameObject implements MouseListener, Transformable, 
+		SignalSender, SignalReceiver, TestListener, Drawable, StateOperatorListener
 {
+	// TODO: Split this into multiple classes (placed, dragged, testing)
+	
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private SingleSpriteDrawer spritedrawer;
-	private boolean active, lastSignalStatus, dragged, testing, testVersion;
+	private boolean lastSignalStatus, dragged, testing, testVersion;
 	private OutputCableConnector start;
 	private InputCableConnector end;
-	private Point2D.Double lastMousePosition;
+	private Vector3D lastMousePosition;
 	private ConnectorRelay connectorRelay;
+	private StateOperator isVisibleOperator;
+	private EventSelector<TestEvent> testEventSelector;
+	private EventSelector<MouseEvent> mouseEventSelector;
+	private Transformation transformation;
 	
 	/**
 	 * Is there currently a cable that's being dragged around
@@ -51,8 +66,7 @@ public class Cable extends DimensionalDrawnObject implements
 	 * Creates a new cable that starts from the given connector. The cable will 
 	 * hover over the mouse until it has been connected to another connector.
 	 * 
-	 * @param area The area where the cable will reside at
-	 * @param testHandler The testHandler that will inform the cable about test events
+	 * @param handlers The handlers that will handle the cable
 	 * @param connectorRelay A connectorRelay that will inform the cable about 
 	 * connector positions
 	 * @param startConnector The connector the cable starts from (Optional if endConnector is provided)
@@ -61,15 +75,13 @@ public class Cable extends DimensionalDrawnObject implements
 	 * where it can't be moved but the type of it's signal can be changed by 
 	 * clicking (provided it doesn't have an input that would dominate the 
 	 * signal type)
+	 * @param mousePosition The mouse's position at the creation time
 	 */
-	public Cable(Area area, TestHandler testHandler, ConnectorRelay connectorRelay, 
+	public Cable(HandlerRelay handlers, ConnectorRelay connectorRelay, 
 			OutputCableConnector startConnector, InputCableConnector endConnector, 
-			boolean isForTesting)
+			boolean isForTesting, Vector3D mousePosition)
 	{
-		super(0, 0, DepthConstants.NORMAL - 5, false, CollisionType.BOX, area);
-		
-		//System.out.println(startConnector);
-		//System.out.println(endConnector);
+		super(handlers);
 		
 		if (!isForTesting && (startConnector == null || endConnector == null))
 		{
@@ -83,27 +95,19 @@ public class Cable extends DimensionalDrawnObject implements
 		else
 			this.dragged = false;
 		
-		/*
-		System.out.println("-------");
-		System.out.println("start: " + startConnector);
-		System.out.println("end: " + endConnector);
-		System.out.println(this.dragged);
-		*/
-		
 		// Initializes attributes
-		this.spritedrawer = new SingleSpriteDrawer(
-				OpenSpriteBank.getSpriteBank("components").getSprite(
-				"cable"), null, this);
-		this.active = true;
+		this.spritedrawer = new SingleSpriteDrawer(SpriteBank.getSprite("components", "cable"), 
+				this, handlers);
 		this.start = startConnector;
 		this.end = endConnector;
 		this.testVersion = isForTesting;
-		this.lastMousePosition = new Point2D.Double(
-				area.getMouseHandler().getMousePosition().getX(), 
-				area.getMouseHandler().getMousePosition().getY());
+		this.lastMousePosition = mousePosition;
 		this.lastSignalStatus = false;
 		this.connectorRelay = connectorRelay;
 		this.testing = false;
+		this.isVisibleOperator = new StateOperator(true, true);
+		this.testEventSelector = new StrictEventSelector<>();
+		this.transformation = new Transformation();
 		
 		updateTransformations();
 		this.spritedrawer.setImageSpeed(0);
@@ -115,237 +119,34 @@ public class Cable extends DimensionalDrawnObject implements
 		if (this.end != null)
 			this.end.connectCable(this);
 		
-		// Adds the object to the handler(s)
-		if (area.getMouseHandler() != null)
-			area.getMouseHandler().addMouseListener(this);
-		if (startConnector != null)
-			startConnector.getTransformationListenerHandler().addListener(this);
-		if (endConnector != null)
-			endConnector.getTransformationListenerHandler().addListener(this);
-		if (testHandler != null)
-			testHandler.addTestable(this);
-	}
-	
-	
-	// IMPLEMENTED METHODS	-----------------------------------------------
-
-	@Override
-	public boolean isActive()
-	{
-		// If the cable is in testing mode it doesn't react to mouse
-		return this.active && !this.testing;
-	}
-
-	@Override
-	public void activate()
-	{
-		this.active = true;
-	}
-
-	@Override
-	public void inactivate()
-	{
-		this.active = false;
-	}
-
-	@Override
-	public Class<?>[] getSupportedListenerClasses()
-	{
-		// Doesn't limit listeners
-		return null;
-	}
-
-	@Override
-	public void onTransformationEvent(TransformationEvent e)
-	{
-		// Resets the position
-		updateTransformations();
-	}
-
-	@Override
-	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Point2D.Double mousePosition,
-			double eventStepTime)
-	{
-		// If the cable is a test version, it fuctions differently
-		if (this.testVersion)
-		{
-			// On left click the signal type is changed (if the cable has no input)
-			if (this.start == null && button == MouseButton.LEFT && 
-					eventType == MouseButtonEventType.PRESSED)
-				onSignalChange(!this.lastSignalStatus, null);
-			
-			return;
-		}
-		
-		// On mouse release tries to place the cable on a connector
-		if (button == MouseButton.LEFT && eventType == 
-				MouseButtonEventType.RELEASED && isBeingDragged())
-		{
-			// Ends drag
-			cableIsBeingDragged = false;
-			this.dragged = false;
-			
-			//System.out.println("Ends drag on cable " + this + ": " + (this.start == null) + ", " + (this.end == null));
-			
-			// Tries to find a suitable new start- / endpoint
-			if (this.start == null)
-			{
-				OutputCableConnector newstart = (OutputCableConnector) 
-						this.connectorRelay.getConnectorAtPoint(
-						this.lastMousePosition, OutputCableConnector.class);
-				// If one couldn't be found, dies
-				if (newstart == null)
-				{
-					//System.out.println("Cable dies since start is null");
-					this.end.removeCable(this);
-					this.end = null;
-					kill();
-				}
-				else
-				{
-					this.start = newstart;
-					this.start.connectCable(this);
-					this.start.getTransformationListenerHandler().addListener(this);
-				}
-			}
-			else //if (this.end == null)
-			{
-				InputCableConnector newend = (InputCableConnector) 
-						this.connectorRelay.getConnectorAtPoint(
-						this.lastMousePosition, InputCableConnector.class);
-				// If one couldn't be found, dies
-				if (newend == null)
-				{
-					//System.out.println("Dies since end is null");
-					this.start.removeCable(this);
-					this.start = null;
-					kill();
-				}
-				else
-				{
-					this.end = newend;
-					this.end.connectCable(this);
-					this.end.getTransformationListenerHandler().addListener(this);
-				}
-			}
-			
-			//System.out.println("Cable is still without end: " + (this.start == null) + ", " + (this.end == null));
-		}
-		
-		// On mouse press removes the cable from either end
-		else if (button == MouseButton.LEFT && eventType == 
-				MouseButtonEventType.PRESSED && !cableIsBeingDragged)
-		{
-			cableIsBeingDragged = true;
-			this.dragged = true;
-			
-			//System.out.println("Releases a cable");
-			
-			// If the button was pressed closer to start, removes the cable 
-			// from there, otherwise removes the cable from the end point
-			if (HelpMath.pointDistance(mousePosition.getX(), 
-					mousePosition.getY(), this.start.getX(), this.start.getY()) 
-					< HelpMath.pointDistance(mousePosition.getX(), 
-					mousePosition.getY(), this.end.getX(), this.end.getY()))
-			{
-				this.start.removeCable(this);
-				this.start = null;
-			}
-			else
-			{
-				this.end.removeCable(this);
-				this.end = null;
-			}
-			
-			setYScale(1);
-		}
-	}
-
-	@Override
-	public boolean listensPosition(Point2D.Double testedPosition)
-	{
-		return pointCollides(testedPosition);
-	}
-
-	@Override
-	public boolean listensMouseEnterExit()
-	{
-		// Listens to enter and exit events if is not being dragged 
+		/*
+		 * 	// Listens to enter and exit events if is not being dragged 
 		// (enter / exit is also disabled on test mode for output cables)
 		return !isBeingDragged() && !(this.testVersion && this.end == null);
-	}
-
-	@Override
-	public void onMousePositionEvent(MousePositionEventType eventType,
-			Point2D.Double mousePosition, double eventStepTime)
-	{
-		// Scales the object on enter, rescales on exit
-		if (eventType == MousePositionEventType.ENTER)
-			setYScale(GameSettings.interfaceScaleFactor);
-		else if (eventType == MousePositionEventType.EXIT)
-			setYScale(1);
-	}
-
-	@Override
-	public void onMouseMove(Point2D.Double newMousePosition)
-	{
-		// Updates the last known mouse position if being dragged
-		if (isBeingDragged())
-		{
-			this.lastMousePosition = newMousePosition;
-			updateTransformations();
-		}
-	}
-
-	@Override
-	public MouseButtonEventScale getCurrentButtonScaleOfInterest()
-	{
+		
 		if (!isBeingDragged())
 			return MouseButtonEventScale.LOCAL;
 		else
 			return MouseButtonEventScale.GLOBAL;
+		 */
+		MultiEventSelector<MouseEvent> selector = new MultiEventSelector<>();
+		selector.addOption(MouseEvent.createEnterExitSelector());
+		StrictEventSelector<MouseEvent, MouseEvent.Feature> localLeft = 
+				MouseEvent.createMouseButtonSelector(MouseButton.LEFT);
+		localLeft.addRequiredFeature(MouseButtonEventScale.LOCAL);
+		localLeft.addRequiredFeature(MouseButtonEventType.PRESSED);
+		selector.addOption(localLeft);
+		StrictEventSelector<MouseEvent, MouseEvent.Feature> globalLeftRelease = 
+				MouseEvent.createMouseButtonSelector(MouseButton.LEFT);
+		globalLeftRelease.addRequiredFeature(MouseButtonEventType.RELEASED);
+		selector.addOption(globalLeftRelease);
+		this.mouseEventSelector = selector;
+		
+		getIsDeadStateOperator().getListenerHandler().add(this);
 	}
-
-	@Override
-	public int getWidth()
-	{
-		if (this.spritedrawer == null)
-			return 0;
-		return this.spritedrawer.getSprite().getWidth();
-	}
-
-	@Override
-	public int getHeight()
-	{
-		if (this.spritedrawer == null)
-			return 0;
-		return (int) (this.spritedrawer.getSprite().getHeight() * 1.25);
-	}
-
-	@Override
-	public int getOriginX()
-	{
-		if (this.spritedrawer == null)
-			return 0;
-		return this.spritedrawer.getSprite().getOriginX();
-	}
-
-	@Override
-	public int getOriginY()
-	{
-		if (this.spritedrawer == null)
-			return 0;
-		return this.spritedrawer.getSprite().getOriginY();
-	}
-
-	@Override
-	public void drawSelfBasic(Graphics2D g2d)
-	{
-		if (this.spritedrawer == null)
-			return;
-		this.spritedrawer.drawSprite(g2d, 0, 0);
-	}
+	
+	
+	// IMPLEMENTED METHODS	-----------------------------------------------
 
 	@Override
 	public void onSignalChange(boolean newSignalStatus, SignalSender source)
@@ -374,46 +175,180 @@ public class Cable extends DimensionalDrawnObject implements
 	}
 	
 	@Override
-	public void onRoomStart(Room room)
+	public void drawSelf(Graphics2D g2d)
 	{
-		// Does nothing
+		AffineTransform lastTransform = getTransformation().transform(g2d);
+		this.spritedrawer.drawSprite(g2d);
+		g2d.setTransform(lastTransform);
 	}
 
 	@Override
-	public void onRoomEnd(Room room)
+	public int getDepth()
 	{
-		// Dies
-		kill();
-	}
-	
-	@Override
-	public void onTestStart()
-	{
-		this.testing = true;
+		return DepthConstants.NORMAL - 10;
 	}
 
 	@Override
-	public void onTestEnd()
+	public StateOperator getIsVisibleStateOperator()
 	{
-		this.testing = false;
+		return this.isVisibleOperator;
 	}
-	
+
 	@Override
-	public void kill()
+	public void onTestEvent(TestEvent event)
 	{
-		// Removes the cable from its connectors first
-		if (this.start != null)
-		{
-			this.start.removeCable(this);
-			this.start = null;
-		}
-		if (this.end != null)
-		{
-			this.end.removeCable(this);
-			this.end = null;
-		}
+		if (event.getType() == TestEventType.START)
+			this.testing = true;
+		else
+			this.testing = false;
+	}
+
+	@Override
+	public EventSelector<TestEvent> getTestEventSelector()
+	{
+		return this.testEventSelector;
+	}
+
+	@Override
+	public Transformation getTransformation()
+	{
+		return this.transformation;
+	}
+
+	@Override
+	public void setTrasformation(Transformation t)
+	{
+		this.transformation = t;
+	}
+
+	@Override
+	public StateOperator getListensToMouseEventsOperator()
+	{
+		return getIsActiveStateOperator();
+	}
+
+	@Override
+	public EventSelector<MouseEvent> getMouseEventSelector()
+	{
+		return this.mouseEventSelector;
+	}
+
+	@Override
+	public boolean isInAreaOfInterest(Vector3D position)
+	{
+		Vector3D relativePos = getTransformation().inverseTransform(position).plus(
+				this.spritedrawer.getSprite().getOrigin());
+		return HelpMath.pointIsInRange(relativePos, Vector3D.zeroVector(), 
+				this.spritedrawer.getSprite().getDimensions());
+	}
+
+	@Override
+	public void onMouseEvent(MouseEvent event)
+	{
+		// If the tests are running, cables don't work
+		if (this.testing && !this.testVersion)
+			return;
 		
-		super.kill();
+		this.lastMousePosition = event.getPosition();
+		
+		
+		// Updates the last known mouse position if being dragged
+		if (event.getMovementEventType() == MouseMovementEventType.MOVE && isBeingDragged())
+			updateTransformations();
+		// Scales the object on enter, rescales on exit
+		else if (event.getMovementEventType() == MouseMovementEventType.ENTER)
+			setYScale(GameSettings.interfaceScaleFactor);
+		else if (event.getMovementEventType() == MouseMovementEventType.EXIT)
+			setYScale(1);
+		else if (event.getButtonEventType() == MouseButtonEventType.PRESSED)
+		{
+			// If the cable is a test version, it fuctions differently
+			if (this.testVersion)
+			{
+				// On left click the signal type is changed (if the cable has no input)
+				if (this.start == null)
+					onSignalChange(!this.lastSignalStatus, null);
+			}
+			else if (!cableIsBeingDragged)
+			{
+				cableIsBeingDragged = true;
+				this.dragged = true;
+				
+				// If the button was pressed closer to start, removes the cable 
+				// from there, otherwise removes the cable from the end point
+				if (HelpMath.pointDistance2D(event.getPosition(), 
+						this.start.getTransformation().getPosition())
+						< HelpMath.pointDistance2D(event.getPosition(), 
+						this.end.getTransformation().getPosition()))
+				{
+					this.start.removeCable(this);
+					this.start = null;
+				}
+				else
+				{
+					this.end.removeCable(this);
+					this.end = null;
+				}
+				
+				setYScale(1);
+			}
+		}
+		// On mouse release tries to place the cable on a connector
+		else if (event.getButtonEventType() == MouseButtonEventType.RELEASED && isBeingDragged())
+		{
+			// Ends drag
+			cableIsBeingDragged = false;
+			this.dragged = false;
+			
+			// Tries to find a suitable new start- / endpoint
+			if (this.start == null)
+			{
+				OutputCableConnector newstart = (OutputCableConnector) 
+						this.connectorRelay.getConnectorAtPoint(
+						this.lastMousePosition, OutputCableConnector.class);
+				// If one couldn't be found, dies
+				if (newstart == null)
+					getIsDeadStateOperator().setState(true);
+				else
+				{
+					this.start = newstart;
+					this.start.connectCable(this);
+				}
+			}
+			else //if (this.end == null)
+			{
+				InputCableConnector newend = (InputCableConnector) 
+						this.connectorRelay.getConnectorAtPoint(
+						this.lastMousePosition, InputCableConnector.class);
+				// If one couldn't be found, dies
+				if (newend == null)
+					getIsDeadStateOperator().setState(true);
+				else
+				{
+					this.end = newend;
+					this.end.connectCable(this);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onStateChange(StateOperator source, boolean newState)
+	{
+		if (source.equals(getIsDeadStateOperator()) && newState)
+		{
+			// Removes the cable from its connectors first
+			if (this.start != null)
+			{
+				this.start.removeCable(this);
+				this.start = null;
+			}
+			if (this.end != null)
+			{
+				this.end.removeCable(this);
+				this.end = null;
+			}
+		}
 	}
 	
 	
@@ -445,43 +380,57 @@ public class Cable extends DimensionalDrawnObject implements
 	}
 	
 	// Updates the position and form of the cable
-	private void updateTransformations()
+	/**
+	 * Updates the cables transformations. This should be called when a connected connector's 
+	 * transformations change
+	 */
+	public void updateTransformations()
 	{
-		Point2D.Double startPoint, endPoint;
+		Vector3D startPoint, endPoint;
 		
 		// Updates starting position
 		if (this.start != null)
-			startPoint = this.start.getPosition();
+			startPoint = this.start.getTransformation().getPosition();
 		else
 		{
 			if (!this.testVersion)
 				startPoint = this.lastMousePosition;
 			else if (this.end != null)
-				startPoint = new Point2D.Double(this.end.getX() - 50, 
-						this.end.getY());
+				startPoint = this.end.getTransformation().getPosition().minus(
+						new Vector3D(50, 0));
 			else
-				startPoint = new Point2D.Double();
+				startPoint = Vector3D.zeroVector();
 		}
 		
 		// Updates scaling and rotation
 		if (this.end != null)
-			endPoint = this.end.getPosition();
+			endPoint = this.end.getTransformation().getPosition();
 		else
 		{
 			if (!this.testVersion)
 				endPoint = this.lastMousePosition;
 			else if (this.start != null)
-				endPoint = new Point2D.Double(this.start.getX() + 50, 
-						this.start.getY());
+				endPoint = this.start.getTransformation().getPosition().plus(
+						new Vector3D(50, 0));
 			else
-				endPoint = new Point2D.Double();
+				endPoint = Vector3D.zeroVector();
 		}
 		
-		setPosition(startPoint);
-		setAngle(HelpMath.pointDirection(startPoint.getX(), startPoint.getY(), 
-				endPoint.getX(), endPoint.getY()));
-		setXScale(HelpMath.pointDistance(startPoint.getX(), startPoint.getY(), 
-				endPoint.getX(), endPoint.getY()) / (getWidth() - 2 * getOriginX()));
+		double angle = HelpMath.pointDirection(startPoint, endPoint);
+		double xScale = HelpMath.pointDistance2D(startPoint, endPoint) / 
+				(this.spritedrawer.getSprite().getDimensions().getFirst() - 2 * 
+				this.spritedrawer.getSprite().getOrigin().getFirst());
+		
+		Transformation t = new Transformation(startPoint, new Vector3D(xScale, 
+				getTransformation().getScaling().getSecond()), Vector3D.identityVector(), 
+				angle);
+		setTrasformation(t);
+	}
+	
+	private void setYScale(double scale)
+	{
+		setTrasformation(getTransformation().withScaling(
+				new Vector3D(getTransformation().getScaling().getFirst(), scale)));
 	}
 	
 	private boolean isBeingDragged()
