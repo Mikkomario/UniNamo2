@@ -1,4 +1,4 @@
-package uninamo_userinterface;
+package uninamo_previous;
 
 import gateway_interface.AbstractButton;
 import genesis_graphic.DepthConstants;

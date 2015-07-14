@@ -1,4 +1,4 @@
-package uninamo_userinterface;
+package uninamo_previous;
 
 import gateway_interface.AbstractButton;
 import genesis_graphic.DepthConstants;
@@ -9,7 +9,6 @@ import omega_graphic.OpenSpriteBank;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
-import uninamo_previous.AreaChanger;
 
 /**
  * FinishButton is used for finishing the current stage and moving to the results 

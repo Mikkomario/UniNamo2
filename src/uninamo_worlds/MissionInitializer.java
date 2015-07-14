@@ -2,7 +2,7 @@ package uninamo_worlds;
 
 import omega_world.Area;
 import uninamo_main.GameSettings;
-import uninamo_userinterface.Note;
+import uninamo_previous.Note;
 
 /**
  * MissionInitializer creates the necessary stuff to start a mission

@@ -11,10 +11,10 @@ import uninamo_gameplaysupport.VictoryHandler;
 import uninamo_machinery.MachineCounter;
 import uninamo_main.GameSettings;
 import uninamo_previous.AreaChanger;
+import uninamo_previous.FinishButton;
+import uninamo_previous.TestingButton;
+import uninamo_previous.ToCodeButton;
 import uninamo_userinterface.DemoButton;
-import uninamo_userinterface.FinishButton;
-import uninamo_userinterface.TestingButton;
-import uninamo_userinterface.ToCodeButton;
 
 /**
  * DesignObjectCreator creates the objects needed in the design area. It also 

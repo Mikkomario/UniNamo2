@@ -2,7 +2,7 @@ package uninamo_gameplaysupport;
 
 import genesis_event.Handler;
 import genesis_event.HandlerType;
-import uninamo_userinterface.FinishButton;
+import uninamo_previous.FinishButton;
 
 /**
  * VictoryHandler keeps track of all the victoryConditions in a stage and 

@@ -6,7 +6,7 @@ import uninamo_components.NormalComponent;
 import uninamo_gameplaysupport.ObstacleCollector;
 import uninamo_machinery.Machine;
 import uninamo_obstacles.Obstacle;
-import uninamo_userinterface.Note;
+import uninamo_previous.Note;
 
 /**
  * ObjectInitializers create different objects when created by reading their 

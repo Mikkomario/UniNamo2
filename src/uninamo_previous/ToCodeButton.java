@@ -1,4 +1,4 @@
-package uninamo_userinterface;
+package uninamo_previous;
 
 import java.awt.geom.Point2D;
 
@@ -6,7 +6,7 @@ import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TestListener;
 import uninamo_main.GameSettings;
-import uninamo_previous.AreaChanger;
+import uninamo_userinterface.DemoButton;
 
 /**
  * ToCodeButton is a codeTransitionButton which also handles some additional 
