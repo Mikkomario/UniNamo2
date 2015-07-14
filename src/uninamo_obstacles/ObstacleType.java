@@ -1,7 +1,9 @@
 package uninamo_obstacles;
 
-import uninamo_gameplaysupport.TestHandler;
+import genesis_event.HandlerRelay;
+import genesis_util.Vector3D;
 import vision_sprite.Sprite;
+import vision_sprite.SpriteBank;
 
 /**
  * ObstacleTypes represents different types of obstacles that often have their 
@@ -34,7 +36,7 @@ public enum ObstacleType
 		}
 		
 		if (spritename != null)
-			return OpenSpriteBank.getSpriteBank("obstacles").getSprite(spritename);
+			return SpriteBank.getSprite("obstacles", spritename);
 		else
 		{
 			System.out.println("Couldn't find the sprite for " + this + 
@@ -75,19 +77,15 @@ public enum ObstacleType
 	
 	/**
 	 * Creates a new obstacle of this type
-	 * 
-	 * @param x The x-coordinate of the created obstacle
-	 * @param y The y-coordinate of the created obstacle
-	 * @param area The area where the obstacle will be located at
-	 * @param testHandler The testHandler that will inform the obstacle about 
-	 * test events
+	 * @param position The obstacle's new position
+	 * @param handlers The handlers that will handle the obstacle
 	 * @return A new obstacle of this type
 	 */
-	public Obstacle getNewObstacle(int x, int y, Area area, TestHandler testHandler)
+	public Obstacle getNewObstacle(Vector3D position, HandlerRelay handlers)
 	{	
 		switch (this)
 		{
-			case BOX: return new Box(area, x, y, testHandler);
+			case BOX: return new Box(handlers, position);
 		}
 		
 		System.err.println("Could not create an obstacle of type " + this + 

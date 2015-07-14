@@ -15,6 +15,7 @@ import uninamo_main.GameSettings;
  * 
  * @author Mikko Hilpinen
  * @since 9.3.2014
+ * @deprecated Replace with a new button type
  */
 public class CodeTransitionButton extends AbstractButton
 {

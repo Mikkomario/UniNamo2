@@ -17,6 +17,7 @@ import uninamo_previous.AreaChanger;
  * 
  * @author Mikko Hilpinen
  * @since 12.3.2014
+ * @deprecated Replaced with a simple button
  */
 public class ManualButton extends AbstractButton implements TestListener
 {

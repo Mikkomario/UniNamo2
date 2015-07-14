@@ -1,39 +1,25 @@
 package uninamo_obstacles;
 
-import java.awt.geom.Point2D.Double;
-import java.util.ArrayList;
-
-import omega_gameplay.Collidable;
-import omega_gameplay.CollisionType;
-import omega_gameplay.Material;
-import omega_world.Area;
-import uninamo_gameplaysupport.TestHandler;
-import uninamo_gameplaysupport.Wall;
+import genesis_event.HandlerRelay;
+import genesis_util.Vector3D;
 
 /**
  * Box is a simple obstacle that does pretty much nothing but collides with walls
  * 
  * @author Mikko Hilpinen
  */
-public class Box extends Obstacle implements Wall
+public class Box extends Obstacle
 {
+	// TODO: All collision systems are removed at the time
+	
 	/**
 	 * Creates a new box to the given position
-	 * 
-	 * @param area The area where the object will reside at
-	 * @param x The box's x-coordinate
-	 * @param y The box's y-coordinate
-	 * @param testHandler The testHandler that will inform the object about 
-	 * test events
+	 * @param handlers The handlers that will handle the box
+	 * @param position The box's position
 	 */
-	public Box(Area area, int x, int y, TestHandler testHandler)
+	public Box(HandlerRelay handlers, Vector3D position)
 	{
-		super(area, x, y, true, CollisionType.BOX, testHandler, "boxdesign", 
-				"boxreal");
-		
-		setBoxCollisionPrecision(3, 0);
-		//setAngle(30);
-		disableRotation();
+		super(handlers, position, "boxdesign", "boxreal");
 	}
 	
 	
@@ -44,18 +30,5 @@ public class Box extends Obstacle implements Wall
 	{
 		// Does nothing
 		//getMovement().setHSpeed(-5);
-	}
-
-	@Override
-	protected void onSpecialCollision(ArrayList<Double> colpoints,
-			Collidable collided, double steps)
-	{
-		// Does nothing
-	}
-
-	@Override
-	public double getDensity()
-	{
-		return Material.WOOD.getDensity() * 0.2;
 	}
 }

@@ -15,6 +15,7 @@ import uninamo_previous.AreaChanger;
  * 
  * @author Mikko Hilpinen
  * @since 16.3.2014
+ * @deprecated Replace with a simple button
  */
 public class ToCodeButton extends CodeTransitionButton implements TestListener
 {

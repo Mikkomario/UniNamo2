@@ -16,6 +16,7 @@ import uninamo_main.GameSettings;
  * 
  * @author Mikko Hilpinen
  * @since 17.3.2014
+ * @deprecated Replace with textDrawer
  */
 public class CurrentCostDrawer extends DrawnObject implements RoomListener
 {

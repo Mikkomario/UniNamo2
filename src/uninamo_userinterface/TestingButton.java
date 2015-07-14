@@ -18,6 +18,7 @@ import uninamo_main.GameSettings;
  * 
  * @author Mikko Hilpinen
  * @since 10.3.2014
+ * @deprecated Replace with a simple button
  */
 public class TestingButton extends AbstractButton implements TestListener
 {
