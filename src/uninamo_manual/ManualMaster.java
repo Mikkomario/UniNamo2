@@ -33,6 +33,7 @@ public class ManualMaster extends GameObject
 	private ManualButton manualButton;
 	private BookMark[] bookMarks;
 	
+	// TODO: Change visibility and data type
 	/**
 	 * ManualWidth tells the width of the manual's area
 	 */

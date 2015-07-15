@@ -8,6 +8,7 @@ import uninamo_components.ComponentType;
  * 
  * @author Mikko Hilpinen
  * @since 12.3.2014
+ * @deprecated Just use a single description holder class
  */
 public class ComponentInfoHolder extends DescriptionHolder
 {

@@ -1,8 +1,9 @@
 package uninamo_gameplaysupport;
 
+import uninamo_main.UninamoHandlerType;
+import gateway_ui.AbstractButton;
 import genesis_event.Handler;
 import genesis_event.HandlerType;
-import uninamo_previous.FinishButton;
 
 /**
  * VictoryHandler keeps track of all the victoryConditions in a stage and 
@@ -16,7 +17,7 @@ public class VictoryHandler extends Handler<VictoryCondition> implements Victory
 	// ATTRIBUTES	------------------------------------------------------
 	
 	private boolean lastClearStatus;
-	private FinishButton finishButton;
+	private AbstractButton finishButton;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
@@ -25,7 +26,7 @@ public class VictoryHandler extends Handler<VictoryCondition> implements Victory
 	 * Creates a new empty victoryHandler
 	 * @param finishButton The finishButton that will be shown after the 
 	 */
-	public VictoryHandler(FinishButton finishButton)
+	public VictoryHandler(AbstractButton finishButton)
 	{
 		super(false);
 		
@@ -76,8 +77,8 @@ public class VictoryHandler extends Handler<VictoryCondition> implements Victory
 		// Shows the victory button
 		if (isClear() && this.finishButton != null)
 		{
-			this.finishButton.setVisible();
-			this.finishButton.activate();
+			this.finishButton.getIsVisibleStateOperator().setState(true);
+			this.finishButton.getIsActiveStateOperator().setState(true);
 		}
 	}
 }

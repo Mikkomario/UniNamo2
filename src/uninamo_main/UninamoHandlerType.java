@@ -1,7 +1,10 @@
-package uninamo_gameplaysupport;
+package uninamo_main;
 
 import uninamo_components.CableConnector;
 import uninamo_components.NormalComponent;
+import uninamo_gameplaysupport.TestListener;
+import uninamo_gameplaysupport.TurnBased;
+import uninamo_gameplaysupport.VictoryCondition;
 import genesis_event.HandlerType;
 
 /**

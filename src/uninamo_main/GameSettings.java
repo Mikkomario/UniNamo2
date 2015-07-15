@@ -1,5 +1,7 @@
 package uninamo_main;
 
+import genesis_util.Vector3D;
+
 import java.awt.Color;
 import java.awt.Font;
 
@@ -14,13 +16,10 @@ public class GameSettings
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	/**
-	 * The width of the game window and view (pixels)
+	 * The size of the game window in pixels
 	 */
-	public static int screenWidth = 1280;
-	/**
-	 * The height of the game window and view (pixels)
-	 */
-	public static int screenHeight = 720;
+	public static Vector3D resolution = new Vector3D(1280, 720);
+	
 	/**
 	 * Will the game start in fullscreen mode
 	 */

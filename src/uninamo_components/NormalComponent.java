@@ -173,9 +173,8 @@ public abstract class NormalComponent extends Component implements
 					this.lastRelativeMouseGrabPosition)));
 			// If the position is near an edge of the screen, prepares to die, 
 			// may also return from this state
-			if (HelpMath.pointIsInRange(event.getPosition(), 64, 
-					GameSettings.screenWidth - 64, 64, 
-					GameSettings.screenHeight - 64))
+			if (HelpMath.pointIsInRange(event.getPosition(), new Vector3D(64, 64), 
+					GameSettings.resolution.minus(new Vector3D(64, 64))))
 			{
 				if (this.diesWhenDropped)
 				{

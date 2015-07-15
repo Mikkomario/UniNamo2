@@ -5,7 +5,7 @@ import exodus_world.AreaListener;
 import genesis_event.Handler;
 import genesis_event.HandlerType;
 import uninamo_gameplaysupport.TotalCostAnalyzer;
-import uninamo_gameplaysupport.UninamoHandlerType;
+import uninamo_main.UninamoHandlerType;
 
 /**
  * ComponentRelay keeps track of all the created components 

@@ -8,6 +8,7 @@ import genesis_event.Drawable;
 import genesis_event.HandlerRelay;
 import genesis_util.DepthConstants;
 import genesis_util.StateOperator;
+import genesis_util.Vector3D;
 import omega_util.SimpleGameObject;
 import uninamo_main.GameSettings;
 
@@ -52,8 +53,9 @@ public class CurrentCostDrawer extends SimpleGameObject implements AreaListener,
 	public void drawSelf(Graphics2D g2d)
 	{
 		// Draws the current total
-		g2d.drawString(this.currentCostString , GameSettings.screenWidth - 250, 
-				GameSettings.screenHeight - 16);
+		Vector3D position = GameSettings.resolution.minus(new Vector3D(250, 16));
+		g2d.drawString(this.currentCostString , position.getFirstInt(), 
+				position.getSecondInt());
 	}
 
 	@Override

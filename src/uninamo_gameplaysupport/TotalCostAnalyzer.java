@@ -144,7 +144,7 @@ public class TotalCostAnalyzer implements AreaListener
 					" x " + machineType.getName());
 			double typeCosts = 
 					this.machineAmounts.get(machineType) * machineType.getPrice();
-			createLineDrawer(new Vector3D(GameSettings.screenWidth - 96, y), typeCosts + " M €");
+			createLineDrawer(new Vector3D(GameSettings.resolution.getFirst() - 96, y), typeCosts + " M €");
 			
 			totalMachineCosts += typeCosts;
 			y += lineHeight;
@@ -162,7 +162,7 @@ public class TotalCostAnalyzer implements AreaListener
 					" x " + componentType.getName());
 			double typeCosts = 
 					this.componentAmounts.get(componentType) * componentType.getPrice();
-			createLineDrawer(new Vector3D(GameSettings.screenWidth - 96, y), typeCosts + " M €");
+			createLineDrawer(new Vector3D(GameSettings.resolution.getFirst() - 96, y), typeCosts + " M €");
 			
 			totalComponentCosts += typeCosts;
 			y += lineHeight;
@@ -171,7 +171,7 @@ public class TotalCostAnalyzer implements AreaListener
 		// Total
 		y += lineHeight * 2;
 		createLineDrawer(new Vector3D(32, y), "TOTAL: ");
-		createLineDrawer(new Vector3D(GameSettings.screenWidth - 96, y), totalMachineCosts + 
+		createLineDrawer(new Vector3D(GameSettings.resolution.getFirst() - 96, y), totalMachineCosts + 
 				totalComponentCosts + " M €");
 		
 		// TODO: Add estimated benefit as well as rank
@@ -181,8 +181,8 @@ public class TotalCostAnalyzer implements AreaListener
 				this.demoComponentCost) / this.demoComponentCost);
 		Grade grade = Grade.getGradeFromCostDifference(costDifferencePercent);
 		// Draws the rank
-		createGradeDrawer(grade, new Vector3D(GameSettings.screenWidth - 96, 
-				GameSettings.screenHeight - 96));
+		createGradeDrawer(grade, new Vector3D(GameSettings.resolution).minus(new Vector3D(96, 
+				96)));
 	}
 	
 	/**

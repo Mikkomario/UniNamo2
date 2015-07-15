@@ -1,5 +1,6 @@
 package uninamo_gameplaysupport;
 
+import uninamo_main.UninamoHandlerType;
 import genesis_event.Handler;
 import genesis_event.HandlerType;
 import genesis_util.StateOperator;
