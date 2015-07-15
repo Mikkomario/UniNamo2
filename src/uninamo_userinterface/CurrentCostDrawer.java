@@ -1,13 +1,14 @@
 package uninamo_userinterface;
 
-import genesis_graphic.DepthConstants;
-
 import java.awt.Graphics2D;
 
-import omega_graphic.DrawnObject;
-import omega_world.Area;
-import omega_world.Room;
-import omega_world.RoomListener;
+import exodus_world.Area;
+import exodus_world.AreaListener;
+import genesis_event.Drawable;
+import genesis_event.HandlerRelay;
+import genesis_util.DepthConstants;
+import genesis_util.StateOperator;
+import omega_util.SimpleGameObject;
 import uninamo_main.GameSettings;
 
 /**
@@ -16,70 +17,62 @@ import uninamo_main.GameSettings;
  * 
  * @author Mikko Hilpinen
  * @since 17.3.2014
- * @deprecated Replace with textDrawer
  */
-public class CurrentCostDrawer extends DrawnObject implements RoomListener
+public class CurrentCostDrawer extends SimpleGameObject implements AreaListener, Drawable
 {
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private double currentCosts;
 	private String currentCostString;
+	private StateOperator isVisibleOperator;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
 	
 	/**
 	 * Creates a new CurrentCostDrawer
-	 * 
-	 * @param area The area where the costs will be drawn
+	 * @param handlers The handlers that will handle the drawer
 	 */
-	public CurrentCostDrawer(Area area)
+	public CurrentCostDrawer(HandlerRelay handlers)
 	{
-		super(GameSettings.screenWidth - 250, GameSettings.screenHeight - 16, 
-				DepthConstants.HUD, area);
+		super(handlers);
 		
 		// Initializes attributes
+		this.isVisibleOperator = new StateOperator(true, true);
 		this.currentCosts = 0;
-		this.currentCostString = "0";
+		this.currentCostString = null;
 		
-		// Adds the object to the handler(s)
-		if (area != null)
-			area.addObject(this);
+		updateText();
 	}
 
 	
 	// IMPLEMENTED METHODS	----------------------------------------------
 	
 	@Override
-	public void onRoomStart(Room room)
-	{
-		// Does nothing
-	}
-
-	@Override
-	public void onRoomEnd(Room room)
-	{
-		// Dies
-		kill();
-	}
-
-	@Override
-	public int getOriginX()
-	{
-		return 0;
-	}
-
-	@Override
-	public int getOriginY()
-	{
-		return 0;
-	}
-
-	@Override
-	public void drawSelfBasic(Graphics2D g2d)
+	public void drawSelf(Graphics2D g2d)
 	{
 		// Draws the current total
-		g2d.drawString("Component Costs: " + this.currentCostString + " M €", 0, 0);
+		g2d.drawString(this.currentCostString , GameSettings.screenWidth - 250, 
+				GameSettings.screenHeight - 16);
+	}
+
+	@Override
+	public int getDepth()
+	{
+		return DepthConstants.HUD;
+	}
+
+	@Override
+	public StateOperator getIsVisibleStateOperator()
+	{
+		return this.isVisibleOperator;
+	}
+
+	@Override
+	public void onAreaStateChange(Area area)
+	{
+		if (!area.getIsActiveStateOperator().getState())
+			getIsDeadStateOperator().setState(true);
 	}
 	
 	
@@ -93,8 +86,12 @@ public class CurrentCostDrawer extends DrawnObject implements RoomListener
 	public void addCosts(double amount)
 	{
 		this.currentCosts += amount;
-		
-		// Rounds the value
-		this.currentCostString = String.format("%.2f", this.currentCosts);
+		updateText();
+	}
+	
+	private void updateText()
+	{
+		this.currentCostString = "Component Costs: " + 
+				String.format("%.2f", this.currentCosts) + " M €";
 	}
 }

@@ -11,9 +11,9 @@ import uninamo_gameplaysupport.TurnTimer;
 import uninamo_main.GameSettings;
 import uninamo_previous.AreaChanger;
 import uninamo_previous.CodeTransitionButton;
+import uninamo_previous.ManualButton;
 import uninamo_previous.TestingButton;
 import uninamo_userinterface.CurrentCostDrawer;
-import uninamo_userinterface.ManualButton;
 
 /**
  * This objectCreator creates the necessary elements used in the coding 

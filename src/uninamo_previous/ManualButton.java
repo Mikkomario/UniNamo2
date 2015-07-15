@@ -1,4 +1,4 @@
-package uninamo_userinterface;
+package uninamo_previous;
 
 import gateway_interface.AbstractButton;
 import genesis_graphic.DepthConstants;
@@ -10,7 +10,6 @@ import uninamo_gameplaysupport.TestListener;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_main.GameSettings;
 import uninamo_manual.ManualMaster;
-import uninamo_previous.AreaChanger;
 
 /**
  * ManualButton takes the user to coding manual when clicked.
