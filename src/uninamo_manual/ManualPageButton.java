@@ -14,6 +14,7 @@ import uninamo_main.GameSettings;
  * 
  * @author Mikko Hilpinen
  * @since 12.3.2014
+ * @deprecated Just replace this with a normal button and handle it from the manual
  */
 public class ManualPageButton extends AbstractButton
 {

@@ -14,6 +14,7 @@ import uninamo_main.GameSettings;
  * 
  * @author Mikko Hilpinen
  * @since 12.3.2014
+ * @deprecated Replace with a normal button the manual listens
  */
 public class ManualCloseButton extends AbstractButton
 {

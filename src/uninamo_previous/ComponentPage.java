@@ -6,8 +6,6 @@ import omega_world.Area;
 import omega_world.GameObject;
 import uninamo_components.ComponentType;
 import uninamo_gameplaysupport.TurnHandler;
-import uninamo_manual.ComponentInfoHolder;
-import uninamo_manual.DescriptionPage;
 
 /**
  * ComponentPage features a short description of a component as well as a 

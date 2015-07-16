@@ -4,8 +4,6 @@ import omega_world.Area;
 import omega_world.GameObject;
 import uninamo_machinery.Machine;
 import uninamo_machinery.MachineType;
-import uninamo_manual.DescriptionPage;
-import uninamo_manual.MachineInfoHolder;
 
 /**
  * MachinePage features a single machine and contains a short description as 

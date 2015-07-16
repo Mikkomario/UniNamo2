@@ -1,4 +1,4 @@
-package uninamo_manual;
+package uninamo_previous;
 
 import uninamo_components.ComponentType;
 

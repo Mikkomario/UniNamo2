@@ -1,4 +1,4 @@
-package uninamo_manual;
+package uninamo_previous;
 
 import java.util.HashMap;
 
@@ -9,6 +9,7 @@ import flow_fileIO.FileReader;
  * 
  * @author Mikko Hilpinen
  * @since 12.3.2014
+ * @deprecated Replaced with a new fileReader from flow
  */
 public class DescriptionHolder extends FileReader
 {

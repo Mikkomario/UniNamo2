@@ -3,8 +3,6 @@ package uninamo_previous;
 import genesis_graphic.DepthConstants;
 import omega_world.Area;
 import omega_world.GameObject;
-import uninamo_manual.DescriptionPage;
-import uninamo_manual.ObstacleInfoHolder;
 import uninamo_obstacles.ObstacleType;
 
 /**

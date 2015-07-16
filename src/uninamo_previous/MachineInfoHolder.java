@@ -1,4 +1,4 @@
-package uninamo_manual;
+package uninamo_previous;
 
 import uninamo_machinery.MachineType;
 
@@ -8,6 +8,7 @@ import uninamo_machinery.MachineType;
  * 
  * @author Mikko Hilpinen
  * @since 12.3.2014
+ * @deprecated page does this already
  */
 public class MachineInfoHolder extends DescriptionHolder
 {

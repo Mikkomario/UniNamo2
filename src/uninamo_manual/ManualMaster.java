@@ -14,10 +14,14 @@ import uninamo_machinery.MachineType;
 import uninamo_main.GameSettings;
 import uninamo_obstacles.ObstacleType;
 import uninamo_previous.AreaChanger;
+import uninamo_previous.ComponentInfoHolder;
 import uninamo_previous.ComponentPage;
+import uninamo_previous.EmptyPage;
 import uninamo_previous.ImagePage;
+import uninamo_previous.MachineInfoHolder;
 import uninamo_previous.MachinePage;
 import uninamo_previous.ManualButton;
+import uninamo_previous.ObstacleInfoHolder;
 import uninamo_previous.ObstaclePage;
 import uninamo_previous.Page;
 

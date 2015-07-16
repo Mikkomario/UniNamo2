@@ -1,14 +1,14 @@
-package uninamo_manual;
+package uninamo_previous;
 
 import omega_world.Area;
 import omega_world.GameObject;
-import uninamo_previous.Page;
 
 /**
  * An empty page is just filler. It doesn't contain anything.
  * 
  * @author Mikko Hilpinen
  * @since 12.3.2014
+ * @deprecated Replaced with page
  */
 public class EmptyPage extends GameObject implements Page
 {

@@ -1,4 +1,4 @@
-package uninamo_manual;
+package uninamo_previous;
 
 import gateway_interface.ParagraphDrawer;
 import genesis_graphic.DepthConstants;
@@ -10,7 +10,7 @@ import omega_graphic.DrawnObject;
 import omega_world.Area;
 import omega_world.GameObject;
 import uninamo_main.GameSettings;
-import uninamo_previous.Page;
+import uninamo_manual.ManualMaster;
 
 /**
  * A descriptionPage contains a description of some object of the game and 
@@ -18,6 +18,7 @@ import uninamo_previous.Page;
  * 
  * @author Mikko Hilpinen
  * @since 12.3.2014
+ * @deprecated replaced with page
  */
 public abstract class DescriptionPage extends DrawnObject implements Page
 {

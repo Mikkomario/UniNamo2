@@ -183,6 +183,17 @@ public class Page extends SimpleGameObject implements StateOperatorListener, UIC
 	}
 	
 	/**
+	 * Adds a new image to the page. The image will be scaled to fill the page. Uses the 
+	 * default margins.
+	 * @param image The image shown on the page
+	 * @return The drawer that will handle the actual drawing of the image
+	 */
+	public DependentSingleSpriteDrawer<Page> addImage(Sprite image)
+	{
+		return addImage(DEFAULTMARGINS, image);
+	}
+	
+	/**
 	 * Adds some text to the page
 	 * @param text The text written on the page ('£' marks a paragraph change)
 	 * @param relativePosition The relative position of the top left corner of the text
