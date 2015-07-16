@@ -283,6 +283,17 @@ public abstract class Machine extends SimpleGameObject implements
 	}
 	
 	
+	// GETTERS & SETTERS	-----------------------
+	
+	/**
+	 * @return The size of the machine (without scaling)
+	 */
+	public Vector3D getDimensions()
+	{
+		return getSpriteDrawer().getSprite().getDimensions();
+	}
+	
+	
 	// OTHER METHODS	-------------------------------------------------
 	
 	/**
@@ -310,7 +321,7 @@ public abstract class Machine extends SimpleGameObject implements
 	
 	private static Vector3D getNewComponentPosition(boolean isInput)
 	{	
-		int x = GameSettings.screenWidth - 200;
+		int x = GameSettings.resolution.getFirstInt() - 200;
 		int y = COMPONENTDISTANCE / 2 + 160;
 		int i = 0;
 		int components = inputComponentsCreated;
@@ -325,7 +336,7 @@ public abstract class Machine extends SimpleGameObject implements
 		{
 			y += COMPONENTDISTANCE + 15;
 			
-			if (y > GameSettings.screenHeight - COMPONENTDISTANCE / 2 + 160)
+			if (y > GameSettings.resolution.getSecond() - COMPONENTDISTANCE / 2 + 160)
 			{
 				if (isInput)
 					x -= COMPONENTDISTANCE;

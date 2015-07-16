@@ -1,9 +1,11 @@
-package uninamo_manual;
+package uninamo_previous;
 
 import omega_world.Area;
 import omega_world.GameObject;
 import uninamo_machinery.Machine;
 import uninamo_machinery.MachineType;
+import uninamo_manual.DescriptionPage;
+import uninamo_manual.MachineInfoHolder;
 
 /**
  * MachinePage features a single machine and contains a short description as 
@@ -11,6 +13,7 @@ import uninamo_machinery.MachineType;
  * 
  * @author Mikko Hilpinen
  * @since 12.3.2014
+ * @deprecated Replaced with a method in page
  */
 public class MachinePage extends DescriptionPage implements Page
 {	

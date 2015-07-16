@@ -2,6 +2,7 @@ package uninamo_manual;
 
 import omega_world.Area;
 import omega_world.GameObject;
+import uninamo_previous.Page;
 
 /**
  * An empty page is just filler. It doesn't contain anything.

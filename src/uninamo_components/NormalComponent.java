@@ -141,6 +141,7 @@ public abstract class NormalComponent extends Component implements
 	@Override
 	public StateOperator getListensToMouseEventsOperator()
 	{
+		// TODO: Use a separate operator here?
 		return getIsActiveStateOperator();
 	}
 

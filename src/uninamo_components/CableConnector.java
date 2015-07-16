@@ -127,6 +127,7 @@ public abstract class CableConnector extends DependentGameObject<Component> impl
 	@Override
 	public StateOperator getListensToMouseEventsOperator()
 	{
+		// TODO: Use a separate operator here
 		return getIsActiveStateOperator();
 	}
 

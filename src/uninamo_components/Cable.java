@@ -204,6 +204,7 @@ public class Cable extends SimpleGameObject implements MouseListener, Transforma
 	@Override
 	public StateOperator getListensToMouseEventsOperator()
 	{
+		// TODO: Use a separate operator?
 		return getIsActiveStateOperator();
 	}
 

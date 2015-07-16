@@ -1,16 +1,18 @@
-package uninamo_manual;
+package uninamo_previous;
 
 import genesis_graphic.DepthConstants;
 import omega_world.Area;
 import omega_world.GameObject;
+import uninamo_manual.DescriptionPage;
+import uninamo_manual.ObstacleInfoHolder;
 import uninamo_obstacles.ObstacleType;
-import uninamo_previous.SpriteDrawerObject;
 
 /**
  * ObstaclePage shows information about a certain obstacle
  * 
  * @author Mikko Hilpinen
  * @since 12.3.2014
+ * @deprecated Replaced with a method in page
  */
 public class ObstaclePage extends DescriptionPage
 {

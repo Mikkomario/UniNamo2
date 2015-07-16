@@ -1,4 +1,4 @@
-package uninamo_manual;
+package uninamo_previous;
 
 import java.awt.Graphics2D;
 
@@ -6,6 +6,8 @@ import omega_world.Area;
 import omega_world.GameObject;
 import uninamo_components.ComponentType;
 import uninamo_gameplaysupport.TurnHandler;
+import uninamo_manual.ComponentInfoHolder;
+import uninamo_manual.DescriptionPage;
 
 /**
  * ComponentPage features a short description of a component as well as a 
@@ -13,6 +15,7 @@ import uninamo_gameplaysupport.TurnHandler;
  * 
  * @author Mikko Hilpinen
  * @since 12.3.2014
+ * @deprecated replaced with a method in page
  */
 public class ComponentPage extends DescriptionPage implements Page
 {

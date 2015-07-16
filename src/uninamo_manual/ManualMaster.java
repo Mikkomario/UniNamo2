@@ -1,5 +1,7 @@
 package uninamo_manual;
 
+import genesis_util.Vector3D;
+
 import java.util.ArrayList;
 
 import omega_graphic.OpenSpriteBank;
@@ -12,7 +14,12 @@ import uninamo_machinery.MachineType;
 import uninamo_main.GameSettings;
 import uninamo_obstacles.ObstacleType;
 import uninamo_previous.AreaChanger;
+import uninamo_previous.ComponentPage;
+import uninamo_previous.ImagePage;
+import uninamo_previous.MachinePage;
 import uninamo_previous.ManualButton;
+import uninamo_previous.ObstaclePage;
+import uninamo_previous.Page;
 
 /**
  * ManualMaster handles the objects shown in the manual and takes care of 
@@ -33,15 +40,7 @@ public class ManualMaster extends GameObject
 	private ManualButton manualButton;
 	private BookMark[] bookMarks;
 	
-	// TODO: Change visibility and data type
-	/**
-	 * ManualWidth tells the width of the manual's area
-	 */
-	protected static final int MANUALWIDTH = 600;
-	/**
-	 * ManualHeight tells the height of the manual's area
-	 */
-	protected static final int MANUALHEIGHT = 500;
+	static final Vector3D MANUALDIMENSIONS = new Vector3D(600, 500);
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -91,12 +90,12 @@ public class ManualMaster extends GameObject
 		
 		// Creates the turorial pages
 		this.pages.add(new DoublePage(new EmptyPage(manualArea), 
-				new SimplePage(rightPageX, pageY, 
+				new ImagePage(rightPageX, pageY, 
 				OpenSpriteBank.getSpriteBank("manual").getSprite(
 				"contentstext"), manualArea)));
-		this.pages.add(new DoublePage(new SimplePage(leftPageX, pageY, 
+		this.pages.add(new DoublePage(new ImagePage(leftPageX, pageY, 
 				OpenSpriteBank.getSpriteBank("manual").getSprite("cables"), 
-				manualArea), new SimplePage(rightPageX, pageY, 
+				manualArea), new ImagePage(rightPageX, pageY, 
 				OpenSpriteBank.getSpriteBank("manual").getSprite("signals"), 
 				manualArea)));
 		

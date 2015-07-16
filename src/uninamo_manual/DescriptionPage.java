@@ -10,6 +10,7 @@ import omega_graphic.DrawnObject;
 import omega_world.Area;
 import omega_world.GameObject;
 import uninamo_main.GameSettings;
+import uninamo_previous.Page;
 
 /**
  * A descriptionPage contains a description of some object of the game and 
