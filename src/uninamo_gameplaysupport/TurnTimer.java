@@ -65,12 +65,12 @@ public class TurnTimer extends SimpleGameObject implements AreaListener, TestLis
 	}
 
 	@Override
-	public void onAreaStateChange(Area area)
+	public void onAreaStateChange(Area area, boolean newState)
 	{
 		// TODO: Maybe this is not necessary?
 		
 		// Dies on room end
-		if (!area.getIsActiveStateOperator().getState())
+		if (!newState)
 			getIsDeadStateOperator().setState(true);
 	}
 	

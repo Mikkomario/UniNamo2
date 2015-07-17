@@ -14,7 +14,6 @@ import genesis_util.DepthConstants;
 import genesis_video.GamePanel;
 import genesis_video.GameWindow;
 import arc_bank.GamePhaseBank;
-import tests.MouseTester;
 import uninamo_components.ConnectorRelay;
 import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.TestHandler;
@@ -73,11 +72,11 @@ public class Main
 		new CodingObjectCreator(codingArea.getHandlers());
 		//new MouseTester(codingArea.getHandlers());
 		
-		designArea.start(true);
-		codingArea.start(false);
+		//designArea.start(true);
+		designArea.start(false);
 		
-		Utility.setMouseState(designArea.getHandlers(), false);
-		Utility.setVisibleState(designArea.getHandlers(), false);
+		Utility.setMouseState(codingArea.getHandlers(), false);
+		Utility.setVisibleState(codingArea.getHandlers(), false);
 		
 		codingArea.getIsActiveStateOperator().setState(true);
 	}
@@ -114,6 +113,8 @@ public class Main
 			this.superHandlers = superHandlers;
 			
 			// Uses the same turnTimer for all objects
+			// TODO: Switch turnHandler to be part of the shared handlers
+			// TODO: And while at it, share an actorHandler as well
 			this.turnHandler = new TurnTimer(superHandlers).getListenerHandler();
 			
 			// Coding and design share test, connector and component handlers

@@ -100,9 +100,9 @@ public abstract class Obstacle extends SimpleGameObject implements
 	}
 
 	@Override
-	public void onAreaStateChange(Area area)
+	public void onAreaStateChange(Area area, boolean newState)
 	{
-		if (!area.getIsActiveStateOperator().getState())
+		if (!newState)
 			getIsDeadStateOperator().setState(true);
 	}
 

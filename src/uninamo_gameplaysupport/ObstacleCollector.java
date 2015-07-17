@@ -131,10 +131,10 @@ public class ObstacleCollector extends SimpleGameObject implements CollisionList
 	}
 
 	@Override
-	public void onAreaStateChange(Area area)
+	public void onAreaStateChange(Area area, boolean newState)
 	{
 		// Dies at the end of the room
-		if (!area.getIsActiveStateOperator().getState())
+		if (!newState)
 			getIsDeadStateOperator().setState(true);
 	}
 

@@ -49,9 +49,9 @@ public class NormalComponentRelay extends Handler<NormalComponent> implements Ar
 	}
 
 	@Override
-	public void onAreaStateChange(Area area)
+	public void onAreaStateChange(Area area, boolean newState)
 	{
-		if (area.getIsActiveStateOperator().getState())
+		if (newState)
 			this.costAnalyzer.resetComponentStatus();
 		else
 			handleObjects(new CostAnalyzerInformerOperator());

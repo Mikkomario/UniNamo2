@@ -93,6 +93,7 @@ public abstract class Machine extends SimpleGameObject implements
 		super(machineHandlers);
 		
 		// Initializes attributes
+		this.transformation = new Transformation(position);
 		Bank<Sprite> spriteBank = SpriteBank.getSpriteBank("machines");
 		Sprite[] sprites = {spriteBank.get(designSpriteName), spriteBank.get(realSpriteName)};
 		this.spritedrawer = new MultiSpriteDrawer(sprites, this, machineHandlers);
@@ -255,9 +256,9 @@ public abstract class Machine extends SimpleGameObject implements
 	}
 
 	@Override
-	public void onAreaStateChange(Area area)
+	public void onAreaStateChange(Area area, boolean newState)
 	{
-		if (!area.getIsActiveStateOperator().getState())
+		if (!newState)
 			getIsDeadStateOperator().setState(false);
 	}
 

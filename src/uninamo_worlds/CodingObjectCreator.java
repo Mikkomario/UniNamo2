@@ -38,27 +38,30 @@ public class CodingObjectCreator extends SimpleGameObject implements AreaListene
 	// IMPLEMENTED METHODS	--------------------------------------------
 
 	@Override
-	public void onAreaStateChange(Area area)
+	public void onAreaStateChange(Area area, boolean newState)
 	{
-		HandlerRelay handlers = area.getHandlers();
-		ConnectorRelay connectorRelay = (ConnectorRelay) 
-				handlers.getHandler(UninamoHandlerType.CONNECTOR);
-		
-		// Creates the necessary utilities
-		CurrentCostDrawer costDrawer = new CurrentCostDrawer(handlers);
-		
-		// Creates the interface
-		new CodingInterface(handlers, AreaBank.getArea("gameplay", "design").getHandlers());
-		
-		// Creates the component boxes
-		Vector3D boxPosition = new Vector3D(64, 30);
-		for (ComponentType type : ComponentType.values())
+		if (newState)
 		{
-			new ComponentBox(boxPosition, handlers, connectorRelay, costDrawer, type);
-			boxPosition = boxPosition.plus(new Vector3D(0, 60));
+			HandlerRelay handlers = area.getHandlers();
+			ConnectorRelay connectorRelay = (ConnectorRelay) 
+					handlers.getHandler(UninamoHandlerType.CONNECTOR);
+			
+			// Creates the necessary utilities
+			CurrentCostDrawer costDrawer = new CurrentCostDrawer(handlers);
+			
+			// Creates the interface
+			new CodingInterface(handlers, AreaBank.getArea("gameplay", "design").getHandlers());
+			
+			// Creates the component boxes
+			Vector3D boxPosition = new Vector3D(64, 30);
+			for (ComponentType type : ComponentType.values())
+			{
+				new ComponentBox(boxPosition, handlers, connectorRelay, costDrawer, type);
+				boxPosition = boxPosition.plus(new Vector3D(0, 60));
+			}
+			
+			// Creates other objects
+			new CodingInitializer(handlers, connectorRelay, costDrawer);
 		}
-		
-		// Creates other objects
-		new CodingInitializer(handlers, connectorRelay, costDrawer);
 	}
 }

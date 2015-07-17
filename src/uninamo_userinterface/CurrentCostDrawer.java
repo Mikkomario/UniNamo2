@@ -71,9 +71,9 @@ public class CurrentCostDrawer extends SimpleGameObject implements AreaListener,
 	}
 
 	@Override
-	public void onAreaStateChange(Area area)
+	public void onAreaStateChange(Area area, boolean newState)
 	{
-		if (!area.getIsActiveStateOperator().getState())
+		if (!newState)
 			getIsDeadStateOperator().setState(true);
 	}
 	

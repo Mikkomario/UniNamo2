@@ -73,10 +73,10 @@ public class InvisibleWall extends SimpleGameObject implements Wall, AreaListene
 	}
 
 	@Override
-	public void onAreaStateChange(Area area)
+	public void onAreaStateChange(Area area, boolean newState)
 	{
 		// Dies when the area ends
-		if (!area.getIsActiveStateOperator().getState())
+		if (!newState)
 			getIsDeadStateOperator().setState(true);
 	}
 }

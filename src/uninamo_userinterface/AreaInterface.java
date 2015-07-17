@@ -79,10 +79,10 @@ public abstract class AreaInterface extends SimpleGameObject implements
 	// IMPLEMENTED METHODS	-------------
 
 	@Override
-	public void onAreaStateChange(Area area)
+	public void onAreaStateChange(Area area, boolean newState)
 	{
 		// Kills the interface, along with any buttons
-		if (!area.getIsActiveStateOperator().getState())
+		if (!newState)
 			getIsDeadStateOperator().setState(true);
 	}
 

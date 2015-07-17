@@ -62,10 +62,10 @@ public class TotalCostAnalyzer implements AreaListener
 	}
 
 	@Override
-	public void onAreaStateChange(Area area)
+	public void onAreaStateChange(Area area, boolean newState)
 	{
 		// Visualizes the data
-		if (area.getIsActiveStateOperator().getState())
+		if (newState)
 			visualizeCosts();
 		
 		// Ends the visualization

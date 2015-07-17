@@ -52,33 +52,38 @@ public class DesignObjectCreator extends SimpleGameObject implements AreaListene
 	// IMPLEMENTED METHODS	---------------------------------------------
 
 	@Override
-	public void onAreaStateChange(Area area)
+	public void onAreaStateChange(Area area, boolean newState)
 	{
-		HandlerRelay handlers = area.getHandlers();
-		HandlerRelay codingHandlers = AreaBank.getArea("gameplay", "coding").getHandlers();
-		
-		// Creates the interface
-		AbstractButton finishButton = ScalingSpriteButton.createButton(
-				GameSettings.resolution.dividedBy(2), handlers, "finish");
-		// Victory handler can only be added at this point
-		VictoryHandler victoryHandler = new VictoryHandler(finishButton);
-		handlers.addHandler(victoryHandler, true);
-		new DesignInterface(handlers, codingHandlers, finishButton);
-		
-		// Creates invisible walls
-		new InvisibleWall(new Vector3D(-32, 0), new Vector3D(32, 
-				GameSettings.resolution.getSecond()), handlers);
-		new InvisibleWall(new Vector3D(0, -32), new Vector3D(
-				GameSettings.resolution.getFirst(), 32), handlers);
-		new InvisibleWall(new Vector3D(GameSettings.resolution.getFirst(), 0), new Vector3D(32, 
-				GameSettings.resolution.getSecond()), handlers);
-		new InvisibleWall(new Vector3D(0, GameSettings.resolution.getSecond()), 
-				new Vector3D(GameSettings.resolution.getFirst(), 32), handlers);
-		
-		// Creates other objects
-		MachineCounter counter = new MachineCounter(this.costAnalyzer);
-		new DesignInitializer(handlers, codingHandlers, counter, (ConnectorRelay) 
-				handlers.getHandler(UninamoHandlerType.CONNECTOR), victoryHandler);
-		new MissionInitializer(handlers);
+		if (newState)
+		{
+			HandlerRelay handlers = area.getHandlers();
+			HandlerRelay codingHandlers = AreaBank.getArea("gameplay", "coding").getHandlers();
+			
+			// Creates the interface
+			AbstractButton finishButton = ScalingSpriteButton.createButton(
+					GameSettings.resolution.dividedBy(2), handlers, "finish");
+			finishButton.getListensToMouseEventsOperator().setState(false);
+			finishButton.getIsVisibleStateOperator().setState(false);
+			// Victory handler can only be added at this point
+			VictoryHandler victoryHandler = new VictoryHandler(finishButton);
+			handlers.addHandler(victoryHandler, true);
+			new DesignInterface(handlers, codingHandlers, finishButton);
+			
+			// Creates invisible walls
+			new InvisibleWall(new Vector3D(-32, 0), new Vector3D(32, 
+					GameSettings.resolution.getSecond()), handlers);
+			new InvisibleWall(new Vector3D(0, -32), new Vector3D(
+					GameSettings.resolution.getFirst(), 32), handlers);
+			new InvisibleWall(new Vector3D(GameSettings.resolution.getFirst(), 0), new Vector3D(32, 
+					GameSettings.resolution.getSecond()), handlers);
+			new InvisibleWall(new Vector3D(0, GameSettings.resolution.getSecond()), 
+					new Vector3D(GameSettings.resolution.getFirst(), 32), handlers);
+			
+			// Creates other objects
+			MachineCounter counter = new MachineCounter(this.costAnalyzer);
+			new DesignInitializer(handlers, codingHandlers, counter, (ConnectorRelay) 
+					handlers.getHandler(UninamoHandlerType.CONNECTOR), victoryHandler);
+			new MissionInitializer(handlers);
+		}
 	}
 }
