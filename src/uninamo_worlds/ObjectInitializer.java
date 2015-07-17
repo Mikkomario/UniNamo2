@@ -1,12 +1,15 @@
 package uninamo_worlds;
 
-import flow_fileIO.FileReader;
+import java.io.FileNotFoundException;
+
+import flow_io.AbstractFileReader;
+import genesis_event.HandlerRelay;
 import uninamo_components.Cable;
 import uninamo_components.NormalComponent;
 import uninamo_gameplaysupport.ObstacleCollector;
 import uninamo_machinery.Machine;
 import uninamo_obstacles.Obstacle;
-import uninamo_previous.Note;
+import uninamo_userinterface.Note;
 
 /**
  * ObjectInitializers create different objects when created by reading their 
@@ -15,24 +18,26 @@ import uninamo_previous.Note;
  * @author Mikko Hilpinen
  * @since 17.3.2014
  */
-public abstract class ObjectInitializer extends FileReader
+public abstract class ObjectInitializer extends AbstractFileReader
 {
 	// TODO: This will be replaced with object constructor from flow
 	
 	// ATTRIBUTES	-----------------------------------------------------
 	
 	private CreationMode currentMode;
+	private HandlerRelay handlers;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
 	
 	/**
 	 * Creates a new objectInitializer and creates the objects
+	 * @param handlers The handlers that will handle the created objects
 	 */
-	public ObjectInitializer()
+	public ObjectInitializer(HandlerRelay handlers)
 	{
 		// TODO Add stage handling
-		
+		this.handlers = handlers;
 		this.currentMode = null;
 	}
 	
@@ -83,6 +88,17 @@ public abstract class ObjectInitializer extends FileReader
 	}
 	
 	
+	// ACCESSORS	-------------------
+	
+	/**
+	 * @return The handlers used for the created objects
+	 */
+	protected HandlerRelay getHandlers()
+	{
+		return this.handlers;
+	}
+	
+	
 	// OTHER METHODS	------------------------------------------------
 	
 	/**
@@ -112,7 +128,15 @@ public abstract class ObjectInitializer extends FileReader
 	 */
 	protected void createObjects()
 	{
-		readFile("missions/teststage.txt", "*");
+		try
+		{
+			readFile("missions/teststage.txt", "*");
+		}
+		catch (FileNotFoundException e)
+		{
+			System.err.println("Can't find the test stage file");
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -127,7 +151,7 @@ public abstract class ObjectInitializer extends FileReader
 	 * @author Mikko Hilpinen
 	 * @since 17.3.2014
 	 */
-	protected enum CreationMode
+	protected static enum CreationMode
 	{
 		/**
 		 * Note1 is the shorter note shown at the beginning of a stage

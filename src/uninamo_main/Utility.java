@@ -4,6 +4,10 @@ import omega_util.Transformable;
 import omega_util.Transformation;
 import conflict_util.Polygon;
 import vision_sprite.Sprite;
+import genesis_event.DrawableHandler;
+import genesis_event.GenesisHandlerType;
+import genesis_event.HandlerRelay;
+import genesis_event.MouseListenerHandler;
 import genesis_util.Vector3D;
 
 /**
@@ -44,5 +48,27 @@ public class Utility
 		// TODO: Have to do it like this since, for some reason, Transformable.transform(...) 
 		// doesn't work in this project
 		transformable.setTrasformation(transformable.getTransformation().plus(t));
+	}
+	
+	/**
+	 * Changes the mouse listening state of the given handler(s)
+	 * @param relay The relay that will be affected by this change
+	 * @param newState The new mouse listening state of the objects in the handler
+	 */
+	public static void setMouseState(HandlerRelay relay, boolean newState)
+	{
+		((MouseListenerHandler) relay.getHandler(GenesisHandlerType.MOUSEHANDLER)
+				).getListensToMouseEventsOperator().setState(newState);
+	}
+	
+	/**
+	 * Changes the visibility of the given handler(s)
+	 * @param relay The relay that will be affected by this change
+	 * @param newState The new visibility state of the objects in the handler
+	 */
+	public static void setVisibleState(HandlerRelay relay, boolean newState)
+	{
+		((DrawableHandler) relay.getHandler(GenesisHandlerType.DRAWABLEHANDLER)
+				).getIsVisibleStateOperator().setState(newState);
 	}
 }

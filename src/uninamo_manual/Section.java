@@ -99,6 +99,22 @@ public class Section
 	}
 	
 	/**
+	 * @return The section is opened on the last page
+	 */
+	public boolean onLastPage()
+	{
+		return this.openIndex == this.openings.size() - 1;
+	}
+	
+	/**
+	 * @return The section is opened on the first page
+	 */
+	public boolean onFirstPage()
+	{
+		return this.openIndex == 0;
+	}
+	
+	/**
 	 * Destroys all the pages in this section
 	 */
 	public void kill()

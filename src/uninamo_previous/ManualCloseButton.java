@@ -1,4 +1,4 @@
-package uninamo_manual;
+package uninamo_previous;
 
 import gateway_interface.AbstractButton;
 import genesis_graphic.DepthConstants;
@@ -8,6 +8,7 @@ import java.awt.geom.Point2D.Double;
 import omega_graphic.OpenSpriteBank;
 import omega_world.Area;
 import uninamo_main.GameSettings;
+import uninamo_manual.ManualMaster;
 
 /**
  * ManualCloseButton closes the manual when clicked

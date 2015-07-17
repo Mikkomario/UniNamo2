@@ -1,7 +1,8 @@
-package uninamo_worlds;
+package uninamo_previous;
 
 import omega_world.Area;
 import omega_world.AreaObjectCreator;
+import uninamo_worlds.MissionInitializer;
 
 /**
  * MissionObjectCreator creates the necessary objects at the start of the 
@@ -9,6 +10,7 @@ import omega_world.AreaObjectCreator;
  * 
  * @author Mikko Hilpinen
  * @since 13.3.2014
+ * @deprecated all this can be done in the design creator as well
  */
 public class MissionObjectCreator extends AreaObjectCreator
 {	

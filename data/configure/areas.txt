@@ -1,0 +1,7 @@
+* These are the different areas used in the project
+
+&gameplay
+coding#gameplay
+design#gameplay
+manual#gameplay
+results#results

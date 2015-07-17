@@ -1,25 +1,26 @@
 package uninamo_main;
 
-import genesis_graphic.GamePanel;
-import genesis_graphic.GameWindow;
-
-import java.awt.BorderLayout;
-
-import omega_graphic.OpenSpriteBankHolder;
+import exodus_util.ConstructableGameObject;
+import exodus_world.Area;
+import exodus_world.AreaBank;
+import exodus_world.AreaHandlerConstructor;
+import exodus_world.AreaObjectConstructorProvider;
+import flow_recording.AbstractConstructor;
+import genesis_event.ActorHandler;
+import genesis_event.DrawableHandler;
+import genesis_event.HandlerRelay;
+import genesis_event.MouseListenerHandler;
+import genesis_util.DepthConstants;
+import genesis_video.GamePanel;
+import genesis_video.GameWindow;
 import arc_bank.GamePhaseBank;
-import arc_bank.MultiMediaHolder;
-import arc_bank.OpenGamePhaseBankHolder;
-import arc_resource.MetaResource;
-import tests.FpsApsTest;
 import uninamo_components.ConnectorRelay;
 import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TotalCostAnalyzer;
+import uninamo_gameplaysupport.TurnHandler;
 import uninamo_gameplaysupport.TurnTimer;
-import uninamo_previous.AreaChanger;
-import uninamo_worlds.CodingObjectCreator;
-import uninamo_worlds.DesignObjectCreator;
-import uninamo_worlds.MissionObjectCreator;
+import vision_sprite.SpriteBank;
 
 /**
  * This is the main class of UniNamo2. The class initializes the necessary 
@@ -37,45 +38,36 @@ public class Main
 	 */
 	public Main()
 	{
-		// TODO: Make using gameWindow less cryptic and easier
-		
 		// Initializes resources
-		/*
-		MultiMediaHolder.initializeResourceDatabase(ResourceType.SPRITE, 
-				"configure/spriteload.txt");
-		MultiMediaHolder.initializeResourceDatabase(ResourceType.GAMEPHASE, 
-				"configure/gamephaseload.txt");
-		*/
-		MultiMediaHolder.initializeResourceDatabase(
-				new OpenSpriteBankHolder("configure/spriteload.txt"));
-		MultiMediaHolder.initializeResourceDatabase(
-				new OpenGamePhaseBankHolder("configure/gamephaseload.txt"));
+		SpriteBank.initializeSpriteResources("configure/spriteload.txt");
+		GamePhaseBank.initializeGamePhaseResources("configure/gamephaseload.txt", "default");
 		
 		// Creates the main window
-		GamePanel gamepanel = new GamePanel(GameSettings.screenWidth, 
-				GameSettings.screenHeight);
-		GameWindow window = new GameWindow(GameSettings.screenWidth, 
-				GameSettings.screenHeight, "UniNamo2", !GameSettings.fullScreen, 
-				120, 10, false);
-		window.addGamePanel(gamepanel, BorderLayout.CENTER);
+		GameWindow window = new GameWindow(GameSettings.resolution, "UniNamo2", 
+				!GameSettings.fullScreen, 120, 20);
+		GamePanel panel = window.getMainPanel().addGamePanel();
 		if (GameSettings.fullScreen)
 			window.setFullScreen(true);
 		
 		// Starts the gameplay area(s)
-		MultiMediaHolder.activateBank(MetaResource.GAMEPHASE, "default", true);
+		HandlerRelay superHandlers = new HandlerRelay();
+		superHandlers.addHandler(new DrawableHandler(true, panel.getDrawer()));
+		superHandlers.addHandler(new ActorHandler(true, window.getHandlerRelay()));
+		superHandlers.addHandler(new MouseListenerHandler(true, window.getHandlerRelay()));
+		// TODO: Add keyboard support if necessary
+		TotalCostAnalyzer costAnalyzer = new TotalCostAnalyzer();
 		
-		// TODO: Add key handler when needed
-		AreaChanger areachanger = new AreaChanger(window, gamepanel);
-		areachanger.getArea("design").start();
-		areachanger.getArea("coding").start();
-		areachanger.getArea("mission").start();
+		AreaBank.initializeAreaResources("configure/areas.txt", new HandlerConstructor(
+				superHandlers, costAnalyzer), new ConstructorProvider());
+		AreaBank.activateAreaBank("gameplay");
+		costAnalyzer.connectToArea(AreaBank.getArea("gameplay", "results"));
 		
-		// TODO: This causes occasional errors
-		areachanger.getArea("coding").getMouseHandler().inactivate();
-		areachanger.getArea("coding").getDrawer().setInvisible();
+		Area codingArea = AreaBank.getArea("gameplay", "coding");
+		AreaBank.getArea("gameplay", "design").start(true);
+		codingArea.start(false);
 		
-		// Also activates FPS test
-		new FpsApsTest(window.getStepHandler(), gamepanel.getDrawer());
+		Utility.setMouseState(codingArea.getHandlers(), false);
+		Utility.setVisibleState(codingArea.getHandlers(), false);
 	}
 	
 	
@@ -89,6 +81,80 @@ public class Main
 	public static void main(String[] args)
 	{
 		new Main();
+	}
+	
+	
+	// SUBCLASSES	-------------------
+	
+	private static class HandlerConstructor implements AreaHandlerConstructor
+	{
+		// ATTRIBUTES	---------------
+		
+		private HandlerRelay superHandlers;
+		private HandlerRelay sharedHandlers;
+		private TurnHandler turnHandler;
+		
+		
+		// CONSTRUCTOR	---------------
+		
+		public HandlerConstructor(HandlerRelay superHandlers, TotalCostAnalyzer costAnalyzer)
+		{
+			this.superHandlers = superHandlers;
+			
+			// Uses the same turnTimer for all objects
+			this.turnHandler = new TurnTimer(superHandlers).getListenerHandler();
+			
+			// Coding and design share test, connector and component handlers
+			this.sharedHandlers = new HandlerRelay();
+			this.sharedHandlers.addHandler(new TestHandler(null));
+			this.sharedHandlers.addHandler(new ConnectorRelay());
+			this.sharedHandlers.addHandler(new NormalComponentRelay(costAnalyzer));
+		}
+		
+		
+		// IMPLEMENTED METHODS	-------
+		
+		@Override
+		public HandlerRelay constructRelay(String areaName)
+		{
+			HandlerRelay relay;
+			// Coding and design share some special handlers
+			if (areaName.equals("coding") || areaName.equals("design"))
+				relay = new HandlerRelay(this.sharedHandlers);
+			else
+				relay = new HandlerRelay();
+			
+			// Manual is drawn a top of the other areas
+			int depth = DepthConstants.NORMAL;
+			if (areaName.equals("manual"))
+				depth --;
+			
+			// All areas use the mouse, drawable and actor handlers
+			relay.addHandler(new ActorHandler(false, this.superHandlers));
+			relay.addHandler(new MouseListenerHandler(false, this.superHandlers));
+			relay.addHandler(new DrawableHandler(false, true, depth, 5, this.superHandlers));
+			
+			// Gameplay areas also use the turnHandler
+			if (areaName.equals("coding") || areaName.equals("design") || 
+					areaName.equals("manual"))
+				relay.addHandler(this.turnHandler);
+			
+			// TODO: Also add collision and collidable handlers
+			
+			return relay;
+		}
+	}
+	
+	private static class ConstructorProvider implements 
+			AreaObjectConstructorProvider<ConstructableGameObject>
+	{
+		@Override
+		public AbstractConstructor<ConstructableGameObject> getConstructor(
+				Area targetArea)
+		{
+			// TODO: Add the correct constructors once they are done
+			return null;
+		}	
 	}
 	
 	/* TODO: Make this a static method or something

@@ -1,4 +1,4 @@
-package tests;
+package uninamo_previous;
 
 import genesis_logic.Handled;
 import genesis_logic.Handler;

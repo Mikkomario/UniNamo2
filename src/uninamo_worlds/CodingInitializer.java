@@ -1,6 +1,7 @@
 package uninamo_worlds;
 
-import omega_world.Area;
+import genesis_event.HandlerRelay;
+import genesis_util.Vector3D;
 import uninamo_components.Cable;
 import uninamo_components.ComponentType;
 import uninamo_components.ConnectorRelay;
@@ -8,8 +9,8 @@ import uninamo_components.InputCableConnector;
 import uninamo_components.NormalComponent;
 import uninamo_components.NormalComponentRelay;
 import uninamo_components.OutputCableConnector;
-import uninamo_gameplaysupport.TestHandler;
-import uninamo_gameplaysupport.TurnHandler;
+import uninamo_main.UninamoHandlerType;
+import uninamo_userinterface.CurrentCostDrawer;
 
 /**
  * The codingInitializer reads the demo component solution from a file and 
@@ -24,43 +25,32 @@ public class CodingInitializer extends ObjectInitializer
 	
 	// ATTRIBUTES	-----------------------------------------------------
 	
-	private Area area;
-	private NormalComponentRelay componentRelay;
 	private ConnectorRelay connectorRelay;
-	private TestHandler testHandler;
-	private TurnHandler turnHandler;
+	private CurrentCostDrawer costDrawer;
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
 	
 	/**
 	 * Creates a new codingInitializer that also creates other objects
-	 * 
-	 * @param area The area where the objects will be created to
-	 * @param componentRelay The componentRelay that will keep track of the 
-	 * created demo components
+	 * @param handlers The handlers used for the objects
 	 * @param connectorRelay The connectorRelay that will keep track of the created connectors
-	 * @param testHandler The testHandler that will inform the components about 
-	 * test events
-	 * @param turnHandler The turnHandler that will inform some of the components 
-	 * about turn events
+	 * @param costDrawer The drawer that will draw the costs
 	 */
-	public CodingInitializer(Area area, NormalComponentRelay componentRelay, 
-			ConnectorRelay connectorRelay, TestHandler testHandler, 
-			TurnHandler turnHandler)
+	public CodingInitializer(HandlerRelay handlers, ConnectorRelay connectorRelay, 
+			CurrentCostDrawer costDrawer)
 	{
+		super (handlers);
+		
 		// Initializes attributes
-		this.area = area;
-		this.componentRelay = componentRelay;
 		this.connectorRelay = connectorRelay;
-		this.testHandler = testHandler;
-		this.turnHandler = turnHandler;
+		this.costDrawer = costDrawer;
 		
 		createObjects();
 		
 		// After creating the demo components, calculates the 
 		// demo component costs
-		this.componentRelay.calculateDemoCosts();
+		((NormalComponentRelay) handlers.getHandler(UninamoHandlerType.NORMALCOMPONENT)).calculateDemoCosts();
 	}
 	
 	
@@ -97,9 +87,8 @@ public class CodingInitializer extends ObjectInitializer
 			int y = getArgumentAsInt(arguments[3]);
 			
 			// Creates the component
-			NormalComponent newComponent = currentType.getNewComponent(
-					this.area, x, y, this.testHandler, this.connectorRelay, 
-					this.componentRelay, null, this.turnHandler, false);
+			NormalComponent newComponent = currentType.getNewComponent(getHandlers(), 
+					new Vector3D(x, y), this.connectorRelay, this.costDrawer, false);
 			
 			// Modifies it a bit
 			newComponent.setID(arguments[0]);
@@ -118,8 +107,8 @@ public class CodingInitializer extends ObjectInitializer
 					(InputCableConnector) this.connectorRelay.getConnectorWithID(arguments[1]);
 			
 			// Creates the cable
-			new Cable(this.area, this.testHandler, this.connectorRelay, start, 
-					end, false);
+			new Cable(getHandlers(), this.connectorRelay, start, end, false, 
+					Vector3D.zeroVector());
 		}
 	}
 }

@@ -12,7 +12,6 @@ import uninamo_gameplaysupport.TotalCostAnalyzer;
 import uninamo_gameplaysupport.TurnTimer;
 import uninamo_worlds.CodingObjectCreator;
 import uninamo_worlds.DesignObjectCreator;
-import uninamo_worlds.MissionObjectCreator;
 
 /**
  * AreaChanger makes the game transition between different states like coding 

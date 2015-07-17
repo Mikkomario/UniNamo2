@@ -28,6 +28,8 @@ public class ScalingSpriteButton extends AbstractSpriteButton<SingleSpriteDrawer
 			SingleSpriteDrawer drawer)
 	{
 		super(position, handlers, drawer, DepthConstants.FOREGROUND);
+		
+		drawer.setMaster(this);
 	}
 	
 	
@@ -52,18 +54,31 @@ public class ScalingSpriteButton extends AbstractSpriteButton<SingleSpriteDrawer
 	 * Creates a new button with the given stats
 	 * @param position The button's position
 	 * @param handlers The handlers that will handle the button
+	 * @param spriteBankName The name of the spriteBank that holds the sprite
+	 * @param spriteName The name of the button's sprite
+	 * @return A new button
+	 */
+	public static ScalingSpriteButton createButton(Vector3D position, HandlerRelay handlers, 
+			String spriteBankName, String spriteName)
+	{
+		SingleSpriteDrawer drawer = new SingleSpriteDrawer(SpriteBank.getSprite(
+				spriteBankName, spriteName), null, handlers);
+		ScalingSpriteButton button = new ScalingSpriteButton(position, handlers, drawer);
+		
+		return button;
+	}
+	
+	/**
+	 * Creates a new button with the given stats
+	 * @param position The button's position
+	 * @param handlers The handlers that will handle the button
 	 * @param spriteName The name of the button's sprite
 	 * @return A new button
 	 */
 	public static ScalingSpriteButton createButton(Vector3D position, HandlerRelay handlers, 
 			String spriteName)
 	{
-		SingleSpriteDrawer drawer = new SingleSpriteDrawer(SpriteBank.getSprite(
-				"gameplayinterface", spriteName), null, handlers);
-		ScalingSpriteButton button = new ScalingSpriteButton(position, handlers, drawer);
-		drawer.setMaster(button);
-		
-		return button;
+		return createButton(position, handlers, "gameplayinterface", spriteName);
 	}
 	
 	private void setScale(double scale)

@@ -1,29 +1,24 @@
 package uninamo_manual;
 
+import exodus_world.Area;
+import exodus_world.AreaBank;
+import gateway_ui.AbstractButton;
+import genesis_event.HandlerRelay;
+import genesis_util.DepthConstants;
 import genesis_util.Vector3D;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import omega_graphic.OpenSpriteBank;
-import omega_graphic.Tile;
-import omega_world.Area;
-import omega_world.GameObject;
-import uninamo_components.ComponentType;
-import uninamo_gameplaysupport.TurnHandler;
-import uninamo_machinery.MachineType;
+import arc_bank.Bank;
+import omega_util.Transformation;
 import uninamo_main.GameSettings;
-import uninamo_obstacles.ObstacleType;
-import uninamo_previous.AreaChanger;
-import uninamo_previous.ComponentInfoHolder;
-import uninamo_previous.ComponentPage;
-import uninamo_previous.EmptyPage;
-import uninamo_previous.ImagePage;
-import uninamo_previous.MachineInfoHolder;
-import uninamo_previous.MachinePage;
-import uninamo_previous.ManualButton;
-import uninamo_previous.ObstacleInfoHolder;
-import uninamo_previous.ObstaclePage;
-import uninamo_previous.Page;
+import uninamo_main.Utility;
+import uninamo_userinterface.AreaInterface;
+import uninamo_userinterface.ScalingSpriteButton;
+import vision_drawing.SimpleSingleSpriteDrawerObject;
+import vision_sprite.Sprite;
+import vision_sprite.SpriteBank;
 
 /**
  * ManualMaster handles the objects shown in the manual and takes care of 
@@ -32,19 +27,19 @@ import uninamo_previous.Page;
  * @author Mikko Hilpinen
  * @since 12.3.2014
  */
-public class ManualMaster extends GameObject
+public class ManualMaster extends AreaInterface
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
-	private Tile manualBack;
-	private AreaChanger areaChanger;
-	private ArrayList<DoublePage> pages;
-	private int currentPageIndex;
-	private ManualPageButton leftPageButton, rightPageButton;
-	private ManualButton manualButton;
-	private BookMark[] bookMarks;
+	private SimpleSingleSpriteDrawerObject background;
+	private List<Section> sections;
+	private int currentSectionIndex;
+	private AbstractButton manualButton;
+	private Vector3D position;
+	private List<BookMark> bookMarks;
 	
 	static final Vector3D MANUALDIMENSIONS = new Vector3D(600, 500);
+	static final String SPRITEBANKNAME = "manual";
 	
 	
 	// CONSTRUCTOR	-----------------------------------------------------
@@ -53,239 +48,215 @@ public class ManualMaster extends GameObject
 	 * Creates a new manual to the center of the screen. Mouse handling will 
 	 * be stopped for the coding area while the manual is shown.
 	 * 
-	 * @param areaChanger The areaChanger that will handle the transitions 
-	 * between areas and give access to different areas.
-	 * @param turnHandler The turnHandler that will inform the created test 
-	 * components about turn events
 	 * @param manualButton The manualButton in the coding area
 	 */
-	public ManualMaster(AreaChanger areaChanger, TurnHandler turnHandler, 
-			ManualButton manualButton)
+	private ManualMaster(AbstractButton manualButton, HandlerRelay handlers, Vector3D position)
 	{
-		super(areaChanger.getArea("manual"));
-		
-		// Starts the manual area
-		Area manualArea = areaChanger.getArea("manual");
-		manualArea.start();
+		super(handlers, ButtonFunction.values());
 		
 		// Initializes attributes
 		this.manualButton = manualButton;
-		this.areaChanger = areaChanger;
-		this.currentPageIndex = 0;
-		this.manualBack = new Tile(GameSettings.screenWidth / 2, 
-				GameSettings.screenHeight / 2, 
-				OpenSpriteBank.getSpriteBank("manual").getSprite("manualback"), 
-				MANUALWIDTH, MANUALHEIGHT, manualArea);
-		this.pages = new ArrayList<DoublePage>();
+		this.currentSectionIndex = 0;
+		this.position = position;
+		this.sections = new ArrayList<>();
+		this.bookMarks = new ArrayList<>();
 		
-		// Creates buttons
-		new ManualCloseButton(GameSettings.screenWidth / 2 + MANUALWIDTH / 2 - 20, 
-				GameSettings.screenHeight / 2 - MANUALHEIGHT / 2 + 20, 
-				this, manualArea);
-		this.leftPageButton = new ManualPageButton(ManualPageButton.BACKWARDS, 
-				this, manualArea);
-		this.rightPageButton = new ManualPageButton(ManualPageButton.FORWARD, 
-				this, manualArea);
+		this.background = new SimpleSingleSpriteDrawerObject(DepthConstants.BACK, 
+				getSpriteBank().get("manualback"), handlers);
+		this.background.addTransformation(Transformation.transitionTransformation(
+				this.position));
+		this.background.getDrawer().getSpriteDrawer().setOrigin(Vector3D.zeroVector());
+		this.background.getDrawer().scaleToSize(MANUALDIMENSIONS);
 		
-		// Creates the page content
-		int leftPageX = GameSettings.screenWidth / 2 - MANUALWIDTH / 4;
-		int rightPageX = GameSettings.screenWidth / 2 + MANUALWIDTH / 4;
-		int pageY = GameSettings.screenHeight / 2;
+		// Creates the manual content
+		this.sections.add(Section.createTutorialSection(position, handlers));
+		this.sections.add(Section.createComponentSection(position, handlers));
+		this.sections.add(Section.createMachineSection(position, handlers));
+		this.sections.add(Section.createObstacleSection(position, handlers));
 		
-		// Creates the turorial pages
-		this.pages.add(new DoublePage(new EmptyPage(manualArea), 
-				new ImagePage(rightPageX, pageY, 
-				OpenSpriteBank.getSpriteBank("manual").getSprite(
-				"contentstext"), manualArea)));
-		this.pages.add(new DoublePage(new ImagePage(leftPageX, pageY, 
-				OpenSpriteBank.getSpriteBank("manual").getSprite("cables"), 
-				manualArea), new ImagePage(rightPageX, pageY, 
-				OpenSpriteBank.getSpriteBank("manual").getSprite("signals"), 
-				manualArea)));
-		
-		// Creates a component page for testing
-		ComponentInfoHolder componentData = new ComponentInfoHolder();
-		this.pages.add(new DoublePage(new EmptyPage(manualArea), 
-				new ComponentPage(rightPageX, pageY, manualArea, turnHandler, 
-				ComponentType.OR, componentData)));
-		
-		// Creates a machine page for testing
-		MachineInfoHolder machineData = new MachineInfoHolder();
-		this.pages.add(new DoublePage(new EmptyPage(manualArea), 
-				new MachinePage(rightPageX, pageY, 
-				manualArea, MachineType.CONVEYORBELT, machineData)));
-		
-		// Creates an obstacle page for testing
-		ObstacleInfoHolder obstacleData = new ObstacleInfoHolder();
-		this.pages.add(new DoublePage(new EmptyPage(manualArea), new ObstaclePage(
-				rightPageX, pageY, manualArea, ObstacleType.BOX, obstacleData)));
-		
-		// Creates the bookmarks
-		int[] pagenumbers = new int[5];
-		pagenumbers[0] = 0; // Contents
-		pagenumbers[1] = 1; // Basics
-		pagenumbers[2] = 2; // Components
-		pagenumbers[3] = 3; // Machines
-		pagenumbers[4] = 4; // Obstacles
-		
-		this.bookMarks = new BookMark[5];
-		for (int i = 0; i < 5; i++)
-		{
-			this.bookMarks[i] = new BookMark(
-					30 + (int) ((i / 5.0) * (MANUALWIDTH / 2 - 40)), pagenumbers[i], 
-					i, manualArea, this);
-		}
-		
-		// Opens the first doublePage
-		this.pages.get(this.currentPageIndex).open();
+		// Opens the first section
+		this.sections.get(this.currentSectionIndex).openAtTheBeginning();
 		
 		// Hides the manual button while the manual is open
-		this.manualButton.setInvisible();
-		//System.out.println(this.manualButton.isVisible());
+		this.manualButton.getIsVisibleStateOperator().setState(false);
 		
-		// Deactivates the coding area
-		areaChanger.getArea("coding").getMouseHandler().inactivate();
+		// Creates the bookmarks
+		for (int i = 0; i < this.sections.size(); i++)
+		{
+			this.bookMarks.add(new BookMark((MANUALDIMENSIONS.getFirstInt() - 32) / 
+					this.sections.size() * i, i, this, handlers));
+		}
+		
+		// Creates other buttons
+		createButtons();
 	}
 	
 	
 	// IMPLEMENTED METHODS	----------------------------------------------
 	
 	@Override
-	public void kill()
+	protected AbstractButton createButtonForFunction(Function f)
 	{
-		// Kills the background and other stuff and returns to the coding area
-		this.manualBack.kill();
-		
-		for (DoublePage doublePage : this.pages)
+		if (f == ButtonFunction.CLOSE)
+			return ScalingSpriteButton.createButton(this.position.plus(new Vector3D(
+					MANUALDIMENSIONS.getFirst() - 32, 32)), getHandlers(), SPRITEBANKNAME, 
+					"close");
+		else
 		{
-			doublePage.kill();
+			Vector3D buttonPosition;
+			String spriteName;
+			if (f == ButtonFunction.NEXT)
+			{
+				buttonPosition = this.position.plus(MANUALDIMENSIONS).minus(new Vector3D(
+						32, 32));
+				spriteName = "next";
+			}
+			else
+			{
+				buttonPosition = this.position.plus(new Vector3D(32, 
+						MANUALDIMENSIONS.getSecond() - 32));
+				spriteName = "previous";
+			}
+			
+			return ScalingSpriteButton.createButton(buttonPosition, getHandlers(), 
+					SPRITEBANKNAME, spriteName);
 		}
-		this.pages.clear();
-		
-		// Shows the manualButton since the manual is closed
-		this.manualButton.setVisible();
-		
-		//System.out.println("Ends manual, starts coding");
-		this.areaChanger.getArea("manual").end();
-		this.areaChanger.getArea("coding").getMouseHandler().activate();
+	}
+
+
+	@Override
+	protected void executeFunction(Function f)
+	{
+		if (f == ButtonFunction.CLOSE)
+		{
+			// Kills the related components
+			this.background.getIsDeadStateOperator().setState(true);
+			for (Section section : this.sections)
+			{
+				section.kill();
+			}
+			this.sections.clear();
+			for (BookMark mark : this.bookMarks)
+			{
+				mark.getIsDeadStateOperator().setState(true);
+			}
+			this.bookMarks.clear();
+			
+			// And itself
+			getIsDeadStateOperator().setState(true);
+			
+			// Manual button becomes visible again
+			this.manualButton.getIsVisibleStateOperator().setState(true);
+			
+			// Changes the area back to coding
+			getAreaBank().get("manual").end();
+			Utility.setMouseState(getAreaBank().get("coding").getHandlers(), true);
+		}
+		else if (f == ButtonFunction.NEXT)
+		{
+			// If an end of a section was reached, moves to the next one
+			if (!this.sections.get(this.currentSectionIndex).flipForward())
+			{
+				this.currentSectionIndex ++;
+				this.sections.get(this.currentSectionIndex).openAtTheBeginning();
+			}
+			
+			if (this.sections.get(this.currentSectionIndex).onLastPage())
+			{
+				AbstractButton button = getButtonForFunction(f);
+				button.getListensToMouseEventsOperator().setState(false);
+				button.getIsVisibleStateOperator().setState(false);
+			}
+			
+			informBookMarks();
+		}
+		// TODO: WET WET
+		else if (f == ButtonFunction.PREVIOUS)
+		{
+			if (!this.sections.get(this.currentSectionIndex).flipBackwards())
+			{
+				this.currentSectionIndex --;
+				this.sections.get(this.currentSectionIndex).openAtTheEnd();
+			}
+			
+			if (this.sections.get(this.currentSectionIndex).onFirstPage())
+			{
+				AbstractButton button = getButtonForFunction(f);
+				button.getListensToMouseEventsOperator().setState(false);
+				button.getIsVisibleStateOperator().setState(false);
+			}
+			
+			informBookMarks();
+		}
+	}
+	
+	
+	// ACCESSORS	-------------------
+	
+	/**
+	 * @return The position of the manual's top left corner
+	 */
+	public Vector3D getPosition()
+	{
+		return this.position;
 	}
 	
 	
 	// OTHER METHODS	--------------------------------------------------
 	
-	/**
-	 * Closes the current pages and opens the next ones
-	 */
-	protected void openNextPages()
+	void openSection(int sectionIndex)
 	{
-		// Only opens next pages if possible
-		if (!nextPagesLeft())
-			return;
-		
-		// Closes the current pages and opens the next ones
-		this.pages.get(this.currentPageIndex).close();
-		this.currentPageIndex ++;
-		this.pages.get(this.currentPageIndex).open();
-	}
-	
-	/**
-	 * Closes the current pages and opens the previous ones
-	 */
-	protected void openPreviousPages()
-	{
-		// Only opens previous pages if possible
-		if (!previousPagesLeft())
-			return;
-		
-		// Closes the current pages and opens the previous ones
-		this.pages.get(this.currentPageIndex).close();
-		this.currentPageIndex --;
-		this.pages.get(this.currentPageIndex).open();
-	}
-	
-	/**
-	 * @return Are there any pages left to open on the left
-	 */
-	protected boolean previousPagesLeft()
-	{
-		return this.currentPageIndex > 0;
-	}
-	
-	/**
-	 * @return Are there any pages left to open on the right
-	 */
-	protected boolean nextPagesLeft()
-	{
-		return this.currentPageIndex < this.pages.size() - 1;
-	}
-	
-	/**
-	 * Changes the page to a certain index. The pages are indexed as double 
-	 * pages
-	 * 
-	 * @param newPageIndex The index of the new page(s) opened
-	 */
-	protected void goToPage(int newPageIndex)
-	{
-		if (this.currentPageIndex == newPageIndex || newPageIndex < 0 || 
-				newPageIndex >= this.pages.size())
-			return;
-		
-		this.pages.get(this.currentPageIndex).close();
-		this.currentPageIndex = newPageIndex;
-		this.pages.get(this.currentPageIndex).open();
-	}
-	
-	
-	// SUBCLASSES	------------------------------------------------------
-	
-	private class DoublePage
-	{
-		// ATTRIBUTES	--------------------------------------------------
-		
-		private Page leftPage;
-		private Page rightPage;
-		
-		
-		// CONSTRUCTOR	--------------------------------------------------
-		
-		private DoublePage(Page leftPage, Page rightPage)
+		if (sectionIndex >= 0 && sectionIndex < this.sections.size())
 		{
-			// Initializes attributes
-			this.leftPage = leftPage;
-			this.rightPage = rightPage;
+			this.sections.get(this.currentSectionIndex).close();
+			this.currentSectionIndex = sectionIndex;
+			this.sections.get(this.currentSectionIndex).openAtTheBeginning();
+			informBookMarks();
 		}
-		
-		
-		// OTHER METHODS	----------------------------------------------
-		
-		private void open()
+	}
+	
+	private void informBookMarks()
+	{
+		for (BookMark mark : this.bookMarks)
 		{
-			this.leftPage.open();
-			this.rightPage.open();
-			
-			// Informs the buttons about a new page opening
-			ManualMaster.this.leftPageButton.onPageChange();
-			ManualMaster.this.rightPageButton.onPageChange();
-			
-			// Informs the bookmarks
-			for (int i = 0; i < ManualMaster.this.bookMarks.length; i++)
-			{
-				ManualMaster.this.bookMarks[i].onPageChange(
-						ManualMaster.this.currentPageIndex);
-			}
+			mark.onSectionChange(this.currentSectionIndex);
 		}
+	}
+	
+	/**
+	 * Opens the manual, disabling mouse functionality from the coding area for a moment
+	 * @param manualButton The manual button that lead to opening this manual
+	 */
+	public static void openManual(AbstractButton manualButton)
+	{
+		// Disables mouse from the coding area
+		Utility.setMouseState(getAreaBank().get("coding").getHandlers(), false);
 		
-		private void close()
-		{
-			this.leftPage.close();
-			this.rightPage.close();
-		}
+		// Starts the area
+		Area manualArea = getAreaBank().get("manual");
+		manualArea.start(false);
 		
-		private void kill()
-		{
-			this.leftPage.kill();
-			this.rightPage.kill();
-		}
+		// Creates the manual
+		Vector3D manualPosition = 
+				GameSettings.resolution.dividedBy(2).minus(MANUALDIMENSIONS.dividedBy(2));
+		new ManualMaster(manualButton, manualArea.getHandlers(), manualPosition);
+	}
+	
+	private static Bank<Sprite> getSpriteBank()
+	{
+		return SpriteBank.getSpriteBank(SPRITEBANKNAME);
+	}
+	
+	private static Bank<Area> getAreaBank()
+	{
+		return AreaBank.getAreaBank("gameplay");
+	}
+	
+	
+	// ENUMS	-----------------------
+	
+	private static enum ButtonFunction implements Function
+	{
+		CLOSE, NEXT, PREVIOUS;
 	}
 }

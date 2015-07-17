@@ -9,11 +9,8 @@ import gateway_event.ButtonEvent;
 import gateway_event.ButtonEventListener;
 import gateway_event.ButtonEvent.ButtonEventType;
 import gateway_ui.AbstractButton;
-import genesis_event.DrawableHandler;
 import genesis_event.EventSelector;
-import genesis_event.GenesisHandlerType;
 import genesis_event.HandlerRelay;
-import genesis_event.MouseListenerHandler;
 import genesis_util.StateOperator;
 import genesis_util.StateOperatorListener;
 import omega_util.SimpleGameObject;
@@ -210,28 +207,6 @@ public abstract class AreaInterface extends SimpleGameObject implements
 			
 			button.getIsDeadStateOperator().setState(true);
 		}
-	}
-	
-	/**
-	 * Changes the mouse listening state of the given handler(s)
-	 * @param relay The relay that will be affected by this change
-	 * @param newState The new mouse listening state of the objects in the handler
-	 */
-	protected static void setMouseState(HandlerRelay relay, boolean newState)
-	{
-		((MouseListenerHandler) relay.getHandler(GenesisHandlerType.MOUSEHANDLER)
-				).getListensToMouseEventsOperator().setState(newState);
-	}
-	
-	/**
-	 * Changes the visibility of the given handler(s)
-	 * @param relay The relay that will be affected by this change
-	 * @param newState The new visibility state of the objects in the handler
-	 */
-	protected static void setVisibleState(HandlerRelay relay, boolean newState)
-	{
-		((DrawableHandler) relay.getHandler(GenesisHandlerType.DRAWABLEHANDLER)
-				).getIsVisibleStateOperator().setState(newState);
 	}
 	
 	private boolean isInitialized()

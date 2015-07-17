@@ -1,18 +1,16 @@
 package uninamo_worlds;
 
-import omega_world.Area;
-import omega_world.AreaObjectCreator;
+import exodus_world.Area;
+import exodus_world.AreaBank;
+import exodus_world.AreaListener;
+import genesis_event.HandlerRelay;
+import genesis_util.Vector3D;
+import omega_util.SimpleGameObject;
 import uninamo_components.ComponentBox;
 import uninamo_components.ComponentType;
 import uninamo_components.ConnectorRelay;
-import uninamo_components.NormalComponentRelay;
-import uninamo_gameplaysupport.TestHandler;
-import uninamo_gameplaysupport.TurnTimer;
-import uninamo_main.GameSettings;
-import uninamo_previous.AreaChanger;
-import uninamo_previous.CodeTransitionButton;
-import uninamo_previous.ManualButton;
-import uninamo_previous.TestingButton;
+import uninamo_main.UninamoHandlerType;
+import uninamo_userinterface.CodingInterface;
 import uninamo_userinterface.CurrentCostDrawer;
 
 /**
@@ -22,71 +20,45 @@ import uninamo_userinterface.CurrentCostDrawer;
  * @author Mikko Hilpinen
  * @since 9.3.2014
  */
-public class CodingObjectCreator extends AreaObjectCreator
+public class CodingObjectCreator extends SimpleGameObject implements AreaListener
 {
-	// ATTRIBUTES	----------------------------------------------------
-	
-	private AreaChanger areaChanger;
-	private ConnectorRelay connectorRelay;
-	private TestHandler testHandler;
-	private TurnTimer timer;
-	private NormalComponentRelay componentRelay;
-	
-	
 	// CONSTRUCTOR	----------------------------------------------------
 	
 	/**
 	 * Creates a new CodignObjectCreator. The creator will create the objects 
 	 * when the area starts.
-	 * 
-	 * @param areaChanger The areaChanger that handles different areas in the 
-	 * game
-	 * @param connectorRelay The connectorRelay that contains the connectors 
-	 * used in the area
-	 * @param componentRelay The componentRelay that will keep track of the 
-	 * created components
-	 * @param testHandler The testHandler that will inform the objects about 
-	 * test events
-	 * @param timer The turnTimer that informs the objects about turn events
+	 * @param handlers The handlers that will handle the object
 	 */
-	public CodingObjectCreator(AreaChanger areaChanger, 
-			ConnectorRelay connectorRelay, NormalComponentRelay componentRelay, 
-			TestHandler testHandler, TurnTimer timer)
+	public CodingObjectCreator(HandlerRelay handlers)
 	{
-		super(areaChanger.getArea("coding"), null, null, 0, 0);
-		
-		// Initializes attributes
-		this.areaChanger = areaChanger;
-		this.connectorRelay = connectorRelay;
-		this.testHandler = testHandler;
-		this.timer = timer;
-		this.componentRelay = componentRelay;
+		super(handlers);
 	}
 	
 	
 	// IMPLEMENTED METHODS	--------------------------------------------
 
 	@Override
-	protected void createObjects(Area area)
+	public void onAreaStateChange(Area area)
 	{
-		// Creates the interface elements
-		new CodeTransitionButton(0, area, this.areaChanger.getArea("design"));
-		new TestingButton(area, GameSettings.screenWidth - 110, 45, this.testHandler);
+		HandlerRelay handlers = area.getHandlers();
+		ConnectorRelay connectorRelay = (ConnectorRelay) 
+				handlers.getHandler(UninamoHandlerType.CONNECTOR);
 		
-		CurrentCostDrawer costDrawer = new CurrentCostDrawer(area);
+		// Creates the necessary utilities
+		CurrentCostDrawer costDrawer = new CurrentCostDrawer(handlers);
 		
-		new ComponentBox(64, 30, area, this.testHandler, 
-				this.connectorRelay, this.componentRelay, costDrawer, 
-				this.timer, ComponentType.PULSE);
-		new ComponentBox(64, 90, area, this.testHandler, 
-				this.connectorRelay, this.componentRelay, costDrawer, 
-				this.timer, ComponentType.POWER);
+		// Creates the interface
+		new CodingInterface(handlers, AreaBank.getArea("gameplay", "design").getHandlers());
 		
-		new ManualButton(GameSettings.screenWidth / 3, GameSettings.screenHeight, 
-				this.areaChanger, this.timer);
+		// Creates the component boxes
+		Vector3D boxPosition = new Vector3D(64, 30);
+		for (ComponentType type : ComponentType.values())
+		{
+			new ComponentBox(boxPosition, handlers, connectorRelay, costDrawer, type);
+			boxPosition = boxPosition.plus(new Vector3D(0, 60));
+		}
 		
-		// Creates the demo components
-		new CodingInitializer(area, this.componentRelay, this.connectorRelay, 
-				this.testHandler, this.timer);
+		// Creates other objects
+		new CodingInitializer(handlers, connectorRelay, costDrawer);
 	}
 }

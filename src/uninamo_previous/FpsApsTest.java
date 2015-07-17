@@ -1,4 +1,4 @@
-package tests;
+package uninamo_previous;
 
 import genesis_graphic.DepthConstants;
 import genesis_graphic.Drawable;

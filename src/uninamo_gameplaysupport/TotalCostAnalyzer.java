@@ -38,23 +38,18 @@ public class TotalCostAnalyzer implements AreaListener
 	// CONSTRUCTOR	-----------------------------------------------------
 	
 	/**
-	 * Creates a new totalCostAnalyzer. The data must be added separately.
-	 * @param area The area where the visualization will be drawn
+	 * Creates a new totalCostAnalyzer. The data must be added separately. The analyzer must 
+	 * be added to an area later.
+	 * @see TotalCostAnalyzer#connectToArea(Area)
 	 */
-	public TotalCostAnalyzer(Area area)
+	public TotalCostAnalyzer()
 	{
 		// Initializes attributes
 		this.isDeadOperator = new StateOperator(false, false);
 		this.demoComponentCost = 0;
 		this.componentAmounts = new HashMap<>();
 		this.machineAmounts = new HashMap<>();
-		this.area = area;
-		//this.textDrawer = new DrawableHandler(false, false, 
-		//		DepthConstants.NORMAL, 0, area.getDrawer());
-		
-		// Adds the object to the handler(s)
-		if (area != null)
-			area.getListenerHandler().add(this);
+		this.area = null;
 	}
 	
 	
@@ -81,6 +76,20 @@ public class TotalCostAnalyzer implements AreaListener
 	
 	
 	// OTHER METHODS	-------------------------------------------------
+	
+	/**
+	 * Connects the cost analyzer to a certain area. The analysis will be visualized on that 
+	 * area once it starts
+	 * @param area The area this analyzer will be tied to
+	 */
+	public void connectToArea(Area area)
+	{
+		if (this.area != null)
+			this.area.getListenerHandler().removeHandled(this);
+		if (area != null)
+			area.getListenerHandler().add(this);
+		this.area = area;
+	}
 	
 	/**
 	 * Records the demo component costs to the given value

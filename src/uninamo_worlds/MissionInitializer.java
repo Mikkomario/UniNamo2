@@ -1,8 +1,10 @@
 package uninamo_worlds;
 
-import omega_world.Area;
+import genesis_event.HandlerRelay;
+import genesis_util.Vector3D;
 import uninamo_main.GameSettings;
-import uninamo_previous.Note;
+import uninamo_userinterface.Note;
+import vision_sprite.SpriteBank;
 
 /**
  * MissionInitializer creates the necessary stuff to start a mission
@@ -13,22 +15,15 @@ import uninamo_previous.Note;
 public class MissionInitializer extends ObjectInitializer
 {
 	// TODO: Replace with objectconstructor
-	
-	// ATTRIBUTES	-----------------------------------------------------
-	
-	private Area missionArea;
-	
-	
 	// CONSTRUCTOR	-----------------------------------------------------
 	
 	/**
 	 * Creates a new missionInitializer that also initializes the notes
-	 * @param missionArea The mission area to which the notes will be added
+	 * @param handlers The handlers that will handle the objects
 	 */
-	public MissionInitializer(Area missionArea)
+	public MissionInitializer(HandlerRelay handlers)
 	{
-		// Initializes atributes
-		this.missionArea = missionArea;
+		super(handlers);
 		
 		createObjects();
 	}
@@ -44,11 +39,28 @@ public class MissionInitializer extends ObjectInitializer
 	protected void createObjectFromLine(String[] arguments,
 			CreationMode currentMode)
 	{
-		if (currentMode == CreationMode.NOTE1) 
-			new Note(GameSettings.screenWidth / 2 + 64, GameSettings.screenHeight / 2, 
-					75, 32, "docket", arguments[0], this.missionArea);
+		createNote(getHandlers(), currentMode, arguments[0]);
+	}
+	
+	private static void createNote(HandlerRelay handlers, CreationMode mode, String content)
+	{
+		Vector3D position, margins;
+		String spriteName;
+		
+		if (mode == CreationMode.NOTE1)
+		{
+			position = GameSettings.resolution.dividedBy(2).plus(new Vector3D(64, 0));
+			margins = new Vector3D(75, 32);
+			spriteName = "docket";
+		}
 		else
-			new Note(2 * GameSettings.screenWidth / 3, GameSettings.screenHeight / 2, 
-					75, 96, "description", arguments[0], this.missionArea);
+		{
+			position = GameSettings.resolution.dividedBy(new Vector3D(3, 2));
+			margins = new Vector3D(75, 96);
+			spriteName = "description";
+		}
+		
+		new Note(handlers, position, margins, SpriteBank.getSprite("mission", spriteName), 
+				content);
 	}
 }

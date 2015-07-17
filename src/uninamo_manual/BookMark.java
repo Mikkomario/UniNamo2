@@ -1,87 +1,90 @@
 package uninamo_manual;
 
-import gateway_interface.AbstractButton;
-import genesis_graphic.DepthConstants;
-
-import java.awt.geom.Point2D.Double;
-
-import omega_graphic.OpenSpriteBank;
-import omega_world.Area;
-import uninamo_main.GameSettings;
+import gateway_event.ButtonEvent;
+import gateway_event.ButtonEventListener;
+import gateway_event.ButtonEvent.ButtonEventType;
+import genesis_event.EventSelector;
+import genesis_event.HandlerRelay;
+import genesis_util.DepthConstants;
+import genesis_util.StateOperator;
+import genesis_util.Vector3D;
+import uninamo_userinterface.ScalingSpriteButton;
+import vision_sprite.SingleSpriteDrawer;
+import vision_sprite.SpriteBank;
 
 /**
- * By clicking a bookMark, the user can go to a certain double page on the manual
+ * By clicking a bookMark, the user can go to a certain section on the manual
  * 
  * @author Mikko Hilpinen
  * @since 13.3.2014
  */
-public class BookMark extends AbstractButton
+public class BookMark extends ScalingSpriteButton implements ButtonEventListener
 {
 	// ATTRIBUTES	------------------------------------------------------
 	
-	private int pageIndex;
+	private int sectionIndex;
 	private int relativeX;
-	private ManualMaster master;
+	private ManualMaster manual;
+	private EventSelector<ButtonEvent> selector;
 	
 	
 	// CONSTRUCTOR	------------------------------------------------------
 	
 	/**
-	 * Creates a new bookMark with the given number and page
-	 * 
-	 * @param x How much to the right the bookMark is from the center of the 
-	 * manual
-	 * @param pageIndex What page clicking the bookMark will take the user to
-	 * @param number Which number is shown on the bookMark
-	 * @param area The area where the bookMark is located at
+	 * Creates a new bookMark that will take the user to the given section
+	 * @param relativeToCenterX How much to the right the bookMark is from the center of the 
+	 * manual (!)
+	 * @param sectionIndex To which sectionthe user will be taken when this bookmark is 
+	 * pressed
 	 * @param master The manualMaster that handles the page changing
+	 * @param handlers The handlers that will handle the bookmark
 	 */
-	public BookMark(int x, int pageIndex, int number, Area area, 
-			ManualMaster master)
+	public BookMark(int relativeToCenterX, int sectionIndex, ManualMaster master, 
+			HandlerRelay handlers)
 	{
+		super(Vector3D.zeroVector(), handlers, new SingleSpriteDrawer(SpriteBank.getSprite(
+				ManualMaster.SPRITEBANKNAME, "bookmark"), null, handlers));
+		/*
 		super(GameSettings.screenWidth / 2 + x, 
 				GameSettings.screenHeight / 2 - ManualMaster.MANUALHEIGHT / 2, 
 				DepthConstants.BOTTOM, 
 				OpenSpriteBank.getSpriteBank("manual").getSprite("bookmark"), 
 				area);
+		*/
 		
 		// Initializes attributes
-		this.pageIndex = pageIndex;
-		this.relativeX = x;
-		this.master = master;
+		this.sectionIndex = sectionIndex;
+		this.relativeX = relativeToCenterX;
+		this.manual = master;
+		this.selector = ButtonEvent.createButtonEventSelector(ButtonEventType.RELEASED);
 		
-		// Sets the corrent image
-		getSpriteDrawer().setImageIndex(number);
+		resetPosition();
+		getDrawer().setDepth(DepthConstants.BOTTOM);
+		getSpriteDrawer().setImageSpeed(0);
+		getSpriteDrawer().setImageIndex(sectionIndex);
+		
+		getListenerHandler().add(this);
 	}
 	
 	
 	// IMPLEMENTED METHODS	----------------------------------------------
 
 	@Override
-	public void onMouseButtonEvent(MouseButton button,
-			MouseButtonEventType eventType, Double mousePosition,
-			double eventStepTime)
+	public EventSelector<ButtonEvent> getButtonEventSelector()
 	{
-		if (button == MouseButton.LEFT && eventType == MouseButtonEventType.PRESSED)
-			this.master.goToPage(this.pageIndex);
+		return this.selector;
 	}
 
 	@Override
-	public boolean listensMouseEnterExit()
+	public StateOperator getListensToButtonEventsOperator()
 	{
-		return true;
+		return getIsActiveStateOperator();
 	}
 
 	@Override
-	public void onMousePositionEvent(MousePositionEventType eventType,
-			Double mousePosition, double eventStepTime)
+	public void onButtonEvent(ButtonEvent e)
 	{
-		// Enter scales, exit rescales
-		if (eventType == MousePositionEventType.ENTER)
-			setScale(GameSettings.interfaceScaleFactor, 
-					GameSettings.interfaceScaleFactor);
-		else if (eventType == MousePositionEventType.EXIT)
-			setScale(1, 1);
+		this.manual.openSection(this.sectionIndex);
 	}
 	
 	
@@ -90,22 +93,32 @@ public class BookMark extends AbstractButton
 	/**
 	 * This method should be called when a new page is opened
 	 * 
-	 * @param newPageIndex The index of the new (double) page
+	 * @param newPageIndex The index of the new section
 	 */
-	public void onPageChange(int newPageIndex)
+	void onSectionChange(int newSectionIndex)
 	{
-		// Changes position
-		if (newPageIndex < this.pageIndex)
-			setX(GameSettings.screenWidth / 2 + this.relativeX);
-		else
-			setX(GameSettings.screenWidth / 2 - this.relativeX);
+		// Updates position
+		int sign = 1;
+		if (newSectionIndex >= this.sectionIndex)
+			sign = -1;
+		this.relativeX = Math.abs(this.relativeX) * sign;
+		
+		resetPosition();
 		
 		// If the page is the same as the pageIndex, changes depth, otherwise 
 		// rechanges if (if necessary)
-		
+		/* TODO: There's no good way for doing this in the current version
 		if (newPageIndex == this.pageIndex)
 			setDepth(DepthConstants.NORMAL);
 		else if (getDepth() == DepthConstants.NORMAL)
 			setDepth(DepthConstants.BOTTOM);
+		*/
+	}
+	
+	private void resetPosition()
+	{
+		setTrasformation(getTransformation().withPosition(this.manual.getPosition().plus(
+				new Vector3D(ManualMaster.MANUALDIMENSIONS.getFirst() / 2 + this.relativeX, 
+				32))));
 	}
 }

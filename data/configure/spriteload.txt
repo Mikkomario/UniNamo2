@@ -33,7 +33,8 @@ boxdesign#images/obstacles/boxgoaldesign.png#1#80#80
 boxreal#images/obstacles/boxgoalreal_strip2.png#2#80#80
 
 &manual
-arrow#images/manual/arrow.png#1#32#29
+next#images/manual/arrow.png
+previous#images/manual/arrow2.png
 bookmark#images/manual/bookmarks_strip5.png#5#32#80
 manualback#images/manual/manualback.png#1#192#192
 contentstext#images/manual/tableofcontentstext.png#1#96#192

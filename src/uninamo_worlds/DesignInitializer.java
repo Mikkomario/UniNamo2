@@ -1,14 +1,13 @@
 package uninamo_worlds;
 
-import omega_world.Area;
+import genesis_event.HandlerRelay;
+import genesis_util.Vector3D;
 import uninamo_components.ConnectorRelay;
 import uninamo_gameplaysupport.ObstacleCollector;
-import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.VictoryHandler;
 import uninamo_machinery.MachineCounter;
 import uninamo_machinery.MachineType;
 import uninamo_obstacles.ObstacleType;
-import uninamo_previous.AreaChanger;
 
 /**
  * DesignInitializer creates the machines, obstacles and obstacleCollectors 
@@ -23,8 +22,7 @@ public class DesignInitializer extends ObjectInitializer
 	
 	// ATTRIBUTES	-----------------------------------------------------
 	
-	private Area designArea, codingArea;
-	private TestHandler testHandler;
+	private HandlerRelay codingHandlers;
 	private MachineCounter machineCounter;
 	private ConnectorRelay connectorRelay;
 	private VictoryHandler victoryHandler;
@@ -34,25 +32,22 @@ public class DesignInitializer extends ObjectInitializer
 	
 	/**
 	 * Creates a new designInitializer that also creates the objects
-	 * 
-	 * @param areaChanger The areaChanger that handles the different areas
-	 * @param testHandler The testHandler that will inform the created objects 
-	 * about test events
+	 * @param designHandlers The handlers that will handle the objects
+	 * @param codingHandlers The handlers that handle the coding area
 	 * @param machineCounter The machineCounter that will count the created 
 	 * machines
 	 * @param connectorRelay The connectorRelay that will keep track of the 
 	 * created connectors
-	 * @param victoryHandler The victoryHandler that will keep track of the 
-	 * created victory conditions (collectors)
+	 * @param victoryHandler The victory handler
 	 */
-	public DesignInitializer(AreaChanger areaChanger, TestHandler testHandler, 
+	public DesignInitializer(HandlerRelay designHandlers, HandlerRelay codingHandlers, 
 			MachineCounter machineCounter, ConnectorRelay connectorRelay, 
 			VictoryHandler victoryHandler)
 	{
+		super(designHandlers);
+		
 		// Initializes attributes
-		this.designArea = areaChanger.getArea("design");
-		this.codingArea = areaChanger.getArea("coding");
-		this.testHandler = testHandler;
+		this.codingHandlers = codingHandlers;
 		this.machineCounter = machineCounter;
 		this.connectorRelay = connectorRelay;
 		this.victoryHandler = victoryHandler;
@@ -85,8 +80,7 @@ public class DesignInitializer extends ObjectInitializer
 					int x = getArgumentAsInt(arguments[1]);
 					int y = getArgumentAsInt(arguments[2]);
 					
-					type.getNewObstacle(x, y, this.designArea, 
-							this.testHandler);
+					type.getNewObstacle(new Vector3D(x, y), getHandlers());
 					break;
 				}
 			}
@@ -103,9 +97,8 @@ public class DesignInitializer extends ObjectInitializer
 					int y = getArgumentAsInt(arguments[2]);
 					
 					// Argument 3 is the ID of the machine
-					type.getNewMachine(x, y, this.designArea, 
-							this.codingArea, this.testHandler, 
-							this.connectorRelay, this.machineCounter, 
+					type.getNewMachine(new Vector3D(x, y), getHandlers(), 
+							this.codingHandlers, this.connectorRelay, this.machineCounter, 
 							arguments[3]);
 					break;
 				}
@@ -131,9 +124,8 @@ public class DesignInitializer extends ObjectInitializer
 			int x = getArgumentAsInt(arguments[2]);
 			int y = getArgumentAsInt(arguments[3]);
 			
-			new ObstacleCollector(this.designArea, x, y, 
-					this.testHandler, this.victoryHandler, collectedType, 
-					amount, arguments[4], arguments[5]);
+			new ObstacleCollector(getHandlers(), new Vector3D(x, y), this.victoryHandler, 
+					collectedType, amount, arguments[4], arguments[5]);
 		}
 	}
 }

@@ -81,6 +81,8 @@ public class Cable extends SimpleGameObject implements MouseListener, Transforma
 	{
 		super(handlers);
 		
+		// TODO: Remove the connectorRelay from the parameter and just get it from the handlers
+		
 		if (!isForTesting && (startConnector == null || endConnector == null))
 		{
 			// The cable starts as being dragged
