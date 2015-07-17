@@ -48,8 +48,8 @@ public class TestButton extends ScalingSpriteButton implements
 			this.testHandler = testHandler;
 			this.testing = false;
 			this.selector = ButtonEvent.createButtonEventSelector(ButtonEventType.RELEASED);
-			getDrawer().setMaster(this);
 			
+			getIsVisibleStateOperator().setState(false);
 			getListenerHandler().add(this);
 		}
 

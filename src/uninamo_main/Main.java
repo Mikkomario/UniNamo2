@@ -14,12 +14,15 @@ import genesis_util.DepthConstants;
 import genesis_video.GamePanel;
 import genesis_video.GameWindow;
 import arc_bank.GamePhaseBank;
+import tests.MouseTester;
 import uninamo_components.ConnectorRelay;
 import uninamo_components.NormalComponentRelay;
 import uninamo_gameplaysupport.TestHandler;
 import uninamo_gameplaysupport.TotalCostAnalyzer;
 import uninamo_gameplaysupport.TurnHandler;
 import uninamo_gameplaysupport.TurnTimer;
+import uninamo_worlds.CodingObjectCreator;
+import uninamo_worlds.DesignObjectCreator;
 import vision_sprite.SpriteBank;
 
 /**
@@ -63,11 +66,20 @@ public class Main
 		costAnalyzer.connectToArea(AreaBank.getArea("gameplay", "results"));
 		
 		Area codingArea = AreaBank.getArea("gameplay", "coding");
-		AreaBank.getArea("gameplay", "design").start(true);
+		Area designArea = AreaBank.getArea("gameplay", "design");
+		
+		// Adds the objects to the areas
+		new DesignObjectCreator(designArea.getHandlers(), costAnalyzer);
+		new CodingObjectCreator(codingArea.getHandlers());
+		//new MouseTester(codingArea.getHandlers());
+		
+		designArea.start(true);
 		codingArea.start(false);
 		
-		Utility.setMouseState(codingArea.getHandlers(), false);
-		Utility.setVisibleState(codingArea.getHandlers(), false);
+		Utility.setMouseState(designArea.getHandlers(), false);
+		Utility.setVisibleState(designArea.getHandlers(), false);
+		
+		codingArea.getIsActiveStateOperator().setState(true);
 	}
 	
 	

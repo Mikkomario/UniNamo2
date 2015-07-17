@@ -68,6 +68,11 @@ public class ObstacleCollector extends SimpleGameObject implements CollisionList
 		super(handlers);
 		
 		// Initializes attributes
+		Bank<Sprite> spriteBank = SpriteBank.getSpriteBank("goals");
+		Sprite[] sprites = {spriteBank.get(designSpriteName), spriteBank.get(realSpriteName)};
+		// TODO: Need animation later?
+		this.spriteDrawer = new MultiSpriteDrawer(sprites, this, handlers);
+		
 		this.neededAmount = neededAmount;
 		this.victoryHandler = victoryHandler;
 		this.collectsLeft = this.neededAmount;
@@ -78,11 +83,6 @@ public class ObstacleCollector extends SimpleGameObject implements CollisionList
 		this.collisionChecker = new CollisionChecker(this, false, false);
 		Class<?>[] collided = {collectedType.getObstacleClass()};
 		this.collisionChecker.limitCheckedClassesTo(collided);
-		
-		Bank<Sprite> spriteBank = SpriteBank.getSpriteBank("goals");
-		Sprite[] sprites = {spriteBank.get(designSpriteName), spriteBank.get(realSpriteName)};
-		// TODO: Need animation later?
-		this.spriteDrawer = new MultiSpriteDrawer(sprites, this, handlers);
 		
 		this.numberDrawer = new SimpleSingleSpriteDrawerObject(getDepth() - 2, 
 				SpriteBank.getSprite("gameplayinterface", "numbers"), handlers);

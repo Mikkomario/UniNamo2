@@ -215,7 +215,7 @@ public abstract class Machine extends SimpleGameObject implements
 	public void drawSelf(Graphics2D g2d)
 	{
 		// Draws the sprite
-		if (this.spritedrawer == null)
+		if (this.spritedrawer == null || getTransformation() == null)
 			return;
 		
 		AffineTransform lastTransform = getTransformation().transform(g2d);

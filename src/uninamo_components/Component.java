@@ -108,11 +108,12 @@ public abstract class Component extends SimpleGameObject implements
 	@Override
 	public void drawSelf(Graphics2D g2d)
 	{
-		AffineTransform lastTransform = getTransformation().transform(g2d);
-		
-		this.spriteDrawer.drawSprite(g2d);
-		
-		g2d.setTransform(lastTransform);
+		if (this.spriteDrawer != null)
+		{
+			AffineTransform lastTransform = getTransformation().transform(g2d);
+			this.spriteDrawer.drawSprite(g2d);
+			g2d.setTransform(lastTransform);
+		}
 	}
 
 	@Override
